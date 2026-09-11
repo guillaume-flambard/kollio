@@ -1,6 +1,7 @@
 # Kollio Phase 0 implementation status
 
-Status as of 2026-09-11: local foundations implemented; Phase 0 is not complete.
+Status as of 2026-09-11: foundations are deployed and production data is reconciled.
+Phase 0 remains open only for the external Logto and OpenAI credential checks listed below.
 
 ## Decisions applied
 
@@ -61,9 +62,10 @@ and [the upstream Hey API issue](https://github.com/hey-api/hey-api/issues/4235)
 
 ## Implemented behavior and evidence
 
-Final backend verification: 24 tests passed, 2 opt-in live evaluations skipped, Ruff and
-strict domain Mypy passed. PostgreSQL integration tests were enabled against a separate
-test database. Both live provider calls had already been verified and recorded separately.
+Final backend verification: 37 tests passed, 2 opt-in live evaluations skipped, Ruff and
+strict domain Mypy passed. PostgreSQL integration tests ran against a separate test
+database. The authorized b.ai live evaluation passed two cases for approximately
+USD 0.000556.
 
 - Pure workspace permission rule: the first non-member test failed with an allowing
   implementation, then passed after the minimal rule was implemented.
@@ -91,10 +93,44 @@ test database. Both live provider calls had already been verified and recorded s
   See [Langfuse observations documentation](https://langfuse.com/docs/api-and-data-platform/features/observations-api).
 - Nuxt type checking, ESLint and production build passed. Browser checks passed for FR/EN
   navigation, mobile overflow, page errors and the generated API client health request.
-- The final API, worker and web images build successfully, including with pnpm 12.4.1.
-- Alembic reports no schema drift after applying the two generated migrations.
-- GitHub Actions configuration exists; it has not run on GitHub yet. It currently verifies
-  lint/types, tests, generated contract drift and builds. Deployment is not wired yet.
+- The final API, worker, web and LiteLLM images build successfully, including with pnpm
+  12.4.1, and are published to GHCR only after the required verification job succeeds.
+- Alembic reports no schema drift after applying the three generated migrations.
+- GitHub Actions run `34643244503` passed installation, lint, type checks, all 37 tests,
+  Alembic, OpenAPI drift and builds, then published all four images. Failed run
+  `34643053400` stopped before publication, proving that a required failure cannot publish
+  a deployable revision.
+
+## Production deployment and recovery evidence
+
+The deployment is declared in `lab-infra` and uses its existing Make, Ansible, Compose,
+Traefik and autodeploy path. Pull request 51 introduced the stack and pull request 52 added
+the encrypted environment, deterministic WAL ownership and recovery tooling. Pull request
+53 corrected defects found by the live PITR rehearsal. All infrastructure checks passed;
+no Coolify component or reference is used.
+
+- Public `https://kollio.memolabs.dev/` and `/api/health` return HTTP 200. Postgres,
+  Redis, LiteLLM, API and web report healthy; the ARQ worker remains running.
+- Alembic and LiteLLM migrations complete successfully before their dependent services.
+  A controlled migration command exiting 42 made Compose exit 1 while the existing API
+  container identifier and image stayed unchanged and public health continued to return 200.
+- The production import ran twice from snapshot
+  `41d6fc40f266210ccc0c9dc4f55b6dba96783eebdb5dc3810d862791d3d67936`.
+  Both runs retained exactly 446 ideas and one immutable legacy import record.
+- Workflow `phase-zero-resume-2f536960-2db0-4ed1-a238-53264465db63` resumed through a
+  newly opened Postgres checkpointer without a second gateway call and retained locale `fr`.
+- A production OpenTelemetry span for `GET /openapi.json` reached Langfuse at
+  `2026-09-11T20:34:50.760Z` through the v4 observations path.
+- The 2026-09-11 backup produced 18 encrypted offsite files. A fresh GitHub clone retrieved
+  `kollio-postgres.dump.age`; decryption with the configured identity yielded a valid
+  733,315-byte Postgres archive with 469 entries.
+- That offsite archive restored into an isolated, networkless Postgres 18 container with
+  446 ideas, one workspace, one legacy import, five checkpoints, no orphan owner or
+  workspace references, 446 distinct source identifiers and no empty idea provenance.
+- The PITR rehearsal restored to `2026-09-11 20:47:39.659431+00`. It found the controlled
+  pre-target row once and the post-target row zero times, using a base backup with SHA-256
+  `8ccbc89b45a0d0dddeac05bbb9c6e01e78e602b57a0188870c90f3b5ac73ae27` and 38 archived
+  WAL files.
 
 ## Legacy migration reconciliation
 
@@ -137,23 +173,14 @@ Legacy code classification:
 
 ## Remaining acceptance criteria
 
-1. Verify a real browser login/logout against the configured Logto development tenant,
-   map the resulting subject to the imported workspace, and provision a separate
-   production tenant before public rollout. Auth module enablement is a build-time switch
-   and requires rebuilding the web image.
-2. Configure the approved OpenAI key, then verify actual 1536-dimensional FR/EN embeddings,
-   storage and retrieval. No fake vectors are presented as multilingual matching proof.
-3. Verify b.ai-specific pricing for gateway monetary accounting. The scoped key has a
-   configured USD 1 daily ceiling and rate/token limits; exact cost enforcement for this
-   custom provider must not be claimed until the price mapping is validated.
-4. Extend the agent evaluation corpus beyond abstention, with explicit reviewed criteria.
-5. Rehearse backup restoration and PITR before any real-data cutover. The audited VPS
-   backup configuration has no offsite destination. The original Prospecteur service and
-   data remain intact.
-6. Add the stack through an isolated lab-infra worktree and PR, respecting that repository's
-   shared-main rule. Wire migration execution before rollout, health checks and CI deployment.
-   No VPS deployment, production cutover or GitHub CI success is claimed.
-7. Map the real Logto identity to the private imported workspace after identity setup.
+1. Create a Logto development user, verify real browser login and logout, map that subject
+   to the imported workspace, and provision separate production credentials before public
+   rollout. These operations require an explicit account-creation confirmation.
+2. Configure the approved OpenAI credential, then verify actual 1,536-dimensional FR/EN
+   embeddings, storage and retrieval. No fake vectors are presented as multilingual
+   matching proof.
+3. Extend the reviewed agent evaluation corpus beyond the current competition cases as
+   product behavior expands.
 
 No provider secret or migration snapshot is tracked in Git. The local snapshot and environment
 files have restrictive permissions. Runtime vendor deprecation warnings remain in the test
