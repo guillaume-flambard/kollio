@@ -7,7 +7,7 @@ unverified security, data, and operational assumptions.
 
 ## What Changes
 
-- Create and configure a Logto Cloud tenant, Traditional Web application, and API resource,
+- Run Logto OSS on the lab and configure its Traditional Web application and API resource,
   then verify SSR sign-in, callback, sign-out, JWT validation, and private workspace access.
 - Provision OpenAI embeddings through LiteLLM and prove that French and English inputs share
   one 1,536-dimensional `text-embedding-3-large` vector space.
@@ -39,6 +39,6 @@ None. This repository has no existing OpenSpec capability specifications.
 
 The change affects the Nuxt Logto runtime configuration, FastAPI identity mapping, LiteLLM
 model metadata, pgvector persistence and tests, GitHub Actions, migration tooling, and the
-separate `lab-infra` repository. It creates external Logto and GitHub resources, uses the
-existing Langfuse service, and imports the already approved 438-idea snapshot only after a
+separate `lab-infra` repository. It creates self-hosted Logto and external GitHub resources, uses the
+existing Langfuse service, and imports the already approved 446-idea snapshot only after a
 successful recovery rehearsal.

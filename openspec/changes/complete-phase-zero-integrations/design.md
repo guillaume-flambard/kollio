@@ -23,15 +23,14 @@ provider, GitHub, backup, and deployment boundaries. Production is managed from 
 
 ## Decisions
 
-### Use Logto Cloud with a Traditional Web application and API resource
+### Use self-hosted Logto OSS with a Traditional Web application and API resource
 
 The Nuxt server owns the browser session and requests an access token for the Kollio API resource.
 FastAPI validates the token independently and maps its subject to local membership. Callback and
-sign-out URLs cover localhost and production. Credentials enter ignored local environment files
-and encrypted `lab-infra` configuration only.
-
-Self-hosting Logto was rejected because it adds another stateful service before identity
-customization is needed and does not remove the need for end-to-end login proof.
+sign-out URLs cover localhost and production. The lab runs the pinned Logto OSS image with a
+dedicated PostgreSQL database, private SSH-only Admin Console, encrypted configuration, and verified
+backup restoration. Credentials enter the macOS password manager and encrypted `lab-infra`
+configuration only.
 
 ### Keep all model traffic behind LiteLLM
 
@@ -78,8 +77,9 @@ contexts, introduce provider flakiness, and consume unrelated budget.
 
 ## Risks / Trade-offs
 
-- [Cloud identity requires interactive verification] -> Hand off only the passkey step, then
-  automate configuration and verify the resulting resources.
+- [Identity administration requires a browser session] -> Keep the Admin Console bound to VPS
+  loopback, connect through SSH, and store its single administrator credential in the password
+  manager.
 - [Custom qwen pricing may be absent] -> Record provider pricing and test spend accounting before
   treating USD budgets as enforced.
 - [One multilingual case can hide matching weakness] -> Limit Phase 0 to compatibility and one
@@ -93,7 +93,8 @@ contexts, introduce provider flakiness, and consume unrelated budget.
 
 ## Migration Plan
 
-1. Complete Logto resources and verify localhost sign-in, sign-out, API audience, and membership.
+1. Complete the self-hosted Logto resources and verify localhost sign-in, sign-out, API audience,
+   and membership.
 2. Add the OpenAI credential and verify stored cross-language retrieval.
 3. Reauthenticate GitHub CLI, create the private repository, push the baseline, and obtain green CI.
 4. Configure encrypted offsite backup, restore into isolation, and prove point-in-time recovery.

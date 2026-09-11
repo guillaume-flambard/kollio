@@ -7,7 +7,7 @@ legacy data on the existing Memo Labs infrastructure.
 
 ### Requirement: Deployment follows the existing infrastructure path
 Kollio SHALL deploy through the existing GitHub Actions, private registry, autodeploy,
-Make/Ansible, Compose, and Traefik path. Deployment SHALL contain no Coolify dependency.
+Make/Ansible, Compose, and Traefik path. Deployment SHALL use this single supported path.
 
 #### Scenario: Main branch build succeeds
 - **WHEN** locked lint, type, test, contract, and image checks pass on `main`
