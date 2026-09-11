@@ -96,18 +96,21 @@ USD 0.000556.
 - The final API, worker, web and LiteLLM images build successfully, including with pnpm
   12.4.1, and are published to GHCR only after the required verification job succeeds.
 - Alembic reports no schema drift after applying the three generated migrations.
-- GitHub Actions run `34643244503` passed installation, lint, type checks, all 37 tests,
-  Alembic, OpenAPI drift and builds, then published all four images. Failed run
-  `34643053400` stopped before publication, proving that a required failure cannot publish
-  a deployable revision.
+- [GitHub Actions run 34643244503](https://github.com/guillaume-flambard/kollio/actions/runs/34643244503)
+  passed installation, lint, type checks, all 37 tests, Alembic, OpenAPI drift and builds,
+  then published all four images. [Failed run 34643053400](https://github.com/guillaume-flambard/kollio/actions/runs/34643053400)
+  stopped before publication, proving that a required failure cannot publish a deployable
+  revision.
 
 ## Production deployment and recovery evidence
 
 The deployment is declared in `lab-infra` and uses its existing Make, Ansible, Compose,
-Traefik and autodeploy path. Pull request 51 introduced the stack and pull request 52 added
-the encrypted environment, deterministic WAL ownership and recovery tooling. Pull request
-53 corrected defects found by the live PITR rehearsal. All infrastructure checks passed;
-no Coolify component or reference is used.
+Traefik and autodeploy path. [Pull request 51](https://github.com/guillaume-flambard/lab-infra/pull/51)
+introduced the stack and [pull request 52](https://github.com/guillaume-flambard/lab-infra/pull/52)
+added the encrypted environment, deterministic WAL ownership and recovery tooling.
+[Pull request 53](https://github.com/guillaume-flambard/lab-infra/pull/53) corrected defects found
+by the live PITR rehearsal. All infrastructure checks passed; no Coolify component or
+reference is used.
 
 - Public `https://kollio.memolabs.dev/` and `/api/health` return HTTP 200. Postgres,
   Redis, LiteLLM, API and web report healthy; the ARQ worker remains running.
