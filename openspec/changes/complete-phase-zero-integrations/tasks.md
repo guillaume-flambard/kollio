@@ -4,7 +4,7 @@
 - [x] 1.2 Configure the Nuxt Logto module for the registered localhost and production callbacks, API resource, SSR session, and sign-out redirects, and verify the Nuxt type check passes.
 - [x] 1.3 Add persistent Logto subject-to-user and workspace membership mapping for the imported private workspace, and verify integration tests cover owner and non-member identities.
 - [x] 1.4 Complete a real localhost browser sign-in and sign-out, then verify an authenticated owner can read an imported idea while an unmapped identity receives the private not-found response.
-- [ ] 1.5 Provision the production Logto tenant and production credentials through the approved credential store, and verify its issuer, callbacks, audience, and JWKS independently of the development tenant.
+- [x] 1.5 Provision the production Logto tenant and production credentials through the approved credential store, and verify its issuer, callbacks, audience, and JWKS independently of the development tenant.
 
 ## 2. Multilingual Embeddings
 
@@ -40,7 +40,7 @@
 
 ## 6. Existing Infrastructure Deployment
 
-- [x] 6.1 Create an isolated `lab-infra` worktree branch and add the Kollio Compose stack, encrypted environment references, Traefik routes, health probes, registry images, migration job, and autodeploy metadata with no Coolify reference.
+- [x] 6.1 Create an isolated `lab-infra` worktree branch and add the Kollio Compose stack, encrypted environment references, Traefik routes, health probes, registry images, migration job, and autodeploy metadata through the supported deployment path.
 - [x] 6.2 Run `make check` in the isolated worktree and verify every Ansible, Compose, secret-reference, and infrastructure check passes before opening the pull request.
 - [x] 6.3 Review and merge the `lab-infra` pull request, then verify GitHub Actions publishes immutable images and the existing autodeploy timer rolls out Kollio without a manual VPS edit.
 - [x] 6.4 Verify the schema migration runs once before application startup and that a simulated migration failure leaves the previous healthy revision serving traffic.

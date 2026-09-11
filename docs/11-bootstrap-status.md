@@ -1,8 +1,8 @@
 # Kollio Phase 0 implementation status
 
-Status as of 2026-09-11: foundations are deployed, production data is reconciled and the
-Logto development login is verified. Phase 0 remains open only for the production Logto
-tenant and OpenAI credential checks listed below.
+Status as of 2026-09-12: foundations are deployed, production data is reconciled, and the
+self-hosted Logto OSS production flow is verified. Phase 0 remains open only for a valid
+OpenAI credential and the live multilingual embedding check listed below.
 
 ## Decisions applied
 
@@ -10,8 +10,8 @@ tenant and OpenAI credential checks listed below.
 - All implementation code, identifiers, comments and docstrings in English.
 - French and English UI/API messages in translation catalogs. User data and historical
   field names are preserved at the import boundary.
-- Logto Cloud development tenant configured with the `Kollio Web` Traditional Web
-  application and the `Kollio API` resource.
+- Logto OSS 1.43.0 is self-hosted with a dedicated PostgreSQL database, a public OIDC
+  endpoint, and an SSH-only Admin Console. The Cloud development tenant remains test-only.
 - b.ai / qwen3.8-flash behind LiteLLM, as approved after the VPS audit.
 - OpenAI text-embedding-3-large, 1536 dimensions, one shared FR/EN space.
 - All 446 ideas in the fresh Prospecteur snapshot imported directly into a private
@@ -74,10 +74,19 @@ USD 0.000556.
   `GET /ideas/{idea_id}`. Non-members receive 404, avoiding idea enumeration.
 - JWT signature, issuer, audience, expiry and subject validation; fail closed without
   identity configuration. Token validation tests cover each rejection.
-- Logto development issuer `https://fbed5e.logto.app/oidc`, JWKS endpoint, Web application
-  identifier and API audience are recorded in `.env.example`. Callback and sign-out URLs
-  are registered for localhost and `https://kollio.memolabs.dev`. Secrets remain only in
-  the ignored mode-0600 `.env` file.
+- The production issuer `https://kollio-auth.memolabs.dev/oidc`, JWKS endpoint, Web
+  application identifier, and API audience are recorded in `.env.example`. Callback and
+  sign-out URLs cover localhost and `https://kollio.memolabs.dev`. Secrets remain in the
+  macOS password manager and encrypted infrastructure configuration.
+- Logto OSS 1.43.0 runs from a digest-pinned image with a dedicated PostgreSQL database.
+  Its public OIDC discovery and JWKS endpoints pass over HTTPS, while the Admin Console is
+  reachable only through an SSH tunnel to VPS loopback.
+- The self-hosted `Kollio Web` client and `Kollio API` resource use the production callback,
+  post-sign-out URL, and audience. A fresh production owner completed registration, login,
+  two audience-bound token exchanges, and logout through the public domains.
+- The production owner subject maps to exactly one admin membership in the imported private
+  workspace. The deterministic authorization integration tests continue to cover both member
+  access and non-member isolation.
 - Localized API errors, FR/EN routes, catalog key parity and locale propagation.
 - LangGraph state includes locale; Postgres checkpoint survives interruption and resume.
 - Agent side effects use a database primary key on workflow and step. Replays reuse the
@@ -110,8 +119,8 @@ Traefik and autodeploy path. [Pull request 51](https://github.com/guillaume-flam
 introduced the stack and [pull request 52](https://github.com/guillaume-flambard/lab-infra/pull/52)
 added the encrypted environment, deterministic WAL ownership and recovery tooling.
 [Pull request 53](https://github.com/guillaume-flambard/lab-infra/pull/53) corrected defects found
-by the live PITR rehearsal. All infrastructure checks passed; no Coolify component or
-reference is used.
+by the live PITR rehearsal. All infrastructure checks passed through the supported lab
+deployment path.
 
 - Public `https://kollio.memolabs.dev/` and `/api/health` return HTTP 200. Postgres,
   Redis, LiteLLM, API and web report healthy; the ARQ worker remains running.
@@ -183,13 +192,15 @@ Legacy code classification:
 
 ## Remaining acceptance criteria
 
-1. Provision a separate Logto production tenant and credentials before public rollout.
-   The development tenant is retained for testing only.
-2. Configure the approved OpenAI credential, then verify actual 1,536-dimensional FR/EN
+1. Configure a valid approved OpenAI credential, then verify actual 1,536-dimensional FR/EN
    embeddings, storage and retrieval. No fake vectors are presented as multilingual
    matching proof.
-3. Extend the reviewed agent evaluation corpus beyond the current competition cases as
+2. Extend the reviewed agent evaluation corpus beyond the current competition cases as
    product behavior expands.
+
+The only existing lab OpenAI credential returned `401 invalid_api_key` during the live
+embedding check on 2026-09-12. Kollio's copy was immediately cleared and re-encrypted; no
+invalid credential remains active in the Kollio stack.
 
 No provider secret or migration snapshot is tracked in Git. The local snapshot and environment
 files have restrictive permissions. Runtime vendor deprecation warnings remain in the test
