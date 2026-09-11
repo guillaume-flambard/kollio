@@ -1,0 +1,109 @@
+name: kollio
+services:
+  postgres:
+    image: pgvector/pgvector@sha256:78bf48b801e792f99e3ac62b5036fd3876e9be48afda16c1e331af1c75ceb2ff
+    environment:
+      POSTGRES_USER: kollio
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_DB: kollio
+    ports: ["127.0.0.1:54329:5432"]
+    volumes: ["postgres-data:/var/lib/postgresql"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kollio -d kollio"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis@sha256:298e5b3bc566bade82f46ad5511777a4a07a294097ce16ada2f6a42be5239df5
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    ports: ["127.0.0.1:63799:6379"]
+    volumes: ["redis-data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  gateway-migrate:
+    image: ghcr.io/berriai/litellm@sha256:a3715fa7ad8387941ab697259bd2881d68931657247a41984f90fae6d11c62bf
+    profiles: [tools]
+    environment: &gateway-environment
+      DATABASE_URL: postgresql://kollio:${POSTGRES_PASSWORD}@postgres:5432/kollio?schema=litellm
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?Set LITELLM_MASTER_KEY}
+      BAI_API_KEY: ${BAI_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      LANGFUSE_HOST: ${LANGFUSE_HOST:-}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LITELLM_TELEMETRY: "false"
+    volumes: ["./infra/litellm/config.yaml:/app/config.yaml:ro"]
+    command: ["--config", "/app/config.yaml", "--skip_server_startup", "--enforce_prisma_migration_check", "--use_v2_migration_resolver"]
+    depends_on:
+      postgres: {condition: service_healthy}
+  litellm:
+    image: ghcr.io/berriai/litellm@sha256:a3715fa7ad8387941ab697259bd2881d68931657247a41984f90fae6d11c62bf
+    environment:
+      <<: *gateway-environment
+      DISABLE_SCHEMA_UPDATE: "true"
+    volumes: ["./infra/litellm/config.yaml:/app/config.yaml:ro"]
+    command: ["--config", "/app/config.yaml", "--port", "4000", "--telemetry", "false"]
+    ports: ["127.0.0.1:4000:4000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment: &api-environment
+      DATABASE_URL: postgresql+asyncpg://kollio:${POSTGRES_PASSWORD}@postgres:5432/kollio
+      REDIS_URL: redis://redis:6379/0
+      LLM_BASE_URL: http://litellm:4000/v1
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LOGTO_ISSUER: ${LOGTO_ISSUER:-}
+      LOGTO_JWKS_URL: ${LOGTO_JWKS_URL:-}
+      LOGTO_AUDIENCE: https://kollio.memolabs.dev/api
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:-}
+      OTEL_EXPORTER_OTLP_HEADERS: ${OTEL_EXPORTER_OTLP_HEADERS:-}
+      LANGCHAIN_TRACING_V2: "false"
+      DEEPEVAL_TELEMETRY_OPT_OUT: "YES"
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+  worker:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment: *api-environment
+    command: ["arq", "src.platform.worker.WorkerSettings"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NUXT_PUBLIC_AUTH_ENABLED: ${NUXT_PUBLIC_AUTH_ENABLED:-false}
+    environment:
+      NUXT_API_BASE: http://api:8000
+      NUXT_PUBLIC_AUTH_ENABLED: ${NUXT_PUBLIC_AUTH_ENABLED:-false}
+      NUXT_LOGTO_ENDPOINT: ${NUXT_LOGTO_ENDPOINT:-}
+      NUXT_LOGTO_APP_ID: ${NUXT_LOGTO_APP_ID:-}
+      NUXT_LOGTO_APP_SECRET: ${NUXT_LOGTO_APP_SECRET:-}
+      NUXT_LOGTO_COOKIE_ENCRYPTION_KEY: ${NUXT_LOGTO_COOKIE_ENCRYPTION_KEY:-}
+    ports: ["127.0.0.1:3000:3000"]
+    depends_on:
+      api: {condition: service_healthy}
+volumes:
+  postgres-data:
+  redis-data:

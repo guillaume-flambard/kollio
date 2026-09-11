@@ -1,0 +1,27 @@
+{
+  "provenance": {
+    "source_system": "prospecteur",
+    "source_case_id": "concurrence-aucun-resultat",
+    "reviewed_on": "2026-09-11",
+    "historical_expectation": "kill",
+    "semantic_note": "Kollio records unknown because failed research cannot establish either competition or opportunity."
+  },
+  "input": {
+    "title": "A product with no research result",
+    "pitch": "The research provider returned no usable record.",
+    "locale": "en",
+    "evidence": []
+  },
+  "expected": {
+    "verdict": "unknown",
+    "source_ids": [],
+    "locale": "en"
+  },
+  "output": {
+    "verdict": "unknown",
+    "reason": "The research returned no evidence, so neither a competitive position nor an open opportunity can be established.",
+    "source_ids": [],
+    "established_facts": [],
+    "locale": "en"
+  }
+}

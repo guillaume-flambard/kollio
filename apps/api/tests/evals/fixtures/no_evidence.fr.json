@@ -1,0 +1,20 @@
+{
+  "input": {
+    "title": "Maintenance planning",
+    "pitch": "A shared planning tool for small maintenance teams.",
+    "locale": "fr",
+    "evidence": []
+  },
+  "expected_verdict": "unknown",
+  "output": {
+    "verdict": "unknown",
+    "reason": "Le contenu fourni est insuffisant pour évaluer la concurrence car aucune preuve ou source externe n'est incluse dans le dossier. Il est impossible de déterminer si des concurrents existent ou si une opportunité de marché subsiste sans données supplémentaires.",
+    "source_ids": [],
+    "established_facts": [
+      "L'idée présentée est un outil de planification partagé destiné aux petites équipes de maintenance.",
+      "Aucune preuve externe n'a été fournie pour cette évaluation."
+    ],
+    "locale": "fr"
+  },
+  "model": "b.ai/qwen3.8-flash"
+}

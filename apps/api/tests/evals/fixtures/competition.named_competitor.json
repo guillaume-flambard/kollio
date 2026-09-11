@@ -1,0 +1,32 @@
+{
+  "provenance": {
+    "source_system": "prospecteur",
+    "source_case_id": "concurrence-occupant-nomme",
+    "reviewed_on": "2026-09-11",
+    "semantic_note": "A directly named competitor serving the same workflow is established evidence."
+  },
+  "input": {
+    "title": "Marina call tracking",
+    "pitch": "A board that records marina call issues and sends follow-up reminders.",
+    "locale": "en",
+    "evidence": [
+      {
+        "id": "portcall-product-page",
+        "url": "https://portcall-pro.example",
+        "text": "Portcall Pro states that it manages marina calls, incidents and follow-up reminders for 400 marinas."
+      }
+    ]
+  },
+  "expected": {
+    "verdict": "kill",
+    "source_ids": ["portcall-product-page"],
+    "locale": "en"
+  },
+  "output": {
+    "verdict": "kill",
+    "reason": "Portcall Pro is named as serving the same marina call and reminder workflow, and the supplied evidence establishes no remaining differentiation.",
+    "source_ids": ["portcall-product-page"],
+    "established_facts": ["Portcall Pro manages marina calls, incidents and reminders."],
+    "locale": "en"
+  }
+}

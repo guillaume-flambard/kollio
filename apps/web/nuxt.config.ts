@@ -1,0 +1,35 @@
+export default defineNuxtConfig({
+  compatibilityDate: '2026-09-11',
+  devtools: { enabled: true },
+  modules: ['@nuxt/ui', '@nuxtjs/i18n', '@nuxt/eslint',
+    ...(process.env.NUXT_PUBLIC_AUTH_ENABLED === 'true' ? ['@logto/nuxt'] : [])],
+  css: ['~/assets/css/main.css'],
+  runtimeConfig: {
+    apiBase: 'http://localhost:8000',
+    logto: {
+      endpoint: '', appId: '', appSecret: '', cookieEncryptionKey: '',
+      customRedirectBaseUrl: '',
+      resources: ['https://kollio.memolabs.dev/api'],
+      scopes: ['openid', 'profile', 'email'],
+      cookieSecure: process.env.NODE_ENV === 'production',
+      fetchUserInfo: false,
+      postCallbackRedirectUri: '/',
+      postLogoutRedirectUri: '/',
+      pathnames: { signIn: '/sign-in', signOut: '/sign-out', callback: '/callback' },
+    },
+    public: { authEnabled: false },
+  },
+  i18n: {
+    defaultLocale: 'fr', strategy: 'prefix_except_default',
+    locales: [{ code: 'fr', language: 'fr-FR', name: 'French', file: 'fr.json' },
+              { code: 'en', language: 'en-GB', name: 'English', file: 'en.json' }],
+    detectBrowserLanguage: { useCookie: true, cookieKey: 'kollio_locale', redirectOn: 'root' },
+    vueI18n: './i18n.config.ts',
+  },
+  fonts: { families: [
+    { name: 'Bricolage Grotesque', provider: 'google', weights: [600, 700, 800] },
+    { name: 'Geist', provider: 'google', weights: [400, 500, 600] },
+    { name: 'Geist Mono', provider: 'google', weights: [400] },
+  ] },
+  colorMode: { preference: 'light' },
+})

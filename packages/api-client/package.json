@@ -1,0 +1,14 @@
+{
+  "name": "@kollio/api-client",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/generated/index.ts"
+  }
+}

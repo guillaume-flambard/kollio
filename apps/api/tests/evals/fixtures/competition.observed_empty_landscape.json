@@ -1,0 +1,38 @@
+{
+  "provenance": {
+    "source_system": "prospecteur",
+    "source_case_id": "concurrence-aucun-occupant",
+    "reviewed_on": "2026-09-11",
+    "historical_expectation": "pass",
+    "semantic_note": "Observed relevant results without a named product support a provisional pass, not a claim that the entire market is empty."
+  },
+  "input": {
+    "title": "Accreditation mention verification",
+    "pitch": "Compare an accreditation mention with an official list and produce archivable evidence.",
+    "locale": "en",
+    "evidence": [
+      {
+        "id": "official-directory",
+        "url": "https://annuaire.example",
+        "text": "The official directory lists accredited organizations and is updated quarterly."
+      },
+      {
+        "id": "quality-guide",
+        "url": "https://guide-qualite.example",
+        "text": "Laboratory quality documentation should trace the accreditation references it uses."
+      }
+    ]
+  },
+  "expected": {
+    "verdict": "pass",
+    "source_ids": ["official-directory", "quality-guide"],
+    "locale": "en"
+  },
+  "output": {
+    "verdict": "pass",
+    "reason": "The reviewed evidence establishes the verification need and an official data source but names no product occupying the proposed workflow.",
+    "source_ids": ["official-directory", "quality-guide"],
+    "established_facts": ["An official accreditation directory exists.", "Quality documentation must trace accreditation references."],
+    "locale": "en"
+  }
+}

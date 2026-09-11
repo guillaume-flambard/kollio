@@ -1,0 +1,41 @@
+{
+  "brand": "Kollio",
+  "navigation": "Navigation principale",
+  "meta": {
+    "title": "Kollio | Des idées aux projets collectifs",
+    "description": "Confrontez vos idées au réel, faites-les évoluer et réunissez les bonnes personnes."
+  },
+  "language": {
+    "switch": "English"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signOut": "Se déconnecter",
+    "pending": "Les inscriptions ouvriront prochainement."
+  },
+  "hero": {
+    "eyebrow": "PENSER ENSEMBLE. CONSTRUIRE ENSEMBLE.",
+    "title": "Une idée mérite plus qu’une conversation.",
+    "description": "Un endroit pour confronter vos intuitions au réel, garder le fil de chaque avancée et construire avec les bonnes personnes.",
+    "action": "Entrer dans mon espace"
+  },
+  "principles": {
+    "label": "Comment les idées avancent",
+    "idea": {
+      "title": "Posez une idée.",
+      "description": "Un problème, une intuition, une possibilité. Donnez-lui un point de départ."
+    },
+    "challenge": {
+      "title": "Mettez-la à l’épreuve.",
+      "description": "Des contraintes explicites et des sources pour décider de la prochaine étape."
+    },
+    "team": {
+      "title": "Faites-la grandir ensemble.",
+      "description": "Chaque contribution compte. Chaque avancée garde son histoire."
+    }
+  },
+  "footer": {
+    "promise": "Un espace privé pour les projets collectifs.",
+    "languages": "Pensé en français et en anglais."
+  }
+}

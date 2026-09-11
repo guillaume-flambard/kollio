@@ -1,0 +1,155 @@
+name: Foundations CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      run_live_evals:
+        description: Run budgeted live provider evaluations
+        required: false
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector@sha256:78bf48b801e792f99e3ac62b5036fd3876e9be48afda16c1e331af1c75ceb2ff
+        env:
+          POSTGRES_USER: kollio
+          POSTGRES_PASSWORD: test-only-password
+          POSTGRES_DB: kollio_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U kollio -d kollio_test"
+          --health-interval 3s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis@sha256:298e5b3bc566bade82f46ad5511777a4a07a294097ce16ada2f6a42be5239df5
+        ports: ['6379:6379']
+        options: --health-cmd "redis-cli ping" --health-interval 3s --health-retries 20
+    env:
+      DATABASE_URL: postgresql+asyncpg://kollio:test-only-password@localhost:5432/kollio_test
+      TEST_DATABASE_URL: postgresql+asyncpg://kollio:test-only-password@localhost:5432/kollio_test
+      REDIS_URL: redis://localhost:6379/0
+      LANGCHAIN_TRACING_V2: 'false'
+      DEEPEVAL_TELEMETRY_OPT_OUT: 'YES'
+      NUXT_PUBLIC_AUTH_ENABLED: 'true'
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+      - name: Install locked dependencies
+        run: |
+          pnpm install --frozen-lockfile
+          uv sync --locked --all-packages
+      - name: Lint and types
+        run: |
+          python scripts/check_private_files.py --tracked
+          uv run --project apps/api ruff check apps/api scripts
+          uv run --project apps/api ruff format --check apps/api scripts
+          uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain
+          pnpm lint
+          pnpm typecheck
+          node scripts/check_locales.mjs
+      - name: Migrate and test
+        working-directory: apps/api
+        run: |
+          uv run alembic upgrade head
+          uv run pytest -m 'not live'
+          uv run alembic check
+      - name: Check generated contract drift
+        run: |
+          cd apps/api
+          uv run python -m src.platform.export_openapi
+          cd ../..
+          pnpm generate:client
+          git diff --exit-code -- contracts packages/api-client/src/generated
+      - name: Build web and runtime images
+        run: |
+          pnpm build
+          docker compose build
+        env:
+          POSTGRES_PASSWORD: test-only-password
+          LITELLM_MASTER_KEY: sk-ci-build-only
+  live-evaluations:
+    if: github.event_name == 'workflow_dispatch' && inputs.run_live_evals
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      BAI_API_KEY: ${{ secrets.BAI_API_KEY }}
+      POSTGRES_PASSWORD: live-eval-only-password
+      LITELLM_MASTER_KEY: ${{ secrets.LITELLM_MASTER_KEY }}
+      LLM_API_KEY: ${{ secrets.LITELLM_MASTER_KEY }}
+      LLM_BASE_URL: http://localhost:4000/v1
+      KOLLIO_RUN_LIVE_EVALS: '1'
+      KOLLIO_LIVE_EVAL_MAX_CASES: '2'
+      KOLLIO_LIVE_EVAL_BUDGET_USD: '0.10'
+      KOLLIO_LIVE_EVAL_ESTIMATED_CASE_COST_USD: '0.01'
+      KOLLIO_LIVE_EVAL_REQUESTS_PER_MINUTE: '6'
+      DEEPEVAL_TELEMETRY_OPT_OUT: 'YES'
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+      - name: Install locked Python dependencies
+        run: uv sync --locked --all-packages
+      - name: Start the provider gateway
+        run: |
+          docker compose up -d --wait postgres
+          docker compose run --rm gateway-migrate
+          docker compose up -d --wait litellm
+      - name: Run bounded live evaluations
+        run: uv run --project apps/api pytest apps/api/tests/evals -m live
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - image: api
+            dockerfile: apps/api/Dockerfile
+          - image: worker
+            dockerfile: apps/api/Dockerfile
+          - image: web
+            dockerfile: apps/web/Dockerfile
+          - image: litellm
+            dockerfile: infra/litellm/Dockerfile
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v7.3.0
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/kollio-${{ matrix.image }}:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/kollio-${{ matrix.image }}:latest
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          build-args: |
+            NUXT_PUBLIC_AUTH_ENABLED=true

@@ -1,0 +1,13 @@
+**/.git
+**/.env
+**/.env.*
+**/node_modules
+**/.venv
+**/.nuxt
+**/.output
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/.mypy_cache
+**/.deepeval
+work

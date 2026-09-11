@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@import "@kollio/ui/tokens.css";
+
+body { min-width: 320px; }
+.font-display { font-family: var(--font-display); }
+::selection { background: #dfe5ff; color: #141310; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

@@ -1,0 +1,32 @@
+{
+  "provenance": {
+    "source_system": "prospecteur",
+    "source_case_id": "concurrence-occupant-nomme",
+    "reviewed_on": "2026-09-11",
+    "semantic_note": "Competitor-authored claims may establish product positioning but remain attributed claims."
+  },
+  "input": {
+    "title": "Marina call tracking",
+    "pitch": "A board that records marina call issues and sends follow-up reminders.",
+    "locale": "en",
+    "evidence": [
+      {
+        "id": "vendor-claim",
+        "url": "https://portcall-pro.example/product",
+        "text": "On its own product page, Portcall Pro says it manages marina calls, incidents and automated reminders."
+      }
+    ]
+  },
+  "expected": {
+    "verdict": "kill",
+    "source_ids": ["vendor-claim"],
+    "locale": "en"
+  },
+  "output": {
+    "verdict": "kill",
+    "reason": "The vendor describes the same core workflow. This is an attributed vendor claim, and the supplied record establishes no defensible difference.",
+    "source_ids": ["vendor-claim"],
+    "established_facts": ["Portcall Pro claims to cover marina calls, incidents and reminders."],
+    "locale": "en"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "brand": "Kollio",
+  "navigation": "Main navigation",
+  "meta": {
+    "title": "Kollio | From ideas to shared projects",
+    "description": "Test your ideas against reality, develop them and bring the right people together."
+  },
+  "language": {
+    "switch": "Français"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "pending": "Registration will open soon."
+  },
+  "hero": {
+    "eyebrow": "THINK TOGETHER. BUILD TOGETHER.",
+    "title": "An idea deserves more than a conversation.",
+    "description": "A place to test your instincts against reality, keep track of every step and build with the right people.",
+    "action": "Enter my workspace"
+  },
+  "principles": {
+    "label": "How ideas move forward",
+    "idea": {
+      "title": "Start with an idea.",
+      "description": "A problem, an intuition, a possibility. Give it a starting point."
+    },
+    "challenge": {
+      "title": "Put it to the test.",
+      "description": "Explicit constraints and sources to help you decide what comes next."
+    },
+    "team": {
+      "title": "Grow it together.",
+      "description": "Every contribution matters. Every step keeps its history."
+    }
+  },
+  "footer": {
+    "promise": "A private space for shared projects.",
+    "languages": "Built for French and English."
+  }
+}
