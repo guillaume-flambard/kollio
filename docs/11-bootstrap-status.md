@@ -1,7 +1,8 @@
 # Kollio Phase 0 implementation status
 
-Status as of 2026-09-11: foundations are deployed and production data is reconciled.
-Phase 0 remains open only for the external Logto and OpenAI credential checks listed below.
+Status as of 2026-09-11: foundations are deployed, production data is reconciled and the
+Logto development login is verified. Phase 0 remains open only for the production Logto
+tenant and OpenAI credential checks listed below.
 
 ## Decisions applied
 
@@ -120,6 +121,12 @@ reference is used.
 - The production import ran twice from snapshot
   `41d6fc40f266210ccc0c9dc4f55b6dba96783eebdb5dc3810d862791d3d67936`.
   Both runs retained exactly 446 ideas and one immutable legacy import record.
+- A Logto development user signed in through the production callback. `/api/session`
+  returned the mapped subject, and the authenticated BFF returned imported private idea
+  `8ff5003d-ac47-5368-b722-e6d532161ebd`. Signing out cleared the session and restored the
+  signed-out interface. The mapped user has one admin membership in the private import
+  workspace, with zero unintended memberships. No password is retained in the repository
+  or this evidence record.
 - Workflow `phase-zero-resume-2f536960-2db0-4ed1-a238-53264465db63` resumed through a
   newly opened Postgres checkpointer without a second gateway call and retained locale `fr`.
 - A production OpenTelemetry span for `GET /openapi.json` reached Langfuse at
@@ -176,9 +183,8 @@ Legacy code classification:
 
 ## Remaining acceptance criteria
 
-1. Create a Logto development user, verify real browser login and logout, map that subject
-   to the imported workspace, and provision separate production credentials before public
-   rollout. These operations require an explicit account-creation confirmation.
+1. Provision a separate Logto production tenant and credentials before public rollout.
+   The development tenant is retained for testing only.
 2. Configure the approved OpenAI credential, then verify actual 1,536-dimensional FR/EN
    embeddings, storage and retrieval. No fake vectors are presented as multilingual
    matching proof.

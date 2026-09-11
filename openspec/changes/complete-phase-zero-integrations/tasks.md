@@ -3,7 +3,7 @@
 - [x] 1.1 Record the Logto issuer, JWKS URL, Web application identifier, and API audience in safe configuration examples and bootstrap documentation, and verify no secret value is tracked by Git.
 - [x] 1.2 Configure the Nuxt Logto module for the registered localhost and production callbacks, API resource, SSR session, and sign-out redirects, and verify the Nuxt type check passes.
 - [x] 1.3 Add persistent Logto subject-to-user and workspace membership mapping for the imported private workspace, and verify integration tests cover owner and non-member identities.
-- [ ] 1.4 Complete a real localhost browser sign-in and sign-out, then verify an authenticated owner can read an imported idea while an unmapped identity receives the private not-found response.
+- [x] 1.4 Complete a real localhost browser sign-in and sign-out, then verify an authenticated owner can read an imported idea while an unmapped identity receives the private not-found response.
 - [ ] 1.5 Provision the production Logto tenant and production credentials through the approved credential store, and verify its issuer, callbacks, audience, and JWKS independently of the development tenant.
 
 ## 2. Multilingual Embeddings
@@ -36,7 +36,7 @@
 - [x] 5.3 Demonstrate point-in-time recovery to a recorded timestamp after a controlled write, and verify the recovered database includes the pre-point record and excludes the post-point record.
 - [x] 5.4 Capture a fresh consistent read-only Prospecteur snapshot and checksum, and verify the source SQLite file remains byte-for-byte unchanged after extraction.
 - [x] 5.5 Import all approved ideas idempotently into the production private workspace with stable identifiers and provenance, and verify a second run changes neither counts nor records.
-- [ ] 5.6 Map the approved Logto owner identity to the imported workspace, and verify no public or unintended membership exists.
+- [x] 5.6 Map the approved Logto owner identity to the imported workspace, and verify no public or unintended membership exists.
 
 ## 6. Existing Infrastructure Deployment
 
