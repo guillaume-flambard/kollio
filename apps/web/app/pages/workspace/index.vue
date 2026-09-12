@@ -125,11 +125,11 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
         <aside class="ideas-filter-rail">
           <p>{{ t('ideas.explorer.explore') }}</p>
           <button type="button" :aria-pressed="!activeStage" @click="replaceFilters({ stage: undefined })">
-            <KollioSketchAnnotation :active="!activeStage" kind="loop">{{ t('ideas.explorer.all') }}</KollioSketchAnnotation>
+            <KollioSketchAnnotation :active="!activeStage" kind="swash">{{ t('ideas.explorer.all') }}</KollioSketchAnnotation>
             <span v-if="!activeStage">{{ ideaPage?.total ?? 0 }}</span>
           </button>
           <button v-for="stage in validStages" :key="stage" type="button" :aria-pressed="activeStage === stage" @click="replaceFilters({ stage })">
-            <KollioSketchAnnotation :active="activeStage === stage" kind="loop">{{ t(`ideas.stage.${stage}`) }}</KollioSketchAnnotation>
+            <KollioSketchAnnotation :active="activeStage === stage" kind="swash">{{ t(`ideas.stage.${stage}`) }}</KollioSketchAnnotation>
           </button>
 
           <template v-if="visibleDomains.length">
@@ -221,7 +221,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-filter-rail button { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; color: var(--ui-text-muted); font-size: .78rem; text-align: left; }
 .ideas-filter-rail button[aria-pressed='true'] { color: var(--kollio-heading); font-weight: 620; }
 .ideas-filter-rail button > span { padding-right: 9px; font-size: .66rem; }
-.ideas-filter-rail :deep(.sketch-annotation--loop) { min-height: 40px; margin-left: -8px; padding: 6px 13px; }
+.ideas-filter-rail :deep(.sketch-annotation--swash) { min-height: 32px; margin-left: -3px; padding: 4px 7px; }
 .ideas-filter-rail .domain-filter { min-height: 39px; padding-inline: 11px; }
 .ideas-filter-rail hr { margin: 20px 10px; border-color: var(--ui-border); }
 .ideas-results { min-width: 0; border-right: 1px solid var(--ui-border); }

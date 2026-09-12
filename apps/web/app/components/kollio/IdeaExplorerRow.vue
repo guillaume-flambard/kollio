@@ -21,13 +21,9 @@ defineEmits<{
     :aria-pressed="selected"
     @click="$emit('select')"
   >
-    <KollioSketchAnnotation v-if="selected" kind="bracket" class="explorer-row-selection">
-      <span class="sr-only">{{ stageLabel }}</span>
-    </KollioSketchAnnotation>
-
     <span class="explorer-row-copy">
       <span class="explorer-row-meta">
-        <KollioSketchAnnotation kind="swash"><span>{{ stageLabel }}</span></KollioSketchAnnotation>
+        <span>{{ stageLabel }}</span>
         <span v-if="idea.domain && idea.domain.length <= 32">{{ idea.domain }}</span>
         <time :datetime="idea.created_at">{{ dateLabel }}</time>
       </span>
@@ -44,8 +40,7 @@ defineEmits<{
 .explorer-row { position: relative; display: grid; width: 100%; min-height: 100px; grid-template-columns: minmax(0, 1fr) 28px; align-items: center; gap: 20px; overflow: hidden; border-bottom: 1px solid var(--ui-border); padding: 18px 24px; text-align: left; transition: background 180ms ease; }
 .explorer-row:hover, .explorer-row:focus-visible, .explorer-row.is-selected { background: color-mix(in srgb, var(--kollio-wash) 16%, var(--ui-bg-elevated)); }
 .explorer-row:focus-visible { outline: 2px solid color-mix(in srgb, var(--kollio-active-ink) 58%, transparent); outline-offset: -3px; }
-.explorer-row-selection { position: absolute; z-index: 0; inset: 5px 8px; width: auto; height: calc(100% - 10px); padding: 0; }
-.explorer-row-copy { position: relative; z-index: 1; min-width: 0; }
+.explorer-row-copy { min-width: 0; }
 .explorer-row-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 12px; color: var(--ui-text-muted); font-size: .69rem; }
 .explorer-row-meta > * + *::before { margin-right: 12px; color: var(--ui-border-accented); content: '·'; }
 .explorer-row strong { display: block; margin-top: 12px; color: var(--kollio-heading); font-size: clamp(.98rem, 1.25vw, 1.12rem); font-weight: 620; letter-spacing: -.022em; line-height: 1.28; }
