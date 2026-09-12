@@ -33,6 +33,10 @@ Temporal remains outside the current architecture. LangGraph checkpoints plus a 
 - Human review resumes the same LangGraph thread and never starts a second model call.
 - Langfuse datasets grow from reviewed production traces. Automated quality gates are calibrated only after enough human labels exist to measure false positives and false negatives.
 
+## Current evidence boundary
+
+The pull request verifies the complete workflow with recorded model results and a real PostgreSQL checkpointer. It does not spend provider budget on a live `b.ai / qwen3.8-flash` analysis. That live acceptance run remains an environment check after the branch is deployed with the approved provider credential. The earlier production OpenTelemetry to Langfuse ingestion evidence remains valid, while this new API to Taskiq trace chain still requires one deployed trace inspection.
+
 ## Primary references
 
 - [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview)
