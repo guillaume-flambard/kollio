@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IdeaPageResponse, WorkspaceResponse } from '@kollio/api-client'
+import type { IdeaPageResponse, IdeaSummaryResponse, WorkspaceResponse } from '@kollio/api-client'
 import { motion, useReducedMotion } from 'motion-v'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
@@ -10,9 +10,12 @@ const router = useRouter()
 const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
 const reducedMotion = useReducedMotion()
-const pageSize = 6
+const pageSize = 5
 const validStages = ['seed', 'iterating', 'team_formed'] as const
 const searchInput = ref(typeof route.query.q === 'string' ? route.query.q : '')
+const selectedIdeaId = ref<string>()
+const previewOpen = ref(false)
+const glyphs = Object.freeze({ plus: '＋', down: '⌄' })
 let searchTimer: ReturnType<typeof setTimeout> | undefined
 
 const { data: workspaces } = await useAsyncData('workspaces', () => requestFetch<WorkspaceResponse[]>('/api/workspaces'))
@@ -49,36 +52,64 @@ const { data: ideaPage, status, error, refresh } = await useAsyncData(
   { watch: [activeWorkspace, currentPage, queryText, activeStage, activeDomain] },
 )
 
+const selectedIdea = computed(() => ideaPage.value?.items.find(idea => idea.id === selectedIdeaId.value) ?? ideaPage.value?.items[0])
 const totalPages = computed(() => Math.max(1, Math.ceil((ideaPage.value?.total ?? 0) / pageSize)))
-const dateFormatter = computed(() => new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'short', year: 'numeric' }))
-const visibleDomains = computed(() => Array.from(new Set(
-  ideaPage.value?.items.map(idea => idea.domain).filter(
-    (domain): domain is string => Boolean(domain && domain.length <= 32),
-  ) ?? [],
-)).slice(0, 6))
+const relativeFormatter = computed(() => new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }))
+const visibleDomainGroups = computed(() => {
+  const groups = new Map<string, { label: string, value: string, count: number }>()
+  for (const idea of ideaPage.value?.items ?? []) {
+    if (!idea.domain) continue
+    const label = domainLabel(idea.domain)
+    const current = groups.get(label)
+    groups.set(label, { label, value: current?.value ?? idea.domain, count: (current?.count ?? 0) + 1 })
+  }
+  return Array.from(groups.values()).slice(0, 7)
+})
 
 watch(() => route.query.q, value => {
   searchInput.value = typeof value === 'string' ? value : ''
 })
+watch(() => ideaPage.value?.items, items => {
+  if (!items?.length) {
+    selectedIdeaId.value = undefined
+    return
+  }
+  if (!items.some(idea => idea.id === selectedIdeaId.value)) selectedIdeaId.value = items[0]?.id
+}, { immediate: true })
 
 function replaceFilters(updates: Record<string, string | undefined>) {
-  const nextQuery = Object.fromEntries(
-    Object.entries({ ...route.query, ...updates }).filter(([key, value]) => key !== 'page' && Boolean(value)),
-  )
+  const nextQuery = Object.fromEntries(Object.entries({ ...route.query, ...updates }).filter(([key, value]) => key !== 'page' && Boolean(value)))
   void router.replace({ path: localePath('/workspace'), query: nextQuery })
 }
 function scheduleSearch() {
   clearTimeout(searchTimer)
   searchTimer = setTimeout(() => replaceFilters({ q: searchInput.value.trim() || undefined }), 280)
 }
+function selectIdea(idea: IdeaSummaryResponse) {
+  selectedIdeaId.value = idea.id
+  previewOpen.value = true
+}
+function relativeDate(date: string) {
+  const days = Math.round((new Date(date).getTime() - Date.now()) / 86_400_000)
+  if (Math.abs(days) < 1) {
+    const hours = Math.round((new Date(date).getTime() - Date.now()) / 3_600_000)
+    return relativeFormatter.value.format(hours, 'hour')
+  }
+  return relativeFormatter.value.format(days, 'day')
+}
+function domainLabel(domain: string) {
+  const value = domain.toLocaleLowerCase()
+  if (/llm|ia|ai|modèle/.test(value)) return t('ideas.explorer.domainGroups.ai')
+  if (/data|donnée|base/.test(value)) return t('ideas.explorer.domainGroups.data')
+  if (/confiance|preuve|qualité|fiabil/.test(value)) return t('ideas.explorer.domainGroups.trust')
+  if (/conform|gouvernance|réglement/.test(value)) return t('ideas.explorer.domainGroups.governance')
+  if (/cours|formation|éducation/.test(value)) return t('ideas.explorer.domainGroups.education')
+  return t('ideas.explorer.domainGroups.product')
+}
 function pageLocation(page: number) {
   return {
     path: localePath('/workspace'),
-    query: {
-      ...route.query,
-      ...(activeWorkspace.value ? { workspace: activeWorkspace.value.id } : {}),
-      ...(page > 1 ? { page: String(page) } : {}),
-    },
+    query: { ...route.query, ...(activeWorkspace.value ? { workspace: activeWorkspace.value.id } : {}), ...(page > 1 ? { page: String(page) } : {}) },
   }
 }
 
@@ -94,128 +125,150 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
     </section>
 
     <template v-else>
-      <motion.header
-        :initial="{ opacity: 0, y: reducedMotion ? 0 : 7 }"
-        :animate="{ opacity: 1, y: 0 }"
-        :transition="{ duration: reducedMotion ? 0 : 0.26 }"
-        class="ideas-explorer-header"
-      >
+      <motion.header :initial="{ opacity: 0, y: reducedMotion ? 0 : 7 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: reducedMotion ? 0 : 0.26 }" class="ideas-explorer-header">
         <div>
-          <p>{{ activeWorkspace.name }}</p>
           <h1>{{ t('ideas.title') }}</h1>
-          <span>{{ t('ideas.explorer.description') }}</span>
+          <p>{{ t('ideas.explorer.description') }}</p>
         </div>
+        <button type="button" class="ideas-create-action">
+          {{ t('ideas.explorer.create') }}<span aria-hidden="true" v-text="glyphs.plus" />
+        </button>
         <label class="ideas-search">
           <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m16 16 5 5" /></svg>
           <input v-model="searchInput" type="search" :placeholder="t('ideas.explorer.search')" @input="scheduleSearch">
+          <span class="ideas-filter-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h10m4 0h2M4 17h2m4 0h10M14 4v6M7 14v6" /></svg></span>
         </label>
       </motion.header>
 
       <section class="ideas-explorer-shell" :aria-label="t('ideas.explorer.library')">
         <aside class="ideas-filter-rail">
-          <p>{{ t('ideas.explorer.explore') }}</p>
-          <button type="button" :aria-pressed="!activeStage" @click="replaceFilters({ stage: undefined })">
-            <KollioSketchAnnotation :active="!activeStage" kind="swash">{{ t('ideas.explorer.all') }}</KollioSketchAnnotation>
-            <span v-if="!activeStage">{{ ideaPage?.total ?? 0 }}</span>
-          </button>
-          <button v-for="stage in validStages" :key="stage" type="button" :aria-pressed="activeStage === stage" @click="replaceFilters({ stage })">
-            <KollioSketchAnnotation :active="activeStage === stage" kind="swash">{{ t(`ideas.stage.${stage}`) }}</KollioSketchAnnotation>
-          </button>
-
-          <template v-if="visibleDomains.length">
-            <hr>
-            <p>{{ t('ideas.explorer.domains') }}</p>
-            <button
-              v-for="domain in visibleDomains"
-              :key="domain"
-              type="button"
-              class="domain-filter"
-              :aria-pressed="activeDomain === domain"
-              @click="replaceFilters({ domain: activeDomain === domain ? undefined : domain })"
-            >
-              <KollioSketchAnnotation :active="activeDomain === domain" kind="swash">{{ domain }}</KollioSketchAnnotation>
+          <nav :aria-label="t('ideas.explorer.explore')">
+            <button type="button" :aria-pressed="!activeStage && !activeDomain" @click="replaceFilters({ stage: undefined, domain: undefined })">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z" /></svg>
+              <KollioSketchAnnotation :active="!activeStage && !activeDomain" kind="loop">{{ t('ideas.explorer.forYou') }}</KollioSketchAnnotation>
+            </button>
+            <button type="button" :aria-pressed="false" @click="replaceFilters({ stage: undefined, domain: undefined })">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><path d="M12 7v5l3 2" /></svg>{{ t('ideas.explorer.recent') }}
+            </button>
+            <button type="button" :aria-pressed="activeStage === 'iterating'" @click="replaceFilters({ stage: activeStage === 'iterating' ? undefined : 'iterating' })">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 3h6M10 3v5l-5 9a3 3 0 0 0 2.6 4h8.8a3 3 0 0 0 2.6-4l-5-9V3M8 15h8" /></svg>{{ t('ideas.explorer.validation') }}
+            </button>
+            <button type="button" :aria-pressed="activeStage === 'team_formed'" @click="replaceFilters({ stage: activeStage === 'team_formed' ? undefined : 'team_formed' })">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M16 20a4 4 0 0 0-8 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 7a3 3 0 0 0-3-3M5 20a3 3 0 0 1 3-3" /></svg>{{ t('ideas.stage.team_formed') }}
+            </button>
+          </nav>
+          <template v-if="visibleDomainGroups.length">
+            <hr><p>{{ t('ideas.explorer.domains') }}</p>
+            <button v-for="domain in visibleDomainGroups" :key="domain.label" type="button" class="domain-filter" :aria-pressed="activeDomain === domain.value" @click="replaceFilters({ domain: activeDomain === domain.value ? undefined : domain.value })">
+              <span>{{ domain.label }}</span><small>{{ domain.count }}</small>
             </button>
           </template>
         </aside>
 
         <main class="ideas-results">
           <header class="ideas-results-header">
-            <span>{{ t('ideas.explorer.results', { count: ideaPage?.total ?? 0 }) }}</span>
-            <span>{{ t('ideas.page', { current: currentPage, total: totalPages }) }}</span>
+            <strong>{{ t('ideas.explorer.found', { count: ideaPage?.total ?? 0 }) }}</strong>
+            <span>{{ t('ideas.explorer.sortBy') }} <b>{{ t('ideas.explorer.relevance') }}</b><i aria-hidden="true" v-text="glyphs.down" /></span>
           </header>
-
           <div v-if="status === 'pending'" aria-live="polite">
-            <div v-for="index in pageSize" :key="index" class="explorer-row-skeleton">
-              <span class="skeleton-line w-20" /><span class="skeleton-line mt-5 w-3/4" /><span class="skeleton-line mt-3 w-full" />
-            </div>
+            <div v-for="index in pageSize" :key="index" class="explorer-row-skeleton"><span class="skeleton-circle" /><span><i class="skeleton-line w-3/4" /><i class="skeleton-line mt-3 w-full" /></span></div>
           </div>
-          <div v-else-if="error" class="ideas-results-feedback">
-            <h2>{{ t('ideas.error.title') }}</h2><p>{{ t('ideas.error.description') }}</p>
-            <KollioPrimaryAction :label="t('ideas.retry')" @click="() => refresh()" />
-          </div>
+          <div v-else-if="error" class="ideas-results-feedback"><h2>{{ t('ideas.error.title') }}</h2><p>{{ t('ideas.error.description') }}</p><KollioPrimaryAction :label="t('ideas.retry')" @click="() => refresh()" /></div>
           <div v-else-if="ideaPage?.items.length">
             <KollioIdeaExplorerRow
-              v-for="(idea, index) in ideaPage.items"
+              v-for="idea in ideaPage.items"
               :key="idea.id"
               :idea="idea"
-              :number="String((currentPage - 1) * pageSize + index + 1).padStart(2, '0')"
-              :to="localePath(`/workspace/ideas/${idea.id}`)"
+              :selected="selectedIdea?.id === idea.id"
               :stage-label="t(`ideas.stage.${idea.stage}`)"
-              :date-label="dateFormatter.format(new Date(idea.created_at))"
+              :date-label="relativeDate(idea.created_at)"
+              :contributor-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
+              :avatar-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
+              :expertise-label="idea.collaborators?.[0]?.roles[0] ? t(`ideas.detail.roles.${idea.collaborators[0].roles[0]}`) : undefined"
+              :domain-label="idea.domain ? domainLabel(idea.domain) : undefined"
+              @select="selectIdea(idea)"
             />
           </div>
-          <div v-else class="ideas-results-feedback">
-            <h2>{{ t('ideas.empty.title') }}</h2><p>{{ t('ideas.explorer.noResults') }}</p>
-          </div>
-
+          <div v-else class="ideas-results-feedback"><h2>{{ t('ideas.empty.title') }}</h2><p>{{ t('ideas.explorer.noResults') }}</p></div>
           <nav v-if="ideaPage && totalPages > 1" class="ideas-results-pagination" :aria-label="t('ideas.pagination')">
             <NuxtLink v-if="currentPage > 1" :to="pageLocation(currentPage - 1)">{{ t('ideas.previous') }}</NuxtLink><span v-else />
             <NuxtLink v-if="currentPage < totalPages" :to="pageLocation(currentPage + 1)">{{ t('ideas.next') }}</NuxtLink>
           </nav>
         </main>
 
+        <KollioIdeaPreviewPanel
+          v-if="selectedIdea"
+          :idea="selectedIdea"
+          :stage-label="t(`ideas.stage.${selectedIdea.stage}`)"
+          :open-label="t('ideas.explorer.open')"
+          :contributor-title="t('ideas.explorer.contributorTitle')"
+          :expertise-title="t('ideas.explorer.expertiseTitle')"
+          :close-label="t('ideas.explorer.closePreview')"
+          :to="localePath(`/workspace/ideas/${selectedIdea.id}`)"
+          :mobile-open="previewOpen"
+          @close="previewOpen = false"
+        />
       </section>
+      <button v-if="previewOpen" type="button" class="preview-backdrop" :aria-label="t('ideas.explorer.closePreview')" @click="previewOpen = false" />
     </template>
   </div>
 </template>
 
 <style scoped>
-.ideas-explorer { width: 100%; padding: clamp(22px, 3vw, 46px); }
-.ideas-explorer-header { display: grid; grid-template-columns: minmax(320px, .85fr) minmax(360px, 1.15fr); align-items: end; gap: clamp(30px, 4vw, 70px); margin-bottom: 28px; }
-.ideas-explorer-header > div > p { color: var(--kollio-active-ink); font-size: .72rem; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; }
-.ideas-explorer-header h1 { margin-top: 9px; color: var(--kollio-heading); font-size: clamp(2.35rem, 3.6vw, 3.8rem); font-weight: 620; letter-spacing: -.062em; line-height: .96; }
-.ideas-explorer-header > div > span { display: block; max-width: 560px; margin-top: 14px; color: var(--ui-text-muted); font-size: .94rem; line-height: 1.55; }
-.ideas-search { display: flex; min-height: 58px; align-items: center; gap: 13px; border: 1px solid var(--ui-border); border-radius: 18px; background: var(--ui-bg-elevated); padding: 0 19px; box-shadow: 0 14px 42px color-mix(in srgb, var(--kollio-active-ink) 5%, transparent); }
-.ideas-search:focus-within { border-color: color-mix(in srgb, var(--kollio-active-ink) 45%, var(--ui-border)); }
-.ideas-search svg { width: 20px; flex: none; fill: none; stroke: var(--ui-text-muted); stroke-linecap: round; stroke-width: 1.7; }
-.ideas-search input { min-width: 0; flex: 1; outline: 0; background: transparent; color: var(--kollio-heading); font-size: .88rem; }
-.ideas-explorer-shell { display: grid; min-height: 680px; grid-template-columns: minmax(190px, 224px) minmax(0, 1fr); overflow: hidden; border: 1px solid var(--ui-border); border-radius: 24px; background: var(--ui-bg-elevated); box-shadow: 0 22px 70px color-mix(in srgb, var(--kollio-active-ink) 5%, transparent); }
-.ideas-filter-rail { border-right: 1px solid var(--ui-border); padding: 28px 18px; }
-.ideas-filter-rail > p { margin: 0 11px 10px; color: var(--ui-text-muted); font-size: .66rem; font-weight: 680; letter-spacing: .075em; text-transform: uppercase; }
-.ideas-filter-rail button { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; color: var(--ui-text-muted); font-size: .78rem; text-align: left; }
+.ideas-explorer { width: 100%; padding: clamp(20px, 2.4vw, 38px); }
+.ideas-explorer-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 22px; margin-bottom: 20px; }
+.ideas-explorer-header h1 { color: var(--kollio-heading); font-size: clamp(2.45rem, 3.6vw, 3.8rem); font-weight: 650; letter-spacing: -.065em; line-height: .95; }
+.ideas-explorer-header p { margin-top: 8px; color: var(--ui-text-muted); font-size: 1rem; }
+.ideas-create-action { display: flex; min-height: 48px; align-items: center; gap: 24px; border-radius: 12px; background: var(--kollio-heading); padding: 0 20px; color: white; font-size: .78rem; font-weight: 570; box-shadow: 0 8px 22px color-mix(in srgb, var(--kollio-heading) 17%, transparent); transition: transform 180ms ease, box-shadow 180ms ease; }
+.ideas-create-action:hover { transform: translateY(-1px); box-shadow: 0 11px 28px color-mix(in srgb, var(--kollio-heading) 22%, transparent); }
+.ideas-create-action span { font-size: 1.2rem; font-weight: 300; }
+.ideas-search { display: flex; min-height: 56px; grid-column: 1 / -1; align-items: center; gap: 13px; border: 1px solid var(--ui-border); border-radius: 12px; background: var(--ui-bg-elevated); padding-left: 16px; }
+.ideas-search:focus-within { border-color: color-mix(in srgb, var(--kollio-active-ink) 42%, var(--ui-border)); }
+.ideas-search > svg { width: 21px; flex: none; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-width: 1.7; }
+.ideas-search input { min-width: 0; flex: 1; outline: 0; background: transparent; color: var(--kollio-heading); font-size: .84rem; }
+.ideas-filter-icon { display: grid; width: 56px; height: 54px; place-items: center; border-left: 1px solid var(--ui-border); }
+.ideas-filter-icon svg { width: 22px; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-width: 1.6; }
+.ideas-explorer-shell { display: grid; min-height: 704px; grid-template-columns: minmax(184px, 210px) minmax(430px, 1fr) minmax(300px, 356px); overflow: hidden; border: 1px solid var(--ui-border); border-radius: 15px; background: var(--ui-bg-elevated); box-shadow: 0 20px 65px color-mix(in srgb, var(--kollio-active-ink) 5%, transparent); }
+.ideas-filter-rail { border-right: 1px solid var(--ui-border); padding: 14px 15px 24px; }
+.ideas-filter-rail nav { display: grid; gap: 1px; }
+.ideas-filter-rail button { display: flex; width: 100%; min-height: 50px; align-items: center; gap: 12px; color: var(--ui-text-muted); font-size: .75rem; text-align: left; }
 .ideas-filter-rail button[aria-pressed='true'] { color: var(--kollio-heading); font-weight: 620; }
-.ideas-filter-rail button > span { padding-right: 9px; font-size: .66rem; }
-.ideas-filter-rail :deep(.sketch-annotation--swash) { min-height: 32px; margin-left: -3px; padding: 4px 7px; }
-.ideas-filter-rail .domain-filter { min-height: 39px; padding-inline: 11px; }
-.ideas-filter-rail hr { margin: 20px 10px; border-color: var(--ui-border); }
+.ideas-filter-rail button svg { width: 21px; flex: none; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.55; }
+.ideas-filter-rail nav :deep(.sketch-annotation--loop) { width: 100%; min-height: 44px; margin-left: -8px; padding: 8px 12px; }
+.ideas-filter-rail hr { margin: 16px 0 22px; border-color: var(--ui-border); }
+.ideas-filter-rail > p { margin: 0 8px 8px; color: var(--kollio-heading); font-size: .74rem; font-weight: 650; }
+.ideas-filter-rail .domain-filter { min-height: 34px; justify-content: space-between; padding: 0 8px; }
+.ideas-filter-rail .domain-filter small { font-size: .65rem; }
 .ideas-results { min-width: 0; }
-.ideas-results-header { display: flex; min-height: 62px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ui-border); padding: 0 24px; color: var(--ui-text-muted); font-size: .71rem; }
-.explorer-row-skeleton { min-height: 100px; border-bottom: 1px solid var(--ui-border); padding: 22px 24px; }
-.ideas-results-feedback { display: flex; min-height: 360px; align-items: flex-start; flex-direction: column; justify-content: center; padding: 42px; }
+.ideas-results-header { display: flex; min-height: 58px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ui-border); padding: 0 22px; color: var(--ui-text-muted); font-size: .7rem; }
+.ideas-results-header strong { color: var(--kollio-heading); font-size: .77rem; font-weight: 650; }
+.ideas-results-header b { margin: 0 7px; color: var(--kollio-active-ink); font-weight: 570; }
+.explorer-row-skeleton { display: grid; min-height: 128px; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 18px; border-bottom: 1px solid var(--ui-border); padding: 20px 22px; }
+.explorer-row-skeleton > span:last-child { display: block; }
+.skeleton-circle { width: 48px; height: 48px; border-radius: 50%; background: var(--ui-bg-muted); }
+.ideas-results-feedback { display: flex; min-height: 420px; align-items: flex-start; flex-direction: column; justify-content: center; padding: 42px; }
 .ideas-results-feedback h2 { color: var(--kollio-heading); font-size: 1.25rem; font-weight: 620; }
 .ideas-results-feedback p { margin: 9px 0 22px; color: var(--ui-text-muted); font-size: .82rem; }
-.ideas-results-pagination { display: flex; min-height: 68px; align-items: center; justify-content: space-between; padding: 0 24px; }
+.ideas-results-pagination { display: flex; min-height: 58px; align-items: center; justify-content: space-between; padding: 0 22px; }
 .ideas-results-pagination a { min-height: 40px; border-radius: 10px; padding: 11px 13px; color: var(--kollio-active-ink); font-size: .75rem; font-weight: 600; }
-.ideas-results-pagination a:hover { background: var(--ui-bg-muted); }
-@media (max-width: 720px) {
+.preview-backdrop { display: none; }
+@media (max-width: 1180px) {
+  .ideas-explorer-shell { grid-template-columns: minmax(184px, 210px) minmax(0, 1fr); }
+  .preview-backdrop { position: fixed; z-index: 65; display: block; inset: 0; background: rgb(28 22 37 / 18%); backdrop-filter: blur(2px); }
+}
+@media (max-width: 760px) {
   .ideas-explorer { padding: 24px 14px 50px; }
-  .ideas-explorer-header { grid-template-columns: 1fr; gap: 24px; }
+  .ideas-explorer-header { grid-template-columns: 1fr; }
   .ideas-explorer-header h1 { font-size: clamp(2.4rem, 13vw, 3.5rem); }
-  .ideas-explorer-shell { display: block; height: auto; min-height: 0; overflow: visible; border-radius: 20px; }
-  .ideas-filter-rail { display: flex; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--ui-border); padding: 10px 13px; scrollbar-width: none; }
+  .ideas-create-action { grid-row: 3; justify-content: space-between; }
+  .ideas-search { grid-column: 1; }
+  .ideas-explorer-shell { display: block; min-height: 0; overflow: visible; border-radius: 15px; }
+  .ideas-filter-rail { display: flex; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--ui-border); padding: 8px 12px; scrollbar-width: none; }
+  .ideas-filter-rail nav { display: flex; }
   .ideas-filter-rail > p, .ideas-filter-rail hr, .ideas-filter-rail .domain-filter { display: none; }
-  .ideas-filter-rail button { width: auto; min-width: max-content; padding-right: 8px; }
-  .ideas-filter-rail button > span { display: none; }
-  .ideas-results-header { padding-inline: 18px; }
+  .ideas-filter-rail button { width: auto; min-width: max-content; padding-right: 14px; }
+  .ideas-filter-rail nav :deep(.sketch-annotation--loop) { width: auto; }
+  .ideas-results-header { padding-inline: 16px; }
+  .ideas-results-header > span { display: none; }
 }
 </style>

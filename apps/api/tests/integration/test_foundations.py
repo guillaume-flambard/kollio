@@ -420,6 +420,7 @@ async def test_member_browses_only_their_workspace_ideas(database):
                         "lang": "fr",
                         "created_at": "2026-02-01T00:00:00Z",
                         "domain": "Developer tools",
+                        "collaborators": [],
                     }
                 ],
                 "total": 2,
@@ -519,12 +520,15 @@ async def test_demo_collaborators_seed_idempotently_and_appear_on_idea(database)
                 transport=httpx.ASGITransport(app=app), base_url="http://test"
             ) as client:
                 response = await client.get(f"/ideas/{idea_id}")
+                page_response = await client.get(f"/workspaces/{WORKSPACE_ID}/ideas")
 
             assert response.status_code == 200
             collaborators = response.json()["collaborators"]
             assert len(collaborators) == first["memberships"]
             assert all(collaborator["handle"] for collaborator in collaborators)
             assert all(collaborator["avatar_key"] for collaborator in collaborators)
+            assert page_response.status_code == 200
+            assert page_response.json()["items"][0]["collaborators"] == collaborators
 
             reset = await reset_demo_data(session)
             assert reset["users"] == len(DEMO_PROFILES)

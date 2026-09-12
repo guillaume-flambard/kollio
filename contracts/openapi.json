@@ -520,6 +520,13 @@
               }
             ],
             "title": "Domain"
+          },
+          "collaborators": {
+            "items": {
+              "$ref": "#/components/schemas/CollaboratorResponse"
+            },
+            "type": "array",
+            "title": "Collaborators"
           }
         },
         "type": "object",

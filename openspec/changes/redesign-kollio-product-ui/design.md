@@ -31,9 +31,9 @@ Active washes use a pseudo-element or background-size transition with a controll
 
 Contextual lines will be rendered as accessible, pointer-events-disabled SVG paths positioned over the central and companion regions. The underlying relationship remains semantic through `aria-controls`, selected tab state, and focus movement. On narrow screens the line is omitted because the related content moves into document flow.
 
-### The idea library is a calm two-column index
+### The idea library is a calm master-detail explorer
 
-The library keeps filtering in a narrow rail and gives the remaining width to readable idea rows. Each row includes its sequence, title, short narrative, stage, date, and a direct route to the idea. The library does not reserve a permanent third column for a preview because that compresses the narrative and makes the screen read like an administration table.
+The library uses three coordinated zones on wide screens: stable filters, readable idea rows, and a persistent preview. Selecting a row updates the preview without losing the member's position in the list. The preview becomes a drawer on tablet and a full-screen surface on mobile. A distinct action inside the preview opens the complete idea page.
 
 ### Motion communicates causal order
 

@@ -52,6 +52,7 @@ class IdeaSummaryResponse(BaseModel):
     lang: Literal["fr", "en"]
     created_at: datetime
     domain: str | None = None
+    collaborators: list[CollaboratorResponse] = Field(default_factory=list)
 
 
 class IdeaPageResponse(BaseModel):

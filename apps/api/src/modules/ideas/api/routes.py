@@ -107,10 +107,27 @@ async def read_workspace_ideas(
     if page is None:
         raise HTTPException(404, MESSAGES[request.state.locale]["not_found"])
     items, total = page
+    collaborators_by_idea = await PostgresIdeas(session).collaborators_for_ideas(
+        [item.id for item in items]
+    )
     return IdeaPageResponse(
         items=[
             IdeaSummaryResponse.model_validate(item).model_copy(
-                update={"domain": item.provenance.get("domaine")}
+                update={
+                    "domain": item.provenance.get("domaine"),
+                    "collaborators": [
+                        CollaboratorResponse(
+                            id=user.id,
+                            handle=user.handle,
+                            display_name=user.display_name,
+                            role=role,
+                            roles=user.roles,
+                            bio=user.bio,
+                            avatar_key=user.avatar_key,
+                        )
+                        for user, role in collaborators_by_idea.get(item.id, [])
+                    ],
+                }
             )
             for item in items
         ],

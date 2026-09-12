@@ -167,6 +167,10 @@ export type IdeaSummaryResponse = {
      * Domain
      */
     domain?: string | null;
+    /**
+     * Collaborators
+     */
+    collaborators?: Array<CollaboratorResponse>;
 };
 
 /**

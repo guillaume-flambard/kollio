@@ -110,6 +110,22 @@ class PostgresIdeas:
         )
         return [(user, role) for user, role in (await self.session.execute(query)).all()]
 
+    async def collaborators_for_ideas(
+        self, idea_ids: list[UUID]
+    ) -> dict[UUID, list[tuple[User, str]]]:
+        if not idea_ids:
+            return {}
+        query = (
+            select(IdeaMembership.idea_id, User, IdeaMembership.role)
+            .join(User, User.id == IdeaMembership.user_id)
+            .where(IdeaMembership.idea_id.in_(idea_ids))
+            .order_by(IdeaMembership.idea_id, IdeaMembership.joined_at, User.display_name)
+        )
+        collaborators: dict[UUID, list[tuple[User, str]]] = {}
+        for idea_id, user, role in (await self.session.execute(query)).all():
+            collaborators.setdefault(idea_id, []).append((user, role))
+        return collaborators
+
     async def list_for_workspace(
         self,
         workspace_id: UUID,
