@@ -21,8 +21,8 @@
   --ui-bg-muted: #f2eff3;
   --ui-bg-accented: #eee8f2;
   --ui-border: #e8e3ea;
-  --ui-text: #252229;
-  --ui-text-muted: #6f6877;
+  --ui-text: #25213a;
+  --ui-text-muted: #696a8f;
   --ui-success: #899744;
   --ui-warning: #a57932;
   --ui-error: #d47a70;
@@ -30,6 +30,7 @@
   --kollio-active-ink: #49335e;
   --kollio-active-wash: #cbb7d8;
   --kollio-action: #2e2938;
+  --kollio-heading: #242039;
   --kollio-tab-ink: #625c78;
   --kollio-question: #d47a70;
   --kollio-question-wash: #f5dedb;

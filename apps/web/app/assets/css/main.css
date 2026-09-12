@@ -23,10 +23,11 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 }
 
 .idea-title {
-  font-size: clamp(2.125rem, 3.125vw, 3rem);
-  font-weight: 600;
+  color: var(--kollio-heading);
+  font-size: clamp(2.125rem, 2.87vw, 2.75rem);
+  font-weight: 650;
   letter-spacing: -0.04em;
-  line-height: 1.08;
+  line-height: .98;
 }
 
 .idea-summary {
@@ -51,24 +52,36 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 @media (min-width: 1024px) {
   .workspace-shell {
     display: grid;
-    grid-template-columns: clamp(138px, 12.37vw, 190px) minmax(0, 1fr);
+    grid-template-columns: clamp(126px, 11.72vw, 180px) minmax(0, 1fr);
+    gap: clamp(11px, 1.04vw, 16px);
+    padding: clamp(11px, 1.04vw, 16px);
   }
 
   .workspace-rail {
-    padding: clamp(18px, 1.56vw, 24px) clamp(12px, 1.04vw, 16px);
+    top: clamp(11px, 1.04vw, 16px);
+    height: calc(100vh - clamp(22px, 2.08vw, 32px));
+    border-radius: var(--kollio-radius-lg);
+    padding: 8px;
   }
 
   .workspace-main {
-    padding: clamp(14px, 1.3vw, 20px) clamp(14px, 1.82vw, 28px);
+    max-width: 1276px;
+    padding: 0;
   }
 
   .idea-layout {
-    grid-template-columns: minmax(0, 1fr) clamp(276px, 23.45vw, 360px);
-    gap: clamp(12px, 1.04vw, 16px);
+    grid-template-columns: minmax(0, 1fr) clamp(276px, 25.52vw, 392px);
+    gap: clamp(10px, .91vw, 14px);
   }
 
   .idea-document {
-    padding: clamp(24px, 2.35vw, 36px) !important;
+    padding: clamp(18px, 1.3vw, 20px) clamp(24px, 2.21vw, 34px) 24px !important;
+  }
+
+  .idea-description {
+    margin-inline: -19px;
+    padding-top: 16px !important;
+    padding-bottom: 36px !important;
   }
 }
 
@@ -91,8 +104,33 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 }
 
 .idea-description {
-  background: color-mix(in srgb, var(--ui-bg-elevated) 92%, var(--kollio-wash));
+  background: var(--ui-bg-elevated);
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 82%, transparent);
+}
+
+.idea-description .idea-prose {
+  height: 168px;
+  overflow: hidden;
+}
+
+.idea-description .idea-prose > p:nth-child(2) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.idea-description .idea-prose > p:nth-child(n+3) {
+  display: none;
+}
+
+.workspace-nav-active {
+  background: color-mix(in srgb, var(--kollio-wash) 34%, transparent);
+}
+
+.workspace-rail nav a,
+.workspace-rail nav span[aria-disabled='true'] {
+  font-size: clamp(.8125rem, 1.04vw, 1rem);
 }
 
 .idea-writing-prompt {
@@ -174,9 +212,9 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 .felt-mark--label::after {
   position: absolute;
   z-index: -1;
-  right: -0.2em;
+  right: -0.32em;
   bottom: 0.02em;
-  left: -0.2em;
+  left: -0.32em;
   height: 0.48em;
   border-radius: 52% 38% 48% 32%;
   background: var(--kollio-wash);
@@ -260,7 +298,7 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   min-height: clamp(56px, 4.17vw, 64px);
   padding-inline: 8px;
   color: var(--kollio-tab-ink);
-  font-size: clamp(.875rem, 1.05vw, 1rem);
+  font-size: clamp(.8125rem, 1.05vw, 1rem);
   font-weight: 400;
   transition: color 180ms ease;
 }
@@ -304,15 +342,15 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 .primary-action {
   position: relative;
   display: inline-flex;
-  min-height: clamp(44px, 3.13vw, 48px);
+  min-height: 44px;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
   overflow: visible;
   border-radius: var(--kollio-radius-md);
   background: var(--kollio-action);
-  padding: 0 12px 0 20px;
+  padding: 0 12px 0 16px;
   color: var(--ui-bg-elevated);
-  font-size: clamp(.875rem, 1.05vw, 1rem);
+  font-size: 1rem;
   font-weight: 500;
   box-shadow: 0 2px 5px color-mix(in srgb, var(--ui-text) 12%, transparent);
   transition: transform 180ms cubic-bezier(.16, 1, .3, 1), box-shadow 180ms ease;
@@ -345,6 +383,25 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 }
 .primary-action:disabled::after { transform: scaleX(.25); }
 .primary-action-arrow { transition: transform 180ms cubic-bezier(.16, 1, .3, 1); }
+
+.idea-more-action {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--kollio-radius-md);
+  background: var(--ui-bg-elevated);
+  color: var(--ui-text);
+  transition: background 180ms ease, transform 180ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.idea-more-action:hover { background: var(--ui-bg-muted); }
+.idea-more-action:active { transform: scale(.97); }
+
+.idea-header-actions {
+  margin-right: -13px;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .page-enter-active, .page-leave-active { transition: opacity 180ms ease, transform 220ms cubic-bezier(.16, 1, .3, 1); }

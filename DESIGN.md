@@ -99,6 +99,10 @@ components:
 
 **Creative North Star: "The Living Canvas"**
 
+The canonical visual reference is stored at
+`docs/assets/design/approved-idea-detail.png`. Desktop implementation reviews
+must compare against it at 1536 by 1024 before changing the shared primitives.
+
 Kollio's authenticated workspace is a quiet, collaborative canvas. Porcelain surrounds white working surfaces, deep aubergine carries intent, and soft felt-tip marks reveal the current thread of attention. The interface keeps the idea narrative dominant while related people, questions, and evidence remain close enough to inspect without breaking the reading flow.
 
 The system reveals detail through deliberate interaction. A selected phrase can expose its provenance, a companion panel changes with the user's focus, and long content expands only on request. The interface is bilingual, light first, responsive, keyboard usable, and honest when collaboration or evidence has not arrived yet.

@@ -19,8 +19,8 @@ const switchLocalePath = useSwitchLocalePath()
       </div>
     </header>
 
-    <aside class="workspace-rail sticky top-0 hidden h-screen flex-col border-r border-default bg-elevated/70 lg:flex">
-      <NuxtLink :to="$localePath('/workspace')" class="px-2 text-2xl font-bold tracking-[-0.04em]" :aria-label="t('brand')">
+    <aside class="workspace-rail sticky hidden flex-col border border-default bg-elevated/80 lg:flex">
+      <NuxtLink :to="$localePath('/workspace')" class="px-2 text-[1.75rem] font-bold tracking-[-0.04em]" :aria-label="t('brand')">
         {{ t('brand') }}
       </NuxtLink>
       <p class="mt-1 px-2 text-sm leading-snug text-muted">{{ t('navigation.promise') }}</p>
@@ -28,8 +28,8 @@ const switchLocalePath = useSwitchLocalePath()
       <nav class="mt-12" :aria-label="t('navigation.label')">
         <NuxtLink
           :to="$localePath('/workspace')"
-          class="group flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:text-default"
-          active-class="text-default"
+          class="workspace-nav-active group flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:text-default"
+          active-class="workspace-nav-active text-default"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18h6m-5 3h4m4.5-10.5a6.5 6.5 0 1 0-10.7 5l.7.6c.9.8 1.5 1.9 1.5 3.1h4c0-1.2.6-2.3 1.5-3.1l.7-.6a6.5 6.5 0 0 0 2.3-5Z" /></svg>
           <KollioFeltMark active>{{ t('navigation.ideas') }}</KollioFeltMark>
