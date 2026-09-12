@@ -71,12 +71,14 @@ function updateConnection() {
   const endY = targetRect.top + Math.min(42, targetRect.height / 2) - canvasRect.top
   const gutterX = documentRect.right - canvasRect.left
     + Math.max(7, (targetRect.left - documentRect.right) * 0.28)
-  const horizontalCurve = Math.max(36, (gutterX - startX) * 0.52)
+  const bendX = Math.min(gutterX - 12, startX + Math.max(38, (endX - startX) * 0.42))
+  const shoulderX = Math.max(bendX + 18, endX - 34)
+  const rise = Math.max(80, startY - endY)
   connection.width = canvasRect.width
   connection.height = canvas.scrollHeight
   connection.startX = startX
   connection.startY = startY
-  connection.path = `M ${startX} ${startY} C ${startX + horizontalCurve} ${startY}, ${gutterX} ${startY}, ${gutterX} ${startY - 24} C ${gutterX} ${endY + 30}, ${endX - 34} ${endY}, ${endX} ${endY}`
+  connection.path = `M ${startX} ${startY} C ${startX + 24} ${startY}, ${bendX} ${startY - 10}, ${bendX} ${startY - Math.min(48, rise * 0.2)} C ${bendX + 12} ${startY - rise * 0.48}, ${shoulderX} ${endY + 58}, ${shoulderX} ${endY + 24} C ${shoulderX} ${endY + 8}, ${endX - 15} ${endY}, ${endX} ${endY}`
 }
 
 function selectPanel(panel: string) {
