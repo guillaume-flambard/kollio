@@ -72,14 +72,22 @@ onBeforeUnmount(() => emit('targetReady', undefined))
               :initials="sourceLabel?.charAt(0)"
             />
           </div>
-          <KollioEmptyState class="mt-6" :description="t('ideas.detail.companion.team.empty')" />
+          <KollioEmptyState
+            class="mt-6"
+            image-src="/images/empty-states/team.png"
+            :description="t('ideas.detail.companion.team.empty')"
+          />
         </section>
         <section class="idea-panel-section">
           <div class="idea-panel-heading">
             <h2>{{ t('ideas.detail.companion.questions.title') }}</h2>
             <button type="button" @click="selectPanel('questions')">{{ t('ideas.detail.companion.seeAll') }}</button>
           </div>
-          <KollioEmptyState class="mt-5" :description="t('ideas.detail.companion.questions.empty')" />
+          <KollioEmptyState
+            class="mt-5"
+            image-src="/images/empty-states/questions.png"
+            :description="t('ideas.detail.companion.questions.empty')"
+          />
         </section>
       </template>
 
@@ -108,7 +116,11 @@ onBeforeUnmount(() => emit('targetReady', undefined))
         <div class="idea-panel-heading">
           <h2>{{ t(`ideas.detail.companion.${activePanel}.title`) }}</h2>
         </div>
-        <KollioEmptyState class="mt-5" :description="t(`ideas.detail.companion.${activePanel}.empty`)" />
+        <KollioEmptyState
+          class="mt-5"
+          :image-src="`/images/empty-states/${activePanel}.png`"
+          :description="t(`ideas.detail.companion.${activePanel}.empty`)"
+        />
       </template>
     </div>
   </aside>

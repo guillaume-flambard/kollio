@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it, vi } from 'vitest'
 import IdeaDetailError from '../../app/components/kollio/IdeaDetailError.vue'
 import IdeaDetailSkeleton from '../../app/components/kollio/IdeaDetailSkeleton.vue'
+import EmptyState from '../../app/components/kollio/EmptyState.vue'
 
 describe('Idea detail states', () => {
   it('announces loading while keeping both layout surfaces present', async () => {
@@ -52,5 +53,22 @@ describe('Idea detail states', () => {
     expect(wrapper.get('[role="status"]').attributes('style')).toBeUndefined()
     expect(wrapper.get('[role="status"]').isVisible()).toBe(true)
     vi.unstubAllGlobals()
+  })
+
+  it('renders an optional decorative illustration and action', async () => {
+    const wrapper = mount(EmptyState, {
+      props: {
+        description: 'No collaborators yet.',
+        imageSrc: '/images/empty-states/team.png',
+        actionLabel: 'Invite a collaborator',
+      },
+    })
+
+    expect(wrapper.get('img').attributes()).toMatchObject({
+      alt: '',
+      src: '/images/empty-states/team.png',
+    })
+    await wrapper.get('button').trigger('click')
+    expect(wrapper.emitted('action')).toHaveLength(1)
   })
 })
