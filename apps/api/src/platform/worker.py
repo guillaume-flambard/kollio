@@ -8,7 +8,7 @@ from opentelemetry import trace
 from opentelemetry.propagate import extract
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from taskiq import Context as TaskiqContext
-from taskiq import TaskiqDepends, TaskiqEvents, TaskiqState
+from taskiq import SimpleRetryMiddleware, TaskiqDepends, TaskiqEvents, TaskiqState
 from taskiq_redis import RedisStreamBroker
 
 from src.modules.constraint_analysis.adapters.litellm import (
@@ -23,6 +23,7 @@ from src.modules.constraint_analysis.agent.graph import build_constraint_analysi
 from src.modules.constraint_analysis.domain.lifecycle import (
     AnalysisStatus,
     await_review,
+    failure_status,
     finish_review,
     start_execution,
 )
@@ -31,7 +32,9 @@ from src.platform.config import get_settings
 from src.platform.telemetry import configure_telemetry
 
 settings = get_settings()
-broker = RedisStreamBroker(settings.redis_url, queue_name="kollio-agent-jobs")
+broker = RedisStreamBroker(settings.redis_url, queue_name="kollio-agent-jobs").with_middlewares(
+    SimpleRetryMiddleware(default_retry_count=3)
+)
 
 
 @broker.on_event(TaskiqEvents.WORKER_STARTUP)
@@ -68,19 +71,29 @@ async def _load_and_start(
 
 
 async def _record_failure(
-    sessions: async_sessionmaker[AsyncSession], workflow_id: UUID, code: str
+    sessions: async_sessionmaker[AsyncSession],
+    workflow_id: UUID,
+    code: str,
+    *,
+    retrying: bool,
+    review: bool,
 ) -> None:
     async with sessions() as session:
         workflow = await PostgresAnalysisWorkflows(session).get_for_worker(workflow_id, lock=True)
         if workflow is not None:
-            workflow.status = AnalysisStatus.FAILED.value
-            workflow.current_step = "failed"
+            workflow.status = failure_status(retrying=retrying, review=review).value
+            workflow.current_step = "retry" if retrying else "failed"
             workflow.error_code = code[:100]
-            workflow.finished_at = datetime.now(UTC)
+            workflow.finished_at = None if retrying else datetime.now(UTC)
             await session.commit()
 
 
-@broker.task(task_name="constraint-analysis.execute", timeout=180)
+@broker.task(
+    task_name="constraint-analysis.execute",
+    timeout=180,
+    retry_on_error=True,
+    max_retries=3,
+)
 async def execute_constraint_analysis(
     workflow_id: str,
     trace_context: dict[str, str],
@@ -153,5 +166,13 @@ async def execute_constraint_analysis(
                 await session.commit()
             return {"workflow_id": workflow_id, "status": current.status}
     except Exception as error:
-        await _record_failure(task_context.state.sessions, identifier, type(error).__name__)
+        retries = int(task_context.message.labels.get("_retries", 0)) + 1
+        max_retries = int(task_context.message.labels.get("max_retries", 3))
+        await _record_failure(
+            task_context.state.sessions,
+            identifier,
+            type(error).__name__,
+            retrying=retries < max_retries,
+            review=approved is not None,
+        )
         raise

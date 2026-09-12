@@ -41,3 +41,9 @@ def finish_review(status: AnalysisStatus, approved: bool) -> AnalysisStatus:
     if status is not AnalysisStatus.RUNNING:
         raise InvalidAnalysisTransition(f"Cannot finish review from {status} status")
     return AnalysisStatus.COMPLETED if approved else AnalysisStatus.REJECTED
+
+
+def failure_status(*, retrying: bool, review: bool) -> AnalysisStatus:
+    if not retrying:
+        return AnalysisStatus.FAILED
+    return AnalysisStatus.REVIEW_QUEUED if review else AnalysisStatus.QUEUED

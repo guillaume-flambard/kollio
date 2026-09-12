@@ -26,6 +26,7 @@ Temporal remains outside the current architecture. LangGraph checkpoints plus a 
 ## Operational rules
 
 - PostgreSQL owns workflow status and results. Redis transports commands and never becomes the source of truth.
+- Taskiq retries failed jobs at most three times. The PostgreSQL workflow returns to its queued phase before each retry and becomes failed only after the retry budget is exhausted.
 - Every queued command contains only a workflow identifier, a review decision when applicable and W3C trace context.
 - Every model output is validated with strict Pydantic models before review or persistence.
 - Every model and tool side effect is idempotent. Product writes retain a database uniqueness constraint.

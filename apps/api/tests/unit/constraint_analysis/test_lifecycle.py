@@ -3,6 +3,7 @@ import pytest
 from src.modules.constraint_analysis.domain.lifecycle import (
     AnalysisStatus,
     InvalidAnalysisTransition,
+    failure_status,
     queue_review,
     start_execution,
 )
@@ -22,6 +23,12 @@ def test_review_can_only_be_queued_once() -> None:
 
     with pytest.raises(InvalidAnalysisTransition):
         queue_review(AnalysisStatus.REVIEW_QUEUED)
+
+
+def test_failure_returns_to_the_correct_queue_until_retries_are_exhausted() -> None:
+    assert failure_status(retrying=True, review=False) is AnalysisStatus.QUEUED
+    assert failure_status(retrying=True, review=True) is AnalysisStatus.REVIEW_QUEUED
+    assert failure_status(retrying=False, review=True) is AnalysisStatus.FAILED
 
 
 def test_constraint_result_requires_each_factor_once() -> None:
