@@ -6,8 +6,8 @@ const switchLocalePath = useSwitchLocalePath()
 <template>
   <div class="workspace-canvas workspace-shell min-h-screen bg-default text-default">
     <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default/95 px-5 backdrop-blur lg:hidden">
-      <NuxtLink :to="$localePath('/workspace')" class="text-xl font-bold tracking-[-0.03em]" :aria-label="t('brand')">
-        {{ t('brand') }}
+      <NuxtLink :to="$localePath('/workspace')" :aria-label="t('brand')">
+        <KollioBrand />
       </NuxtLink>
       <div class="flex items-center gap-2">
         <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="min-h-11 rounded-xl px-3 text-sm font-medium leading-11 text-muted">
@@ -20,8 +20,8 @@ const switchLocalePath = useSwitchLocalePath()
     </header>
 
     <aside class="workspace-rail sticky hidden flex-col border border-default bg-elevated/80 lg:flex">
-      <NuxtLink :to="$localePath('/workspace')" class="px-2 text-[1.75rem] font-bold tracking-[-0.04em]" :aria-label="t('brand')">
-        {{ t('brand') }}
+      <NuxtLink :to="$localePath('/workspace')" class="px-2" :aria-label="t('brand')">
+        <KollioBrand />
       </NuxtLink>
       <p class="mt-1 px-2 text-sm leading-snug text-muted">{{ t('navigation.promise') }}</p>
 

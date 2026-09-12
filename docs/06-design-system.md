@@ -6,6 +6,17 @@ Kollio uses the **Living Canvas** interaction model with the **Aubergine** palet
 
 Earlier Collective.work-inspired mockups and the blue editorial direction are superseded by this document and the root `DESIGN.md`.
 
+## Brand mark
+
+The Kollio mark is an open lowercase `k` built from two rounded gestures meeting around a small seed. The aubergine stem represents a stable shared workspace, the lavender stroke represents contributions moving an idea forward, and the muted citron seed marks the point where they meet.
+
+- Production asset: `apps/web/public/brand/kollio-mark.svg`.
+- The mark always appears with the `Kollio` wordmark in navigation when space permits.
+- The wordmark uses Geist at weight 700 with tight tracking.
+- The mark may appear alone below 32px or where the product name is already visible.
+- Preserve clear space equal to the seed diameter around the mark.
+- Do not recolor individual strokes, rotate the mark, place it in a badge, or add gradients and shadows.
+
 ## Typography
 
 - Interface and headings: Geist, weights 400 to 700.
