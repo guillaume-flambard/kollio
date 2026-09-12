@@ -28,6 +28,13 @@ const dateFormatter = computed(() =>
   new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
 )
 const panels = ['team', 'questions', 'evidence'] as const
+const panelCounts = { questions: 0, evidence: 0 } as const
+const contextTabs = computed(() => panels.map(panel => ({
+  id: panel,
+  label: panel === 'team'
+    ? t(`ideas.detail.companion.${panel}.tab`)
+    : t('ideas.detail.companion.tabWithCount', { label: t(`ideas.detail.companion.${panel}.tab`), count: panelCounts[panel] }),
+})))
 const pitchParagraphs = computed(() => idea.value?.pitch.split(/\n\s*\n/).filter(Boolean) ?? [])
 const pitchSentences = computed(() => idea.value?.pitch.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ])/).map(sentence => sentence.trim()).filter(Boolean) ?? [])
 const ideaSummary = computed(() => pitchSentences.value[0] ?? pitchParagraphs.value[0] ?? '')
@@ -78,23 +85,14 @@ function updateConnection() {
   connection.path = `M ${startX} ${startY} C ${startX + curve} ${startY}, ${endX - curve} ${endY}, ${endX} ${endY}`
 }
 
-function selectPanel(panel: typeof panels[number]) {
-  activePanel.value = panel
+function selectPanel(panel: string) {
+  if (!panels.includes(panel as typeof panels[number])) return
+  const nextPanel = panel as typeof panels[number]
+  activePanel.value = nextPanel
   nextTick(() => {
-    document.getElementById(`tab-${panel}`)?.focus()
+    document.getElementById(`idea-context-tab-${nextPanel}`)?.focus()
     requestAnimationFrame(updateConnection)
   })
-}
-
-function handleTabKeydown(event: KeyboardEvent, index: number) {
-  let nextIndex: number | undefined
-  if (event.key === 'ArrowRight') nextIndex = (index + 1) % panels.length
-  if (event.key === 'ArrowLeft') nextIndex = (index - 1 + panels.length) % panels.length
-  if (event.key === 'Home') nextIndex = 0
-  if (event.key === 'End') nextIndex = panels.length - 1
-  if (nextIndex === undefined) return
-  event.preventDefault()
-  selectPanel(panels[nextIndex]!)
 }
 
 watch(activePanel, () => nextTick(() => requestAnimationFrame(updateConnection)))
@@ -122,7 +120,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
     :transition="{ duration: reducedMotion ? 0 : 0.28 }"
     class="mx-auto max-w-[1320px]"
   >
-    <div ref="canvasRef" class="relative grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_300px] 2xl:grid-cols-[minmax(0,1fr)_360px]">
+    <div ref="canvasRef" class="idea-layout relative grid min-w-0">
       <svg v-if="connection.path" aria-hidden="true" class="pointer-events-none absolute inset-0 z-40 hidden overflow-visible lg:block" :viewBox="`0 0 ${connection.width} ${connection.height}`" preserveAspectRatio="none">
         <path class="relationship-path" :d="connection.path" pathLength="1" fill="none" stroke="var(--ui-primary)" stroke-width="1.5" />
         <circle :cx="connection.startX" :cy="connection.startY" r="4" fill="var(--ui-primary)" />
@@ -136,14 +134,11 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               <svg aria-hidden="true" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6" /></svg>
               {{ t(`ideas.stage.${idea.stage}`) }}
             </NuxtLink>
-            <button type="button" class="split-action" @click="selectPanel('evidence')">
-              {{ t('ideas.detail.inspectSource') }}
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="split-action-arrow size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
-            </button>
+            <KollioPrimaryAction :label="t('ideas.detail.inspectSource')" @click="selectPanel('evidence')" />
           </div>
-          <h1 class="mt-7 max-w-4xl text-[2.75rem] leading-[1.02] font-semibold tracking-[-0.045em] xl:text-[3.25rem]">{{ idea.title }}</h1>
+          <h1 class="idea-title mt-7 max-w-4xl">{{ idea.title }}</h1>
           <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
-            <span class="marker-active is-active font-semibold text-default">{{ t(`ideas.stage.${idea.stage}`) }}</span>
+            <KollioFeltMark active>{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
             <template v-for="topic in legacyTopics" :key="topic">
               <span aria-hidden="true" class="idea-dot" />
               <span class="first-letter:uppercase">{{ topic }}</span>
@@ -152,7 +147,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" /></svg>
             </button>
           </div>
-          <p class="mt-6 max-w-[70ch] text-xl leading-8 text-muted">{{ ideaSummary }}</p>
+          <p class="idea-summary mt-6 max-w-[70ch] text-muted">{{ ideaSummary }}</p>
           <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
             <span>{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
@@ -167,9 +162,9 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         <section id="description" class="idea-description mt-9 rounded-2xl border border-default p-5 sm:p-7" :aria-labelledby="'idea-pitch-title'">
           <h2 id="idea-pitch-title" class="text-xl font-semibold">{{ t('ideas.detail.pitchTitle') }}</h2>
           <div class="relative mt-5 max-w-[72ch]">
-            <div class="space-y-5 text-lg leading-8 text-muted">
+            <div class="idea-prose space-y-5 text-muted">
               <p v-if="problemAnnotation">
-                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><span class="linked-passage-stroke">{{ problemAnnotation.highlight }}</span></button>{{ problemAnnotation.after }}
+                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><KollioFeltMark active variant="passage">{{ problemAnnotation.highlight }}</KollioFeltMark></button>{{ problemAnnotation.after }}
               </p>
               <p v-else-if="detailParagraphs[0]">{{ detailParagraphs[0] }}</p>
               <p v-for="(paragraph, index) in detailParagraphs.slice(1)" :key="index">{{ paragraph }}</p>
@@ -208,27 +203,10 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         </button>
       </div>
 
-      <aside class="kollio-surface relative z-30 self-start overflow-hidden lg:sticky lg:top-5 lg:min-h-[calc(100vh-2.5rem)]">
-        <div class="grid grid-cols-3 border-b border-default" role="tablist" :aria-label="t('ideas.detail.companion.label')">
-          <button
-            v-for="panel in panels"
-            :id="`tab-${panel}`"
-            :key="panel"
-            type="button"
-            role="tab"
-            class="min-h-14 px-2 text-base font-medium transition-colors hover:text-default"
-            :class="{ 'text-default': activePanel === panel }"
-            :aria-selected="activePanel === panel"
-            :tabindex="activePanel === panel ? 0 : -1"
-            :aria-controls="`panel-${panel}`"
-            @click="activePanel = panel"
-            @keydown="handleTabKeydown($event, panels.indexOf(panel))"
-          >
-            <span class="marker-active" :class="{ 'is-active': activePanel === panel }">{{ t(`ideas.detail.companion.${panel}.tab`) }}</span>
-          </button>
-        </div>
+      <aside class="kollio-surface idea-companion relative z-30 self-start overflow-hidden lg:sticky">
+        <KollioContextTabs id-prefix="idea-context" :items="contextTabs" :label="t('ideas.detail.companion.label')" :model-value="activePanel" @update:model-value="selectPanel" />
         <motion.div
-          :id="`panel-${activePanel}`"
+          id="idea-context-panel"
           :key="activePanel"
           :initial="{ opacity: 0, x: reducedMotion ? 0 : 6 }"
           :animate="{ opacity: 1, x: 0 }"

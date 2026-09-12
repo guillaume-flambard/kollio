@@ -109,7 +109,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           >
             <div class="min-w-0">
               <div class="mb-2 flex flex-wrap items-center gap-2 text-xs text-muted">
-                <span class="marker-active is-active font-medium text-default">{{ t(`ideas.stage.${idea.stage}`) }}</span>
+                <KollioFeltMark active>{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
                 <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
                 <span class="uppercase">{{ idea.lang }}</span>
                 <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
@@ -139,10 +139,11 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           {{ t('ideas.previous') }}
         </NuxtLink>
         <span v-else />
-        <NuxtLink v-if="currentPage < totalPages" :to="pageLocation(currentPage + 1)" class="split-action">
-          {{ t('ideas.next') }}
-          <svg aria-hidden="true" viewBox="0 0 24 24" class="split-action-arrow size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
-        </NuxtLink>
+        <KollioPrimaryAction
+          v-if="currentPage < totalPages"
+          :to="pageLocation(currentPage + 1)"
+          :label="t('ideas.next')"
+        />
       </nav>
     </template>
   </div>

@@ -4,8 +4,8 @@ const switchLocalePath = useSwitchLocalePath()
 </script>
 
 <template>
-  <div class="workspace-canvas min-h-screen bg-default text-default xl:grid xl:grid-cols-[190px_minmax(0,1fr)]">
-    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default/95 px-5 backdrop-blur xl:hidden">
+  <div class="workspace-canvas workspace-shell min-h-screen bg-default text-default">
+    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default/95 px-5 backdrop-blur lg:hidden">
       <NuxtLink :to="$localePath('/workspace')" class="text-xl font-bold tracking-[-0.03em]" :aria-label="t('brand')">
         {{ t('brand') }}
       </NuxtLink>
@@ -19,7 +19,7 @@ const switchLocalePath = useSwitchLocalePath()
       </div>
     </header>
 
-    <aside class="sticky top-0 hidden h-screen flex-col border-r border-default bg-elevated/70 px-4 py-6 xl:flex">
+    <aside class="workspace-rail sticky top-0 hidden h-screen flex-col border-r border-default bg-elevated/70 lg:flex">
       <NuxtLink :to="$localePath('/workspace')" class="px-2 text-2xl font-bold tracking-[-0.04em]" :aria-label="t('brand')">
         {{ t('brand') }}
       </NuxtLink>
@@ -32,7 +32,7 @@ const switchLocalePath = useSwitchLocalePath()
           active-class="text-default"
         >
           <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18h6m-5 3h4m4.5-10.5a6.5 6.5 0 1 0-10.7 5l.7.6c.9.8 1.5 1.9 1.5 3.1h4c0-1.2.6-2.3 1.5-3.1l.7-.6a6.5 6.5 0 0 0 2.3-5Z" /></svg>
-          <span class="marker-active" aria-current="page">{{ t('navigation.ideas') }}</span>
+          <KollioFeltMark active>{{ t('navigation.ideas') }}</KollioFeltMark>
         </NuxtLink>
 
         <div class="mt-2 space-y-1" :aria-label="t('navigation.upcoming')">
@@ -67,7 +67,7 @@ const switchLocalePath = useSwitchLocalePath()
       </div>
     </aside>
 
-    <main id="main" class="min-w-0 px-4 py-5 sm:px-6 lg:px-5 lg:py-5 xl:px-7">
+    <main id="main" class="workspace-main min-w-0">
       <slot />
     </main>
   </div>

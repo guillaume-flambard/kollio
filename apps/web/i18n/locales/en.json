@@ -117,6 +117,7 @@
       },
       "companion": {
         "label": "Idea context",
+        "tabWithCount": "{label} ({count})",
         "seeAll": "See all",
         "team": {
           "tab": "Team",

@@ -14,6 +14,64 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
     var(--ui-bg);
 }
 
+.workspace-main {
+  padding: 20px 16px;
+}
+
+.idea-layout {
+  gap: 16px;
+}
+
+.idea-title {
+  font-size: clamp(2.125rem, 3.125vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.idea-summary {
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.55;
+}
+
+.idea-prose {
+  font-size: clamp(1rem, 1.17vw, 1.125rem);
+  line-height: 1.75;
+}
+
+.idea-companion {
+  top: 20px;
+  min-height: calc(100vh - 40px);
+}
+
+@media (min-width: 640px) {
+  .workspace-main { padding-inline: 24px; }
+}
+
+@media (min-width: 1024px) {
+  .workspace-shell {
+    display: grid;
+    grid-template-columns: clamp(138px, 12.37vw, 190px) minmax(0, 1fr);
+  }
+
+  .workspace-rail {
+    padding: clamp(18px, 1.56vw, 24px) clamp(12px, 1.04vw, 16px);
+  }
+
+  .workspace-main {
+    padding: clamp(14px, 1.3vw, 20px) clamp(14px, 1.82vw, 28px);
+  }
+
+  .idea-layout {
+    grid-template-columns: minmax(0, 1fr) clamp(276px, 23.45vw, 360px);
+    gap: clamp(12px, 1.04vw, 16px);
+  }
+
+  .idea-document {
+    padding: clamp(24px, 2.35vw, 36px) !important;
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--ui-primary);
   outline-offset: 3px;
@@ -103,6 +161,49 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   position: relative;
 }
 
+.felt-mark {
+  isolation: isolate;
+  position: relative;
+}
+
+.felt-mark--label {
+  color: inherit;
+  font-weight: inherit;
+}
+
+.felt-mark--label::after {
+  position: absolute;
+  z-index: -1;
+  right: -0.2em;
+  bottom: 0.02em;
+  left: -0.2em;
+  height: 0.48em;
+  border-radius: 52% 38% 48% 32%;
+  background: var(--kollio-wash);
+  clip-path: polygon(1% 20%, 98% 6%, 100% 76%, 4% 100%);
+  content: '';
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 190ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.felt-mark--label.is-active::after {
+  transform: scaleX(1);
+}
+
+.felt-mark--label.is-active {
+  color: var(--kollio-active-ink);
+  font-weight: 500;
+}
+
+.felt-mark--passage {
+  border-radius: 5px 8px 6px 7px;
+  background: linear-gradient(to bottom, transparent 5%, color-mix(in srgb, var(--kollio-wash) 76%, transparent) 10%, color-mix(in srgb, var(--kollio-wash) 76%, transparent) 94%, transparent 98%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: .04em .12em .08em;
+}
+
 .linked-passage-stroke {
   border-radius: 5px 8px 6px 7px;
   background: linear-gradient(to bottom, transparent 5%, color-mix(in srgb, var(--kollio-wash) 76%, transparent) 10%, color-mix(in srgb, var(--kollio-wash) 76%, transparent) 94%, transparent 98%);
@@ -148,15 +249,27 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   transition: transform 190ms cubic-bezier(.16, 1, .3, 1);
 }
 
-[role='tab'] {
-  position: relative;
+.context-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid var(--ui-border);
 }
 
-[role='tab'] .marker-active::after {
+.context-tabs [role='tab'] {
+  position: relative;
+  min-height: clamp(56px, 4.17vw, 64px);
+  padding-inline: 8px;
+  color: var(--kollio-tab-ink);
+  font-size: clamp(.875rem, 1.05vw, 1rem);
+  font-weight: 400;
+  transition: color 180ms ease;
+}
+
+.context-tabs [role='tab'] .felt-mark::after {
   display: none;
 }
 
-[role='tab'][aria-selected='true']::after {
+.context-tabs [role='tab'][aria-selected='true']::after {
   position: absolute;
   z-index: 2;
   right: 14%;
@@ -171,13 +284,9 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   opacity: .82;
 }
 
-[role='tab'] {
-  color: var(--kollio-tab-ink);
-}
-
-[role='tab'][aria-selected='true'] {
+.context-tabs [role='tab'][aria-selected='true'] {
   color: var(--kollio-active-ink);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .marker-active[aria-current='page']::after,
@@ -192,10 +301,10 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   color: var(--kollio-active-ink);
 }
 
-.split-action {
+.primary-action {
   position: relative;
   display: inline-flex;
-  min-height: 48px;
+  min-height: clamp(44px, 3.13vw, 48px);
   align-items: center;
   gap: 18px;
   overflow: visible;
@@ -203,13 +312,13 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   background: var(--kollio-action);
   padding: 0 12px 0 20px;
   color: var(--ui-bg-elevated);
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: clamp(.875rem, 1.05vw, 1rem);
+  font-weight: 500;
   box-shadow: 0 2px 5px color-mix(in srgb, var(--ui-text) 12%, transparent);
   transition: transform 180ms cubic-bezier(.16, 1, .3, 1), box-shadow 180ms ease;
 }
 
-.split-action::after {
+.primary-action::after {
   position: absolute;
   right: 0;
   bottom: -7px;
@@ -225,11 +334,17 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   transition: transform 220ms cubic-bezier(.16, 1, .3, 1);
 }
 
-.split-action:hover::after { transform: scaleX(1.03); }
-.split-action:hover { box-shadow: 0 5px 12px color-mix(in srgb, var(--ui-text) 16%, transparent); }
-.split-action:hover .split-action-arrow { transform: translateX(3px); }
-.split-action:active { transform: scale(.98); }
-.split-action-arrow { transition: transform 180ms cubic-bezier(.16, 1, .3, 1); }
+.primary-action:hover::after { transform: scaleX(1.03); }
+.primary-action:hover { box-shadow: 0 5px 12px color-mix(in srgb, var(--ui-text) 16%, transparent); }
+.primary-action:hover .primary-action-arrow { transform: translateX(3px); }
+.primary-action:active { transform: scale(.98); }
+.primary-action:disabled {
+  cursor: not-allowed;
+  opacity: .46;
+  transform: none;
+}
+.primary-action:disabled::after { transform: scaleX(.25); }
+.primary-action-arrow { transition: transform 180ms cubic-bezier(.16, 1, .3, 1); }
 
 @media (prefers-reduced-motion: no-preference) {
   .page-enter-active, .page-leave-active { transition: opacity 180ms ease, transform 220ms cubic-bezier(.16, 1, .3, 1); }

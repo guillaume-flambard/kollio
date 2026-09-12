@@ -117,6 +117,7 @@
       },
       "companion": {
         "label": "Contexte de l’idée",
+        "tabWithCount": "{label} ({count})",
         "seeAll": "Tout voir",
         "team": {
           "tab": "Équipe",
