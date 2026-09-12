@@ -215,7 +215,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-search:focus-within { border-color: color-mix(in srgb, var(--kollio-active-ink) 45%, var(--ui-border)); }
 .ideas-search svg { width: 20px; flex: none; fill: none; stroke: var(--ui-text-muted); stroke-linecap: round; stroke-width: 1.7; }
 .ideas-search input { min-width: 0; flex: 1; outline: 0; background: transparent; color: var(--kollio-heading); font-size: .88rem; }
-.ideas-explorer-shell { display: grid; height: max(680px, calc(100vh - 228px)); grid-template-columns: minmax(168px, 210px) minmax(420px, 1fr) minmax(300px, 360px); overflow: hidden; border: 1px solid var(--ui-border); border-radius: 24px; background: var(--ui-bg-elevated); }
+.ideas-explorer-shell { display: grid; min-height: 680px; grid-template-columns: minmax(168px, 210px) minmax(420px, 1fr) minmax(300px, 360px); overflow: hidden; border: 1px solid var(--ui-border); border-radius: 24px; background: var(--ui-bg-elevated); }
 .ideas-filter-rail { border-right: 1px solid var(--ui-border); padding: 24px 16px; }
 .ideas-filter-rail > p { margin: 0 11px 10px; color: var(--ui-text-muted); font-size: .66rem; font-weight: 680; letter-spacing: .075em; text-transform: uppercase; }
 .ideas-filter-rail button { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; color: var(--ui-text-muted); font-size: .78rem; text-align: left; }
@@ -224,7 +224,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-filter-rail :deep(.sketch-annotation--loop) { min-height: 40px; margin-left: -8px; padding: 6px 13px; }
 .ideas-filter-rail .domain-filter { min-height: 39px; padding-inline: 11px; }
 .ideas-filter-rail hr { margin: 20px 10px; border-color: var(--ui-border); }
-.ideas-results { min-width: 0; overflow-y: auto; border-right: 1px solid var(--ui-border); }
+.ideas-results { min-width: 0; border-right: 1px solid var(--ui-border); }
 .ideas-results-header { display: flex; min-height: 62px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ui-border); padding: 0 24px; color: var(--ui-text-muted); font-size: .71rem; }
 .explorer-row-skeleton { min-height: 100px; border-bottom: 1px solid var(--ui-border); padding: 22px 24px; }
 .ideas-results-feedback { display: flex; min-height: 360px; align-items: flex-start; flex-direction: column; justify-content: center; padding: 42px; }
