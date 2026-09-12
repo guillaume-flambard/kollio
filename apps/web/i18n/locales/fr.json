@@ -89,6 +89,13 @@
       "pitchTitle": "Description de l’idée",
       "foundationNote": "L’analyse des contraintes, les itérations et l’activité de l’équipe apparaîtront ici à mesure que l’idée avance.",
       "notFound": "Idée introuvable",
+      "notFoundDescription": "Cette idée n’existe pas ou vous n’avez pas accès à son espace de travail.",
+      "loading": "Chargement de l’idée…",
+      "retry": "Réessayer",
+      "loadError": {
+        "title": "Impossible de charger cette idée",
+        "description": "Une erreur a interrompu le chargement. Réessayez dans un instant."
+      },
       "explore": "Explorer les idées",
       "advance": "Faire avancer l’idée",
       "moreActions": "Plus d’actions",

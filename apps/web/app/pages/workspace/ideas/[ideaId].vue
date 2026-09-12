@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import type { IdeaResponse } from '@kollio/api-client'
-import { motion, useReducedMotion } from 'motion-v'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
 const { t, locale } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
-const reducedMotion = useReducedMotion()
 const ideaId = String(route.params.ideaId)
 const activePanel = ref<'team' | 'questions' | 'evidence'>('team')
 const canvasRef = ref<HTMLElement>()
@@ -17,25 +15,14 @@ const relationshipTargetRef = ref<HTMLElement>()
 const connection = reactive({ path: '', width: 1, height: 1, startX: 0, startY: 0 })
 let canvasObserver: ResizeObserver | undefined
 
-const { data: idea, error } = await useAsyncData(`idea-${ideaId}`, () =>
+const { data: idea, error, status, refresh } = useLazyAsyncData(`idea-${ideaId}`, () =>
   requestFetch<IdeaResponse>(`/api/ideas/${encodeURIComponent(ideaId)}`),
 )
-
-if (error.value) {
-  throw createError({ statusCode: error.value.statusCode ?? 404, statusMessage: t('ideas.detail.notFound') })
-}
 
 const dateFormatter = computed(() =>
   new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
 )
 const panels = ['team', 'questions', 'evidence'] as const
-const panelCounts = { questions: 0, evidence: 0 } as const
-const contextTabs = computed(() => panels.map(panel => ({
-  id: panel,
-  label: panel === 'team'
-    ? t(`ideas.detail.companion.${panel}.tab`)
-    : t('ideas.detail.companion.tabWithCount', { label: t(`ideas.detail.companion.${panel}.tab`), count: panelCounts[panel] }),
-})))
 const pitchParagraphs = computed(() => idea.value?.pitch.split(/\n\s*\n/).filter(Boolean) ?? [])
 const pitchSentences = computed(() => idea.value?.pitch.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ])/).map(sentence => sentence.trim()).filter(Boolean) ?? [])
 const ideaSummary = computed(() => pitchSentences.value[0] ?? pitchParagraphs.value[0] ?? '')
@@ -56,6 +43,8 @@ const problemAnnotation = computed(() => {
   }
 })
 const legacySourceLabel = computed(() => idea.value?.legacy_context?.source === 'prospecteur' ? 'Prospecteur' : idea.value?.legacy_context?.source)
+const errorTitle = computed(() => error.value?.statusCode === 404 ? t('ideas.detail.notFound') : t('ideas.detail.loadError.title'))
+const errorDescription = computed(() => error.value?.statusCode === 404 ? t('ideas.detail.notFoundDescription') : t('ideas.detail.loadError.description'))
 
 function updateConnection() {
   const canvas = canvasRef.value
@@ -97,6 +86,11 @@ function selectPanel(panel: string) {
   nextTick(() => requestAnimationFrame(updateConnection))
 }
 
+function handleRelationshipTarget(target?: HTMLElement) {
+  relationshipTargetRef.value = target
+  nextTick(() => requestAnimationFrame(updateConnection))
+}
+
 watch(activePanel, () => nextTick(() => requestAnimationFrame(updateConnection)))
 onMounted(() => {
   window.addEventListener('resize', updateConnection)
@@ -115,12 +109,19 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
 </script>
 
 <template>
-  <motion.article
-    v-if="idea"
-    :initial="{ opacity: 0, y: reducedMotion ? 0 : 8 }"
-    :animate="{ opacity: 1, y: 0 }"
-    :transition="{ duration: reducedMotion ? 0 : 0.28 }"
-    class="mx-auto max-w-[1320px]"
+  <KollioIdeaDetailSkeleton v-if="status === 'pending' || status === 'idle'" :label="t('ideas.detail.loading')" />
+  <KollioIdeaDetailError
+    v-else-if="error"
+    :title="errorTitle"
+    :description="errorDescription"
+    :retry-label="t('ideas.detail.retry')"
+    :back-label="t('ideas.detail.explore')"
+    :back-to="$localePath('/workspace')"
+    @retry="refresh"
+  />
+  <article
+    v-else-if="idea"
+    class="idea-enter mx-auto max-w-[1320px]"
   >
     <div ref="canvasRef" class="idea-layout relative grid min-w-0">
       <svg v-if="connection.path" aria-hidden="true" class="pointer-events-none absolute inset-0 z-40 hidden overflow-visible lg:block" :viewBox="`0 0 ${connection.width} ${connection.height}`" preserveAspectRatio="none">
@@ -180,95 +181,26 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           <button type="button" class="idea-writing-prompt mt-6 w-full text-left" @click="selectPanel('questions')">{{ t('ideas.detail.writeToEnrich') }}</button>
         </section>
 
-        <section class="mt-6" aria-labelledby="iterations-title">
-          <div class="flex items-center justify-between gap-4">
-            <h2 id="iterations-title" class="text-xl font-semibold">{{ t('ideas.detail.iterations.title') }}</h2>
-            <span class="text-sm text-muted">{{ t('ideas.detail.iterations.count', { count: iterationCount }) }}</span>
-          </div>
-          <div v-if="idea.legacy_context" class="mt-3 grid gap-2 rounded-2xl bg-muted/55 px-5 py-5 text-sm sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-5">
-            <time :datetime="idea.created_at" class="text-muted">{{ dateFormatter.format(new Date(idea.created_at)) }}</time>
-            <div>
-              <p class="font-medium text-default">{{ t('ideas.detail.iterations.imported') }}</p>
-              <p class="mt-1 flex flex-wrap items-center gap-2 text-muted">
-                <span>{{ legacySourceLabel }}</span>
-                <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
-                <span>{{ idea.legacy_context.source_id }}</span>
-              </p>
-            </div>
-          </div>
-          <div v-else class="mt-3 rounded-2xl bg-muted/55 px-5 py-6 text-sm leading-relaxed text-muted">
-            {{ t('ideas.detail.iterations.empty') }}
-          </div>
-        </section>
+        <KollioIterationTimeline
+          :context="idea.legacy_context"
+          :created-at="idea.created_at"
+          :date-label="dateFormatter.format(new Date(idea.created_at))"
+          :count-label="t('ideas.detail.iterations.count', { count: iterationCount })"
+          :title="t('ideas.detail.iterations.title')"
+          :imported-label="t('ideas.detail.iterations.imported')"
+          :empty-label="t('ideas.detail.iterations.empty')"
+          :source-label="legacySourceLabel"
+        />
 
-        <button type="button" class="mt-12 flex min-h-14 w-full items-center gap-3 rounded-2xl border border-default px-4 text-left transition-colors hover:bg-muted/45" @click="selectPanel('team')">
-          <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 shrink-0 text-primary" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 9.5 9.5 0 0 1-4-.9L3 21l1.7-4.4A8.2 8.2 0 0 1 3 11.5a8.4 8.4 0 0 1 9-8.5 8.4 8.4 0 0 1 9 8.5Z" /></svg>
-          <span class="min-h-11 flex-1 text-sm leading-11 text-muted">{{ t('ideas.detail.comment') }}</span>
-          <span class="grid size-9 place-items-center rounded-xl bg-primary/15 text-primary" aria-hidden="true">
-            <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
-          </span>
-        </button>
+        <KollioCommentComposer :label="t('ideas.detail.comment')" @activate="selectPanel('team')" />
       </div>
 
-      <aside class="kollio-surface idea-companion relative z-30 self-start overflow-hidden lg:sticky">
-        <KollioContextTabs id-prefix="idea-context" :items="contextTabs" :label="t('ideas.detail.companion.label')" :model-value="activePanel" @update:model-value="selectPanel" />
-        <motion.div
-          id="idea-context-panel"
-          :key="activePanel"
-          :initial="{ opacity: 0, x: reducedMotion ? 0 : 6 }"
-          :animate="{ opacity: 1, x: 0 }"
-          :transition="{ duration: reducedMotion ? 0 : 0.2 }"
-          role="tabpanel"
-          :aria-labelledby="`idea-context-tab-${activePanel}`"
-          class="p-5"
-        >
-          <template v-if="activePanel === 'team'">
-            <section class="team-panel-primary">
-              <div class="flex items-center justify-between gap-3">
-                <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.team.contributors') }}</h2>
-                <span class="text-sm text-muted">{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
-              </div>
-              <div v-if="idea.legacy_context" ref="relationshipTargetRef" class="source-person mt-5">
-                <span class="source-person-avatar" aria-hidden="true">{{ legacySourceLabel?.charAt(0) }}</span>
-                <span class="min-w-0">
-                  <strong class="block truncate text-sm font-semibold text-default">{{ legacySourceLabel }}</strong>
-                  <span class="mt-0.5 block text-sm text-muted">{{ t('ideas.detail.companion.team.source') }}</span>
-                </span>
-              </div>
-              <div class="mt-6 rounded-2xl bg-muted/55 p-5 text-sm leading-relaxed text-muted">{{ t('ideas.detail.companion.team.empty') }}</div>
-            </section>
-            <section class="mt-7 border-t border-default pt-7">
-              <div class="flex items-center justify-between gap-3">
-                <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.questions.title') }}</h2>
-                <button type="button" class="text-sm text-primary" @click="selectPanel('questions')">{{ t('ideas.detail.companion.seeAll') }}</button>
-              </div>
-              <div class="mt-5 rounded-2xl bg-muted/55 p-5 text-sm leading-relaxed text-muted">{{ t('ideas.detail.companion.questions.empty') }}</div>
-            </section>
-          </template>
-          <template v-else-if="activePanel === 'evidence' && idea.legacy_context">
-            <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.evidence.sourceTitle') }}</h2>
-            <div class="mt-5 rounded-2xl bg-accented p-5">
-              <p class="font-medium text-default">{{ legacySourceLabel }}</p>
-              <p class="mt-1 break-words text-xs text-muted">{{ idea.legacy_context.source_id }}</p>
-              <p class="mt-4 text-sm leading-relaxed text-muted">{{ t('ideas.detail.companion.evidence.provenanceNote') }}</p>
-            </div>
-            <dl class="mt-7 space-y-5 text-sm">
-              <div v-if="idea.legacy_context.fatal_constraint">
-                <dt class="text-muted">{{ t('ideas.detail.legacy.constraint') }}</dt>
-                <dd class="mt-1 font-medium text-default">{{ idea.legacy_context.fatal_constraint }}</dd>
-              </div>
-              <div v-if="idea.legacy_context.channel">
-                <dt class="text-muted">{{ t('ideas.detail.legacy.channel') }}</dt>
-                <dd class="mt-1 leading-relaxed text-default">{{ idea.legacy_context.channel }}</dd>
-              </div>
-            </dl>
-          </template>
-          <template v-else>
-            <h2 class="text-lg font-semibold">{{ t(`ideas.detail.companion.${activePanel}.title`) }}</h2>
-            <div class="mt-5 rounded-2xl bg-muted/55 p-5 text-sm leading-relaxed text-muted">{{ t(`ideas.detail.companion.${activePanel}.empty`) }}</div>
-          </template>
-        </motion.div>
-      </aside>
+      <KollioIdeaCompanion
+        :idea="idea"
+        :active-panel="activePanel"
+        @update:active-panel="selectPanel"
+        @target-ready="handleRelationshipTarget"
+      />
     </div>
-  </motion.article>
+  </article>
 </template>

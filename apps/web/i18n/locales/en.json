@@ -89,6 +89,13 @@
       "pitchTitle": "Idea description",
       "foundationNote": "Constraint analysis, iterations and team activity will appear here as the idea develops.",
       "notFound": "Idea not found",
+      "notFoundDescription": "This idea does not exist or you do not have access to its workspace.",
+      "loading": "Loading idea…",
+      "retry": "Try again",
+      "loadError": {
+        "title": "This idea could not be loaded",
+        "description": "An error interrupted loading. Try again in a moment."
+      },
       "explore": "Explore ideas",
       "advance": "Move idea forward",
       "moreActions": "More actions",
