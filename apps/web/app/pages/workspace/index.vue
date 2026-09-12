@@ -144,8 +144,9 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
         <aside class="ideas-filter-rail">
           <nav :aria-label="t('ideas.explorer.explore')">
             <button type="button" :aria-pressed="!activeStage && !activeDomain" @click="replaceFilters({ stage: undefined, domain: undefined })">
-              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z" /></svg>
-              <KollioSketchAnnotation :active="!activeStage && !activeDomain" kind="loop">{{ t('ideas.explorer.forYou') }}</KollioSketchAnnotation>
+              <KollioSketchAnnotation :active="!activeStage && !activeDomain" kind="loop">
+                <span class="filter-annotation-content"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z" /></svg>{{ t('ideas.explorer.forYou') }}</span>
+              </KollioSketchAnnotation>
             </button>
             <button type="button" :aria-pressed="false" @click="replaceFilters({ stage: undefined, domain: undefined })">
               <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><path d="M12 7v5l3 2" /></svg>{{ t('ideas.explorer.recent') }}
@@ -215,10 +216,10 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 </template>
 
 <style scoped>
-.ideas-explorer { width: 100%; padding: clamp(20px, 2.4vw, 38px); }
+.ideas-explorer { width: 100%; padding: 16px 16px 34px; }
 .ideas-explorer-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 22px; margin-bottom: 20px; }
-.ideas-explorer-header h1 { color: var(--kollio-heading); font-size: clamp(2.45rem, 3.6vw, 3.8rem); font-weight: 650; letter-spacing: -.065em; line-height: .95; }
-.ideas-explorer-header p { margin-top: 8px; color: var(--ui-text-muted); font-size: 1rem; }
+.ideas-explorer-header h1 { color: var(--kollio-heading); font-size: clamp(2.45rem, 3.15vw, 3.25rem); font-weight: 650; letter-spacing: -.06em; line-height: .96; }
+.ideas-explorer-header p { margin-top: 8px; color: var(--ui-text-muted); font-size: 1.06rem; }
 .ideas-create-action { display: flex; min-height: 48px; align-items: center; gap: 24px; border-radius: 12px; background: var(--kollio-heading); padding: 0 20px; color: white; font-size: .78rem; font-weight: 570; box-shadow: 0 8px 22px color-mix(in srgb, var(--kollio-heading) 17%, transparent); transition: transform 180ms ease, box-shadow 180ms ease; }
 .ideas-create-action:hover { transform: translateY(-1px); box-shadow: 0 11px 28px color-mix(in srgb, var(--kollio-heading) 22%, transparent); }
 .ideas-create-action span { font-size: 1.2rem; font-weight: 300; }
@@ -228,20 +229,21 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-search input { min-width: 0; flex: 1; outline: 0; background: transparent; color: var(--kollio-heading); font-size: .84rem; }
 .ideas-filter-icon { display: grid; width: 56px; height: 54px; place-items: center; border-left: 1px solid var(--ui-border); }
 .ideas-filter-icon svg { width: 22px; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-width: 1.6; }
-.ideas-explorer-shell { display: grid; min-height: 704px; grid-template-columns: minmax(184px, 210px) minmax(430px, 1fr) minmax(300px, 356px); overflow: hidden; border: 1px solid var(--ui-border); border-radius: 15px; background: var(--ui-bg-elevated); box-shadow: 0 20px 65px color-mix(in srgb, var(--kollio-active-ink) 5%, transparent); }
-.ideas-filter-rail { border-right: 1px solid var(--ui-border); padding: 14px 15px 24px; }
+.ideas-explorer-shell { display: grid; min-height: 744px; grid-template-columns: minmax(192px, 210px) minmax(470px, 1fr) minmax(330px, 376px); overflow: hidden; border: 1px solid var(--ui-border); border-radius: 18px; background: var(--ui-bg-elevated); box-shadow: 0 22px 72px color-mix(in srgb, var(--kollio-active-ink) 6%, transparent); }
+.ideas-filter-rail { border-right: 1px solid var(--ui-border); padding: 16px 15px 26px; }
 .ideas-filter-rail nav { display: grid; gap: 1px; }
-.ideas-filter-rail button { display: flex; width: 100%; min-height: 50px; align-items: center; gap: 12px; color: var(--ui-text-muted); font-size: .75rem; text-align: left; }
+.ideas-filter-rail button { display: flex; width: 100%; min-height: 52px; align-items: center; gap: 12px; color: var(--ui-text-muted); font-size: .82rem; text-align: left; }
 .ideas-filter-rail button[aria-pressed='true'] { color: var(--kollio-heading); font-weight: 620; }
 .ideas-filter-rail button svg { width: 21px; flex: none; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.55; }
-.ideas-filter-rail nav :deep(.sketch-annotation--loop) { width: 100%; min-height: 44px; margin-left: -8px; padding: 8px 12px; }
+.ideas-filter-rail nav :deep(.sketch-annotation--loop) { --sketch-opacity: .72; --sketch-secondary-opacity: .16; --sketch-stroke: 1.45px; width: 100%; min-height: 46px; margin-left: -8px; padding: 8px 12px; }
+.filter-annotation-content { display: flex; align-items: center; gap: 12px; }
 .ideas-filter-rail hr { margin: 16px 0 22px; border-color: var(--ui-border); }
-.ideas-filter-rail > p { margin: 0 8px 8px; color: var(--kollio-heading); font-size: .74rem; font-weight: 650; }
-.ideas-filter-rail .domain-filter { min-height: 34px; justify-content: space-between; padding: 0 8px; }
-.ideas-filter-rail .domain-filter small { font-size: .65rem; }
+.ideas-filter-rail > p { margin: 0 8px 9px; color: var(--kollio-heading); font-size: .8rem; font-weight: 650; }
+.ideas-filter-rail .domain-filter { min-height: 38px; justify-content: space-between; padding: 0 8px; }
+.ideas-filter-rail .domain-filter small { font-size: .7rem; }
 .ideas-results { min-width: 0; }
-.ideas-results-header { display: flex; min-height: 58px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ui-border); padding: 0 22px; color: var(--ui-text-muted); font-size: .7rem; }
-.ideas-results-header strong { color: var(--kollio-heading); font-size: .77rem; font-weight: 650; }
+.ideas-results-header { display: flex; min-height: 62px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ui-border); padding: 0 24px; color: var(--ui-text-muted); font-size: .75rem; }
+.ideas-results-header strong { color: var(--kollio-heading); font-size: .84rem; font-weight: 650; }
 .ideas-results-header b { margin: 0 7px; color: var(--kollio-active-ink); font-weight: 570; }
 .explorer-row-skeleton { display: grid; min-height: 128px; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 18px; border-bottom: 1px solid var(--ui-border); padding: 20px 22px; }
 .explorer-row-skeleton > span:last-child { display: block; }

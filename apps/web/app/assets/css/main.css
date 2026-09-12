@@ -228,8 +228,10 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   color: var(--kollio-active-ink);
 }
 
-.workspace-nav-sketch {
-  width: 100%;
+.workspace-nav-sketch.sketch-annotation--loop {
+  --sketch-opacity: .68;
+  --sketch-secondary-opacity: .14;
+  width: 100% !important;
   justify-content: flex-start;
   padding-inline: 12px;
 }
