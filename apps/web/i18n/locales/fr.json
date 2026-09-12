@@ -94,7 +94,8 @@
       "retry": "Réessayer",
       "loadError": {
         "title": "Impossible de charger cette idée",
-        "description": "Une erreur a interrompu le chargement. Réessayez dans un instant."
+        "description": "Une erreur a interrompu le chargement. Réessayez dans un instant.",
+        "reassurance": "L’idée et les contributions de votre équipe restent intactes."
       },
       "explore": "Explorer les idées",
       "advance": "Faire avancer l’idée",

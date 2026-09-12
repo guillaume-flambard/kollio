@@ -115,6 +115,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
     v-else-if="error"
     :title="errorTitle"
     :description="errorDescription"
+    :reassurance="t('ideas.detail.loadError.reassurance')"
     :retry-label="t('ideas.detail.retry')"
     :back-label="t('ideas.detail.explore')"
     :back-to="$localePath('/workspace')"

@@ -20,6 +20,7 @@ describe('Idea detail states', () => {
       props: {
         title: 'Idea unavailable',
         description: 'Try again later.',
+        reassurance: 'Your work is still safe.',
         retryLabel: 'Try again',
         backLabel: 'Explore ideas',
         backTo: '/workspace',
@@ -35,6 +36,7 @@ describe('Idea detail states', () => {
     })
 
     expect(wrapper.get('[role="alert"]').text()).toContain('Idea unavailable')
+    expect(wrapper.get('img').attributes('src')).toBe('/images/states/idea-load-error.png')
     await wrapper.get('button').trigger('click')
     expect(wrapper.emitted('retry')).toHaveLength(1)
     expect(wrapper.get('a').attributes('href')).toBe('/workspace')
