@@ -108,12 +108,12 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   }
 
   .workspace-main {
-    max-width: 1276px;
+    width: 100%;
     padding: 0;
   }
 
   .idea-layout {
-    grid-template-columns: minmax(0, 1fr) clamp(276px, 25.52vw, 392px);
+    grid-template-columns: minmax(0, 1fr) clamp(276px, 25.52vw, 480px);
     gap: clamp(10px, .91vw, 14px);
   }
 

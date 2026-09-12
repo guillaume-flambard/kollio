@@ -57,7 +57,6 @@ function updateConnection() {
     return
   }
   const canvasRect = canvas.getBoundingClientRect()
-  const documentRect = documentSurface.getBoundingClientRect()
   const annotationRect = annotation.getBoundingClientRect()
   const targetRect = target.getBoundingClientRect()
   const annotationVisible = annotationRect.bottom > 0 && annotationRect.top < window.innerHeight
@@ -70,16 +69,15 @@ function updateConnection() {
   const startY = annotationRect.top + annotationRect.height / 2 - canvasRect.top
   const endX = targetRect.left - canvasRect.left
   const endY = targetRect.top + Math.min(42, targetRect.height / 2) - canvasRect.top
-  const gutterX = documentRect.right - canvasRect.left
-    + Math.max(7, (targetRect.left - documentRect.right) * 0.28)
-  const lowerShoulderX = Math.min(gutterX + 12, startX + Math.max(48, (endX - startX) * 0.52))
-  const upperShoulderX = Math.max(lowerShoulderX + 18, endX - 22)
-  const rise = Math.max(80, startY - endY)
+  const horizontalSpan = Math.max(1, endX - startX)
+  const curveSpan = Math.min(220, horizontalSpan)
+  const curveStartX = endX - curveSpan
+  const controlOffset = Math.max(34, curveSpan * 0.45)
   connection.width = canvasRect.width
   connection.height = canvas.scrollHeight
   connection.startX = startX
   connection.startY = startY
-  connection.path = `M ${startX} ${startY} C ${startX + 24} ${startY}, ${lowerShoulderX - 6} ${startY - 2}, ${lowerShoulderX} ${startY - 20} C ${lowerShoulderX + 18} ${startY - rise * 0.38}, ${upperShoulderX - 8} ${endY + 72}, ${upperShoulderX} ${endY + 24} C ${upperShoulderX + 2} ${endY + 9}, ${endX - 14} ${endY}, ${endX} ${endY}`
+  connection.path = `M ${startX} ${startY} L ${curveStartX} ${startY} C ${curveStartX + controlOffset} ${startY}, ${endX - controlOffset} ${endY}, ${endX} ${endY}`
 }
 
 function selectPanel(panel: string) {
@@ -124,7 +122,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
   />
   <article
     v-else-if="idea"
-    class="idea-enter mx-auto max-w-[1320px]"
+    class="idea-enter w-full"
   >
     <div ref="canvasRef" class="idea-layout relative grid min-w-0">
       <svg v-if="connection.path" aria-hidden="true" class="pointer-events-none absolute inset-0 z-40 hidden overflow-visible lg:block" :viewBox="`0 0 ${connection.width} ${connection.height}`" preserveAspectRatio="none">
