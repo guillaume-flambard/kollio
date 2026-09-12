@@ -11,6 +11,8 @@ const localePath = useLocalePath()
 const reducedMotion = useReducedMotion()
 const pageSize = 12
 
+const isIdeasPrototype = computed(() => import.meta.dev && route.query.prototype === 'ideas')
+
 const { data: workspaces } = await useAsyncData('workspaces', () =>
   requestFetch<WorkspaceResponse[]>('/api/workspaces'),
 )
@@ -56,7 +58,13 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 </script>
 
 <template>
-  <div class="idea-library">
+  <KollioIdeaLibraryPrototype
+    v-if="isIdeasPrototype && activeWorkspace && ideaPage?.items.length"
+    :ideas="ideaPage.items"
+    :total="ideaPage.total"
+  />
+
+  <div v-else class="idea-library">
     <section v-if="!activeWorkspace" class="py-24 text-center">
       <h1 class="text-3xl font-semibold tracking-[-0.03em]">{{ t('workspace.empty.title') }}</h1>
       <p class="mx-auto mt-3 max-w-lg leading-relaxed text-muted">{{ t('workspace.empty.description') }}</p>
