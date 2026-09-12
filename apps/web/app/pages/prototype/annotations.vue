@@ -6,8 +6,8 @@ if (!import.meta.dev) {
 definePageMeta({ layout: false })
 
 const enabled = ref(true)
-const intensity = ref(68)
-const stroke = ref(1.45)
+const intensity = ref(54)
+const stroke = ref(1.3)
 const glyphs = Object.freeze({ dot: '·', percent: '%', pixels: 'px', arrow: '→' })
 
 const copy = {
@@ -123,7 +123,7 @@ async function replay() {
 .annotation-lab { min-height: 100vh; background: #f7f5f7; padding: clamp(24px, 5vw, 72px); color: #252229; font-family: Geist, system-ui, sans-serif; }
 .lab-header { display: flex; max-width: 1280px; align-items: end; justify-content: space-between; gap: 28px; margin: 0 auto 30px; }
 .lab-header p { color: #493b57; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.lab-header h1 { margin-top: 10px; font-size: clamp(2.5rem, 6vw, 5.8rem); font-weight: 620; letter-spacing: -.075em; line-height: .92; }
+.lab-header h1 { margin-top: 10px; font-size: clamp(2.5rem, 5vw, 4.7rem); font-weight: 620; letter-spacing: -.07em; line-height: .94; }
 .lab-header div > span { display: block; max-width: 640px; margin-top: 20px; color: #726d79; font-size: 1rem; line-height: 1.6; }
 .lab-header button { min-height: 46px; flex: none; border-radius: 12px; background: #252229; padding: 0 18px; color: #fff; font-size: .82rem; font-weight: 600; }
 .lab-controls { display: flex; max-width: 1280px; flex-wrap: wrap; align-items: end; gap: 26px; margin: 0 auto 20px; border: 1px solid #e5e0e7; border-radius: 16px; background: #fff; padding: 18px 22px; }

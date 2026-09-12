@@ -29,7 +29,7 @@ withDefaults(defineProps<{
     >
       <path class="sketch-wash" d="M8 26C9 13 29 8 60 8c31 0 52 5 53 17 1 11-20 16-53 16S7 37 8 26Z" />
       <path class="sketch-line" pathLength="1" d="M4 25C5 9 29 4 61 5c34 0 55 7 55 21 0 13-23 18-57 17C25 43 3 38 4 25Z" />
-      <path class="sketch-line sketch-line-secondary" pathLength="1" d="M7 27C8 12 31 6 62 7c31 0 51 6 51 18 0 12-22 16-53 16C29 41 6 37 7 27Z" />
+      <path class="sketch-line sketch-line-secondary sketch-loop-echo" pathLength="1" d="M18 10C40 3 82 4 103 12" />
     </svg>
 
     <svg
@@ -39,8 +39,7 @@ withDefaults(defineProps<{
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      <path class="sketch-wash sketch-wash-solid" d="M3 16C23 12 43 13 62 12c21 0 39 1 55 5l-2 9c-22 1-40-1-58 0-20 0-37 2-53-1Z" />
-      <path class="sketch-line sketch-swash-edge" pathLength="1" d="M4 24c23-2 42 0 61-1 20-1 35 1 51-1" />
+      <path class="sketch-wash sketch-wash-solid" d="M2 12C25 7 45 10 64 8c20 0 38 2 54 7l-3 13c-22-1-40-2-58 0-20-1-38 2-54-2Z" />
     </svg>
 
     <svg
@@ -49,8 +48,8 @@ withDefaults(defineProps<{
       viewBox="0 0 54 34"
       aria-hidden="true"
     >
-      <path class="sketch-line" pathLength="1" d="M3 6c10 1 15 2 22 7 7 4 10 10 17 11" />
-      <path class="sketch-line" pathLength="1" d="m36 17 7 7-9 4" />
+      <path class="sketch-line" pathLength="1" d="M2 5c11 0 18 2 26 7 7 4 10 9 16 12" />
+      <path class="sketch-line" pathLength="1" d="m37 16 8 8-10 5" />
     </svg>
 
     <svg
@@ -60,9 +59,8 @@ withDefaults(defineProps<{
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      <path class="sketch-wash sketch-bracket-wash" d="M3 5c20-2 49-2 76-1 17 1 28 1 38 4v36c-32 1-78 1-114-1Z" />
-      <path class="sketch-line" pathLength="1" d="M7 4C4 12 4 34 8 42c24 3 77 2 108 1" />
-      <path class="sketch-line sketch-line-secondary" pathLength="1" d="M9 6c-2 9-2 26 1 34 23 2 73 2 104 1" />
+      <path class="sketch-wash sketch-bracket-wash" d="M5 4c27-2 76-1 112 4v35c-37 2-81 1-112-1Z" />
+      <path class="sketch-line sketch-bracket-line" pathLength="1" d="M12 5C7 15 7 33 12 42c8 2 17 2 26 2" />
     </svg>
   </span>
 </template>
@@ -71,9 +69,9 @@ withDefaults(defineProps<{
 .sketch-annotation {
   --sketch-ink: var(--kollio-active-ink, #493b57);
   --sketch-wash: var(--kollio-wash, #ddd3e8);
-  --sketch-opacity: .68;
-  --sketch-secondary-opacity: .2;
-  --sketch-stroke: 1.45px;
+  --sketch-opacity: .54;
+  --sketch-secondary-opacity: .12;
+  --sketch-stroke: 1.3px;
   position: relative;
   z-index: 0;
   display: inline-flex;
@@ -149,7 +147,7 @@ withDefaults(defineProps<{
 }
 
 .sketch-line-secondary {
-  stroke-width: calc(var(--sketch-stroke) * .72);
+  stroke-width: calc(var(--sketch-stroke) * .66);
   opacity: 0;
 }
 
@@ -162,8 +160,9 @@ withDefaults(defineProps<{
   opacity: 0;
 }
 
-.sketch-swash-edge {
-  stroke-width: calc(var(--sketch-stroke) * .68);
+.sketch-loop-echo {
+  transform: rotate(-1deg);
+  transform-origin: center;
 }
 
 .sketch-bracket-wash {
@@ -183,11 +182,11 @@ withDefaults(defineProps<{
 }
 
 .is-active .sketch-wash-solid {
-  opacity: .46;
+  opacity: .38;
 }
 
 .is-active .sketch-bracket-wash {
-  opacity: .15;
+  opacity: .12;
 }
 
 .is-animated .sketch-line {
