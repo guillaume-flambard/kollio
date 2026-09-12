@@ -196,10 +196,13 @@ Main surfaces and nested content blocks use gently rounded 16px corners. Navigat
 ## Components
 
 The production primitives live in `apps/web/app/components/kollio`. Reuse
-`KollioFeltMark`, `KollioPrimaryAction`, and `KollioContextTabs` across workspace
-screens. Structural surfaces use the shared `kollio-surface` class. New screens
-must consume these primitives and the semantic tokens from `@kollio/ui` instead
-of duplicating their geometry, colors, or interaction states.
+`KollioFeltMark`, `KollioPrimaryAction`, `KollioContextTabs`, `KollioEmptyState`,
+and `KollioPersonRow` across workspace screens. Idea detail composes these with
+`KollioIdeaCompanion`, `KollioIterationTimeline`, `KollioCommentComposer`,
+`KollioIdeaDetailSkeleton`, and `KollioIdeaDetailError`. Structural surfaces use
+the shared `kollio-surface` class. New screens must consume these primitives and
+the semantic tokens from `@kollio/ui` instead of duplicating their geometry,
+colors, or interaction states.
 
 ### Primary Actions
 
