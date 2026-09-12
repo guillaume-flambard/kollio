@@ -37,7 +37,15 @@ const iterationCount = computed(() => idea.value?.legacy_context ? 1 : 0)
 const problemAnnotation = computed(() => {
   const paragraph = detailParagraphs.value[0] ?? ''
   if (!idea.value?.legacy_context || !paragraph) return undefined
-  return { highlight: paragraph }
+  const words = paragraph.split(/\s+/)
+  if (words.length < 8) return { before: '', highlight: paragraph, after: '' }
+  const start = Math.min(words.length - 5, Math.floor(words.length * 0.55))
+  const end = Math.min(words.length, start + 6)
+  return {
+    before: `${words.slice(0, start).join(' ')} `,
+    highlight: words.slice(start, end).join(' '),
+    after: ` ${words.slice(end).join(' ')}`,
+  }
 })
 const legacySourceLabel = computed(() => idea.value?.legacy_context?.source === 'prospecteur' ? 'Prospecteur' : idea.value?.legacy_context?.source)
 
@@ -115,7 +123,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
     class="mx-auto max-w-[1320px]"
   >
     <div ref="canvasRef" class="relative grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_300px] 2xl:grid-cols-[minmax(0,1fr)_360px]">
-      <svg v-if="connection.path" aria-hidden="true" class="pointer-events-none absolute inset-0 z-20 hidden overflow-visible lg:block" :viewBox="`0 0 ${connection.width} ${connection.height}`" preserveAspectRatio="none">
+      <svg v-if="connection.path" aria-hidden="true" class="pointer-events-none absolute inset-0 z-40 hidden overflow-visible lg:block" :viewBox="`0 0 ${connection.width} ${connection.height}`" preserveAspectRatio="none">
         <path class="relationship-path" :d="connection.path" pathLength="1" fill="none" stroke="var(--ui-primary)" stroke-width="1.5" />
         <circle :cx="connection.startX" :cy="connection.startY" r="4" fill="var(--ui-primary)" />
       </svg>
@@ -161,7 +169,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           <div class="relative mt-5 max-w-[72ch]">
             <div class="space-y-5 text-base leading-7 text-muted xl:text-lg xl:leading-8">
               <p v-if="problemAnnotation">
-                <button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><span class="linked-passage-stroke">{{ problemAnnotation.highlight }}</span></button>
+                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><span class="linked-passage-stroke">{{ problemAnnotation.highlight }}</span></button>{{ problemAnnotation.after }}
               </p>
               <p v-else-if="detailParagraphs[0]">{{ detailParagraphs[0] }}</p>
               <p v-for="(paragraph, index) in detailParagraphs.slice(1)" :key="index">{{ paragraph }}</p>
@@ -230,14 +238,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           class="p-6"
         >
           <template v-if="activePanel === 'team'">
-            <section>
-              <div class="flex items-center justify-between gap-3">
-                <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.team.contributors') }}</h2>
-                <span class="text-sm text-muted">{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
-              </div>
-              <div class="mt-5 rounded-2xl bg-muted/55 p-5 text-sm leading-relaxed text-muted">{{ t('ideas.detail.companion.team.empty') }}</div>
-            </section>
-            <section v-if="idea.legacy_context" class="mt-7 border-t border-default pt-7">
+            <section v-if="idea.legacy_context">
               <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.team.source') }}</h2>
               <div ref="relationshipTargetRef" class="source-person mt-5">
                 <span class="source-person-avatar" aria-hidden="true">{{ legacySourceLabel?.charAt(0) }}</span>
@@ -246,6 +247,13 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
                   <span class="mt-0.5 block text-sm text-muted">{{ t('ideas.detail.companion.team.importedBy') }}</span>
                 </span>
               </div>
+            </section>
+            <section :class="idea.legacy_context ? 'mt-7 border-t border-default pt-7' : ''">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.team.contributors') }}</h2>
+                <span class="text-sm text-muted">{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
+              </div>
+              <div class="mt-5 rounded-2xl bg-muted/55 p-5 text-sm leading-relaxed text-muted">{{ t('ideas.detail.companion.team.empty') }}</div>
             </section>
             <section class="mt-7 border-t border-default pt-7">
               <div class="flex items-center justify-between gap-3">
