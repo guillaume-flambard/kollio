@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.ideas.adapters.postgres import PostgresIdeas
 from src.modules.ideas.api.schemas import (
+    CollaboratorResponse,
     IdeaPageResponse,
     IdeaResponse,
     IdeaSummaryResponse,
@@ -55,8 +56,26 @@ async def read_idea(
     idea = await get_idea(PostgresIdeas(session), idea_id, identity.subject)
     if idea is None:
         raise HTTPException(404, MESSAGES[request.state.locale]["not_found"])
+    repository = PostgresIdeas(session)
+    collaborators = [
+        CollaboratorResponse(
+            id=user.id,
+            handle=user.handle,
+            display_name=user.display_name,
+            role=role,
+            roles=user.roles,
+            bio=user.bio,
+            avatar_key=user.avatar_key,
+        )
+        for user, role in await repository.collaborators(idea.id)
+    ]
     response = IdeaResponse.model_validate(idea)
-    return response.model_copy(update={"legacy_context": legacy_context(idea.provenance)})
+    return response.model_copy(
+        update={
+            "legacy_context": legacy_context(idea.provenance),
+            "collaborators": collaborators,
+        }
+    )
 
 
 @workspace_ideas_router.get(

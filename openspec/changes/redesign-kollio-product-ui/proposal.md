@@ -10,6 +10,7 @@ Kollio's current workspace interface exposes the available data but does not yet
 - Keep the next experiment visible as the primary action without turning the page into a dashboard.
 - Add a compact iteration history and a contextual comparison mode for evidence changes.
 - Preserve French and English interface behavior, responsive layouts, keyboard access, and reduced-motion support.
+- Add development-only collaboration profiles and idea memberships so team interactions can be evaluated with realistic, clearly synthetic data.
 
 ## Capabilities
 
@@ -24,5 +25,4 @@ None.
 ## Impact
 
 - Affects the Nuxt workspace layout, idea list and detail views, shared visual tokens, localized copy, and related UI tests.
-- Uses existing API contracts first; data-dependent controls remain progressive until the corresponding backend slices are available.
-- Does not change authentication, workspace isolation, persistence, or deployment architecture.
+- Extends the idea detail contract with workspace-isolated collaborators while keeping authentication and deployment architecture unchanged.

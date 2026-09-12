@@ -1,6 +1,6 @@
 ## Context
 
-See `proposal.md` for motivation and `specs/idea-evaluation-workspace/spec.md` for observable behavior. The current Nuxt interface has authenticated idea list and detail routes backed by generated API contracts. Constraint, evidence, iteration, and team APIs will arrive in later vertical slices.
+See `proposal.md` for motivation and `specs/idea-evaluation-workspace/spec.md` for observable behavior. The current Nuxt interface has authenticated idea list and detail routes backed by generated API contracts. The idea detail now needs a narrow team slice so avatar, membership, and collaborator interactions can be evaluated without hard-coded frontend records.
 
 ## Goals / Non-Goals
 
@@ -8,12 +8,12 @@ See `proposal.md` for motivation and `specs/idea-evaluation-workspace/spec.md` f
 
 - Establish Living Canvas and the Aubergine palette as reusable interface grammar.
 - Improve the current workspace shell and idea surfaces using only available data.
-- Prepare contextual relationships and motion without coupling the UI to fabricated records.
+- Prepare contextual relationships and motion using explicit development fixtures rather than hard-coded frontend records.
 - Keep all copy localized and all states keyboard accessible.
 
 **Non-Goals:**
 
-- Add missing constraint, evidence, iteration, or team backend capabilities.
+- Add missing constraint, evidence, or iteration backend capabilities.
 - Add workspace theme settings in this change.
 - Reproduce the approved mockup with placeholder production data.
 
@@ -37,7 +37,11 @@ Selection appears first, the relationship path draws second, and companion conte
 
 ### Missing product slices use honest empty states
 
-The initial implementation updates the visual shell and available idea data. It does not display invented people, questions, evidence, scores, or iterations. Companion sections appear only when their contracts exist, or as clearly labeled empty states when the route requires them.
+Questions, evidence, scores, and iterations remain honest empty states until their contracts exist. Collaborators come from persisted idea memberships. Development profiles are synthetic by design, carry no login subject or password, and are never embedded as frontend constants.
+
+### Demo collaboration data is explicit and reversible
+
+The demo seed refuses to run when the application environment is production. It uses stable UUIDs, updates its own marked profiles idempotently, and can remove only the records it owns. This keeps visual development reproducible without confusing fixtures with real people or granting them authentication access.
 
 ### The primary button uses an ink surface and active stroke
 
@@ -54,6 +58,7 @@ The action label and arrow sit on one ink surface with a dusty-lilac felt-tip st
 
 1. Introduce Aubergine semantic tokens and browser-surface styling.
 2. Update the authenticated workspace shell and existing idea list/detail routes.
-3. Verify French and English layouts at supported breakpoints.
-4. Add contextual panels as their backend capabilities become available.
-5. Roll back by reverting the token and view changes; no data migration is required.
+3. Add the collaborator schema, generated contract, and development seed.
+4. Verify French and English layouts at supported breakpoints.
+5. Add remaining contextual panels as their backend capabilities become available.
+6. Roll back demo content with the reset command before reverting its schema migration.

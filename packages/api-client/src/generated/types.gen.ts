@@ -5,6 +5,40 @@ export type ClientOptions = {
 };
 
 /**
+ * CollaboratorResponse
+ */
+export type CollaboratorResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Handle
+     */
+    handle?: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Role
+     */
+    role: string;
+    /**
+     * Roles
+     */
+    roles: Array<string>;
+    /**
+     * Bio
+     */
+    bio?: string | null;
+    /**
+     * Avatar Key
+     */
+    avatar_key?: string | null;
+};
+
+/**
  * HTTPValidationError
  */
 export type HttpValidationError = {
@@ -91,6 +125,10 @@ export type IdeaResponse = {
      */
     created_at: string;
     legacy_context?: LegacyIdeaContext | null;
+    /**
+     * Collaborators
+     */
+    collaborators?: Array<CollaboratorResponse>;
 };
 
 /**

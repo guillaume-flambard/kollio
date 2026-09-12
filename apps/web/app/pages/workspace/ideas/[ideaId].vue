@@ -27,6 +27,7 @@ const panels = ['team', 'questions', 'evidence'] as const
 const pitchParagraphs = computed(() => idea.value?.pitch.split(/\n\s*\n/).filter(Boolean) ?? [])
 const pitchSentences = computed(() => idea.value?.pitch.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ])/).map(sentence => sentence.trim()).filter(Boolean) ?? [])
 const ideaSummary = computed(() => pitchSentences.value[0] ?? pitchParagraphs.value[0] ?? '')
+const collaborators = computed(() => idea.value?.collaborators ?? [])
 const detailParagraphs = computed(() => pitchSentences.value.length > 1 ? pitchSentences.value.slice(1) : pitchParagraphs.value)
 const legacyTopics = computed(() => idea.value?.legacy_context?.domain?.split('·').map(topic => topic.trim()).filter(Boolean) ?? [])
 const iterationCount = computed(() => idea.value?.legacy_context ? 1 : 0)
@@ -159,7 +160,12 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           </div>
           <p class="idea-summary line-clamp-2 max-w-[70ch] text-muted">{{ ideaSummary }}</p>
           <div class="idea-stats flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
-            <span>{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
+            <KollioAvatarStack
+              v-if="collaborators.length"
+              :people="collaborators"
+              :label="t('ideas.detail.stats.contributors', { count: collaborators.length })"
+            />
+            <span>{{ t('ideas.detail.stats.contributors', { count: collaborators.length }) }}</span>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
             <button type="button" class="transition-colors hover:text-default" @click="selectPanel('questions')">{{ t('ideas.detail.stats.questions', { count: 0 }) }}</button>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />

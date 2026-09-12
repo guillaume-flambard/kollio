@@ -299,6 +299,12 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   object-fit: cover;
 }
 
+.person-row-avatar[data-avatar='rose'] { background: color-mix(in srgb, var(--kollio-question-wash) 72%, white); }
+.person-row-avatar[data-avatar='ochre'] { background: color-mix(in srgb, var(--ui-warning) 28%, white); }
+.person-row-avatar[data-avatar='citron'] { background: color-mix(in srgb, var(--kollio-verified) 34%, white); }
+.person-row-avatar[data-avatar='coral'] { background: color-mix(in srgb, var(--ui-error) 16%, white); }
+.person-row-avatar[data-avatar='sage'] { background: color-mix(in srgb, var(--ui-success) 18%, white); }
+
 .person-row-name {
   display: flex;
   min-width: 0;

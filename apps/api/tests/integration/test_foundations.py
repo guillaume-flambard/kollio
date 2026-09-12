@@ -12,7 +12,13 @@ from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from src.agents.graph import build_graph
 from src.agents.schemas import GateFinding
 from src.main import create_app
-from src.modules.ideas.adapters.postgres import Idea, User, Workspace, WorkspaceMembership
+from src.modules.ideas.adapters.postgres import (
+    Idea,
+    IdeaMembership,
+    User,
+    Workspace,
+    WorkspaceMembership,
+)
 from src.platform.auth import Identity, current_identity
 from src.platform.config import Settings
 from src.platform.db import get_session
@@ -23,7 +29,9 @@ from src.platform.embeddings import (
     similar_idea_ids,
     store_embeddings,
 )
+from src.platform.import_legacy import IMPORTER_ID, WORKSPACE_ID
 from src.platform.map_identity import map_identity_in_session
+from src.platform.seed_demo import DEMO_PROFILES, reset_demo_data, seed_demo_data
 
 pytestmark = pytest.mark.integration
 
@@ -432,4 +440,94 @@ async def test_member_browses_only_their_workspace_ideas(database):
             assert domain.status_code == 200
             assert domain.json()["total"] == 1
             assert domain.json()["items"][0]["id"] == str(newer_id)
+        await transaction.rollback()
+
+
+async def test_demo_collaborators_seed_idempotently_and_appear_on_idea(database):
+    engine, _, url = database
+    identity_id, idea_id = uuid4(), uuid4()
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            session.add_all(
+                [
+                    Workspace(id=WORKSPACE_ID, name="Prospecteur import"),
+                    User(
+                        id=IMPORTER_ID,
+                        auth_subject=None,
+                        display_name="Legacy importer",
+                    ),
+                    User(
+                        id=identity_id,
+                        auth_subject=str(identity_id),
+                        display_name="Test member",
+                    ),
+                ]
+            )
+            await session.flush()
+            session.add_all(
+                [
+                    WorkspaceMembership(
+                        workspace_id=WORKSPACE_ID,
+                        user_id=identity_id,
+                        role="member",
+                    ),
+                    Idea(
+                        id=idea_id,
+                        slug="seeded-collaboration",
+                        title="Seeded collaboration",
+                        pitch="A private idea with a real persisted demo team.",
+                        owner_id=IMPORTER_ID,
+                        workspace_id=WORKSPACE_ID,
+                        stage="seed",
+                        lang="en",
+                        visibility="workspace",
+                        source="prospecteur",
+                        source_id="seeded-collaboration",
+                        provenance={"cle": "seeded-collaboration"},
+                    ),
+                ]
+            )
+            await session.flush()
+
+            first = await seed_demo_data(session)
+            second = await seed_demo_data(session)
+            assert first == second
+            assert first["users"] == len(DEMO_PROFILES)
+            assert first["ideas"] == 1
+            assert await session.scalar(
+                select(func.count()).select_from(User).where(User.is_demo.is_(True))
+            ) == len(DEMO_PROFILES)
+            assert (
+                await session.scalar(
+                    select(func.count())
+                    .select_from(IdeaMembership)
+                    .where(IdeaMembership.idea_id == idea_id)
+                )
+                == first["memberships"]
+            )
+
+            app = create_app(Settings(_env_file=None, database_url=url))
+            app.dependency_overrides[current_identity] = lambda: Identity(str(identity_id))
+
+            async def override_session():
+                yield session
+
+            app.dependency_overrides[get_session] = override_session
+            async with httpx.AsyncClient(
+                transport=httpx.ASGITransport(app=app), base_url="http://test"
+            ) as client:
+                response = await client.get(f"/ideas/{idea_id}")
+
+            assert response.status_code == 200
+            collaborators = response.json()["collaborators"]
+            assert len(collaborators) == first["memberships"]
+            assert all(collaborator["handle"] for collaborator in collaborators)
+            assert all(collaborator["avatar_key"] for collaborator in collaborators)
+
+            reset = await reset_demo_data(session)
+            assert reset["users"] == len(DEMO_PROFILES)
+            assert await session.scalar(select(func.count()).select_from(IdeaMembership)) == 0
+            assert (await session.get(Idea, idea_id)).stage == "seed"
         await transaction.rollback()

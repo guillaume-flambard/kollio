@@ -248,6 +248,71 @@
   },
   "components": {
     "schemas": {
+      "CollaboratorResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "handle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Handle"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "bio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bio"
+          },
+          "avatar_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "display_name",
+          "role",
+          "roles"
+        ],
+        "title": "CollaboratorResponse"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -380,6 +445,13 @@
                 "type": "null"
               }
             ]
+          },
+          "collaborators": {
+            "items": {
+              "$ref": "#/components/schemas/CollaboratorResponse"
+            },
+            "type": "array",
+            "title": "Collaborators"
           }
         },
         "type": "object",

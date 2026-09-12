@@ -3,14 +3,17 @@ from typing import Any
 from uuid import UUID
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     DateTime,
     ForeignKey,
     String,
     UniqueConstraint,
+    false,
     func,
     or_,
     select,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -30,6 +33,13 @@ class User(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     auth_subject: Mapped[str | None] = mapped_column(unique=True)
     display_name: Mapped[str]
+    handle: Mapped[str | None] = mapped_column(unique=True)
+    roles: Mapped[list[str]] = mapped_column(
+        JSONB, default=list, server_default=text("'[]'::jsonb")
+    )
+    bio: Mapped[str | None]
+    avatar_key: Mapped[str | None]
+    is_demo: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
 
 
 class WorkspaceMembership(Base):
@@ -66,6 +76,18 @@ class Idea(Base):
     provenance: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
 
 
+class IdeaMembership(Base):
+    __tablename__ = "idea_memberships"
+    idea_id: Mapped[UUID] = mapped_column(
+        ForeignKey("ideas.id", ondelete="CASCADE"), primary_key=True
+    )
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    role: Mapped[str]
+    joined_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class PostgresIdeas:
     def __init__(self, session: AsyncSession):
         self.session = session
@@ -78,6 +100,15 @@ class PostgresIdeas:
             select(WorkspaceMembership.workspace_id).join(User).where(User.auth_subject == subject)
         )
         return frozenset((await self.session.scalars(query)).all())
+
+    async def collaborators(self, idea_id: UUID) -> list[tuple[User, str]]:
+        query = (
+            select(User, IdeaMembership.role)
+            .join(IdeaMembership, IdeaMembership.user_id == User.id)
+            .where(IdeaMembership.idea_id == idea_id)
+            .order_by(IdeaMembership.joined_at, User.display_name)
+        )
+        return [(user, role) for user, role in (await self.session.execute(query)).all()]
 
     async def list_for_workspace(
         self,

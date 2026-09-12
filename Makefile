@@ -1,4 +1,4 @@
-.PHONY: install services migrate up verify contract build
+.PHONY: install services migrate seed-demo reset-demo up verify contract build
 
 install:
 	pnpm install --frozen-lockfile
@@ -11,6 +11,12 @@ migrate:
 	cd apps/api && uv run alembic upgrade head
 	cd apps/api && uv run python -m src.platform.bootstrap_checkpointer
 	docker compose run --rm gateway-migrate
+
+seed-demo:
+	cd apps/api && uv run python -m src.platform.seed_demo
+
+reset-demo:
+	cd apps/api && uv run python -m src.platform.seed_demo --reset
 
 up:
 	docker compose up -d --wait

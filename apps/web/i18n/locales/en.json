@@ -132,6 +132,14 @@
         "questions": "{count} open question | {count} open questions",
         "evidence": "{count} piece of evidence | {count} pieces of evidence"
       },
+      "roles": {
+        "product": "Product and strategy",
+        "design": "Design and research",
+        "engineering": "Engineering",
+        "ai_data": "AI and data",
+        "growth": "Growth",
+        "operations": "Operations"
+      },
       "iterations": {
         "title": "Latest iterations",
         "count": "{count} so far",
