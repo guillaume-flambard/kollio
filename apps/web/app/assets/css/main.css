@@ -851,3 +851,73 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Keep the collapsed idea view aligned on laptop-sized viewports. */
+@media (min-width: 1024px) and (max-height: 1100px) {
+  .workspace-shell {
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .idea-layout {
+    height: calc(100vh - (2 * var(--workspace-edge)));
+  }
+
+  .idea-document {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    padding-block: 14px 12px !important;
+  }
+
+  .idea-title {
+    margin-top: 10px;
+    font-size: clamp(2rem, 2.65vw, 2.5rem);
+  }
+
+  .idea-topics,
+  .idea-stats {
+    margin-top: 10px;
+  }
+
+  .idea-summary {
+    margin-top: 12px;
+    line-height: 1.42;
+  }
+
+  .idea-description {
+    margin-top: 22px !important;
+    padding-block: 13px 20px !important;
+  }
+
+  .idea-description .kollio-disclosure {
+    margin-top: 10px;
+  }
+
+  .idea-prose {
+    line-height: 1.55;
+  }
+
+  .idea-writing-prompt {
+    min-height: 42px;
+    margin-top: 14px;
+  }
+
+  .idea-iterations {
+    margin-top: 18px;
+  }
+
+  .iteration-timeline {
+    margin-top: 8px;
+  }
+
+  .iteration-entry {
+    padding: 14px 16px;
+  }
+
+  .comment-composer {
+    min-height: 50px;
+    margin-top: 18px;
+  }
+}
