@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import IdeaDetailError from '../../app/components/kollio/IdeaDetailError.vue'
 import IdeaDetailSkeleton from '../../app/components/kollio/IdeaDetailSkeleton.vue'
 import EmptyState from '../../app/components/kollio/EmptyState.vue'
+import Disclosure from '../../app/components/kollio/Disclosure.vue'
 
 describe('Idea detail states', () => {
   it('announces loading while keeping both layout surfaces present', async () => {
@@ -70,5 +71,25 @@ describe('Idea detail states', () => {
     })
     await wrapper.get('button').trigger('click')
     expect(wrapper.emitted('action')).toHaveLength(1)
+  })
+
+  it('exposes and toggles the full description', async () => {
+    const wrapper = mount(Disclosure, {
+      props: {
+        modelValue: false,
+        contentId: 'description-content',
+        expandLabel: 'Read the full description',
+        collapseLabel: 'Collapse the description',
+        'onUpdate:modelValue': (expanded: boolean) => wrapper.setProps({ modelValue: expanded }),
+      },
+      slots: { default: '<p>Full description</p>' },
+    })
+
+    const toggle = wrapper.get('button')
+    expect(toggle.attributes('aria-expanded')).toBe('false')
+    expect(toggle.attributes('aria-controls')).toBe('description-content')
+    await toggle.trigger('click')
+    expect(toggle.attributes('aria-expanded')).toBe('true')
+    expect(toggle.text()).toContain('Collapse the description')
   })
 })

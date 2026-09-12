@@ -8,6 +8,7 @@ const route = useRoute()
 const requestFetch = useRequestFetch()
 const ideaId = String(route.params.ideaId)
 const activePanel = ref<'team' | 'questions' | 'evidence'>('team')
+const descriptionExpanded = ref(false)
 const canvasRef = ref<HTMLElement>()
 const documentRef = ref<HTMLElement>()
 const annotationRef = ref<HTMLElement>()
@@ -71,14 +72,14 @@ function updateConnection() {
   const endY = targetRect.top + Math.min(42, targetRect.height / 2) - canvasRect.top
   const gutterX = documentRect.right - canvasRect.left
     + Math.max(7, (targetRect.left - documentRect.right) * 0.28)
-  const bendX = Math.min(gutterX - 12, startX + Math.max(38, (endX - startX) * 0.42))
-  const shoulderX = Math.max(bendX + 18, endX - 34)
+  const lowerShoulderX = Math.min(gutterX + 12, startX + Math.max(48, (endX - startX) * 0.52))
+  const upperShoulderX = Math.max(lowerShoulderX + 18, endX - 22)
   const rise = Math.max(80, startY - endY)
   connection.width = canvasRect.width
   connection.height = canvas.scrollHeight
   connection.startX = startX
   connection.startY = startY
-  connection.path = `M ${startX} ${startY} C ${startX + 24} ${startY}, ${bendX} ${startY - 10}, ${bendX} ${startY - Math.min(48, rise * 0.2)} C ${bendX + 12} ${startY - rise * 0.48}, ${shoulderX} ${endY + 58}, ${shoulderX} ${endY + 24} C ${shoulderX} ${endY + 8}, ${endX - 15} ${endY}, ${endX} ${endY}`
+  connection.path = `M ${startX} ${startY} C ${startX + 24} ${startY}, ${lowerShoulderX - 6} ${startY - 2}, ${lowerShoulderX} ${startY - 20} C ${lowerShoulderX + 18} ${startY - rise * 0.38}, ${upperShoulderX - 8} ${endY + 72}, ${upperShoulderX} ${endY + 24} C ${upperShoulderX + 2} ${endY + 9}, ${endX - 14} ${endY}, ${endX} ${endY}`
 }
 
 function selectPanel(panel: string) {
@@ -127,11 +128,11 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
   >
     <div ref="canvasRef" class="idea-layout relative grid min-w-0">
       <svg v-if="connection.path" aria-hidden="true" class="pointer-events-none absolute inset-0 z-40 hidden overflow-visible lg:block" :viewBox="`0 0 ${connection.width} ${connection.height}`" preserveAspectRatio="none">
-        <path class="relationship-path" :d="connection.path" pathLength="1" fill="none" stroke="var(--kollio-connector)" stroke-width="1.75" />
+        <path class="relationship-path" :d="connection.path" pathLength="1" fill="none" stroke="var(--kollio-connector)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
         <circle :cx="connection.startX" :cy="connection.startY" r="4.5" fill="var(--kollio-connector)" />
       </svg>
 
-      <div ref="documentRef" class="kollio-surface idea-document relative z-10 min-w-0 p-5 sm:p-7 lg:min-h-[calc(100vh-2.5rem)] lg:p-7 xl:p-9">
+      <div ref="documentRef" class="kollio-surface idea-document relative z-10 min-w-0 p-5 sm:p-7 lg:p-7 xl:p-9">
         <header class="idea-header">
           <NuxtLink :to="$localePath('/workspace')" class="idea-breadcrumb inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-default">
             {{ t('navigation.ideas') }}
@@ -171,7 +172,13 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
 
         <section id="description" class="idea-description mt-11 rounded-2xl border border-default p-5 sm:p-6" :aria-labelledby="'idea-pitch-title'">
           <h2 id="idea-pitch-title" class="text-[1.375rem] font-semibold tracking-[-0.025em]">{{ t('ideas.detail.pitchTitle') }}</h2>
-          <div class="relative mt-4 max-w-[72ch]">
+          <KollioDisclosure
+            v-model="descriptionExpanded"
+            content-id="idea-description-content"
+            :expand-label="t('ideas.detail.showFull')"
+            :collapse-label="t('ideas.detail.showLess')"
+            class="mt-4 max-w-[72ch]"
+          >
             <div class="idea-prose space-y-5 text-muted">
               <p v-if="problemAnnotation">
                 {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><KollioFeltMark active variant="passage">{{ problemAnnotation.highlight }}</KollioFeltMark></button><br class="linked-passage-break">{{ problemAnnotation.after }}
@@ -179,7 +186,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               <p v-else-if="detailParagraphs[0]">{{ detailParagraphs[0] }}</p>
               <p v-for="(paragraph, index) in detailParagraphs.slice(1)" :key="index">{{ paragraph }}</p>
             </div>
-          </div>
+          </KollioDisclosure>
           <button type="button" class="idea-writing-prompt mt-6 w-full text-left" @click="selectPanel('questions')">{{ t('ideas.detail.writeToEnrich') }}</button>
         </section>
 
