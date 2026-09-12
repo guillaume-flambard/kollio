@@ -24,8 +24,8 @@ function initials(name: string) {
 <template>
   <button type="button" class="explorer-row" :class="{ 'is-selected': selected }" :aria-pressed="selected" @click="$emit('select')">
     <svg class="explorer-row-selection" viewBox="0 0 1000 136" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M13 7C6 30 6 101 14 127C220 133 680 132 988 128" />
-      <path d="M16 10C10 37 11 94 17 123" />
+      <path d="M15 8C8 38 8 101 18 125C232 132 696 131 988 127" />
+      <path d="M18 12C12 42 12 98 21 122C270 128 704 128 972 125" />
     </svg>
     <span class="explorer-row-avatar" :data-avatar="collaborators[0]?.avatar_key || 'lilac'" aria-hidden="true">
       {{ initials(collaborators[0]?.display_name || idea.title) }}
@@ -49,11 +49,13 @@ function initials(name: string) {
 
 <style scoped>
 .explorer-row { position: relative; display: grid; width: 100%; min-height: 136px; grid-template-columns: 58px minmax(0, 1fr) 132px; align-items: center; gap: 18px; border-bottom: 1px solid var(--ui-border); padding: 20px 24px; text-align: left; transition: background 180ms ease, transform 220ms cubic-bezier(.16, 1, .3, 1); }
-.explorer-row-selection { position: absolute; z-index: 0; inset: 0; width: 100%; height: 100%; fill: none; stroke: var(--kollio-connector); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.45; opacity: 0; pointer-events: none; transition: opacity 180ms ease; vector-effect: non-scaling-stroke; }
-.explorer-row-selection path:last-child { stroke-width: .7; opacity: .35; }
+.explorer-row-selection { position: absolute; z-index: 0; inset: 6px 8px 8px 6px; width: calc(100% - 14px); height: calc(100% - 14px); fill: none; stroke: var(--kollio-connector); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.2; opacity: 0; pointer-events: none; transition: opacity 180ms ease; }
+.explorer-row-selection path { vector-effect: non-scaling-stroke; }
+.explorer-row-selection path:last-child { stroke-width: .65; opacity: .22; }
 .explorer-row:hover, .explorer-row:focus-visible { background: color-mix(in srgb, var(--kollio-wash) 13%, transparent); }
 .explorer-row:focus-visible { outline: 2px solid color-mix(in srgb, var(--kollio-active-ink) 52%, transparent); outline-offset: -3px; }
-.explorer-row.is-selected { background: color-mix(in srgb, var(--kollio-wash) 24%, transparent); }
+.explorer-row.is-selected { background: transparent; }
+.explorer-row.is-selected::before { position: absolute; z-index: 0; inset: 6px 8px 8px 6px; border-radius: 12px; background: color-mix(in srgb, var(--kollio-wash) 24%, transparent); content: ''; }
 .explorer-row.is-selected .explorer-row-selection { opacity: .9; }
 .explorer-row > :not(.explorer-row-selection) { position: relative; z-index: 1; }
 .explorer-row-avatar { display: grid; width: 54px; height: 54px; place-items: center; overflow: hidden; border: 2px solid var(--ui-bg-elevated); border-radius: 50%; background-color: var(--kollio-wash); background-image: url('/avatars/collaborator-sprite.webp'); background-position: 0 0; background-size: 300% 200%; color: transparent; font-size: .72rem; font-weight: 720; }
