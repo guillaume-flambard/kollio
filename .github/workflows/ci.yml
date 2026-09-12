@@ -59,7 +59,7 @@ jobs:
           python scripts/check_private_files.py --tracked
           uv run --project apps/api ruff check apps/api scripts
           uv run --project apps/api ruff format --check apps/api scripts
-          uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain apps/api/src/modules/iterations/domain
+          uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain apps/api/src/modules/iterations/domain apps/api/src/modules/constraint_analysis/domain
           pnpm lint
           pnpm typecheck
           node scripts/check_locales.mjs

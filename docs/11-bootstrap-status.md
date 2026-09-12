@@ -123,7 +123,7 @@ by the live PITR rehearsal. All infrastructure checks passed through the support
 deployment path.
 
 - Public `https://kollio.memolabs.dev/` and `/api/health` return HTTP 200. Postgres,
-  Redis, LiteLLM, API and web report healthy; the ARQ worker remains running.
+  Redis, LiteLLM, API and web report healthy; the Taskiq worker remains running.
 - Alembic and LiteLLM migrations complete successfully before their dependent services.
   A controlled migration command exiting 42 made Compose exit 1 while the existing API
   container identifier and image stayed unchanged and public health continued to return 200.

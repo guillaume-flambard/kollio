@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses } from './types.gen';
+import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -35,6 +35,41 @@ export const getIdea = <ThrowOnError extends boolean = false>(options: Options<G
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/ideas/{idea_id}',
     ...options
+});
+
+/**
+ * Launch
+ */
+export const launchConstraintAnalysis = <ThrowOnError extends boolean = false>(options: Options<LaunchConstraintAnalysisData, ThrowOnError>): RequestResult<LaunchConstraintAnalysisResponses, LaunchConstraintAnalysisErrors, ThrowOnError> => (options.client ?? client).post<LaunchConstraintAnalysisResponses, LaunchConstraintAnalysisErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/analyses',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Read
+ */
+export const getConstraintAnalysis = <ThrowOnError extends boolean = false>(options: Options<GetConstraintAnalysisData, ThrowOnError>): RequestResult<GetConstraintAnalysisResponses, GetConstraintAnalysisErrors, ThrowOnError> => (options.client ?? client).get<GetConstraintAnalysisResponses, GetConstraintAnalysisErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/analyses/{workflow_id}',
+    ...options
+});
+
+/**
+ * Review
+ */
+export const reviewConstraintAnalysis = <ThrowOnError extends boolean = false>(options: Options<ReviewConstraintAnalysisData, ThrowOnError>): RequestResult<ReviewConstraintAnalysisResponses, ReviewConstraintAnalysisErrors, ThrowOnError> => (options.client ?? client).post<ReviewConstraintAnalysisResponses, ReviewConstraintAnalysisErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/analyses/{workflow_id}/review',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 /**

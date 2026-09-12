@@ -14,7 +14,7 @@ def configure_telemetry(settings: Settings) -> TracerProvider | None:
     provider = TracerProvider(resource=Resource.create({"service.name": "kollio-api"}))
     exporter = OTLPSpanExporter(
         endpoint=settings.otel_exporter_otlp_traces_endpoint,
-        headers=parse_env_headers(settings.otel_exporter_otlp_headers.get_secret_value()),
+        headers=dict(parse_env_headers(settings.otel_exporter_otlp_headers.get_secret_value())),
         timeout=5,
     )
     provider.add_span_processor(BatchSpanProcessor(exporter))

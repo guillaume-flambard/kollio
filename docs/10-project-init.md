@@ -33,7 +33,7 @@ cd ../..
 ```bash
 mkdir -p apps/api && cd apps/api
 uv init
-uv add "fastapi[standard]" pydantic pydantic-settings sqlalchemy alembic asyncpg redis arq langgraph langfuse litellm
+uv add "fastapi[standard]" pydantic pydantic-settings sqlalchemy alembic asyncpg redis taskiq taskiq-redis langgraph langfuse litellm
 uv add --dev pytest pytest-asyncio ruff mypy deepeval
 uv run alembic init alembic
 cd ../..
