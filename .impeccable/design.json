@@ -1,0 +1,272 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-12T09:30:28Z",
+  "title": "Design System: Kollio Living Canvas",
+  "extensions": {
+    "colorMeta": {
+      "primary-aubergine": {
+        "role": "primary",
+        "displayName": "Deep Aubergine",
+        "canonical": "#493B57",
+        "tonalRamp": ["#252229", "#3D3347", "#493B57", "#684F76", "#80638F", "#A68BB8", "#DDD3E8", "#F7F4F9"]
+      },
+      "active-wash": {
+        "role": "primary",
+        "displayName": "Dusty Lilac Wash",
+        "canonical": "#DDD3E8",
+        "tonalRamp": ["#252229", "#3D3347", "#574360", "#80638F", "#A68BB8", "#C5B3D4", "#DDD3E8", "#F7F4F9"]
+      },
+      "canvas-porcelain": {
+        "role": "neutral",
+        "displayName": "Porcelain Canvas",
+        "canonical": "#F7F5F7",
+        "tonalRamp": ["#252229", "#413D45", "#5F5964", "#817987", "#A69FA9", "#C9C3CB", "#E5E0E6", "#F7F5F7"]
+      },
+      "surface-white": {
+        "role": "neutral",
+        "displayName": "White Surface",
+        "canonical": "#FFFFFF",
+        "tonalRamp": ["#252229", "#454147", "#666168", "#89858B", "#AEABB0", "#D0CDD1", "#EEECEF", "#FFFFFF"]
+      },
+      "surface-muted": {
+        "role": "neutral",
+        "displayName": "Muted Surface",
+        "canonical": "#F2EFF3",
+        "tonalRamp": ["#29252C", "#474149", "#655E68", "#867E89", "#A8A1AB", "#C9C3CB", "#E2DEE4", "#F2EFF3"]
+      },
+      "surface-accented": {
+        "role": "neutral",
+        "displayName": "Accented Surface",
+        "canonical": "#EEE8F2",
+        "tonalRamp": ["#29232D", "#463B4D", "#63546D", "#826F8F", "#A18EAD", "#C0AEC9", "#DDD0E3", "#EEE8F2"]
+      },
+      "border-soft": {
+        "role": "neutral",
+        "displayName": "Soft Border",
+        "canonical": "#E8E3EA",
+        "tonalRamp": ["#28242A", "#454047", "#625D65", "#827C85", "#A39DA6", "#C2BDC5", "#DBD6DD", "#F4F1F5"]
+      },
+      "ink-soft-black": {
+        "role": "neutral",
+        "displayName": "Soft Black",
+        "canonical": "#252229",
+        "tonalRamp": ["#18161B", "#252229", "#403B45", "#5F5965", "#837B89", "#ABA4AF", "#D3CDD6", "#F5F2F6"]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#6F6877",
+        "tonalRamp": ["#211E24", "#39343E", "#534D59", "#6F6877", "#918999", "#B3ACB8", "#D4CED7", "#F3F0F4"]
+      },
+      "question-clay": {
+        "role": "tertiary",
+        "displayName": "Clay Rose",
+        "canonical": "#D47A70",
+        "tonalRamp": ["#3F1714", "#63231E", "#87362F", "#AB4F47", "#D47A70", "#E6AAA3", "#F3D5D1", "#FFF3F1"]
+      },
+      "question-wash": {
+        "role": "tertiary",
+        "displayName": "Clay Rose Wash",
+        "canonical": "#F5DEDB",
+        "tonalRamp": ["#3F1714", "#63231E", "#87362F", "#AB4F47", "#D47A70", "#E6AAA3", "#F5DEDB", "#FFF3F1"]
+      },
+      "evidence-citron": {
+        "role": "secondary",
+        "displayName": "Muted Citron",
+        "canonical": "#899744",
+        "tonalRamp": ["#252A0F", "#3A4318", "#526022", "#6B7B2F", "#899744", "#A8B660", "#CED790", "#F4F7DF"]
+      },
+      "pending-ochre": {
+        "role": "secondary",
+        "displayName": "Warm Ochre",
+        "canonical": "#A57932",
+        "tonalRamp": ["#38250C", "#583A12", "#775019", "#956821", "#A57932", "#C9A15F", "#E4C995", "#FBF1DD"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Brand Display",
+        "purpose": "Expressive public brand moments."
+      },
+      "headline": {
+        "displayName": "Idea Headline",
+        "purpose": "Idea titles in the authenticated workspace."
+      },
+      "title": {
+        "displayName": "Section Title",
+        "purpose": "Major narrative and companion headings."
+      },
+      "body": {
+        "displayName": "Narrative Body",
+        "purpose": "Readable idea pitches and supporting explanation."
+      },
+      "label": {
+        "displayName": "Interface Label",
+        "purpose": "Navigation, tabs, actions, counts, and metadata."
+      },
+      "mono": {
+        "displayName": "Technical Identifier",
+        "purpose": "Hashes, source identifiers, and measured values."
+      }
+    },
+    "shadows": [
+      {
+        "name": "workspace-ambient",
+        "value": "0 10px 30px rgba(73, 59, 87, 0.055)",
+        "purpose": "Lifts the narrative and contextual companion surfaces from the canvas."
+      }
+    ],
+    "motion": [
+      {
+        "name": "felt-tip-draw",
+        "value": "190ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Draws active lower-third marks from left to right."
+      },
+      {
+        "name": "relationship-draw",
+        "value": "260ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Reveals the single active curved relationship."
+      },
+      {
+        "name": "companion-change",
+        "value": "200ms",
+        "purpose": "Moves replacement panel content six pixels into place."
+      },
+      {
+        "name": "control-response",
+        "value": "180ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Moves arrows and compresses primary controls."
+      },
+      {
+        "name": "reduced-motion-final-state",
+        "value": "0.01ms",
+        "purpose": "Removes decorative motion while preserving immediate semantic state."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action",
+      "kind": "button",
+      "refersTo": "primary-action",
+      "description": "Advances the idea or opens the next useful context.",
+      "html": "<button class=\"ds-primary-action\">Faire avancer l’idée <svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M5 12h14m-5-5 5 5-5 5\" /></svg></button>",
+      "css": ".ds-primary-action { position: relative; display: inline-flex; min-height: 44px; align-items: center; gap: 18px; border: 0; border-radius: var(--kollio-radius-md, 12px); background: var(--ui-text, #252229); padding: 0 10px 0 18px; color: var(--ui-bg-elevated, #fff); font: 600 0.875rem/1.5 'Geist', system-ui, sans-serif; transition: transform 180ms cubic-bezier(.16,1,.3,1); } .ds-primary-action::after { position: absolute; right: 2px; bottom: -5px; left: -2px; z-index: -1; height: 8px; border-radius: 50%; background: var(--kollio-wash, #ddd3e8); clip-path: polygon(1% 35%,97% 5%,100% 68%,3% 100%); content: ''; transform: scaleX(.18); transform-origin: left; transition: transform 220ms cubic-bezier(.16,1,.3,1); } .ds-primary-action svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; transition: transform 180ms cubic-bezier(.16,1,.3,1); } .ds-primary-action:hover::after { transform: scaleX(1); } .ds-primary-action:hover svg { transform: translateX(3px); } .ds-primary-action:active { transform: scale(.98); } .ds-primary-action:focus-visible { outline: 2px solid var(--ui-primary, #493b57); outline-offset: 3px; }"
+    },
+    {
+      "name": "Workspace Surface",
+      "kind": "card",
+      "refersTo": "workspace-surface",
+      "description": "Holds either the idea narrative or its contextual companion.",
+      "html": "<section class=\"ds-workspace-surface\"><h2>Idea narrative</h2><p>The work stays readable while context remains close.</p></section>",
+      "css": ".ds-workspace-surface { max-width: 560px; border: 1px solid var(--ui-border, #e8e3ea); border-radius: var(--kollio-radius-lg, 16px); background: var(--ui-bg-elevated, #fff); box-shadow: var(--kollio-shadow, 0 10px 30px rgba(73,59,87,.055)); padding: 28px; color: var(--ui-text, #252229); font-family: 'Geist', system-ui, sans-serif; } .ds-workspace-surface h2 { margin: 0; font-size: 1.25rem; line-height: 1.4; } .ds-workspace-surface p { margin: 16px 0 0; max-width: 52ch; color: var(--ui-text-muted, #6f6877); line-height: 1.75; } .ds-workspace-surface:focus-within { outline: 2px solid var(--ui-primary, #493b57); outline-offset: 3px; }"
+    },
+    {
+      "name": "Active Navigation Item",
+      "kind": "nav",
+      "refersTo": "navigation-item",
+      "description": "Marks the current workspace destination with the felt-tip gesture.",
+      "html": "<a class=\"ds-nav-item\" href=\"#\" aria-current=\"page\"><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\"><path d=\"M9 18h6m-5 3h4m4.5-10.5a6.5 6.5 0 1 0-10.7 5l.7.6c.9.8 1.5 1.9 1.5 3.1h4c0-1.2.6-2.3 1.5-3.1l.7-.6a6.5 6.5 0 0 0 2.3-5Z\" /></svg><span>Idées</span></a>",
+      "css": ".ds-nav-item { display: inline-flex; min-height: 44px; align-items: center; gap: 12px; border-radius: var(--kollio-radius-md, 12px); padding: 0 12px; color: var(--ui-text-muted, #6f6877); font: 500 0.875rem/1.5 'Geist', system-ui, sans-serif; text-decoration: none; } .ds-nav-item svg { width: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; } .ds-nav-item span { position: relative; isolation: isolate; } .ds-nav-item span::after { position: absolute; right: -.2em; bottom: .02em; left: -.2em; z-index: -1; height: .48em; border-radius: 52% 38% 48% 32%; background: var(--kollio-wash, #ddd3e8); clip-path: polygon(1% 20%,98% 6%,100% 76%,4% 100%); content: ''; transform: scaleX(1); transform-origin: left; } .ds-nav-item:hover { color: var(--ui-text, #252229); } .ds-nav-item:focus-visible { outline: 2px solid var(--ui-primary, #493b57); outline-offset: 3px; }"
+    },
+    {
+      "name": "Contextual Companion Tabs",
+      "kind": "nav",
+      "refersTo": "navigation-item",
+      "description": "Switches among team, open questions, and evidence in place.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Context\"><button role=\"tab\" aria-selected=\"true\"><span>Équipe</span></button><button role=\"tab\" aria-selected=\"false\">Questions</button><button role=\"tab\" aria-selected=\"false\">Preuves</button></div>",
+      "css": ".ds-tabs { display: grid; grid-template-columns: repeat(3,1fr); overflow: hidden; border: 1px solid var(--ui-border, #e8e3ea); border-radius: var(--kollio-radius-lg, 16px) var(--kollio-radius-lg, 16px) 0 0; background: var(--ui-bg-elevated, #fff); } .ds-tabs button { min-height: 56px; border: 0; background: transparent; padding: 0 8px; color: var(--ui-text-muted, #6f6877); font: 500 .875rem/1.5 'Geist', system-ui, sans-serif; } .ds-tabs button[aria-selected='true'] { color: var(--ui-text, #252229); } .ds-tabs button[aria-selected='true'] span { background: linear-gradient(to bottom, transparent 54%, var(--kollio-wash, #ddd3e8) 54%, var(--kollio-wash, #ddd3e8) 91%, transparent 91%); padding: 0 .08em; } .ds-tabs button:hover { color: var(--ui-text, #252229); } .ds-tabs button:focus-visible { outline: 2px solid var(--ui-primary, #493b57); outline-offset: -4px; }"
+    },
+    {
+      "name": "Linked Passage Annotation",
+      "kind": "custom",
+      "refersTo": "linked-passage",
+      "description": "Connects selected narrative text to one visible contextual target.",
+      "html": "<div class=\"ds-relationship\"><button class=\"ds-linked-passage\" aria-pressed=\"true\">la revue par des experts humains</button><svg aria-hidden=\"true\" viewBox=\"0 0 180 52\"><path d=\"M2 26 C70 26, 100 8, 178 8\" /><circle cx=\"2\" cy=\"26\" r=\"4\" /></svg><aside>Prospecteur<br><small>source-identifier</small></aside></div>",
+      "css": ".ds-relationship { display: grid; grid-template-columns: max-content 180px 160px; align-items: center; color: var(--ui-text-muted, #6f6877); font: 400 1rem/1.75 'Geist', system-ui, sans-serif; } .ds-linked-passage { border: 0; border-radius: 3px 7px 4px 6px; background: linear-gradient(to bottom, transparent 54%, color-mix(in srgb,var(--kollio-wash,#ddd3e8) 78%,transparent) 54%,color-mix(in srgb,var(--kollio-wash,#ddd3e8) 78%,transparent) 91%,transparent 91%); padding: 0 .08em; color: inherit; font: inherit; text-align: left; } .ds-relationship svg { width: 180px; height: 52px; overflow: visible; } .ds-relationship path { fill: none; stroke: var(--ui-primary, #493b57); stroke-width: 1.5; } .ds-relationship circle { fill: var(--ui-primary, #493b57); } .ds-relationship aside { border-radius: var(--kollio-radius-lg, 16px); background: var(--ui-bg-accented, #eee8f2); padding: 20px; color: var(--ui-text, #252229); font-weight: 500; } .ds-relationship small { color: var(--ui-text-muted, #6f6877); font: 400 .75rem/1.5 'Geist Mono', monospace; } .ds-linked-passage:hover { filter: saturate(1.18); } .ds-linked-passage:focus-visible { outline: 2px solid var(--ui-primary, #493b57); outline-offset: 3px; }"
+    },
+    {
+      "name": "Honest Empty State",
+      "kind": "card",
+      "refersTo": "empty-state",
+      "description": "Names missing activity plainly without adding fictional progress.",
+      "html": "<div class=\"ds-empty-state\"><strong>Contributeurs</strong><span>0 contributeur</span><p>Aucun contributeur pour le moment.</p></div>",
+      "css": ".ds-empty-state { width: 280px; color: var(--ui-text, #252229); font-family: 'Geist', system-ui, sans-serif; } .ds-empty-state strong { font-size: 1.125rem; } .ds-empty-state > span { float: right; color: var(--ui-text-muted, #6f6877); font-size: .875rem; } .ds-empty-state p { clear: both; margin: 20px 0 0; border-radius: var(--kollio-radius-lg, 16px); background: color-mix(in srgb,var(--ui-bg-muted,#f2eff3) 55%,transparent); padding: 20px; color: var(--ui-text-muted, #6f6877); font-size: .875rem; line-height: 1.6; } .ds-empty-state:focus-within { outline: 2px solid var(--ui-primary, #493b57); outline-offset: 3px; }"
+    },
+    {
+      "name": "Typed Provenance Card",
+      "kind": "card",
+      "refersTo": "provenance-card",
+      "description": "Shows the real imported source and its stable identifier.",
+      "html": "<article class=\"ds-provenance\"><strong>Prospecteur</strong><code>source-identifier</code><p>Source importée avec son contexte disponible.</p></article>",
+      "css": ".ds-provenance { width: 260px; border-radius: var(--kollio-radius-lg, 16px); background: var(--ui-bg-accented, #eee8f2); padding: 20px; color: var(--ui-text, #252229); font-family: 'Geist', system-ui, sans-serif; } .ds-provenance strong { display: block; font-size: 1rem; font-weight: 500; } .ds-provenance code { display: block; margin-top: 4px; overflow-wrap: anywhere; color: var(--ui-text-muted, #6f6877); font: 400 .75rem/1.5 'Geist Mono', monospace; } .ds-provenance p { margin: 16px 0 0; color: var(--ui-text-muted, #6f6877); font-size: .875rem; line-height: 1.6; } .ds-provenance:hover { background: color-mix(in srgb,var(--ui-bg-accented,#eee8f2) 82%,var(--kollio-wash,#ddd3e8)); } .ds-provenance:focus-within { outline: 2px solid var(--ui-primary, #493b57); outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Living Canvas",
+    "overview": "Kollio's authenticated workspace is a quiet, collaborative canvas. Porcelain surrounds white working surfaces, deep aubergine carries intent, and soft felt-tip marks reveal the current thread of attention. The interface keeps the idea narrative dominant while related people, questions, and evidence remain close enough to inspect without breaking the reading flow.\n\nThe system reveals detail through deliberate interaction. A selected phrase can expose its provenance, a companion panel changes with the user's focus, and long content expands only on request. The interface is bilingual, light first, responsive, keyboard usable, and honest when collaboration or evidence has not arrived yet.",
+    "keyCharacteristics": [
+      "Airy reading surfaces with restrained structural depth.",
+      "Lower-third felt-tip marks that carry active state and provenance.",
+      "One visible relationship between the narrative and its current context.",
+      "Progressive disclosure that preserves the idea as the main reading object.",
+      "Real source labels, identifiers, and empty states instead of invented activity."
+    ],
+    "rules": [
+      {
+        "name": "The Felt-Tip Rule",
+        "body": "Use Dusty Lilac Wash as a partial mark behind content. It never becomes a full-width selection bar or decorative block.",
+        "section": "colors"
+      },
+      {
+        "name": "The Semantic Accent Rule",
+        "body": "Clay, citron, and ochre communicate product meaning. Do not use them as arbitrary decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Narrative First Rule",
+        "body": "The idea title and pitch carry the strongest type. Counts, dates, stages, and source metadata remain quieter.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Relationship Rule",
+        "body": "Show at most one active link between a passage and its contextual target. Render it only while both endpoints are visible.",
+        "section": "layout"
+      },
+      {
+        "name": "The Structural Depth Rule",
+        "body": "Elevate the main work surfaces once. Use borders or tonal fills for everything nested inside them.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep the idea narrative wider and visually stronger than its metadata or companion content.",
+      "Do use lower-third marks to connect active navigation, selected passages, and the current companion tab.",
+      "Do reveal long text, evidence, history, and collaboration context only when the user asks or the current state needs them.",
+      "Do preserve real provenance labels and identifiers exactly at the data boundary.",
+      "Do state zero activity and missing evidence plainly.",
+      "Do render the final semantic state immediately when reduced motion is requested."
+    ],
+    "donts": [
+      "Don't show more than one curved relationship at a time.",
+      "Don't turn semantic accents into decorative chips, oversized metrics, or permanent diagram clutter.",
+      "Don't fill the workspace with independent card grids or nested shadows.",
+      "Don't invent contributors, questions, evidence, or activity to make an empty state look complete.",
+      "Don't let secondary controls compete with the main reading flow."
+    ]
+  }
+}

@@ -3,6 +3,12 @@
   "navigation": {
     "label": "Main navigation",
     "ideas": "Ideas",
+    "workshops": "Workshops",
+    "community": "Community",
+    "resources": "Resources",
+    "search": "Search",
+    "notifications": "Notifications",
+    "upcoming": "Upcoming features",
     "workspace": "Workspace",
     "promise": "Ideas with impact, together."
   },
@@ -84,11 +90,36 @@
       "foundationNote": "Constraint analysis, iterations and team activity will appear here as the idea develops.",
       "notFound": "Idea not found",
       "explore": "Explore ideas",
+      "advance": "View open questions",
+      "enrich": "Explore open questions",
+      "showFull": "Read the full description",
+      "showLess": "Collapse the description",
+      "comment": "See who contributes to this idea",
+      "annotation": {
+        "provenance": "Show the source of this passage: {excerpt}"
+      },
+      "stats": {
+        "contributors": "{count} contributor | {count} contributors",
+        "questions": "{count} open question | {count} open questions",
+        "evidence": "{count} piece of evidence | {count} pieces of evidence"
+      },
+      "iterations": {
+        "title": "Latest iterations",
+        "count": "{count} so far",
+        "imported": "Initial deposit imported",
+        "empty": "The first change to this idea will appear here with its author and decision."
+      },
+      "legacy": {
+        "constraint": "Historical constraint",
+        "channel": "Proposed channel"
+      },
       "companion": {
         "label": "Idea context",
+        "seeAll": "See all",
         "team": {
           "tab": "Team",
           "title": "Around this idea",
+          "contributors": "Contributors",
           "empty": "People who join this idea and their contributions will appear here."
         },
         "questions": {
@@ -99,6 +130,8 @@
         "evidence": {
           "tab": "Evidence",
           "title": "Linked evidence",
+          "sourceTitle": "Passage provenance",
+          "provenanceNote": "This passage comes from the original Prospecteur deposit. Its provenance is not yet verified evidence.",
           "empty": "Sources that support or challenge this idea will appear here."
         }
       }

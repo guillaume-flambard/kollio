@@ -5,6 +5,16 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 
+class LegacyIdeaContext(BaseModel):
+    source: str
+    source_id: str
+    domain: str | None = None
+    verdict: str | None = None
+    fatal_constraint: str | None = None
+    channel: str | None = None
+    why_now: str | None = None
+
+
 class IdeaResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: UUID
@@ -17,6 +27,7 @@ class IdeaResponse(BaseModel):
     lang: Literal["fr", "en"]
     visibility: Literal["public", "workspace"]
     created_at: datetime
+    legacy_context: LegacyIdeaContext | None = None
 
 
 class IdeaSummaryResponse(BaseModel):

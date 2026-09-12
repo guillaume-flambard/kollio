@@ -3,6 +3,12 @@
   "navigation": {
     "label": "Navigation principale",
     "ideas": "Idées",
+    "workshops": "Ateliers",
+    "community": "Communauté",
+    "resources": "Ressources",
+    "search": "Recherche",
+    "notifications": "Notifications",
+    "upcoming": "Fonctionnalités à venir",
     "workspace": "Espace",
     "promise": "Des idées à impact, ensemble."
   },
@@ -84,11 +90,36 @@
       "foundationNote": "L’analyse des contraintes, les itérations et l’activité de l’équipe apparaîtront ici à mesure que l’idée avance.",
       "notFound": "Idée introuvable",
       "explore": "Explorer les idées",
+      "advance": "Voir les questions ouvertes",
+      "enrich": "Explorer les questions ouvertes",
+      "showFull": "Lire la description complète",
+      "showLess": "Réduire la description",
+      "comment": "Voir qui contribue à cette idée",
+      "annotation": {
+        "provenance": "Afficher la provenance du passage : {excerpt}"
+      },
+      "stats": {
+        "contributors": "{count} contributeur | {count} contributeurs",
+        "questions": "{count} question ouverte | {count} questions ouvertes",
+        "evidence": "{count} preuve | {count} preuves"
+      },
+      "iterations": {
+        "title": "Dernières itérations",
+        "count": "{count} pour le moment",
+        "imported": "Dépôt initial importé",
+        "empty": "La première évolution de cette idée apparaîtra ici avec son auteur et sa décision."
+      },
+      "legacy": {
+        "constraint": "Contrainte historique",
+        "channel": "Canal envisagé"
+      },
       "companion": {
         "label": "Contexte de l’idée",
+        "seeAll": "Tout voir",
         "team": {
           "tab": "Équipe",
           "title": "Autour de cette idée",
+          "contributors": "Contributeurs",
           "empty": "Les personnes qui rejoignent cette idée et leurs contributions apparaîtront ici."
         },
         "questions": {
@@ -99,6 +130,8 @@
         "evidence": {
           "tab": "Preuves",
           "title": "Preuves liées",
+          "sourceTitle": "Provenance du passage",
+          "provenanceNote": "Ce passage vient du dépôt Prospecteur d’origine. Cette provenance ne constitue pas encore une preuve vérifiée.",
           "empty": "Les sources qui soutiennent ou remettent en cause cette idée apparaîtront ici."
         }
       }

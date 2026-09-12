@@ -315,6 +315,16 @@
             "type": "string",
             "format": "date-time",
             "title": "Created At"
+          },
+          "legacy_context": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LegacyIdeaContext"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -385,6 +395,79 @@
           "created_at"
         ],
         "title": "IdeaSummaryResponse"
+      },
+      "LegacyIdeaContext": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id"
+          },
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "verdict": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verdict"
+          },
+          "fatal_constraint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fatal Constraint"
+          },
+          "channel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Channel"
+          },
+          "why_now": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Why Now"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source",
+          "source_id"
+        ],
+        "title": "LegacyIdeaContext"
       },
       "ValidationError": {
         "properties": {

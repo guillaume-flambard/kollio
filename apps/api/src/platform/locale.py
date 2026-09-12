@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Literal
+from typing import Literal, cast
 
 Locale = Literal["fr", "en"]
 MESSAGES = {
@@ -23,4 +23,4 @@ def resolve_locale(header: str) -> Locale:
             continue
         if language in ("fr", "en") and 0 < quality <= 1:
             candidates.append((quality, -position, language))
-    return max(candidates)[2] if candidates else "fr"
+    return cast(Locale, max(candidates)[2]) if candidates else "fr"

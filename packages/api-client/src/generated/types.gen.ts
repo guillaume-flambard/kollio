@@ -90,6 +90,7 @@ export type IdeaResponse = {
      * Created At
      */
     created_at: string;
+    legacy_context?: LegacyIdeaContext | null;
 };
 
 /**
@@ -124,6 +125,40 @@ export type IdeaSummaryResponse = {
      * Created At
      */
     created_at: string;
+};
+
+/**
+ * LegacyIdeaContext
+ */
+export type LegacyIdeaContext = {
+    /**
+     * Source
+     */
+    source: string;
+    /**
+     * Source Id
+     */
+    source_id: string;
+    /**
+     * Domain
+     */
+    domain?: string | null;
+    /**
+     * Verdict
+     */
+    verdict?: string | null;
+    /**
+     * Fatal Constraint
+     */
+    fatal_constraint?: string | null;
+    /**
+     * Channel
+     */
+    channel?: string | null;
+    /**
+     * Why Now
+     */
+    why_now?: string | null;
 };
 
 /**

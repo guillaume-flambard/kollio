@@ -26,6 +26,38 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   box-shadow: var(--kollio-shadow);
 }
 
+.pitch-fade {
+  background: linear-gradient(to top, var(--ui-bg-elevated), transparent);
+}
+
+.linked-passage {
+  position: relative;
+}
+
+.linked-passage-stroke {
+  border-radius: 3px 7px 4px 6px;
+  background: linear-gradient(to bottom, transparent 54%, color-mix(in srgb, var(--kollio-wash) 78%, transparent) 54%, color-mix(in srgb, var(--kollio-wash) 78%, transparent) 91%, transparent 91%);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding-inline: .08em;
+  transition: filter 180ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.linked-passage:hover .linked-passage-stroke,
+.linked-passage:focus-visible .linked-passage-stroke {
+  filter: saturate(1.18);
+}
+
+.relationship-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-relationship 260ms cubic-bezier(.16, 1, .3, 1) forwards;
+}
+
+@keyframes draw-relationship {
+  to { stroke-dashoffset: 0; }
+}
+
 .marker-active {
   isolation: isolate;
   position: relative;
