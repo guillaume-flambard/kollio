@@ -54,7 +54,7 @@ select = ["E", "F", "I", "UP", "B", "ASYNC"]
 
 [tool.mypy]
 strict = true
-files = ["src/modules/ideas/domain"]
+files = ["src/modules/ideas/domain", "src/modules/iterations/domain"]
 
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Depends"]

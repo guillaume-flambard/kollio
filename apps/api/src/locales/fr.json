@@ -1,5 +1,7 @@
 {
   "not_found": "Idée introuvable",
+  "forbidden": "Vous ne pouvez pas effectuer cette action",
+  "conflict": "L’idée a changé. Actualisez-la puis réessayez",
   "unauthorized": "Connexion requise",
   "unavailable": "Service indisponible",
   "invalid": "Requête invalide"

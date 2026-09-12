@@ -89,6 +89,308 @@
         }
       }
     },
+    "/ideas/{idea_id}/iterations": {
+      "get": {
+        "tags": [
+          "iterations"
+        ],
+        "summary": "Read Iterations",
+        "operationId": "list_idea_iterations",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IterationResponse"
+                  },
+                  "title": "Response List Idea Iterations"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "iterations"
+        ],
+        "summary": "Append Iteration",
+        "operationId": "create_idea_iteration",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIterationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IterationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ideas/{idea_id}/iterations/{iteration_id}/accept": {
+      "post": {
+        "tags": [
+          "iterations"
+        ],
+        "summary": "Accept Iteration",
+        "operationId": "accept_idea_iteration",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          },
+          {
+            "name": "iteration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Iteration Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveProposalRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IterationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ideas/{idea_id}/iterations/{iteration_id}/reject": {
+      "post": {
+        "tags": [
+          "iterations"
+        ],
+        "summary": "Reject Iteration",
+        "operationId": "reject_idea_iteration",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          },
+          {
+            "name": "iteration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Iteration Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IterationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ideas/{idea_id}/iterations/{iteration_id}/rollback": {
+      "post": {
+        "tags": [
+          "iterations"
+        ],
+        "summary": "Restore Iteration",
+        "operationId": "rollback_idea_iteration",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          },
+          {
+            "name": "iteration_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Iteration Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RollbackRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IterationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/workspaces/{workspace_id}/ideas": {
       "get": {
         "tags": [
@@ -313,6 +615,52 @@
         ],
         "title": "CollaboratorResponse"
       },
+      "CreateIterationRequest": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Message"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "snapshot": {
+            "$ref": "#/components/schemas/IdeaSnapshot"
+          },
+          "branch": {
+            "type": "string",
+            "pattern": "^(main|proposal/[a-z0-9][a-z0-9._-]{0,47})$",
+            "title": "Branch",
+            "default": "main"
+          },
+          "expected_parent_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Parent Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "lang",
+          "snapshot"
+        ],
+        "title": "CreateIterationRequest"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -469,6 +817,38 @@
         ],
         "title": "IdeaResponse"
       },
+      "IdeaSnapshot": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 240,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "pitch": {
+            "type": "string",
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Pitch"
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "seed",
+              "iterating",
+              "team_formed"
+            ],
+            "title": "Stage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "pitch",
+          "stage"
+        ],
+        "title": "IdeaSnapshot"
+      },
       "IdeaSummaryResponse": {
         "properties": {
           "id": {
@@ -540,6 +920,101 @@
           "created_at"
         ],
         "title": "IdeaSummaryResponse"
+      },
+      "IterationResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "idea_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Idea Id"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "author_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Author Id"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "payload": {
+            "$ref": "#/components/schemas/IdeaSnapshot"
+          },
+          "branch": {
+            "type": "string",
+            "title": "Branch"
+          },
+          "proposal_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "accepted",
+                  "rejected"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposal Status"
+          },
+          "short_hash": {
+            "type": "string",
+            "title": "Short Hash"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "idea_id",
+          "parent_id",
+          "author_id",
+          "message",
+          "lang",
+          "payload",
+          "branch",
+          "proposal_status",
+          "short_hash",
+          "revision",
+          "created_at"
+        ],
+        "title": "IterationResponse"
       },
       "LegacyIdeaContext": {
         "properties": {
@@ -613,6 +1088,60 @@
           "source_id"
         ],
         "title": "LegacyIdeaContext"
+      },
+      "ResolveProposalRequest": {
+        "properties": {
+          "expected_main_parent_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Main Parent Id"
+          }
+        },
+        "type": "object",
+        "title": "ResolveProposalRequest"
+      },
+      "RollbackRequest": {
+        "properties": {
+          "expected_main_parent_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Main Parent Id"
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Message"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message",
+          "lang"
+        ],
+        "title": "RollbackRequest"
       },
       "ValidationError": {
         "properties": {
