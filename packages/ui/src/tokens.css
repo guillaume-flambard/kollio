@@ -27,6 +27,10 @@
   --ui-warning: #a57932;
   --ui-error: #d47a70;
   --kollio-wash: #ddd3e8;
+  --kollio-active-ink: #56386a;
+  --kollio-active-wash: #cbb7d8;
+  --kollio-action: #2e2938;
+  --kollio-tab-ink: #5d5675;
   --kollio-question: #d47a70;
   --kollio-question-wash: #f5dedb;
   --kollio-verified: #899744;
@@ -52,5 +56,9 @@
   --ui-success: #b7c85a;
   --ui-error: #e99a91;
   --kollio-wash: #5a4766;
+  --kollio-active-ink: #d7c2e4;
+  --kollio-active-wash: #765d84;
+  --kollio-action: #e8e0ed;
+  --kollio-tab-ink: #c1b4ca;
   --kollio-question-wash: #593735;
 }

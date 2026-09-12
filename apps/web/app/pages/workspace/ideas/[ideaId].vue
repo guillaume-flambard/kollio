@@ -141,7 +141,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               <svg aria-hidden="true" viewBox="0 0 24 24" class="split-action-arrow size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
             </button>
           </div>
-          <h1 class="mt-7 max-w-4xl text-4xl leading-[1.02] font-semibold tracking-[-0.045em] xl:text-[3.25rem]">{{ idea.title }}</h1>
+          <h1 class="mt-7 max-w-4xl text-[2.75rem] leading-[1.02] font-semibold tracking-[-0.045em] xl:text-[3.25rem]">{{ idea.title }}</h1>
           <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
             <span class="marker-active is-active font-semibold text-default">{{ t(`ideas.stage.${idea.stage}`) }}</span>
             <template v-for="topic in legacyTopics" :key="topic">
@@ -152,7 +152,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" /></svg>
             </button>
           </div>
-          <p class="mt-6 max-w-[70ch] text-lg leading-8 text-muted">{{ ideaSummary }}</p>
+          <p class="mt-6 max-w-[70ch] text-xl leading-8 text-muted">{{ ideaSummary }}</p>
           <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
             <span>{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
@@ -167,7 +167,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         <section id="description" class="idea-description mt-9 rounded-2xl border border-default p-5 sm:p-7" :aria-labelledby="'idea-pitch-title'">
           <h2 id="idea-pitch-title" class="text-xl font-semibold">{{ t('ideas.detail.pitchTitle') }}</h2>
           <div class="relative mt-5 max-w-[72ch]">
-            <div class="space-y-5 text-base leading-7 text-muted xl:text-lg xl:leading-8">
+            <div class="space-y-5 text-lg leading-8 text-muted">
               <p v-if="problemAnnotation">
                 {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><span class="linked-passage-stroke">{{ problemAnnotation.highlight }}</span></button>{{ problemAnnotation.after }}
               </p>
@@ -216,7 +216,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
             :key="panel"
             type="button"
             role="tab"
-            class="min-h-14 px-2 text-sm font-medium text-muted transition-colors hover:text-default"
+            class="min-h-14 px-2 text-base font-medium transition-colors hover:text-default"
             :class="{ 'text-default': activePanel === panel }"
             :aria-selected="activePanel === panel"
             :tabindex="activePanel === panel ? 0 : -1"
