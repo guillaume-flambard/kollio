@@ -60,7 +60,7 @@ withDefaults(defineProps<{
       aria-hidden="true"
     >
       <path class="sketch-wash sketch-bracket-wash" d="M5 4c27-2 76-1 112 4v35c-37 2-81 1-112-1Z" />
-      <path class="sketch-line sketch-bracket-line" pathLength="1" d="M12 5C7 15 7 33 12 42c8 2 17 2 26 2" />
+      <path class="sketch-line sketch-bracket-line" pathLength="1" d="M12 5C7 15 7 33 12 43" />
     </svg>
   </span>
 </template>

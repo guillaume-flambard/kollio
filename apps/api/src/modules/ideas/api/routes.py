@@ -1,5 +1,5 @@
 import json
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -69,17 +69,32 @@ async def read_workspace_ideas(
     request: Request,
     limit: Annotated[int, Query(ge=1, le=100)] = 24,
     offset: Annotated[int, Query(ge=0)] = 0,
+    q: Annotated[str | None, Query(max_length=160)] = None,
+    stage: Literal["seed", "iterating", "team_formed"] | None = None,
+    domain: Annotated[str | None, Query(max_length=120)] = None,
     identity: Identity = Depends(current_identity),
     session: AsyncSession = Depends(get_session),
 ) -> IdeaPageResponse:
     page = await list_workspace_ideas(
-        PostgresIdeas(session), workspace_id, identity.subject, limit, offset
+        PostgresIdeas(session),
+        workspace_id,
+        identity.subject,
+        limit,
+        offset,
+        query_text=q,
+        stage=stage,
+        domain=domain,
     )
     if page is None:
         raise HTTPException(404, MESSAGES[request.state.locale]["not_found"])
     items, total = page
     return IdeaPageResponse(
-        items=[IdeaSummaryResponse.model_validate(item) for item in items],
+        items=[
+            IdeaSummaryResponse.model_validate(item).model_copy(
+                update={"domain": item.provenance.get("domaine")}
+            )
+            for item in items
+        ],
         total=total,
         limit=limit,
         offset=offset,

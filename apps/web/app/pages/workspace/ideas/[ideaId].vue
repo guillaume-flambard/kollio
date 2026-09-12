@@ -146,7 +146,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           </div>
           <h1 class="idea-title max-w-[630px]">{{ idea.title }}</h1>
           <div class="idea-topics flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
-            <KollioFeltMark active variant="status">{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
+            <KollioSketchAnnotation active kind="swash">{{ t(`ideas.stage.${idea.stage}`) }}</KollioSketchAnnotation>
             <template v-for="topic in legacyTopics" :key="topic">
               <span class="inline-flex items-center gap-5">
                 <span aria-hidden="true" class="idea-dot" />
@@ -180,7 +180,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           >
             <div class="idea-prose space-y-5 text-muted">
               <p v-if="problemAnnotation">
-                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><KollioFeltMark active variant="passage">{{ problemAnnotation.highlight }}</KollioFeltMark></button><br class="linked-passage-break">{{ problemAnnotation.after }}
+                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><KollioSketchAnnotation active kind="swash">{{ problemAnnotation.highlight }}</KollioSketchAnnotation></button><br class="linked-passage-break">{{ problemAnnotation.after }}
               </p>
               <p v-else-if="detailParagraphs[0]">{{ detailParagraphs[0] }}</p>
               <p v-for="(paragraph, index) in detailParagraphs.slice(1)" :key="index">{{ paragraph }}</p>

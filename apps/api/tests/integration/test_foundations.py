@@ -355,6 +355,7 @@ async def test_member_browses_only_their_workspace_ideas(database):
                         lang="fr",
                         visibility="workspace",
                         created_at=datetime(2026, 2, 1, tzinfo=UTC),
+                        provenance={"domaine": "Developer tools"},
                     ),
                     Idea(
                         id=hidden_id,
@@ -385,6 +386,19 @@ async def test_member_browses_only_their_workspace_ideas(database):
                     f"/workspaces/{workspace_id}/ideas", params={"limit": 1, "offset": 0}
                 )
                 denied = await client.get(f"/workspaces/{other_workspace_id}/ideas")
+                searched = await client.get(
+                    f"/workspaces/{workspace_id}/ideas", params={"q": "newer"}
+                )
+                searched_by_domain = await client.get(
+                    f"/workspaces/{workspace_id}/ideas", params={"q": "developer"}
+                )
+                staged = await client.get(
+                    f"/workspaces/{workspace_id}/ideas", params={"stage": "seed"}
+                )
+                domain = await client.get(
+                    f"/workspaces/{workspace_id}/ideas",
+                    params={"domain": "Developer tools"},
+                )
 
             assert page.status_code == 200
             assert page.json() == {
@@ -397,6 +411,7 @@ async def test_member_browses_only_their_workspace_ideas(database):
                         "stage": "iterating",
                         "lang": "fr",
                         "created_at": "2026-02-01T00:00:00Z",
+                        "domain": "Developer tools",
                     }
                 ],
                 "total": 2,
@@ -405,4 +420,16 @@ async def test_member_browses_only_their_workspace_ideas(database):
             }
             assert denied.status_code == 404
             assert "Hidden" not in denied.text
+            assert searched.status_code == 200
+            assert searched.json()["total"] == 1
+            assert searched.json()["items"][0]["id"] == str(newer_id)
+            assert searched_by_domain.status_code == 200
+            assert searched_by_domain.json()["total"] == 1
+            assert searched_by_domain.json()["items"][0]["id"] == str(newer_id)
+            assert staged.status_code == 200
+            assert staged.json()["total"] == 1
+            assert staged.json()["items"][0]["id"] == str(older_id)
+            assert domain.status_code == 200
+            assert domain.json()["total"] == 1
+            assert domain.json()["items"][0]["id"] == str(newer_id)
         await transaction.rollback()

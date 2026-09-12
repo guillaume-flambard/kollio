@@ -9,6 +9,7 @@ from sqlalchemy import (
     String,
     UniqueConstraint,
     func,
+    or_,
     select,
 )
 from sqlalchemy.dialects.postgresql import JSONB
@@ -79,12 +80,31 @@ class PostgresIdeas:
         return frozenset((await self.session.scalars(query)).all())
 
     async def list_for_workspace(
-        self, workspace_id: UUID, limit: int, offset: int
+        self,
+        workspace_id: UUID,
+        limit: int,
+        offset: int,
+        query_text: str | None = None,
+        stage: str | None = None,
+        domain: str | None = None,
     ) -> tuple[list[Idea], int]:
-        filters = (
+        filters: list[Any] = [
             Idea.workspace_id == workspace_id,
             Idea.visibility == "workspace",
-        )
+        ]
+        if query_text:
+            pattern = f"%{query_text.strip()}%"
+            filters.append(
+                or_(
+                    Idea.title.ilike(pattern),
+                    Idea.pitch.ilike(pattern),
+                    Idea.provenance["domaine"].astext.ilike(pattern),
+                )
+            )
+        if stage:
+            filters.append(Idea.stage == stage)
+        if domain:
+            filters.append(Idea.provenance["domaine"].astext == domain)
         query = (
             select(Idea)
             .where(*filters)

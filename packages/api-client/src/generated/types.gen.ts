@@ -125,6 +125,10 @@ export type IdeaSummaryResponse = {
      * Created At
      */
     created_at: string;
+    /**
+     * Domain
+     */
+    domain?: string | null;
 };
 
 /**
@@ -286,6 +290,18 @@ export type ListWorkspaceIdeasData = {
          * Offset
          */
         offset?: number;
+        /**
+         * Q
+         */
+        q?: string | null;
+        /**
+         * Stage
+         */
+        stage?: 'seed' | 'iterating' | 'team_formed' | null;
+        /**
+         * Domain
+         */
+        domain?: string | null;
     };
     url: '/workspaces/{workspace_id}/ideas';
 };

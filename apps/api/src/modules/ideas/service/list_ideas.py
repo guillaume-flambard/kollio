@@ -10,8 +10,18 @@ async def list_workspace_ideas(
     subject: str,
     limit: int,
     offset: int,
+    query_text: str | None = None,
+    stage: str | None = None,
+    domain: str | None = None,
 ) -> tuple[list[Idea], int] | None:
     memberships = await repository.memberships(subject)
     if not can_read_idea(workspace_id, memberships):
         return None
-    return await repository.list_for_workspace(workspace_id, limit, offset)
+    return await repository.list_for_workspace(
+        workspace_id,
+        limit,
+        offset,
+        query_text=query_text,
+        stage=stage,
+        domain=domain,
+    )

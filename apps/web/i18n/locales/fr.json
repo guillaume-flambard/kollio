@@ -71,6 +71,22 @@
     "previous": "Précédent",
     "next": "Suivant",
     "retry": "Réessayer",
+    "explorer": {
+      "description": "Trouvez une idée qui a besoin de vous.",
+      "search": "Rechercher une idée, un domaine ou un besoin",
+      "library": "Bibliothèque des idées",
+      "explore": "Explorer",
+      "all": "Toutes les idées",
+      "domains": "Domaines",
+      "results": "{count} résultat | {count} résultats",
+      "preview": "Aperçu de l’idée",
+      "open": "Ouvrir l’idée",
+      "domain": "Domaine",
+      "language": "Langue",
+      "updated": "Mise à jour",
+      "closePreview": "Fermer l’aperçu",
+      "noResults": "Aucune idée ne correspond à ces critères."
+    },
     "stage": {
       "seed": "Graine",
       "iterating": "En itération",

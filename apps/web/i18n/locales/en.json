@@ -71,6 +71,22 @@
     "previous": "Previous",
     "next": "Next",
     "retry": "Try again",
+    "explorer": {
+      "description": "Find an idea that needs you.",
+      "search": "Search for an idea, domain or need",
+      "library": "Idea library",
+      "explore": "Explore",
+      "all": "All ideas",
+      "domains": "Domains",
+      "results": "{count} result | {count} results",
+      "preview": "Idea preview",
+      "open": "Open idea",
+      "domain": "Domain",
+      "language": "Language",
+      "updated": "Updated",
+      "closePreview": "Close preview",
+      "noResults": "No ideas match these filters."
+    },
     "stage": {
       "seed": "Seed",
       "iterating": "Iterating",

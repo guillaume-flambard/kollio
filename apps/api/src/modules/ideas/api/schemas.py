@@ -40,6 +40,7 @@ class IdeaSummaryResponse(BaseModel):
     stage: Literal["seed", "iterating", "team_formed"]
     lang: Literal["fr", "en"]
     created_at: datetime
+    domain: str | None = None
 
 
 class IdeaPageResponse(BaseModel):

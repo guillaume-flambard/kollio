@@ -28,11 +28,15 @@ const switchLocalePath = useSwitchLocalePath()
       <nav class="mt-12" :aria-label="t('navigation.label')">
         <NuxtLink
           :to="$localePath('/workspace')"
-          class="workspace-nav-active group flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:text-default"
+          class="workspace-nav-active group flex min-h-11 items-center rounded-xl text-sm font-medium text-muted transition-colors hover:text-default"
           active-class="workspace-nav-active text-default"
         >
-          <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18h6m-5 3h4m4.5-10.5a6.5 6.5 0 1 0-10.7 5l.7.6c.9.8 1.5 1.9 1.5 3.1h4c0-1.2.6-2.3 1.5-3.1l.7-.6a6.5 6.5 0 0 0 2.3-5Z" /></svg>
-          <KollioFeltMark active>{{ t('navigation.ideas') }}</KollioFeltMark>
+          <KollioSketchAnnotation active kind="loop" class="workspace-nav-sketch">
+            <span class="flex items-center gap-3">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18h6m-5 3h4m4.5-10.5a6.5 6.5 0 1 0-10.7 5l.7.6c.9.8 1.5 1.9 1.5 3.1h4c0-1.2.6-2.3 1.5-3.1l.7-.6a6.5 6.5 0 0 0 2.3-5Z" /></svg>
+              {{ t('navigation.ideas') }}
+            </span>
+          </KollioSketchAnnotation>
         </NuxtLink>
 
         <div class="mt-2 space-y-1" :aria-label="t('navigation.upcoming')">

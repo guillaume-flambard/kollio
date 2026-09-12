@@ -52,7 +52,7 @@ function handleKeydown(event: KeyboardEvent, index: number) {
       @click="select(item.id)"
       @keydown="handleKeydown($event, index)"
     >
-      <KollioFeltMark :active="modelValue === item.id">{{ item.label }}</KollioFeltMark>
+      <KollioSketchAnnotation :active="modelValue === item.id" kind="loop">{{ item.label }}</KollioSketchAnnotation>
     </button>
   </div>
 </template>

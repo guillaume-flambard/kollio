@@ -220,17 +220,13 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 }
 
 .workspace-nav-active {
-  background:
-    radial-gradient(ellipse at 56% 74%, color-mix(in srgb, var(--kollio-active-wash) 36%, transparent), transparent 58%),
-    color-mix(in srgb, var(--kollio-wash) 25%, transparent);
   color: var(--kollio-active-ink);
 }
 
-.workspace-nav-active .felt-mark--label::after {
-  right: -1.7em;
-  left: -.25em;
-  height: .55em;
-  filter: blur(1.4px);
+.workspace-nav-sketch {
+  width: 100%;
+  justify-content: flex-start;
+  padding-inline: 12px;
 }
 
 .workspace-rail nav a,
@@ -1208,28 +1204,9 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   outline: none;
 }
 
-.context-tabs [role='tab'] .felt-mark::after {
-  display: none;
-}
-
-.context-tabs [role='tab'][aria-selected='true']::after {
-  position: absolute;
-  z-index: 2;
-  bottom: -1px;
-  left: 50%;
-  width: 74px;
-  height: 18px;
-  border-radius: 54% 47% 14% 10% / 64% 58% 18% 14%;
-  background:
-    radial-gradient(circle at 20% 48%, color-mix(in srgb, var(--kollio-active-ink) 14%, transparent) 0 .5px, transparent .9px) 0 0 / 5px 4px,
-    radial-gradient(ellipse at 50% 92%,
-      color-mix(in srgb, var(--kollio-active-wash) 92%, transparent) 0 42%,
-      color-mix(in srgb, var(--kollio-active-wash) 66%, transparent) 68%,
-      transparent 100%);
-  content: '';
-  filter: blur(1.05px);
-  opacity: .88;
-  transform: translateX(-50%) rotate(-.7deg);
+.context-tabs [role='tab'] .sketch-annotation--loop {
+  min-height: 42px;
+  padding: 6px 14px;
 }
 
 .context-tabs [role='tab'][aria-selected='true'] {
