@@ -31,6 +31,10 @@ Active washes use a pseudo-element or background-size transition with a controll
 
 Contextual lines will be rendered as accessible, pointer-events-disabled SVG paths positioned over the central and companion regions. The underlying relationship remains semantic through `aria-controls`, selected tab state, and focus movement. On narrow screens the line is omitted because the related content moves into document flow.
 
+### The idea library is a calm two-column index
+
+The library keeps filtering in a narrow rail and gives the remaining width to readable idea rows. Each row includes its sequence, title, short narrative, stage, date, and a direct route to the idea. The library does not reserve a permanent third column for a preview because that compresses the narrative and makes the screen read like an administration table.
+
 ### Motion communicates causal order
 
 Selection appears first, the relationship path draws second, and companion content settles last. Motion effects never gate application state and in-flight animations are replaceable. Motion for Vue handles component transitions; CSS handles small hover and wash effects.

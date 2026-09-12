@@ -4,6 +4,21 @@ Defines how workspace members understand an idea, follow its active relationship
 
 ## ADDED Requirements
 
+### Requirement: Calm idea library
+The system SHALL present the idea library as a two-column index with filters beside readable idea summaries and SHALL open an idea directly from its row.
+
+#### Scenario: Member scans available ideas
+- **WHEN** a workspace member opens the idea library on a wide viewport
+- **THEN** filters remain in a narrow rail and each result shows its sequence, title, short narrative, stage, and date without a permanent preview column
+
+#### Scenario: Member opens an idea from the index
+- **WHEN** a workspace member activates an idea row
+- **THEN** the application navigates directly to that idea
+
+#### Scenario: Member uses a narrow viewport
+- **WHEN** the filter rail and result list no longer fit side by side
+- **THEN** stage filters become an in-flow horizontal control and idea rows retain a readable title and narrative
+
 ### Requirement: Focused idea canvas
 The system SHALL present the idea narrative as the primary content and SHALL reveal detailed constraints, evidence, and history progressively.
 

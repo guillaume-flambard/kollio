@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IdeaPageResponse, IdeaSummaryResponse, WorkspaceResponse } from '@kollio/api-client'
+import type { IdeaPageResponse, WorkspaceResponse } from '@kollio/api-client'
 import { motion, useReducedMotion } from 'motion-v'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
@@ -13,8 +13,6 @@ const reducedMotion = useReducedMotion()
 const pageSize = 6
 const validStages = ['seed', 'iterating', 'team_formed'] as const
 const searchInput = ref(typeof route.query.q === 'string' ? route.query.q : '')
-const selectedIdeaId = ref<string>()
-const previewOpen = ref(false)
 let searchTimer: ReturnType<typeof setTimeout> | undefined
 
 const { data: workspaces } = await useAsyncData('workspaces', () => requestFetch<WorkspaceResponse[]>('/api/workspaces'))
@@ -53,7 +51,6 @@ const { data: ideaPage, status, error, refresh } = await useAsyncData(
 
 const totalPages = computed(() => Math.max(1, Math.ceil((ideaPage.value?.total ?? 0) / pageSize)))
 const dateFormatter = computed(() => new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'short', year: 'numeric' }))
-const selectedIdea = computed(() => ideaPage.value?.items.find(idea => idea.id === selectedIdeaId.value) ?? ideaPage.value?.items[0])
 const visibleDomains = computed(() => Array.from(new Set(
   ideaPage.value?.items.map(idea => idea.domain).filter(
     (domain): domain is string => Boolean(domain && domain.length <= 32),
@@ -63,9 +60,6 @@ const visibleDomains = computed(() => Array.from(new Set(
 watch(() => route.query.q, value => {
   searchInput.value = typeof value === 'string' ? value : ''
 })
-watch(() => ideaPage.value?.items, items => {
-  if (!items?.some(idea => idea.id === selectedIdeaId.value)) selectedIdeaId.value = items?.[0]?.id
-}, { immediate: true })
 
 function replaceFilters(updates: Record<string, string | undefined>) {
   const nextQuery = Object.fromEntries(
@@ -76,10 +70,6 @@ function replaceFilters(updates: Record<string, string | undefined>) {
 function scheduleSearch() {
   clearTimeout(searchTimer)
   searchTimer = setTimeout(() => replaceFilters({ q: searchInput.value.trim() || undefined }), 280)
-}
-function selectIdea(idea: IdeaSummaryResponse) {
-  selectedIdeaId.value = idea.id
-  previewOpen.value = true
 }
 function pageLocation(page: number) {
   return {
@@ -165,13 +155,13 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           </div>
           <div v-else-if="ideaPage?.items.length">
             <KollioIdeaExplorerRow
-              v-for="idea in ideaPage.items"
+              v-for="(idea, index) in ideaPage.items"
               :key="idea.id"
               :idea="idea"
-              :selected="selectedIdea?.id === idea.id"
+              :number="String((currentPage - 1) * pageSize + index + 1).padStart(2, '0')"
+              :to="localePath(`/workspace/ideas/${idea.id}`)"
               :stage-label="t(`ideas.stage.${idea.stage}`)"
               :date-label="dateFormatter.format(new Date(idea.created_at))"
-              @select="selectIdea(idea)"
             />
           </div>
           <div v-else class="ideas-results-feedback">
@@ -184,23 +174,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           </nav>
         </main>
 
-        <KollioIdeaPreviewPanel
-          v-if="selectedIdea"
-          class="ideas-preview-panel"
-          :class="{ 'is-open': previewOpen }"
-          :idea="selectedIdea"
-          :stage-label="t(`ideas.stage.${selectedIdea.stage}`)"
-          :date-label="dateFormatter.format(new Date(selectedIdea.created_at))"
-          :open-label="t('ideas.explorer.open')"
-          :preview-label="t('ideas.explorer.preview')"
-          :domain-label="t('ideas.explorer.domain')"
-          :language-label="t('ideas.explorer.language')"
-          :close-label="t('ideas.explorer.closePreview')"
-          @close="previewOpen = false"
-        />
       </section>
-
-      <button v-if="previewOpen" class="ideas-preview-backdrop" type="button" :aria-label="t('ideas.explorer.closePreview')" @click="previewOpen = false" />
     </template>
   </div>
 </template>
@@ -215,8 +189,8 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-search:focus-within { border-color: color-mix(in srgb, var(--kollio-active-ink) 45%, var(--ui-border)); }
 .ideas-search svg { width: 20px; flex: none; fill: none; stroke: var(--ui-text-muted); stroke-linecap: round; stroke-width: 1.7; }
 .ideas-search input { min-width: 0; flex: 1; outline: 0; background: transparent; color: var(--kollio-heading); font-size: .88rem; }
-.ideas-explorer-shell { display: grid; min-height: 680px; grid-template-columns: minmax(168px, 210px) minmax(420px, 1fr) minmax(300px, 360px); overflow: hidden; border: 1px solid var(--ui-border); border-radius: 24px; background: var(--ui-bg-elevated); }
-.ideas-filter-rail { border-right: 1px solid var(--ui-border); padding: 24px 16px; }
+.ideas-explorer-shell { display: grid; min-height: 680px; grid-template-columns: minmax(190px, 224px) minmax(0, 1fr); overflow: hidden; border: 1px solid var(--ui-border); border-radius: 24px; background: var(--ui-bg-elevated); box-shadow: 0 22px 70px color-mix(in srgb, var(--kollio-active-ink) 5%, transparent); }
+.ideas-filter-rail { border-right: 1px solid var(--ui-border); padding: 28px 18px; }
 .ideas-filter-rail > p { margin: 0 11px 10px; color: var(--ui-text-muted); font-size: .66rem; font-weight: 680; letter-spacing: .075em; text-transform: uppercase; }
 .ideas-filter-rail button { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; color: var(--ui-text-muted); font-size: .78rem; text-align: left; }
 .ideas-filter-rail button[aria-pressed='true'] { color: var(--kollio-heading); font-weight: 620; }
@@ -224,7 +198,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-filter-rail :deep(.sketch-annotation--swash) { min-height: 32px; margin-left: -3px; padding: 4px 7px; }
 .ideas-filter-rail .domain-filter { min-height: 39px; padding-inline: 11px; }
 .ideas-filter-rail hr { margin: 20px 10px; border-color: var(--ui-border); }
-.ideas-results { min-width: 0; border-right: 1px solid var(--ui-border); }
+.ideas-results { min-width: 0; }
 .ideas-results-header { display: flex; min-height: 62px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ui-border); padding: 0 24px; color: var(--ui-text-muted); font-size: .71rem; }
 .explorer-row-skeleton { min-height: 100px; border-bottom: 1px solid var(--ui-border); padding: 22px 24px; }
 .ideas-results-feedback { display: flex; min-height: 360px; align-items: flex-start; flex-direction: column; justify-content: center; padding: 42px; }
@@ -233,15 +207,6 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-results-pagination { display: flex; min-height: 68px; align-items: center; justify-content: space-between; padding: 0 24px; }
 .ideas-results-pagination a { min-height: 40px; border-radius: 10px; padding: 11px 13px; color: var(--kollio-active-ink); font-size: .75rem; font-weight: 600; }
 .ideas-results-pagination a:hover { background: var(--ui-bg-muted); }
-.ideas-preview-panel { min-width: 0; }
-.ideas-preview-backdrop { display: none; }
-@media (max-width: 1099px) {
-  .ideas-explorer-shell { grid-template-columns: minmax(170px, 210px) minmax(0, 1fr); }
-  .ideas-results { border-right: 0; }
-  .ideas-preview-panel { position: fixed; z-index: 55; top: 72px; right: 16px; bottom: 16px; width: min(430px, calc(100vw - 32px)); border: 1px solid var(--ui-border); border-radius: 22px; box-shadow: 0 24px 70px rgb(37 34 41 / 18%); opacity: 0; pointer-events: none; transform: translateX(24px); transition: opacity 180ms ease, transform 220ms cubic-bezier(.16, 1, .3, 1); }
-  .ideas-preview-panel.is-open { opacity: 1; pointer-events: auto; transform: translateX(0); }
-  .ideas-preview-backdrop { position: fixed; z-index: 50; inset: 0; display: block; background: rgb(37 34 41 / 16%); }
-}
 @media (max-width: 720px) {
   .ideas-explorer { padding: 24px 14px 50px; }
   .ideas-explorer-header { grid-template-columns: 1fr; gap: 24px; }
