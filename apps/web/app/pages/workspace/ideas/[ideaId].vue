@@ -94,10 +94,7 @@ function selectPanel(panel: string) {
   if (!panels.includes(panel as typeof panels[number])) return
   const nextPanel = panel as typeof panels[number]
   activePanel.value = nextPanel
-  nextTick(() => {
-    document.getElementById(`idea-context-tab-${nextPanel}`)?.focus()
-    requestAnimationFrame(updateConnection)
-  })
+  nextTick(() => requestAnimationFrame(updateConnection))
 }
 
 watch(activePanel, () => nextTick(() => requestAnimationFrame(updateConnection)))

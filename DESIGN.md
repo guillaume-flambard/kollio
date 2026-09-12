@@ -110,7 +110,7 @@ The system reveals detail through deliberate interaction. A selected phrase can 
 **Key Characteristics:**
 
 - Airy reading surfaces with restrained structural depth.
-- Three felt-tip gestures: lower-edge marks for labels, pale capsules for status, and full-height washes for linked passages.
+- Three felt-tip gestures: short lower-edge marks for labels, broad lower-edge bands for status, and full-height washes for linked passages.
 - One visible relationship between the narrative and its current context.
 - Progressive disclosure that preserves the idea as the main reading object.
 - Real source labels, identifiers, and empty states instead of invented activity.
@@ -140,7 +140,7 @@ The palette pairs warm porcelain neutrals with a low-chroma aubergine family. Cl
 
 ### Named Rules
 
-**The Felt-Tip Rule.** Active labels use a short lower-edge brush mark. Status text sits inside a pale, diffuse capsule. Linked passages use an irregular full-height wash. Every treatment follows the text width and stays soft-edged; none becomes a generic badge or full-row selection bar.
+**The Felt-Tip Rule.** Active labels use a short lower-edge brush mark. Status text sits above a pale, diffuse band that extends beyond the label. Linked passages use an irregular full-height wash. Every treatment follows the text width and stays soft-edged; none becomes a generic badge or full-row selection bar.
 
 **The Semantic Accent Rule.** Clay, citron, and ochre communicate product meaning. Do not use them as arbitrary decoration.
 

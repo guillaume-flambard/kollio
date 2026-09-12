@@ -326,23 +326,25 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 .felt-mark--status {
   isolation: isolate;
   position: relative;
-  padding: .08em .5em .12em;
   color: var(--kollio-active-ink);
   font-weight: 500;
 }
 
 .felt-mark--status::after {
   position: absolute;
-  inset: -.08em -.05em -.05em;
   z-index: -1;
-  border-radius: 48% 44% 46% 42%;
-  background: radial-gradient(ellipse at center,
-    color-mix(in srgb, var(--kollio-wash) 88%, transparent) 0 58%,
-    color-mix(in srgb, var(--kollio-wash) 42%, transparent) 79%,
-    transparent 100%);
+  right: -.9em;
+  bottom: -.25em;
+  left: -.9em;
+  height: 1.05em;
+  border-radius: 7px 9px 8px 6px;
+  background: linear-gradient(178deg,
+    color-mix(in srgb, var(--kollio-wash) 65%, transparent) 0 8%,
+    color-mix(in srgb, var(--kollio-wash) 92%, transparent) 24% 78%,
+    color-mix(in srgb, var(--kollio-wash) 60%, transparent) 100%);
   content: '';
-  filter: blur(.8px);
-  transform: rotate(-.3deg);
+  filter: blur(.65px);
+  transform: rotate(-.25deg) skewX(-.5deg);
 }
 
 .relationship-path {
@@ -393,6 +395,10 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   transition: color 180ms ease;
 }
 
+.context-tabs [role='tab']:focus-visible {
+  outline: none;
+}
+
 .context-tabs [role='tab'] .felt-mark::after {
   display: none;
 }
@@ -404,13 +410,13 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   left: 50%;
   width: 74px;
   height: 17px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center,
-    color-mix(in srgb, var(--kollio-active-wash) 92%, transparent) 0 48%,
-    color-mix(in srgb, var(--kollio-active-wash) 56%, transparent) 70%,
-    transparent 100%);
+  border-radius: 8px 10px 7px 9px;
+  background: linear-gradient(176deg,
+    color-mix(in srgb, var(--kollio-active-wash) 30%, transparent) 0 7%,
+    color-mix(in srgb, var(--kollio-active-wash) 84%, transparent) 24% 76%,
+    color-mix(in srgb, var(--kollio-active-wash) 42%, transparent) 100%);
   content: '';
-  filter: blur(1.8px);
+  filter: blur(1.35px);
   opacity: .92;
   transform: translateX(-50%) rotate(-1.2deg);
 }
