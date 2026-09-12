@@ -65,10 +65,12 @@
   "ideas": {
     "eyebrow": "Bibliothèque d’idées",
     "title": "Idées à explorer",
+    "collectionTitle": "Le fil des idées",
     "page": "Page {current} sur {total}",
     "pagination": "Pages d’idées",
     "previous": "Précédent",
     "next": "Suivant",
+    "retry": "Réessayer",
     "stage": {
       "seed": "Graine",
       "iterating": "En itération",

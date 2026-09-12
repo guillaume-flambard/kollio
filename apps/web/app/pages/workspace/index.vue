@@ -25,7 +25,7 @@ const currentPage = computed(() => {
   return Number.isInteger(value) && value > 0 ? value : 1
 })
 
-const { data: ideaPage, status, error } = await useAsyncData(
+const { data: ideaPage, status, error, refresh } = await useAsyncData(
   'workspace-ideas',
   async () => {
     if (!activeWorkspace.value) return undefined
@@ -56,7 +56,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 </script>
 
 <template>
-  <div class="mx-auto max-w-5xl">
+  <div class="idea-library">
     <section v-if="!activeWorkspace" class="py-24 text-center">
       <h1 class="text-3xl font-semibold tracking-[-0.03em]">{{ t('workspace.empty.title') }}</h1>
       <p class="mx-auto mt-3 max-w-lg leading-relaxed text-muted">{{ t('workspace.empty.description') }}</p>
@@ -67,84 +67,81 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
         :initial="{ opacity: 0, y: reducedMotion ? 0 : 8 }"
         :animate="{ opacity: 1, y: 0 }"
         :transition="{ duration: reducedMotion ? 0 : 0.28 }"
-        class="mb-10 flex flex-wrap items-end justify-between gap-6"
+        class="idea-library-hero"
       >
-        <div>
-          <p class="mb-2 flex items-center gap-2 text-sm text-muted">
-            <span class="size-2 rounded-full bg-success" aria-hidden="true" />
-            {{ t(`workspace.role.${activeWorkspace.role}`) }}
+        <div class="idea-library-intro">
+          <p class="idea-library-context">
+            <span>{{ activeWorkspace.name }}</span>
+            <span>{{ t(`workspace.role.${activeWorkspace.role}`) }}</span>
           </p>
-          <h1 class="text-4xl font-semibold tracking-[-0.035em] sm:text-5xl">{{ activeWorkspace.name }}</h1>
-          <p class="mt-3 max-w-2xl leading-relaxed text-muted">{{ t('workspace.description') }}</p>
+          <h1>{{ t('ideas.title') }}</h1>
+          <p class="idea-library-description">{{ t('workspace.description') }}</p>
         </div>
-        <p class="text-sm text-muted">
-          <strong class="font-semibold text-default tabular-nums">{{ ideaPage?.total ?? 0 }}</strong>
-          {{ t('workspace.ideaLabel') }}
-        </p>
+        <div class="idea-library-count" aria-live="polite">
+          <strong>{{ ideaPage?.total ?? 0 }}</strong>
+          <KollioFeltMark active>{{ t('workspace.ideaLabel') }}</KollioFeltMark>
+        </div>
       </motion.header>
 
-      <section class="kollio-surface overflow-hidden" aria-labelledby="idea-list-title">
-        <header class="flex items-center justify-between gap-4 border-b border-default px-5 py-4 sm:px-6">
-          <h2 id="idea-list-title" class="text-lg font-semibold">{{ t('ideas.title') }}</h2>
-          <p v-if="ideaPage" class="text-sm text-muted">{{ t('ideas.page', { current: currentPage, total: totalPages }) }}</p>
+      <section class="kollio-surface idea-library-surface" aria-labelledby="idea-list-title">
+        <header class="idea-library-toolbar">
+          <div>
+            <p>{{ t('ideas.eyebrow') }}</p>
+            <h2 id="idea-list-title">{{ t('ideas.collectionTitle') }}</h2>
+          </div>
+          <p v-if="ideaPage" class="idea-library-page">{{ t('ideas.page', { current: currentPage, total: totalPages }) }}</p>
         </header>
 
-        <div v-if="status === 'pending'" class="divide-y divide-default" aria-live="polite">
-          <div v-for="index in 6" :key="index" class="h-32 animate-pulse bg-muted/60" />
+        <div v-if="status === 'pending'" class="idea-library-grid" aria-live="polite">
+          <div v-for="index in 8" :key="index" class="idea-list-skeleton">
+            <span class="skeleton-line w-16" />
+            <span class="skeleton-line mt-8 w-4/5" />
+            <span class="skeleton-line mt-3 w-full" />
+            <span class="skeleton-line mt-2 w-2/3" />
+          </div>
         </div>
 
-        <div v-else-if="error" class="p-8">
+        <div v-else-if="error" class="idea-library-feedback">
           <h3 class="text-lg font-semibold">{{ t('ideas.error.title') }}</h3>
           <p class="mt-2 text-sm text-muted">{{ t('ideas.error.description') }}</p>
+          <KollioPrimaryAction class="mt-6" :label="t('ideas.retry')" @click="() => refresh()" />
         </div>
 
-        <div v-else-if="ideaPage?.items.length" class="divide-y divide-default">
-          <motion.article
+        <div v-else-if="ideaPage?.items.length" class="idea-library-grid">
+          <motion.div
             v-for="(idea, index) in ideaPage.items"
             :key="idea.id"
             :initial="{ opacity: 0, y: reducedMotion ? 0 : 5 }"
             :animate="{ opacity: 1, y: 0 }"
             :transition="{ duration: reducedMotion ? 0 : 0.24, delay: reducedMotion ? 0 : index * 0.02 }"
-            class="group relative grid gap-3 px-5 py-5 transition-colors hover:bg-muted/45 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:px-6"
+            class="idea-list-entry"
           >
-            <div class="min-w-0">
-              <div class="mb-2 flex flex-wrap items-center gap-2 text-xs text-muted">
-                <KollioFeltMark active variant="status">{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
-                <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
-                <span class="uppercase">{{ idea.lang }}</span>
-                <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
-                <time :datetime="idea.created_at">{{ dateFormatter.format(new Date(idea.created_at)) }}</time>
-              </div>
-              <h3 class="text-lg font-semibold tracking-[-0.015em]">
-                <NuxtLink :to="$localePath(`/workspace/ideas/${idea.id}`)" class="after:absolute after:inset-0">
-                  {{ idea.title }}
-                </NuxtLink>
-              </h3>
-              <p class="mt-2 line-clamp-2 max-w-3xl text-sm leading-relaxed text-muted">{{ idea.pitch }}</p>
-            </div>
-            <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 text-muted transition-transform duration-200 group-hover:translate-x-1 group-hover:text-default" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M5 12h14m-5-5 5 5-5 5" />
-            </svg>
-          </motion.article>
+            <KollioIdeaListItem
+              :idea="idea"
+              :to="$localePath(`/workspace/ideas/${idea.id}`)"
+              :stage-label="t(`ideas.stage.${idea.stage}`)"
+              :date-label="dateFormatter.format(new Date(idea.created_at))"
+            />
+          </motion.div>
         </div>
 
-        <div v-else class="p-12 text-center">
+        <div v-else class="idea-library-feedback">
           <h3 class="text-lg font-semibold">{{ t('ideas.empty.title') }}</h3>
           <p class="mt-2 text-sm text-muted">{{ t('ideas.empty.description') }}</p>
         </div>
-      </section>
 
-      <nav v-if="ideaPage && totalPages > 1" class="mt-6 flex items-center justify-between" :aria-label="t('ideas.pagination')">
-        <NuxtLink v-if="currentPage > 1" :to="pageLocation(currentPage - 1)" class="min-h-11 rounded-xl border border-default bg-elevated px-4 text-sm font-medium leading-11 hover:bg-muted">
-          {{ t('ideas.previous') }}
-        </NuxtLink>
-        <span v-else />
-        <KollioPrimaryAction
-          v-if="currentPage < totalPages"
-          :to="pageLocation(currentPage + 1)"
-          :label="t('ideas.next')"
-        />
-      </nav>
+        <nav v-if="ideaPage && totalPages > 1" class="idea-library-pagination" :aria-label="t('ideas.pagination')">
+          <NuxtLink v-if="currentPage > 1" :to="pageLocation(currentPage - 1)" class="idea-library-previous">
+            {{ t('ideas.previous') }}
+          </NuxtLink>
+          <span v-else />
+          <KollioPrimaryAction
+            v-if="currentPage < totalPages"
+            :to="pageLocation(currentPage + 1)"
+            :label="t('ideas.next')"
+          />
+        </nav>
+      </section>
     </template>
   </div>
 </template>

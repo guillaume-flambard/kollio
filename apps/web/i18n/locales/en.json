@@ -65,10 +65,12 @@
   "ideas": {
     "eyebrow": "Idea library",
     "title": "Ideas to explore",
+    "collectionTitle": "The idea stream",
     "page": "Page {current} of {total}",
     "pagination": "Idea pages",
     "previous": "Previous",
     "next": "Next",
+    "retry": "Try again",
     "stage": {
       "seed": "Seed",
       "iterating": "Iterating",
