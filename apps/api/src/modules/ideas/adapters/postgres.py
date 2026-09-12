@@ -2,7 +2,15 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, String, UniqueConstraint, func, select
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    String,
+    UniqueConstraint,
+    func,
+    select,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
@@ -69,3 +77,22 @@ class PostgresIdeas:
             select(WorkspaceMembership.workspace_id).join(User).where(User.auth_subject == subject)
         )
         return frozenset((await self.session.scalars(query)).all())
+
+    async def list_for_workspace(
+        self, workspace_id: UUID, limit: int, offset: int
+    ) -> tuple[list[Idea], int]:
+        filters = (
+            Idea.workspace_id == workspace_id,
+            Idea.visibility == "workspace",
+        )
+        query = (
+            select(Idea)
+            .where(*filters)
+            .order_by(Idea.created_at.desc(), Idea.id.desc())
+            .limit(limit)
+            .offset(offset)
+        )
+        count_query = select(func.count()).select_from(Idea).where(*filters)
+        ideas = list((await self.session.scalars(query)).all())
+        total = int((await self.session.scalar(count_query)) or 0)
+        return ideas, total

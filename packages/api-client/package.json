@@ -9,6 +9,7 @@
   "type": "module",
   "private": true,
   "exports": {
-    ".": "./src/generated/index.ts"
+    ".": "./src/generated/index.ts",
+    "./client": "./src/generated/client/index.ts"
   }
 }

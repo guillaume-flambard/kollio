@@ -13,7 +13,7 @@ export default defineNuxtConfig({
       scopes: ['openid', 'profile', 'email'],
       cookieSecure: process.env.NODE_ENV === 'production',
       fetchUserInfo: false,
-      postCallbackRedirectUri: '/',
+      postCallbackRedirectUri: '/workspace',
       postLogoutRedirectUri: '/',
       pathnames: { signIn: '/sign-in', signOut: '/sign-out', callback: '/callback' },
     },

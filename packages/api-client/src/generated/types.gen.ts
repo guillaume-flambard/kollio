@@ -25,6 +25,28 @@ export type Health = {
 };
 
 /**
+ * IdeaPageResponse
+ */
+export type IdeaPageResponse = {
+    /**
+     * Items
+     */
+    items: Array<IdeaSummaryResponse>;
+    /**
+     * Total
+     */
+    total: number;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+};
+
+/**
  * IdeaResponse
  */
 export type IdeaResponse = {
@@ -71,6 +93,40 @@ export type IdeaResponse = {
 };
 
 /**
+ * IdeaSummaryResponse
+ */
+export type IdeaSummaryResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Slug
+     */
+    slug: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Pitch
+     */
+    pitch: string;
+    /**
+     * Stage
+     */
+    stage: 'seed' | 'iterating' | 'team_formed';
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
  * ValidationError
  */
 export type ValidationError = {
@@ -96,6 +152,24 @@ export type ValidationError = {
     ctx?: {
         [key: string]: unknown;
     };
+};
+
+/**
+ * WorkspaceResponse
+ */
+export type WorkspaceResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Role
+     */
+    role: 'admin' | 'member';
 };
 
 export type HealthLiveData = {
@@ -159,3 +233,60 @@ export type GetIdeaResponses = {
 };
 
 export type GetIdeaResponse = GetIdeaResponses[keyof GetIdeaResponses];
+
+export type ListWorkspaceIdeasData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: {
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Offset
+         */
+        offset?: number;
+    };
+    url: '/workspaces/{workspace_id}/ideas';
+};
+
+export type ListWorkspaceIdeasErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListWorkspaceIdeasError = ListWorkspaceIdeasErrors[keyof ListWorkspaceIdeasErrors];
+
+export type ListWorkspaceIdeasResponses = {
+    /**
+     * Successful Response
+     */
+    200: IdeaPageResponse;
+};
+
+export type ListWorkspaceIdeasResponse = ListWorkspaceIdeasResponses[keyof ListWorkspaceIdeasResponses];
+
+export type ListWorkspacesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/workspaces';
+};
+
+export type ListWorkspacesResponses = {
+    /**
+     * Response List Workspaces
+     *
+     * Successful Response
+     */
+    200: Array<WorkspaceResponse>;
+};
+
+export type ListWorkspacesResponse = ListWorkspacesResponses[keyof ListWorkspacesResponses];
