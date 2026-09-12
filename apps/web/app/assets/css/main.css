@@ -7,6 +7,13 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 .font-display { font-family: var(--font-display); }
 ::selection { background: var(--kollio-wash); color: var(--ui-text); }
 
+.workspace-canvas {
+  background:
+    radial-gradient(circle at 42% 2%, color-mix(in srgb, var(--kollio-wash) 32%, transparent) 0, transparent 28rem),
+    radial-gradient(circle at 100% 70%, color-mix(in srgb, var(--kollio-question-wash) 20%, transparent) 0, transparent 30rem),
+    var(--ui-bg);
+}
+
 :focus-visible {
   outline: 2px solid var(--ui-primary);
   outline-offset: 3px;
@@ -16,6 +23,7 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   border: 1px solid var(--ui-border);
   border-radius: var(--kollio-radius-lg);
   background: var(--ui-bg-elevated);
+  box-shadow: var(--kollio-shadow);
 }
 
 .marker-active {

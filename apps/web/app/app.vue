@@ -4,5 +4,9 @@ useHead({ htmlAttrs: { lang: locale } })
 </script>
 
 <template>
-  <UApp><NuxtPage /></UApp>
+  <UApp>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </UApp>
 </template>

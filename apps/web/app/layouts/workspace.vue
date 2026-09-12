@@ -4,7 +4,7 @@ const switchLocalePath = useSwitchLocalePath()
 </script>
 
 <template>
-  <div class="min-h-screen bg-default text-default lg:grid lg:grid-cols-[220px_minmax(0,1fr)]">
+  <div class="workspace-canvas min-h-screen bg-default text-default lg:grid lg:grid-cols-[190px_minmax(0,1fr)]">
     <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default/95 px-5 backdrop-blur lg:hidden">
       <NuxtLink :to="$localePath('/workspace')" class="text-xl font-bold tracking-[-0.03em]" :aria-label="t('brand')">
         {{ t('brand') }}
@@ -19,7 +19,7 @@ const switchLocalePath = useSwitchLocalePath()
       </div>
     </header>
 
-    <aside class="sticky top-0 hidden h-screen flex-col border-r border-default bg-elevated/70 px-5 py-7 lg:flex">
+    <aside class="sticky top-0 hidden h-screen flex-col border-r border-default bg-elevated/70 px-4 py-6 lg:flex">
       <NuxtLink :to="$localePath('/workspace')" class="px-2 text-2xl font-bold tracking-[-0.04em]" :aria-label="t('brand')">
         {{ t('brand') }}
       </NuxtLink>
@@ -50,7 +50,7 @@ const switchLocalePath = useSwitchLocalePath()
       </div>
     </aside>
 
-    <main id="main" class="min-w-0 px-5 py-8 sm:px-8 lg:px-10 lg:py-10 xl:px-12">
+    <main id="main" class="min-w-0 px-4 py-5 sm:px-6 lg:px-5 lg:py-5 xl:px-7">
       <slot />
     </main>
   </div>
