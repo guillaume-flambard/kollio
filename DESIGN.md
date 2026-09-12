@@ -140,7 +140,7 @@ The palette pairs warm porcelain neutrals with a low-chroma aubergine family. Cl
 
 ### Named Rules
 
-**The Felt-Tip Rule.** Use Dusty Lilac Wash as a partial mark behind content. It never becomes a full-width selection bar or decorative block.
+**The Felt-Tip Rule.** Active labels use a short lower-edge brush mark. Linked passages use a diffuse, irregular full-height wash. Both treatments follow the text width and never become full-row selection bars.
 
 **The Semantic Accent Rule.** Clay, citron, and ochre communicate product meaning. Do not use them as arbitrary decoration.
 
@@ -169,9 +169,9 @@ The palette pairs warm porcelain neutrals with a low-chroma aubergine family. Cl
 
 ## Layout
 
-The desktop workspace uses a persistent 190px navigation rail and a fluid main region. Idea detail is capped at 1320px and divides into a narrative column plus a 280px contextual companion, growing to 360px on wider screens. A 16px gap leaves room for the active curved relationship without weakening the two-column composition.
+At the 1536px reference viewport, the desktop workspace uses a 180px navigation rail, a 870px narrative surface, and a 392px contextual companion. The outer margin and 14px content gap preserve the geometry of the approved reference while fluid clamps scale the same proportions down to the desktop breakpoint.
 
-At widths below 1024px, navigation becomes a compact top bar, the idea and companion stack in one column, and the curved relationship is hidden. Content padding grows from 20px on compact screens to 28px, then 36px on wide screens. The main narrative keeps the largest uninterrupted reading area at every width.
+At widths below 1024px, navigation becomes a compact top bar, the idea and companion stack in one column, and the curved relationship is hidden. The companion drops its viewport-height minimum so its real content determines its height. On narrow screens the primary action follows the idea summary and metadata instead of preceding the title. Subject separators remain attached to their labels when rows wrap.
 
 Long pitches begin in a bounded reading window with a tonal fade and an explicit expand control. Companion tabs replace content in place. Detailed evidence, history, and team context appear only when relevant or requested.
 
@@ -228,8 +228,8 @@ of duplicating their geometry, colors, or interaction states.
 
 ### Linked Passages
 
-- **Annotation:** A translucent Dusty Lilac stroke covers only the lower third of the selected words. The passage remains readable and behaves as a real button.
-- **Connection:** Activating the passage opens its related panel and draws one 1.5px curved aubergine line in 260ms. The line disappears when either endpoint leaves the viewport and stays hidden in the stacked layout.
+- **Annotation:** A translucent Dusty Lilac wash follows the selected words with softly blurred, irregular edges. The passage remains readable and behaves as a real button.
+- **Connection:** Activating the passage opens its related panel and draws one 1.75px curved aubergine line in 260ms. A 4.5px source dot anchors the curve. The line disappears when either endpoint leaves the viewport and stays hidden in the stacked layout.
 - **Provenance:** The target names the typed source, such as Prospecteur, preserves the source identifier, and exposes available constraint and channel data without fabricating missing evidence.
 
 ## Do's and Don'ts
@@ -237,7 +237,7 @@ of duplicating their geometry, colors, or interaction states.
 ### Do:
 
 - **Do** keep the idea narrative wider and visually stronger than its metadata or companion content.
-- **Do** use lower-third marks to connect active navigation, selected passages, and the current companion tab.
+- **Do** use lower-edge marks for active labels and full-height washes for linked passages.
 - **Do** reveal long text, evidence, history, and collaboration context only when the user asks or the current state needs them.
 - **Do** preserve real provenance labels and identifiers exactly at the data boundary.
 - **Do** state zero activity and missing evidence plainly.

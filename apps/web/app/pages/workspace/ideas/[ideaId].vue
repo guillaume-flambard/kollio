@@ -122,38 +122,38 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
   >
     <div ref="canvasRef" class="idea-layout relative grid min-w-0">
       <svg v-if="connection.path" aria-hidden="true" class="pointer-events-none absolute inset-0 z-40 hidden overflow-visible lg:block" :viewBox="`0 0 ${connection.width} ${connection.height}`" preserveAspectRatio="none">
-        <path class="relationship-path" :d="connection.path" pathLength="1" fill="none" stroke="var(--ui-primary)" stroke-width="1.5" />
-        <circle :cx="connection.startX" :cy="connection.startY" r="4" fill="var(--ui-primary)" />
+        <path class="relationship-path" :d="connection.path" pathLength="1" fill="none" stroke="var(--kollio-connector)" stroke-width="1.75" />
+        <circle :cx="connection.startX" :cy="connection.startY" r="4.5" fill="var(--kollio-connector)" />
       </svg>
 
       <div class="kollio-surface idea-document relative z-10 min-w-0 p-5 sm:p-7 lg:min-h-[calc(100vh-2.5rem)] lg:p-7 xl:p-9">
-        <header>
-          <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <NuxtLink :to="$localePath('/workspace')" class="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted hover:text-default">
-              {{ t('navigation.ideas') }}
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6" /></svg>
-              {{ t(`ideas.stage.${idea.stage}`) }}
-            </NuxtLink>
-            <div class="idea-header-actions flex items-center gap-3">
-              <KollioPrimaryAction :label="t('ideas.detail.advance')" @click="selectPanel('questions')" />
-              <button type="button" class="idea-more-action" :aria-label="t('ideas.detail.moreActions')">
-                <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="currentColor"><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /></svg>
-              </button>
-            </div>
+        <header class="idea-header">
+          <NuxtLink :to="$localePath('/workspace')" class="idea-breadcrumb inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-default">
+            {{ t('navigation.ideas') }}
+            <svg aria-hidden="true" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6" /></svg>
+            {{ t(`ideas.stage.${idea.stage}`) }}
+          </NuxtLink>
+          <div class="idea-header-actions flex items-center gap-3">
+            <KollioPrimaryAction :label="t('ideas.detail.advance')" @click="selectPanel('questions')" />
+            <button type="button" class="idea-more-action" :aria-label="t('ideas.detail.moreActions')">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="currentColor"><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /></svg>
+            </button>
           </div>
-          <h1 class="idea-title mt-4 max-w-[630px]">{{ idea.title }}</h1>
-          <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
+          <h1 class="idea-title max-w-[630px]">{{ idea.title }}</h1>
+          <div class="idea-topics flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
             <KollioFeltMark active>{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
             <template v-for="topic in legacyTopics" :key="topic">
-              <span aria-hidden="true" class="idea-dot" />
-              <span class="first-letter:uppercase">{{ topic }}</span>
+              <span class="inline-flex items-center gap-5">
+                <span aria-hidden="true" class="idea-dot" />
+                <span class="first-letter:uppercase">{{ topic }}</span>
+              </span>
             </template>
             <button type="button" class="idea-topic-add" :aria-label="t('ideas.detail.enrich')" @click="selectPanel('questions')">
               <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" /></svg>
             </button>
           </div>
-          <p class="idea-summary mt-5 line-clamp-2 max-w-[70ch] text-muted">{{ ideaSummary }}</p>
-          <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
+          <p class="idea-summary line-clamp-2 max-w-[70ch] text-muted">{{ ideaSummary }}</p>
+          <div class="idea-stats flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
             <span>{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
             <button type="button" class="transition-colors hover:text-default" @click="selectPanel('questions')">{{ t('ideas.detail.stats.questions', { count: 0 }) }}</button>
@@ -221,7 +221,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           class="p-5"
         >
           <template v-if="activePanel === 'team'">
-            <section class="min-h-[328px]">
+            <section class="team-panel-primary">
               <div class="flex items-center justify-between gap-3">
                 <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.team.contributors') }}</h2>
                 <span class="text-sm text-muted">{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
