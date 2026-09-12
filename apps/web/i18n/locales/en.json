@@ -3,7 +3,8 @@
   "navigation": {
     "label": "Main navigation",
     "ideas": "Ideas",
-    "workspace": "Workspace"
+    "workspace": "Workspace",
+    "promise": "Ideas with impact, together."
   },
   "meta": {
     "title": "Kollio | From ideas to shared projects",
@@ -79,9 +80,28 @@
       "metaTitle": "Idea | Kollio",
       "back": "Back to ideas",
       "eyebrow": "Original idea",
-      "pitchTitle": "Starting point",
+      "pitchTitle": "Idea description",
       "foundationNote": "Constraint analysis, iterations and team activity will appear here as the idea develops.",
-      "notFound": "Idea not found"
+      "notFound": "Idea not found",
+      "explore": "Explore ideas",
+      "companion": {
+        "label": "Idea context",
+        "team": {
+          "tab": "Team",
+          "title": "Around this idea",
+          "empty": "People who join this idea and their contributions will appear here."
+        },
+        "questions": {
+          "tab": "Questions",
+          "title": "Open questions",
+          "empty": "Questions that still need an answer will appear here when they are linked to the idea."
+        },
+        "evidence": {
+          "tab": "Evidence",
+          "title": "Linked evidence",
+          "empty": "Sources that support or challenge this idea will appear here."
+        }
+      }
     }
   }
 }

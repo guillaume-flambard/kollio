@@ -3,7 +3,8 @@
   "navigation": {
     "label": "Navigation principale",
     "ideas": "Idées",
-    "workspace": "Espace"
+    "workspace": "Espace",
+    "promise": "Des idées à impact, ensemble."
   },
   "meta": {
     "title": "Kollio | Des idées aux projets collectifs",
@@ -79,9 +80,28 @@
       "metaTitle": "Idée | Kollio",
       "back": "Retour aux idées",
       "eyebrow": "Idée originale",
-      "pitchTitle": "Point de départ",
+      "pitchTitle": "Description de l’idée",
       "foundationNote": "L’analyse des contraintes, les itérations et l’activité de l’équipe apparaîtront ici à mesure que l’idée avance.",
-      "notFound": "Idée introuvable"
+      "notFound": "Idée introuvable",
+      "explore": "Explorer les idées",
+      "companion": {
+        "label": "Contexte de l’idée",
+        "team": {
+          "tab": "Équipe",
+          "title": "Autour de cette idée",
+          "empty": "Les personnes qui rejoignent cette idée et leurs contributions apparaîtront ici."
+        },
+        "questions": {
+          "tab": "Questions",
+          "title": "Questions ouvertes",
+          "empty": "Les questions encore sans réponse apparaîtront ici lorsqu’elles seront liées à l’idée."
+        },
+        "evidence": {
+          "tab": "Preuves",
+          "title": "Preuves liées",
+          "empty": "Les sources qui soutiennent ou remettent en cause cette idée apparaîtront ici."
+        }
+      }
     }
   }
 }
