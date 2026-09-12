@@ -1,6 +1,6 @@
 ## 1. Visual foundation
 
-- [ ] 1.1 Replace shared color, radius, shadow, focus, selection, and browser-surface tokens with the approved Mineral semantic roles; verify contrast and run the web typecheck.
+- [ ] 1.1 Replace shared color, radius, shadow, focus, selection, and browser-surface tokens with the approved Aubergine semantic roles; verify contrast and run the web typecheck.
 - [ ] 1.2 Add reusable felt-tip wash and split-action primitives with hover, focus, pressed, disabled, and reduced-motion states; verify them in French and English at 375px and 1440px.
 
 ## 2. Existing product surfaces
@@ -19,4 +19,4 @@
 
 - [ ] 4.1 Add meaningful UI tests for semantic active state, keyboard relationships, and reduced motion; verify the focused test suite passes.
 - [ ] 4.2 Run ESLint, Nuxt typecheck, production build, and OpenSpec strict validation; record the commands and results.
-- [ ] 4.3 Perform a visual review against the approved Mineral reference using real French and English content, then correct hierarchy, overflow, contrast, and motion defects.
+- [ ] 4.3 Perform a visual review against the approved Aubergine reference using real French and English content, then correct hierarchy, overflow, contrast, and motion defects.

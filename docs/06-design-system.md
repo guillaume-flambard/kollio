@@ -2,7 +2,7 @@
 
 ## Approved direction
 
-Kollio uses the **Living Canvas** interaction model with the **Mineral** palette. The product is light-first, airy, rounded, and collaborative. It reveals relationships through interaction instead of presenting a dense dashboard.
+Kollio uses the **Living Canvas** interaction model with the **Aubergine** palette. The product is light-first, airy, rounded, and collaborative. It reveals relationships through interaction instead of presenting a dense dashboard.
 
 Earlier Collective.work-inspired mockups and the blue editorial direction are superseded by this document and the root `DESIGN.md`.
 
@@ -16,13 +16,13 @@ Earlier Collective.work-inspired mockups and the blue editorial direction are su
 
 | Role | Value |
 |---|---|
-| Canvas | `#F6F5F1` |
+| Canvas | `#F7F5F7` |
 | Surface | `#FFFFFF` |
-| Ink | `#202522` |
-| Primary interaction | `#164B46` |
-| Active wash | `#BFE3D7` |
-| Open question | `#E8744F` |
-| Verified evidence | `#557A62` |
+| Ink | `#252229` |
+| Primary interaction | `#493B57` |
+| Active wash | `#DDD3E8` |
+| Open question | `#D47A70` |
+| Verified evidence | `#899744` |
 | Pending | `#A57932` |
 
 Dark-mode values remain available as an alternative theme and must preserve the same semantic roles. Workspace-specific color settings are a later capability. They must pass contrast validation before activation.
@@ -43,7 +43,7 @@ A selected passage may connect to one person, question, or evidence item through
 
 ## Primary action
 
-The primary action is one semantic control with a light bordered label area and an integrated filled primary-color arrow segment. Hover moves the arrow by no more than 3px and draws the active edge. Press feedback is subtle and immediate.
+The primary action is one semantic ink-colored control with a dusty-lilac felt-tip stroke extending slightly beneath it. Hover moves the arrow by no more than 3px and draws the stroke from left to right. Press feedback is subtle and immediate.
 
 ## Motion
 

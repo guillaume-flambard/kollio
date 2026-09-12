@@ -6,7 +6,7 @@ See `proposal.md` for motivation and `specs/idea-evaluation-workspace/spec.md` f
 
 **Goals:**
 
-- Establish Living Canvas and the Mineral palette as reusable interface grammar.
+- Establish Living Canvas and the Aubergine palette as reusable interface grammar.
 - Improve the current workspace shell and idea surfaces using only available data.
 - Prepare contextual relationships and motion without coupling the UI to fabricated records.
 - Keep all copy localized and all states keyboard accessible.
@@ -19,9 +19,9 @@ See `proposal.md` for motivation and `specs/idea-evaluation-workspace/spec.md` f
 
 ## Decisions
 
-### Semantic tokens carry the Mineral palette
+### Semantic tokens carry the Aubergine palette
 
-Shared CSS tokens will define canvas, surface, ink, petrol, sea-glass wash, tangerine question, moss verified, and ochre pending roles. Components consume roles rather than palette names. This makes future workspace theming possible without changing component behavior.
+Shared CSS tokens will define canvas, surface, ink, aubergine, dusty-lilac wash, clay-rose question, muted-citron verified, and ochre pending roles. Components consume roles rather than palette names. This makes future workspace theming possible without changing component behavior.
 
 ### Felt-tip washes are CSS geometry
 
@@ -39,9 +39,9 @@ Selection appears first, the relationship path draws second, and companion conte
 
 The initial implementation updates the visual shell and available idea data. It does not display invented people, questions, evidence, scores, or iterations. Companion sections appear only when their contracts exist, or as clearly labeled empty states when the route requires them.
 
-### The primary button uses a split action surface
+### The primary button uses an ink surface and active stroke
 
-The action label sits on a light bordered surface and the arrow occupies an integrated petrol segment. The entire control remains one semantic button or link with one focus target.
+The action label and arrow sit on one ink surface with a dusty-lilac felt-tip stroke extending beneath it. The entire control remains one semantic button or link with one focus target.
 
 ## Risks / Trade-offs
 
@@ -52,7 +52,7 @@ The action label sits on a light bordered surface and the arrow occupies an inte
 
 ## Migration Plan
 
-1. Introduce semantic tokens and browser-surface styling.
+1. Introduce Aubergine semantic tokens and browser-surface styling.
 2. Update the authenticated workspace shell and existing idea list/detail routes.
 3. Verify French and English layouts at supported breakpoints.
 4. Add contextual panels as their backend capabilities become available.

@@ -2,18 +2,18 @@
 
 ## Approved direction
 
-Kollio uses the **Living Canvas** interaction model with the **Mineral** palette. The interface should feel airy, rounded, light, and collaborative. It reveals context through interaction instead of displaying every available fact at once.
+Kollio uses the **Living Canvas** interaction model with the **Aubergine** palette. The interface should feel airy, rounded, light, and collaborative. It reveals context through interaction instead of displaying every available fact at once.
 
 ## Visual language
 
-- **Canvas:** warm bone `#F6F5F1`.
+- **Canvas:** porcelain `#F7F5F7`.
 - **Surface:** white `#FFFFFF`.
-- **Ink:** charcoal `#202522`.
-- **Primary:** deep petrol `#164B46`.
-- **Active wash:** sea glass `#BFE3D7`.
-- **Open question:** tangerine `#E8744F`.
-- **Verified evidence:** moss `#557A62`.
-- **Pending:** ochre `#A57932`.
+- **Ink:** soft black `#252229`.
+- **Primary:** deep aubergine `#493B57`.
+- **Active wash:** dusty lilac `#DDD3E8`.
+- **Open question:** clay rose `#D47A70`.
+- **Verified evidence:** muted citron `#899744`.
+- **Pending:** warm ochre `#A57932`.
 - **Radii:** 16px for main surfaces, 10 to 12px for rows and controls, fully rounded shapes only for avatars and compact status dots.
 - **Depth:** thin neutral borders and soft offset shadows only when a surface is elevated.
 - **Type:** modern sans serif throughout; monospace is reserved for hashes and measured values.
@@ -26,7 +26,7 @@ Selected passages can connect to a person, question, or evidence item through a 
 
 ## Buttons
 
-The primary action uses a light bordered body and a compact filled petrol arrow segment integrated at the trailing edge. Hover moves the arrow segment a few pixels and draws the active edge. Press compresses the control slightly. Secondary actions remain quiet text or outline controls.
+The primary action uses an ink surface with a dusty-lilac felt-tip stroke extending slightly beneath it. Hover draws the stroke from left to right and moves the arrow by a few pixels. Press compresses the control slightly. Secondary actions remain quiet text or outline controls.
 
 ## Motion
 

@@ -52,4 +52,4 @@ The system SHALL express interface colors through semantic roles so future works
 
 #### Scenario: Default theme is used
 - **WHEN** no workspace theme is configured
-- **THEN** the Mineral palette supplies the semantic colors
+- **THEN** the Aubergine palette supplies the semantic colors
