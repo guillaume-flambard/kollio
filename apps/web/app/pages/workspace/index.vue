@@ -109,7 +109,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           >
             <div class="min-w-0">
               <div class="mb-2 flex flex-wrap items-center gap-2 text-xs text-muted">
-                <KollioFeltMark active>{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
+                <KollioFeltMark active variant="status">{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
                 <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
                 <span class="uppercase">{{ idea.lang }}</span>
                 <span aria-hidden="true" class="size-1 rounded-full bg-muted" />

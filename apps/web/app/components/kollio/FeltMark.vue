@@ -1,7 +1,7 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
   active?: boolean
-  variant?: 'label' | 'passage'
+  variant?: 'label' | 'passage' | 'status'
 }>(), {
   active: false,
   variant: 'label',

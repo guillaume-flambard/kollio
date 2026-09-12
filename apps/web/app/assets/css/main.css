@@ -174,7 +174,17 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 }
 
 .workspace-nav-active {
-  background: color-mix(in srgb, var(--kollio-wash) 34%, transparent);
+  background:
+    radial-gradient(ellipse at 56% 74%, color-mix(in srgb, var(--kollio-active-wash) 36%, transparent), transparent 58%),
+    color-mix(in srgb, var(--kollio-wash) 25%, transparent);
+  color: var(--kollio-active-ink);
+}
+
+.workspace-nav-active .felt-mark--label::after {
+  right: -1.7em;
+  left: -.25em;
+  height: .55em;
+  filter: blur(1.4px);
 }
 
 .workspace-rail nav a,
@@ -265,10 +275,13 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   bottom: 0.02em;
   left: -0.32em;
   height: 0.48em;
-  border-radius: 52% 38% 48% 32%;
-  background: var(--kollio-wash);
-  clip-path: polygon(1% 20%, 98% 6%, 100% 76%, 4% 100%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center,
+    var(--kollio-wash) 0 52%,
+    color-mix(in srgb, var(--kollio-wash) 58%, transparent) 72%,
+    transparent 100%);
   content: '';
+  filter: blur(.7px);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 190ms cubic-bezier(.16, 1, .3, 1);
@@ -293,22 +306,43 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   position: absolute;
   inset: .02em -.12em -.01em;
   z-index: -1;
-  border-radius: 18% 10% 16% 12%;
+  border-radius: 6px 9px 7px 5px;
   background:
     linear-gradient(176deg,
       color-mix(in srgb, var(--kollio-wash) 28%, transparent) 0 8%,
       color-mix(in srgb, var(--kollio-wash) 78%, transparent) 18% 82%,
       color-mix(in srgb, var(--kollio-wash) 38%, transparent) 94% 100%);
-  clip-path: polygon(1% 12%, 34% 5%, 68% 9%, 99% 2%, 98% 86%, 62% 94%, 28% 89%, 2% 98%);
   content: '';
-  filter: blur(.35px);
-  transform: rotate(-.25deg);
+  filter: blur(.55px);
+  transform: rotate(-.15deg) skewX(-.35deg);
   transition: filter 180ms cubic-bezier(.16, 1, .3, 1), opacity 180ms ease;
 }
 
 .linked-passage:hover .felt-mark--passage::after,
 .linked-passage:focus-visible .felt-mark--passage::after {
   filter: blur(.2px) saturate(1.12);
+}
+
+.felt-mark--status {
+  isolation: isolate;
+  position: relative;
+  padding: .08em .5em .12em;
+  color: var(--kollio-active-ink);
+  font-weight: 500;
+}
+
+.felt-mark--status::after {
+  position: absolute;
+  inset: -.08em -.05em -.05em;
+  z-index: -1;
+  border-radius: 48% 44% 46% 42%;
+  background: radial-gradient(ellipse at center,
+    color-mix(in srgb, var(--kollio-wash) 88%, transparent) 0 58%,
+    color-mix(in srgb, var(--kollio-wash) 42%, transparent) 79%,
+    transparent 100%);
+  content: '';
+  filter: blur(.8px);
+  transform: rotate(-.3deg);
 }
 
 .relationship-path {
@@ -353,8 +387,9 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   min-height: clamp(56px, 4.17vw, 64px);
   padding-inline: 8px;
   color: var(--kollio-tab-ink);
-  font-size: clamp(.8125rem, 1.05vw, 1rem);
+  font-size: 1rem;
   font-weight: 400;
+  white-space: nowrap;
   transition: color 180ms ease;
 }
 
@@ -369,12 +404,15 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   left: 50%;
   width: 74px;
   height: 17px;
-  border-radius: 50% 38% 46% 34%;
-  background: linear-gradient(174deg, color-mix(in srgb, var(--kollio-active-wash) 42%, transparent), var(--kollio-active-wash) 38% 78%, color-mix(in srgb, var(--kollio-active-wash) 54%, transparent));
-  clip-path: polygon(2% 34%, 28% 18%, 64% 8%, 98% 20%, 96% 74%, 66% 92%, 30% 82%, 4% 96%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center,
+    color-mix(in srgb, var(--kollio-active-wash) 92%, transparent) 0 48%,
+    color-mix(in srgb, var(--kollio-active-wash) 56%, transparent) 70%,
+    transparent 100%);
   content: '';
-  filter: blur(1.2px);
+  filter: blur(1.8px);
   opacity: .92;
+  transform: translateX(-50%) rotate(-1.2deg);
 }
 
 .context-tabs [role='tab'][aria-selected='true'] {

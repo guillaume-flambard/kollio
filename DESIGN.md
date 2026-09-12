@@ -110,7 +110,7 @@ The system reveals detail through deliberate interaction. A selected phrase can 
 **Key Characteristics:**
 
 - Airy reading surfaces with restrained structural depth.
-- Lower-third felt-tip marks that carry active state and provenance.
+- Three felt-tip gestures: lower-edge marks for labels, pale capsules for status, and full-height washes for linked passages.
 - One visible relationship between the narrative and its current context.
 - Progressive disclosure that preserves the idea as the main reading object.
 - Real source labels, identifiers, and empty states instead of invented activity.
@@ -140,7 +140,7 @@ The palette pairs warm porcelain neutrals with a low-chroma aubergine family. Cl
 
 ### Named Rules
 
-**The Felt-Tip Rule.** Active labels use a short lower-edge brush mark. Linked passages use a diffuse, irregular full-height wash. Both treatments follow the text width and never become full-row selection bars.
+**The Felt-Tip Rule.** Active labels use a short lower-edge brush mark. Status text sits inside a pale, diffuse capsule. Linked passages use an irregular full-height wash. Every treatment follows the text width and stays soft-edged; none becomes a generic badge or full-row selection bar.
 
 **The Semantic Accent Rule.** Clay, citron, and ochre communicate product meaning. Do not use them as arbitrary decoration.
 
@@ -175,7 +175,7 @@ At widths below 1024px, navigation becomes a compact top bar, the idea and compa
 
 Long pitches begin in a bounded reading window with a tonal fade and an explicit expand control. Companion tabs replace content in place. Detailed evidence, history, and team context appear only when relevant or requested.
 
-**The One Relationship Rule.** Show at most one active link between a passage and its contextual target. Render it only while both endpoints are visible.
+**The One Relationship Rule.** Show at most one active link between a passage and its contextual target. Route it through the gutter between the narrative and companion so it does not cross unrelated controls or prose. Render it only while both endpoints are visible.
 
 ## Elevation & Depth
 
@@ -229,7 +229,7 @@ of duplicating their geometry, colors, or interaction states.
 ### Linked Passages
 
 - **Annotation:** A translucent Dusty Lilac wash follows the selected words with softly blurred, irregular edges. The passage remains readable and behaves as a real button.
-- **Connection:** Activating the passage opens its related panel and draws one 1.75px curved aubergine line in 260ms. A 4.5px source dot anchors the curve. The line disappears when either endpoint leaves the viewport and stays hidden in the stacked layout.
+- **Connection:** Activating the passage opens its related panel and draws one 1.75px curved aubergine line through the inter-panel gutter in 260ms. A 4.5px source dot anchors the curve. The line disappears when either endpoint leaves the viewport and stays hidden in the stacked layout.
 - **Provenance:** The target names the typed source, such as Prospecteur, preserves the source identifier, and exposes available constraint and channel data without fabricating missing evidence.
 
 ## Do's and Don'ts

@@ -11,6 +11,7 @@ const reducedMotion = useReducedMotion()
 const ideaId = String(route.params.ideaId)
 const activePanel = ref<'team' | 'questions' | 'evidence'>('team')
 const canvasRef = ref<HTMLElement>()
+const documentRef = ref<HTMLElement>()
 const annotationRef = ref<HTMLElement>()
 const relationshipTargetRef = ref<HTMLElement>()
 const connection = reactive({ path: '', width: 1, height: 1, startX: 0, startY: 0 })
@@ -58,13 +59,15 @@ const legacySourceLabel = computed(() => idea.value?.legacy_context?.source === 
 
 function updateConnection() {
   const canvas = canvasRef.value
+  const documentSurface = documentRef.value
   const annotation = annotationRef.value
   const target = relationshipTargetRef.value
-  if (activePanel.value !== 'team' || !canvas || !annotation || !target) {
+  if (activePanel.value !== 'team' || !canvas || !documentSurface || !annotation || !target) {
     connection.path = ''
     return
   }
   const canvasRect = canvas.getBoundingClientRect()
+  const documentRect = documentSurface.getBoundingClientRect()
   const annotationRect = annotation.getBoundingClientRect()
   const targetRect = target.getBoundingClientRect()
   const annotationVisible = annotationRect.bottom > 0 && annotationRect.top < window.innerHeight
@@ -73,16 +76,18 @@ function updateConnection() {
     connection.path = ''
     return
   }
-  const startX = annotationRect.right - canvasRect.left
+  const startX = annotationRect.right - canvasRect.left + 8
   const startY = annotationRect.top + annotationRect.height / 2 - canvasRect.top
   const endX = targetRect.left - canvasRect.left
   const endY = targetRect.top + Math.min(42, targetRect.height / 2) - canvasRect.top
-  const curve = Math.max(48, (endX - startX) * 0.48)
+  const gutterX = documentRect.right - canvasRect.left
+    + Math.max(7, (targetRect.left - documentRect.right) * 0.28)
+  const horizontalCurve = Math.max(36, (gutterX - startX) * 0.52)
   connection.width = canvasRect.width
   connection.height = canvas.scrollHeight
   connection.startX = startX
   connection.startY = startY
-  connection.path = `M ${startX} ${startY} C ${startX + curve} ${startY}, ${endX - curve} ${endY}, ${endX} ${endY}`
+  connection.path = `M ${startX} ${startY} C ${startX + horizontalCurve} ${startY}, ${gutterX} ${startY}, ${gutterX} ${startY - 24} C ${gutterX} ${endY + 30}, ${endX - 34} ${endY}, ${endX} ${endY}`
 }
 
 function selectPanel(panel: string) {
@@ -126,7 +131,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         <circle :cx="connection.startX" :cy="connection.startY" r="4.5" fill="var(--kollio-connector)" />
       </svg>
 
-      <div class="kollio-surface idea-document relative z-10 min-w-0 p-5 sm:p-7 lg:min-h-[calc(100vh-2.5rem)] lg:p-7 xl:p-9">
+      <div ref="documentRef" class="kollio-surface idea-document relative z-10 min-w-0 p-5 sm:p-7 lg:min-h-[calc(100vh-2.5rem)] lg:p-7 xl:p-9">
         <header class="idea-header">
           <NuxtLink :to="$localePath('/workspace')" class="idea-breadcrumb inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-default">
             {{ t('navigation.ideas') }}
@@ -141,7 +146,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           </div>
           <h1 class="idea-title max-w-[630px]">{{ idea.title }}</h1>
           <div class="idea-topics flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
-            <KollioFeltMark active>{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
+            <KollioFeltMark active variant="status">{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
             <template v-for="topic in legacyTopics" :key="topic">
               <span class="inline-flex items-center gap-5">
                 <span aria-hidden="true" class="idea-dot" />
@@ -169,7 +174,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           <div class="relative mt-4 max-w-[72ch]">
             <div class="idea-prose space-y-5 text-muted">
               <p v-if="problemAnnotation">
-                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><KollioFeltMark active variant="passage">{{ problemAnnotation.highlight }}</KollioFeltMark></button>{{ problemAnnotation.after }}
+                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><KollioFeltMark active variant="passage">{{ problemAnnotation.highlight }}</KollioFeltMark></button><br class="linked-passage-break">{{ problemAnnotation.after }}
               </p>
               <p v-else-if="detailParagraphs[0]">{{ detailParagraphs[0] }}</p>
               <p v-for="(paragraph, index) in detailParagraphs.slice(1)" :key="index">{{ paragraph }}</p>
