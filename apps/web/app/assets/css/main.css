@@ -379,19 +379,24 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 }
 
 .context-tabs {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
   overflow: hidden;
   border-bottom: 1px solid var(--ui-border);
+  padding-left: clamp(16px, 1.95vw, 30px);
+  padding-right: clamp(16px, 3.13vw, 48px);
 }
 
 .context-tabs [role='tab'] {
   position: relative;
+  flex: 0 0 auto;
   min-height: clamp(56px, 4.17vw, 64px);
-  padding-inline: 8px;
+  padding-inline: 0;
   color: var(--kollio-tab-ink);
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-weight: 400;
+  letter-spacing: -.07em;
   white-space: nowrap;
   transition: color 180ms ease;
 }

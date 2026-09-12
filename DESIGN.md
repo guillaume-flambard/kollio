@@ -222,7 +222,7 @@ of duplicating their geometry, colors, or interaction states.
 
 ### Contextual Companion
 
-- **Tabs:** Team, questions, and evidence share an accessible three-tab rail. Arrow keys move between tabs; Home and End jump to the first and last tab.
+- **Tabs:** Team, questions, and evidence share an accessible three-tab rail. Labels use 17px Geist with `-0.07em` tracking and intrinsic widths; the rail distributes the remaining space instead of forcing equal columns. Arrow keys move between tabs; Home and End jump to the first and last tab.
 - **Panel change:** Content enters with a short 200ms spatial transition. Reduced-motion users receive the final state immediately.
 - **Empty state:** A muted 16px surface explains the absence of data in plain language and keeps counts at zero.
 
