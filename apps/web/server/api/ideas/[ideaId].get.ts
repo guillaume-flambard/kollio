@@ -1,22 +1,16 @@
-const API_AUDIENCE = 'https://kollio.memolabs.dev/api'
+import { getIdea } from '@kollio/api-client'
+import { createKollioApiClient, forwardApiError } from '../../utils/kollio-api'
 
 export default defineEventHandler(async (event) => {
-  if (!event.context.logtoUser) {
-    throw createError({ statusCode: 401, statusMessage: 'Authentication required' })
-  }
-
   const ideaId = getRouterParam(event, 'ideaId')
   if (!ideaId) {
     throw createError({ statusCode: 400, statusMessage: 'Idea identifier required' })
   }
 
-  const accessToken = await event.context.logtoClient.getAccessToken(API_AUDIENCE)
-  const config = useRuntimeConfig(event)
-  return await $fetch(`/ideas/${encodeURIComponent(ideaId)}`, {
-    baseURL: config.apiBase,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Accept-Language': getHeader(event, 'accept-language') ?? 'fr',
-    },
-  })
+  const client = await createKollioApiClient(event)
+  const result = await getIdea({ client, path: { idea_id: ideaId } })
+  if (result.error) {
+    forwardApiError(result.response?.status ?? 502, result.error)
+  }
+  return result.data
 })

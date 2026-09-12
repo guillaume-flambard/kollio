@@ -260,3 +260,149 @@ async def test_graph_resumes_after_checkpointer_reopens(database):
         assert result["finding"]["verdict"] == "unknown"
         state = await graph.aget_state(config)
         assert state.next == ()
+
+
+async def test_member_discovers_only_their_workspaces(database):
+    engine, _, url = database
+    included_workspace, excluded_workspace, user_id = (uuid4() for _ in range(3))
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            session.add_all(
+                [
+                    Workspace(id=included_workspace, name="Included workspace"),
+                    Workspace(id=excluded_workspace, name="Excluded workspace"),
+                    User(id=user_id, auth_subject=str(user_id), display_name="Workspace member"),
+                ]
+            )
+            await session.flush()
+            session.add(
+                WorkspaceMembership(
+                    workspace_id=included_workspace,
+                    user_id=user_id,
+                    role="admin",
+                )
+            )
+            await session.flush()
+            app = create_app(Settings(_env_file=None, database_url=url))
+            app.dependency_overrides[current_identity] = lambda: Identity(str(user_id))
+
+            async def override_session():
+                yield session
+
+            app.dependency_overrides[get_session] = override_session
+            async with httpx.AsyncClient(
+                transport=httpx.ASGITransport(app=app), base_url="http://test"
+            ) as client:
+                response = await client.get("/workspaces")
+
+            assert response.status_code == 200
+            assert response.json() == [
+                {
+                    "id": str(included_workspace),
+                    "name": "Included workspace",
+                    "role": "admin",
+                }
+            ]
+        await transaction.rollback()
+
+
+async def test_member_browses_only_their_workspace_ideas(database):
+    from datetime import UTC, datetime
+
+    engine, _, url = database
+    workspace_id, other_workspace_id, user_id, older_id, newer_id, hidden_id = (
+        uuid4() for _ in range(6)
+    )
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            session.add_all(
+                [
+                    Workspace(id=workspace_id, name="Product workspace"),
+                    Workspace(id=other_workspace_id, name="Hidden workspace"),
+                    User(id=user_id, auth_subject=str(user_id), display_name="Product member"),
+                ]
+            )
+            await session.flush()
+            session.add(
+                WorkspaceMembership(workspace_id=workspace_id, user_id=user_id, role="member")
+            )
+            session.add_all(
+                [
+                    Idea(
+                        id=older_id,
+                        slug="older-idea",
+                        title="Older idea",
+                        pitch="Older pitch",
+                        owner_id=user_id,
+                        workspace_id=workspace_id,
+                        stage="seed",
+                        lang="en",
+                        visibility="workspace",
+                        created_at=datetime(2026, 1, 1, tzinfo=UTC),
+                    ),
+                    Idea(
+                        id=newer_id,
+                        slug="newer-idea",
+                        title="Newer idea",
+                        pitch="Newer pitch",
+                        owner_id=user_id,
+                        workspace_id=workspace_id,
+                        stage="iterating",
+                        lang="fr",
+                        visibility="workspace",
+                        created_at=datetime(2026, 2, 1, tzinfo=UTC),
+                    ),
+                    Idea(
+                        id=hidden_id,
+                        slug="hidden-idea",
+                        title="Hidden idea",
+                        pitch="Hidden pitch",
+                        owner_id=user_id,
+                        workspace_id=other_workspace_id,
+                        stage="seed",
+                        lang="en",
+                        visibility="workspace",
+                        created_at=datetime(2026, 3, 1, tzinfo=UTC),
+                    ),
+                ]
+            )
+            await session.flush()
+            app = create_app(Settings(_env_file=None, database_url=url))
+            app.dependency_overrides[current_identity] = lambda: Identity(str(user_id))
+
+            async def override_session():
+                yield session
+
+            app.dependency_overrides[get_session] = override_session
+            async with httpx.AsyncClient(
+                transport=httpx.ASGITransport(app=app), base_url="http://test"
+            ) as client:
+                page = await client.get(
+                    f"/workspaces/{workspace_id}/ideas", params={"limit": 1, "offset": 0}
+                )
+                denied = await client.get(f"/workspaces/{other_workspace_id}/ideas")
+
+            assert page.status_code == 200
+            assert page.json() == {
+                "items": [
+                    {
+                        "id": str(newer_id),
+                        "slug": "newer-idea",
+                        "title": "Newer idea",
+                        "pitch": "Newer pitch",
+                        "stage": "iterating",
+                        "lang": "fr",
+                        "created_at": "2026-02-01T00:00:00Z",
+                    }
+                ],
+                "total": 2,
+                "limit": 1,
+                "offset": 0,
+            }
+            assert denied.status_code == 404
+            assert "Hidden" not in denied.text
+        await transaction.rollback()

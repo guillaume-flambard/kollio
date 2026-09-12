@@ -19,6 +19,9 @@ useSeoMeta({ title: () => t('meta.title'), description: () => t('meta.descriptio
         <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="text-sm font-medium underline-offset-4 hover:underline" :hreflang="locale === 'fr' ? 'en' : 'fr'">
           {{ t('language.switch') }}
         </NuxtLink>
+        <NuxtLink v-if="authEnabled && session?.signedIn" :to="$localePath('/workspace')" class="rounded-md px-3 py-2 text-sm font-medium hover:bg-elevated">
+          {{ t('navigation.workspace') }}
+        </NuxtLink>
         <a v-if="authEnabled" :href="session?.signedIn ? '/sign-out' : '/sign-in'" class="rounded-md border border-default px-4 py-2 text-sm font-medium hover:bg-elevated">
           {{ session?.signedIn ? t('auth.signOut') : t('auth.signIn') }}
         </a>
@@ -29,7 +32,8 @@ useSeoMeta({ title: () => t('meta.title'), description: () => t('meta.descriptio
         <p class="mb-6 text-sm font-semibold tracking-wide text-primary">{{ t('hero.eyebrow') }}</p>
         <h1 class="font-display max-w-3xl text-5xl leading-[1.04] font-bold tracking-tight sm:text-7xl">{{ t('hero.title') }}</h1>
         <p class="mt-7 max-w-xl text-lg leading-relaxed text-muted">{{ t('hero.description') }}</p>
-        <a v-if="authEnabled" class="mt-9 inline-flex rounded-md bg-primary px-5 py-3 font-semibold text-white hover:bg-primary/90" href="/sign-in">{{ t('hero.action') }}</a>
+        <NuxtLink v-if="authEnabled && session?.signedIn" class="mt-9 inline-flex rounded-md bg-primary px-5 py-3 font-semibold text-white hover:bg-primary/90" :to="$localePath('/workspace')">{{ t('hero.action') }}</NuxtLink>
+        <a v-else-if="authEnabled" class="mt-9 inline-flex rounded-md bg-primary px-5 py-3 font-semibold text-white hover:bg-primary/90" href="/sign-in">{{ t('hero.action') }}</a>
         <p v-else class="mt-9 text-sm text-muted" role="status">{{ t('auth.pending') }}</p>
       </motion.div>
       <aside class="space-y-0 border-y border-default" :aria-label="t('principles.label')">

@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses } from './types.gen';
+import type { GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -34,5 +34,23 @@ export const healthReady = <ThrowOnError extends boolean = false>(options?: Opti
 export const getIdea = <ThrowOnError extends boolean = false>(options: Options<GetIdeaData, ThrowOnError>): RequestResult<GetIdeaResponses, GetIdeaErrors, ThrowOnError> => (options.client ?? client).get<GetIdeaResponses, GetIdeaErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/ideas/{idea_id}',
+    ...options
+});
+
+/**
+ * Read Workspace Ideas
+ */
+export const listWorkspaceIdeas = <ThrowOnError extends boolean = false>(options: Options<ListWorkspaceIdeasData, ThrowOnError>): RequestResult<ListWorkspaceIdeasResponses, ListWorkspaceIdeasErrors, ThrowOnError> => (options.client ?? client).get<ListWorkspaceIdeasResponses, ListWorkspaceIdeasErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/ideas',
+    ...options
+});
+
+/**
+ * List Workspaces
+ */
+export const listWorkspaces = <ThrowOnError extends boolean = false>(options?: Options<ListWorkspacesData, ThrowOnError>): RequestResult<ListWorkspacesResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListWorkspacesResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces',
     ...options
 });

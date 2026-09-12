@@ -1,6 +1,10 @@
 {
   "brand": "Kollio",
-  "navigation": "Navigation principale",
+  "navigation": {
+    "label": "Navigation principale",
+    "ideas": "Idées",
+    "workspace": "Espace"
+  },
   "meta": {
     "title": "Kollio | Des idées aux projets collectifs",
     "description": "Confrontez vos idées au réel, faites-les évoluer et réunissez les bonnes personnes."
@@ -37,5 +41,47 @@
   "footer": {
     "promise": "Un espace privé pour les projets collectifs.",
     "languages": "Pensé en français et en anglais."
+  },
+  "workspace": {
+    "metaTitle": "Espace de travail | Kollio",
+    "description": "La mémoire privée des idées que votre équipe peut tester, façonner et faire avancer.",
+    "ideaLabel": "Idées privées",
+    "role": {
+      "admin": "Administration de l’espace",
+      "member": "Membre de l’espace"
+    },
+    "empty": {
+      "title": "Aucun espace pour le moment",
+      "description": "Votre compte est prêt, mais il n’a pas encore été ajouté à un espace de travail."
+    }
+  },
+  "ideas": {
+    "eyebrow": "Bibliothèque d’idées",
+    "title": "Idées à explorer",
+    "page": "Page {current} sur {total}",
+    "pagination": "Pages d’idées",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "stage": {
+      "seed": "Graine",
+      "iterating": "En itération",
+      "team_formed": "Équipe formée"
+    },
+    "empty": {
+      "title": "Aucune idée pour le moment",
+      "description": "Les idées ajoutées à cet espace apparaîtront ici."
+    },
+    "error": {
+      "title": "Impossible de charger les idées",
+      "description": "Actualisez la page pour réessayer."
+    },
+    "detail": {
+      "metaTitle": "Idée | Kollio",
+      "back": "Retour aux idées",
+      "eyebrow": "Idée originale",
+      "pitchTitle": "Point de départ",
+      "foundationNote": "L’analyse des contraintes, les itérations et l’activité de l’équipe apparaîtront ici à mesure que l’idée avance.",
+      "notFound": "Idée introuvable"
+    }
   }
 }

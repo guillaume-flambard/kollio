@@ -1,6 +1,10 @@
 {
   "brand": "Kollio",
-  "navigation": "Main navigation",
+  "navigation": {
+    "label": "Main navigation",
+    "ideas": "Ideas",
+    "workspace": "Workspace"
+  },
   "meta": {
     "title": "Kollio | From ideas to shared projects",
     "description": "Test your ideas against reality, develop them and bring the right people together."
@@ -37,5 +41,47 @@
   "footer": {
     "promise": "A private space for shared projects.",
     "languages": "Built for French and English."
+  },
+  "workspace": {
+    "metaTitle": "Workspace | Kollio",
+    "description": "A private record of the ideas your team can test, shape and move forward.",
+    "ideaLabel": "Private ideas",
+    "role": {
+      "admin": "Workspace admin",
+      "member": "Workspace member"
+    },
+    "empty": {
+      "title": "No workspace yet",
+      "description": "Your account is ready, but it has not been added to a workspace yet."
+    }
+  },
+  "ideas": {
+    "eyebrow": "Idea library",
+    "title": "Ideas to explore",
+    "page": "Page {current} of {total}",
+    "pagination": "Idea pages",
+    "previous": "Previous",
+    "next": "Next",
+    "stage": {
+      "seed": "Seed",
+      "iterating": "Iterating",
+      "team_formed": "Team formed"
+    },
+    "empty": {
+      "title": "No ideas here yet",
+      "description": "Ideas added to this workspace will appear here."
+    },
+    "error": {
+      "title": "Ideas could not be loaded",
+      "description": "Refresh the page to try again."
+    },
+    "detail": {
+      "metaTitle": "Idea | Kollio",
+      "back": "Back to ideas",
+      "eyebrow": "Original idea",
+      "pitchTitle": "Starting point",
+      "foundationNote": "Constraint analysis, iterations and team activity will appear here as the idea develops.",
+      "notFound": "Idea not found"
+    }
   }
 }

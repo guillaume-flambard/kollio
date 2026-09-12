@@ -9,7 +9,13 @@ from redis.asyncio import Redis
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-from src.modules.ideas.api.routes import router
+from src.modules.ideas.api.routes import (
+    router as ideas_router,
+)
+from src.modules.ideas.api.routes import (
+    workspace_ideas_router,
+)
+from src.modules.workspaces.api.routes import router as workspaces_router
 from src.platform.config import Settings, get_settings
 from src.platform.locale import MESSAGES, resolve_locale
 from src.platform.telemetry import configure_telemetry
@@ -76,7 +82,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             )
         return Health(status="ok")
 
-    app.include_router(router)
+    app.include_router(ideas_router)
+    app.include_router(workspace_ideas_router)
+    app.include_router(workspaces_router)
     FastAPIInstrumentor.instrument_app(app, excluded_urls="health/live,health/ready")
     return app
 
