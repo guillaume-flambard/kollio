@@ -91,7 +91,9 @@
       "notFound": "Idea not found",
       "explore": "Explore ideas",
       "advance": "View open questions",
+      "inspectSource": "Explore source context",
       "enrich": "Explore open questions",
+      "writeToEnrich": "Write to enrich this idea, or type / for more options...",
       "showFull": "Read the full description",
       "showLess": "Collapse the description",
       "comment": "See who contributes to this idea",
@@ -120,6 +122,8 @@
           "tab": "Team",
           "title": "Around this idea",
           "contributors": "Contributors",
+          "source": "Original source",
+          "importedBy": "Original imported deposit",
           "empty": "People who join this idea and their contributions will appear here."
         },
         "questions": {

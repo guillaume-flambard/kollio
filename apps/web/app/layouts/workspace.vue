@@ -4,8 +4,8 @@ const switchLocalePath = useSwitchLocalePath()
 </script>
 
 <template>
-  <div class="workspace-canvas min-h-screen bg-default text-default lg:grid lg:grid-cols-[190px_minmax(0,1fr)]">
-    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default/95 px-5 backdrop-blur lg:hidden">
+  <div class="workspace-canvas min-h-screen bg-default text-default xl:grid xl:grid-cols-[190px_minmax(0,1fr)]">
+    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default/95 px-5 backdrop-blur xl:hidden">
       <NuxtLink :to="$localePath('/workspace')" class="text-xl font-bold tracking-[-0.03em]" :aria-label="t('brand')">
         {{ t('brand') }}
       </NuxtLink>
@@ -19,7 +19,7 @@ const switchLocalePath = useSwitchLocalePath()
       </div>
     </header>
 
-    <aside class="sticky top-0 hidden h-screen flex-col border-r border-default bg-elevated/70 px-4 py-6 lg:flex">
+    <aside class="sticky top-0 hidden h-screen flex-col border-r border-default bg-elevated/70 px-4 py-6 xl:flex">
       <NuxtLink :to="$localePath('/workspace')" class="px-2 text-2xl font-bold tracking-[-0.04em]" :aria-label="t('brand')">
         {{ t('brand') }}
       </NuxtLink>
@@ -61,7 +61,7 @@ const switchLocalePath = useSwitchLocalePath()
         >
           {{ t('language.switch') }}
         </NuxtLink>
-        <a href="/sign-out" class="flex min-h-11 items-center rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:bg-muted hover:text-default">
+        <a href="/sign-out" class="flex min-h-11 items-center rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:bg-muted hover:text-default" :aria-label="t('auth.signOut')">
           {{ t('auth.signOut') }}
         </a>
       </div>

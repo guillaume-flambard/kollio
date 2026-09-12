@@ -10,7 +10,6 @@ const requestFetch = useRequestFetch()
 const reducedMotion = useReducedMotion()
 const ideaId = String(route.params.ideaId)
 const activePanel = ref<'team' | 'questions' | 'evidence'>('team')
-const pitchExpanded = ref(false)
 const canvasRef = ref<HTMLElement>()
 const annotationRef = ref<HTMLElement>()
 const relationshipTargetRef = ref<HTMLElement>()
@@ -30,13 +29,15 @@ const dateFormatter = computed(() =>
 )
 const panels = ['team', 'questions', 'evidence'] as const
 const pitchParagraphs = computed(() => idea.value?.pitch.split(/\n\s*\n/).filter(Boolean) ?? [])
+const pitchSentences = computed(() => idea.value?.pitch.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ])/).map(sentence => sentence.trim()).filter(Boolean) ?? [])
+const ideaSummary = computed(() => pitchSentences.value[0] ?? pitchParagraphs.value[0] ?? '')
+const detailParagraphs = computed(() => pitchSentences.value.length > 1 ? pitchSentences.value.slice(1) : pitchParagraphs.value)
 const legacyTopics = computed(() => idea.value?.legacy_context?.domain?.split('·').map(topic => topic.trim()).filter(Boolean) ?? [])
 const iterationCount = computed(() => idea.value?.legacy_context ? 1 : 0)
 const problemAnnotation = computed(() => {
-  const paragraph = pitchParagraphs.value[0] ?? ''
-  const marker = paragraph.toLocaleLowerCase('fr').indexOf('la revue par des experts humains')
-  if (!idea.value?.legacy_context || marker < 0) return undefined
-  return { before: paragraph.slice(0, marker), highlight: paragraph.slice(marker) }
+  const paragraph = detailParagraphs.value[0] ?? ''
+  if (!idea.value?.legacy_context || !paragraph) return undefined
+  return { highlight: paragraph }
 })
 const legacySourceLabel = computed(() => idea.value?.legacy_context?.source === 'prospecteur' ? 'Prospecteur' : idea.value?.legacy_context?.source)
 
@@ -44,7 +45,7 @@ function updateConnection() {
   const canvas = canvasRef.value
   const annotation = annotationRef.value
   const target = relationshipTargetRef.value
-  if (activePanel.value !== 'evidence' || !canvas || !annotation || !target) {
+  if (activePanel.value !== 'team' || !canvas || !annotation || !target) {
     connection.path = ''
     return
   }
@@ -88,12 +89,13 @@ function handleTabKeydown(event: KeyboardEvent, index: number) {
   selectPanel(panels[nextIndex]!)
 }
 
-watch([activePanel, pitchExpanded], () => nextTick(() => requestAnimationFrame(updateConnection)))
+watch(activePanel, () => nextTick(() => requestAnimationFrame(updateConnection)))
 onMounted(() => {
   window.addEventListener('resize', updateConnection)
   window.addEventListener('scroll', updateConnection, { passive: true })
   canvasObserver = new ResizeObserver(updateConnection)
   if (canvasRef.value) canvasObserver.observe(canvasRef.value)
+  requestAnimationFrame(updateConnection)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('resize', updateConnection)
@@ -112,13 +114,13 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
     :transition="{ duration: reducedMotion ? 0 : 0.28 }"
     class="mx-auto max-w-[1320px]"
   >
-    <div ref="canvasRef" class="relative grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_360px]">
+    <div ref="canvasRef" class="relative grid min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,1fr)_300px] 2xl:grid-cols-[minmax(0,1fr)_360px]">
       <svg v-if="connection.path" aria-hidden="true" class="pointer-events-none absolute inset-0 z-20 hidden overflow-visible lg:block" :viewBox="`0 0 ${connection.width} ${connection.height}`" preserveAspectRatio="none">
         <path class="relationship-path" :d="connection.path" pathLength="1" fill="none" stroke="var(--ui-primary)" stroke-width="1.5" />
         <circle :cx="connection.startX" :cy="connection.startY" r="4" fill="var(--ui-primary)" />
       </svg>
 
-      <div class="kollio-surface relative z-10 min-w-0 p-5 sm:p-7 lg:min-h-[calc(100vh-2.5rem)] lg:p-7 xl:p-9">
+      <div class="kollio-surface idea-document relative z-10 min-w-0 p-5 sm:p-7 lg:min-h-[calc(100vh-2.5rem)] lg:p-7 xl:p-9">
         <header>
           <div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
             <NuxtLink :to="$localePath('/workspace')" class="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted hover:text-default">
@@ -126,47 +128,46 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               <svg aria-hidden="true" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6" /></svg>
               {{ t(`ideas.stage.${idea.stage}`) }}
             </NuxtLink>
-            <button type="button" class="split-action" @click="selectPanel('questions')">
-              {{ t('ideas.detail.advance') }}
+            <button type="button" class="split-action" @click="selectPanel('evidence')">
+              {{ t('ideas.detail.inspectSource') }}
               <svg aria-hidden="true" viewBox="0 0 24 24" class="split-action-arrow size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-5-5 5 5-5 5" /></svg>
             </button>
           </div>
-          <h1 class="mt-7 max-w-4xl text-3xl leading-[1.08] font-semibold tracking-[-0.04em] sm:text-4xl xl:text-5xl">{{ idea.title }}</h1>
-          <div v-if="legacyTopics.length" class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
-            <span v-for="topic in legacyTopics" :key="topic" class="first-letter:uppercase">{{ topic }}</span>
-          </div>
+          <h1 class="mt-7 max-w-4xl text-4xl leading-[1.02] font-semibold tracking-[-0.045em] xl:text-[3.25rem]">{{ idea.title }}</h1>
           <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
             <span class="marker-active is-active font-semibold text-default">{{ t(`ideas.stage.${idea.stage}`) }}</span>
-            <span class="uppercase">{{ idea.lang }}</span>
-            <time :datetime="idea.created_at">{{ dateFormatter.format(new Date(idea.created_at)) }}</time>
+            <template v-for="topic in legacyTopics" :key="topic">
+              <span aria-hidden="true" class="idea-dot" />
+              <span class="first-letter:uppercase">{{ topic }}</span>
+            </template>
+            <button type="button" class="idea-topic-add" :aria-label="t('ideas.detail.enrich')" @click="selectPanel('questions')">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" /></svg>
+            </button>
           </div>
+          <p class="mt-6 max-w-[70ch] text-lg leading-8 text-muted">{{ ideaSummary }}</p>
           <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
             <span>{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
             <button type="button" class="transition-colors hover:text-default" @click="selectPanel('questions')">{{ t('ideas.detail.stats.questions', { count: 0 }) }}</button>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
             <button type="button" class="transition-colors hover:text-default" @click="selectPanel('evidence')">{{ t('ideas.detail.stats.evidence', { count: 0 }) }}</button>
+            <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
+            <time :datetime="idea.created_at">{{ dateFormatter.format(new Date(idea.created_at)) }}</time>
           </div>
         </header>
 
-        <section id="description" class="mt-9 rounded-2xl border border-default p-5 sm:p-7" :aria-labelledby="'idea-pitch-title'">
+        <section id="description" class="idea-description mt-9 rounded-2xl border border-default p-5 sm:p-7" :aria-labelledby="'idea-pitch-title'">
           <h2 id="idea-pitch-title" class="text-xl font-semibold">{{ t('ideas.detail.pitchTitle') }}</h2>
           <div class="relative mt-5 max-w-[72ch]">
-            <div class="space-y-5 overflow-hidden text-base leading-7 text-muted transition-[max-height] duration-300 xl:text-lg xl:leading-8" :class="pitchExpanded ? 'max-h-[80rem]' : 'max-h-64'">
+            <div class="space-y-5 text-base leading-7 text-muted xl:text-lg xl:leading-8">
               <p v-if="problemAnnotation">
-                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'evidence'" @click="selectPanel('evidence')"><span class="linked-passage-stroke">{{ problemAnnotation.highlight }}</span></button>
+                <button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><span class="linked-passage-stroke">{{ problemAnnotation.highlight }}</span></button>
               </p>
-              <p v-else-if="pitchParagraphs[0]">{{ pitchParagraphs[0] }}</p>
-              <p v-for="(paragraph, index) in pitchParagraphs.slice(1)" :key="index">{{ paragraph }}</p>
+              <p v-else-if="detailParagraphs[0]">{{ detailParagraphs[0] }}</p>
+              <p v-for="(paragraph, index) in detailParagraphs.slice(1)" :key="index">{{ paragraph }}</p>
             </div>
-            <div v-if="!pitchExpanded" class="pitch-fade pointer-events-none absolute inset-x-0 bottom-0 h-20" aria-hidden="true" />
           </div>
-          <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <button type="button" class="min-h-11 text-sm font-medium text-primary" :aria-expanded="pitchExpanded" @click="pitchExpanded = !pitchExpanded">
-              {{ t(pitchExpanded ? 'ideas.detail.showLess' : 'ideas.detail.showFull') }}
-            </button>
-            <button type="button" class="min-h-11 text-sm text-muted transition-colors hover:text-default" @click="selectPanel('questions')">{{ t('ideas.detail.enrich') }}</button>
-          </div>
+          <button type="button" class="idea-writing-prompt mt-6 w-full text-left" @click="selectPanel('questions')">{{ t('ideas.detail.writeToEnrich') }}</button>
         </section>
 
         <section class="mt-8" aria-labelledby="iterations-title">
@@ -236,7 +237,17 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               </div>
               <div class="mt-5 rounded-2xl bg-muted/55 p-5 text-sm leading-relaxed text-muted">{{ t('ideas.detail.companion.team.empty') }}</div>
             </section>
-            <section class="mt-9 border-t border-default pt-7">
+            <section v-if="idea.legacy_context" class="mt-7 border-t border-default pt-7">
+              <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.team.source') }}</h2>
+              <div ref="relationshipTargetRef" class="source-person mt-5">
+                <span class="source-person-avatar" aria-hidden="true">{{ legacySourceLabel?.charAt(0) }}</span>
+                <span class="min-w-0">
+                  <strong class="block truncate text-sm font-semibold text-default">{{ legacySourceLabel }}</strong>
+                  <span class="mt-0.5 block text-sm text-muted">{{ t('ideas.detail.companion.team.importedBy') }}</span>
+                </span>
+              </div>
+            </section>
+            <section class="mt-7 border-t border-default pt-7">
               <div class="flex items-center justify-between gap-3">
                 <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.questions.title') }}</h2>
                 <button type="button" class="text-sm text-primary" @click="selectPanel('questions')">{{ t('ideas.detail.companion.seeAll') }}</button>
@@ -246,7 +257,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           </template>
           <template v-else-if="activePanel === 'evidence' && idea.legacy_context">
             <h2 class="text-lg font-semibold">{{ t('ideas.detail.companion.evidence.sourceTitle') }}</h2>
-            <div ref="relationshipTargetRef" class="mt-5 rounded-2xl bg-accented p-5">
+            <div class="mt-5 rounded-2xl bg-accented p-5">
               <p class="font-medium text-default">{{ legacySourceLabel }}</p>
               <p class="mt-1 break-words text-xs text-muted">{{ idea.legacy_context.source_id }}</p>
               <p class="mt-4 text-sm leading-relaxed text-muted">{{ t('ideas.detail.companion.evidence.provenanceNote') }}</p>

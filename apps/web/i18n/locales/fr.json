@@ -91,7 +91,9 @@
       "notFound": "Idée introuvable",
       "explore": "Explorer les idées",
       "advance": "Voir les questions ouvertes",
+      "inspectSource": "Explorer le contexte source",
       "enrich": "Explorer les questions ouvertes",
+      "writeToEnrich": "Écrire pour enrichir cette idée, ou saisir / pour plus d’options…",
       "showFull": "Lire la description complète",
       "showLess": "Réduire la description",
       "comment": "Voir qui contribue à cette idée",
@@ -120,6 +122,8 @@
           "tab": "Équipe",
           "title": "Autour de cette idée",
           "contributors": "Contributeurs",
+          "source": "Source originale",
+          "importedBy": "Dépôt original importé",
           "empty": "Les personnes qui rejoignent cette idée et leurs contributions apparaîtront ici."
         },
         "questions": {
