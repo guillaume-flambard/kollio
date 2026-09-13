@@ -75,7 +75,9 @@ class IdeaSummaryResponse(BaseModel):
     stage: Literal["seed", "iterating", "team_formed"]
     lang: Literal["fr", "en"]
     created_at: datetime
-    domain: str | None = None
+    sought_roles: list[str] = Field(default_factory=list)
+    realism_score: int | None = None
+    last_activity_at: datetime | None = None
     collaborators: list[CollaboratorResponse] = Field(default_factory=list)
 
 

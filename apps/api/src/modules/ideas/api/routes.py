@@ -192,7 +192,8 @@ async def read_workspace_ideas(
     offset: Annotated[int, Query(ge=0)] = 0,
     q: Annotated[str | None, Query(max_length=160)] = None,
     stage: Literal["seed", "iterating", "team_formed"] | None = None,
-    domain: Annotated[str | None, Query(max_length=120)] = None,
+    sought_role: Annotated[str | None, Query(max_length=20)] = None,
+    realism_min: Annotated[int | None, Query(ge=1, le=99)] = None,
     identity: Identity = Depends(current_identity),
     session: AsyncSession = Depends(get_session),
 ) -> IdeaPageResponse:
@@ -204,19 +205,21 @@ async def read_workspace_ideas(
         offset,
         query_text=q,
         stage=stage,
-        domain=domain,
+        sought_role=sought_role,
+        realism_min=realism_min,
     )
     if page is None:
         raise HTTPException(404, MESSAGES[request.state.locale]["not_found"])
-    items, total = page
     collaborators_by_idea = await PostgresIdeas(session).collaborators_for_ideas(
-        [item.id for item in items]
+        [item.id for item in page.items]
     )
     return IdeaPageResponse(
         items=[
             IdeaSummaryResponse.model_validate(item).model_copy(
                 update={
-                    "domain": item.provenance.get("domaine"),
+                    "sought_roles": item.sought_roles,
+                    "realism_score": page.realism_scores.get(item.id),
+                    "last_activity_at": page.last_activity.get(item.id),
                     "collaborators": [
                         CollaboratorResponse(
                             id=user.id,
@@ -231,9 +234,9 @@ async def read_workspace_ideas(
                     ],
                 }
             )
-            for item in items
+            for item in page.items
         ],
-        total=total,
+        total=page.total,
         limit=limit,
         offset=offset,
     )

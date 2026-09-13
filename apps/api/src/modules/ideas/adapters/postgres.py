@@ -225,7 +225,8 @@ class PostgresIdeas:
         offset: int,
         query_text: str | None = None,
         stage: str | None = None,
-        domain: str | None = None,
+        sought_role: str | None = None,
+        realism_min: int | None = None,
     ) -> tuple[list[Idea], int]:
         filters: list[Any] = [
             Idea.workspace_id == workspace_id,
@@ -242,16 +243,42 @@ class PostgresIdeas:
             )
         if stage:
             filters.append(Idea.stage == stage)
-        if domain:
-            filters.append(Idea.provenance["domaine"].astext == domain)
+        if sought_role:
+            filters.append(Idea.sought_roles.contains([sought_role]))
+        activity, _analysis = self._activity_binding()
+        if realism_min is not None:
+            filters.append(_analysis >= realism_min)
         query = (
-            select(Idea)
+            select(Idea, _analysis.label("realism_score"), activity.label("last_activity_at"))
             .where(*filters)
-            .order_by(Idea.created_at.desc(), Idea.id.desc())
+            .order_by(activity.desc().nulls_last(), Idea.created_at.desc(), Idea.id.desc())
             .limit(limit)
             .offset(offset)
         )
         count_query = select(func.count()).select_from(Idea).where(*filters)
-        ideas = list((await self.session.scalars(query)).all())
         total = int((await self.session.scalar(count_query)) or 0)
-        return ideas, total
+        ideas: list[Idea] = []
+        realism_scores: dict[UUID, int | None] = {}
+        last_activity: dict[UUID, datetime | None] = {}
+        for row in (await self.session.execute(query)).all():
+            idea = row[0]
+            realism_scores[idea.id] = row[1]
+            last_activity[idea.id] = row[2]
+            ideas.append(idea)
+        return ideas, total, realism_scores, last_activity
+
+    def _activity_binding(self) -> tuple[Any, Any]:
+        from src.modules.iterations.adapters.postgres import IdeaAnalysis, Iteration
+
+        head = (
+            select(Iteration)
+            .where(Iteration.idea_id == Idea.id, Iteration.branch == "main")
+            .order_by(Iteration.revision.desc())
+            .limit(1)
+            .subquery()
+            .lateral()
+        )
+        analysis = select(IdeaAnalysis.realism_score).where(
+            IdeaAnalysis.iteration_id == head.c.id
+        )
+        return head.c.created_at, analysis.scalar_subquery()
