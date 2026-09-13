@@ -23,6 +23,44 @@ export type AnalysisEvidence = {
 };
 
 /**
+ * AnalysisResponse
+ */
+export type AnalysisResponse = {
+    /**
+     * State
+     */
+    state: 'resolved' | 'abstained' | 'running' | 'unavailable';
+    /**
+     * Iteration Id
+     */
+    iteration_id?: string | null;
+    /**
+     * Realism Score
+     */
+    realism_score?: number | null;
+    /**
+     * Constraints
+     */
+    constraints?: {
+        [key: string]: {
+            [key: string]: unknown;
+        };
+    };
+    /**
+     * Locale
+     */
+    locale?: 'fr' | 'en' | null;
+    /**
+     * Model
+     */
+    model?: string | null;
+    /**
+     * Created At
+     */
+    created_at?: string | null;
+};
+
+/**
  * AnalysisWorkflowResponse
  */
 export type AnalysisWorkflowResponse = {
@@ -68,6 +106,20 @@ export type AnalysisWorkflowResponse = {
      * Finished At
      */
     finished_at: string | null;
+};
+
+/**
+ * ApplyJoinBody
+ */
+export type ApplyJoinBody = {
+    /**
+     * Role
+     */
+    role: string;
+    /**
+     * Note
+     */
+    note: string;
 };
 
 /**
@@ -159,6 +211,36 @@ export type ConstraintFactor = {
 };
 
 /**
+ * ContributionResponse
+ */
+export type ContributionResponse = {
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Idea Title
+     */
+    idea_title: string;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Short Hash
+     */
+    short_hash: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
  * CreateIterationRequest
  */
 export type CreateIterationRequest = {
@@ -179,6 +261,24 @@ export type CreateIterationRequest = {
      * Expected Parent Id
      */
     expected_parent_id?: string | null;
+};
+
+/**
+ * DepositIdeaRequest
+ */
+export type DepositIdeaRequest = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Pitch
+     */
+    pitch: string;
+    /**
+     * Lang
+     */
+    lang?: 'fr' | 'en' | null;
 };
 
 /**
@@ -267,6 +367,15 @@ export type IdeaResponse = {
      * Created At
      */
     created_at: string;
+    analysis?: AnalysisResponse | null;
+    /**
+     * Sought Roles
+     */
+    sought_roles?: Array<string>;
+    /**
+     * Join Requests
+     */
+    join_requests?: Array<JoinRequestResponse>;
     legacy_context?: LegacyIdeaContext | null;
     /**
      * Collaborators
@@ -325,9 +434,17 @@ export type IdeaSummaryResponse = {
      */
     created_at: string;
     /**
-     * Domain
+     * Sought Roles
      */
-    domain?: string | null;
+    sought_roles?: Array<string>;
+    /**
+     * Realism Score
+     */
+    realism_score?: number | null;
+    /**
+     * Last Activity At
+     */
+    last_activity_at?: string | null;
     /**
      * Collaborators
      */
@@ -372,6 +489,10 @@ export type IterationResponse = {
      */
     proposal_status: 'pending' | 'accepted' | 'rejected' | null;
     /**
+     * Rationale
+     */
+    rationale?: string | null;
+    /**
      * Short Hash
      */
     short_hash: string;
@@ -379,6 +500,45 @@ export type IterationResponse = {
      * Revision
      */
     revision: number;
+    /**
+     * Created At
+     */
+    created_at: string;
+    analysis?: AnalysisResponse | null;
+};
+
+/**
+ * JoinRequestResponse
+ */
+export type JoinRequestResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Requester Id
+     */
+    requester_id: string;
+    /**
+     * Role
+     */
+    role: string;
+    /**
+     * Note
+     */
+    note: string;
+    /**
+     * Status
+     */
+    status: 'pending' | 'accepted' | 'rejected';
+    /**
+     * Rationale
+     */
+    rationale?: string | null;
     /**
      * Created At
      */
@@ -427,6 +587,126 @@ export type LegacyIdeaContext = {
      * Why Now
      */
     why_now?: string | null;
+};
+
+/**
+ * MembershipResponse
+ */
+export type MembershipResponse = {
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Idea Title
+     */
+    idea_title: string;
+    /**
+     * Role
+     */
+    role: string;
+};
+
+/**
+ * OwnedIdeaResponse
+ */
+export type OwnedIdeaResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Slug
+     */
+    slug: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Stage
+     */
+    stage: 'seed' | 'iterating' | 'team_formed';
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * ProfileResponse
+ */
+export type ProfileResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Handle
+     */
+    handle?: string | null;
+    /**
+     * Roles
+     */
+    roles: Array<string>;
+    /**
+     * Bio
+     */
+    bio?: string | null;
+    /**
+     * Avatar Key
+     */
+    avatar_key?: string | null;
+    /**
+     * Owned Ideas
+     */
+    owned_ideas: Array<OwnedIdeaResponse>;
+    /**
+     * Memberships
+     */
+    memberships: Array<MembershipResponse>;
+    /**
+     * Contributions
+     */
+    contributions: Array<ContributionResponse>;
+};
+
+/**
+ * RejectJoinBody
+ */
+export type RejectJoinBody = {
+    /**
+     * Rationale
+     */
+    rationale: string;
+};
+
+/**
+ * RejectProposalRequest
+ */
+export type RejectProposalRequest = {
+    /**
+     * Rationale
+     */
+    rationale: string;
+};
+
+/**
+ * RemoveMemberBody
+ */
+export type RemoveMemberBody = {
+    /**
+     * Reason
+     */
+    reason?: string | null;
 };
 
 /**
@@ -574,6 +854,179 @@ export type GetIdeaResponses = {
 };
 
 export type GetIdeaResponse = GetIdeaResponses[keyof GetIdeaResponses];
+
+export type RequestIdeaMembershipData = {
+    body: ApplyJoinBody;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/join-requests';
+};
+
+export type RequestIdeaMembershipErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RequestIdeaMembershipError = RequestIdeaMembershipErrors[keyof RequestIdeaMembershipErrors];
+
+export type RequestIdeaMembershipResponses = {
+    /**
+     * Successful Response
+     */
+    201: JoinRequestResponse;
+};
+
+export type RequestIdeaMembershipResponse = RequestIdeaMembershipResponses[keyof RequestIdeaMembershipResponses];
+
+export type AcceptIdeaMembershipRequestData = {
+    body?: never;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+        /**
+         * Request Id
+         */
+        request_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/join-requests/{request_id}/accept';
+};
+
+export type AcceptIdeaMembershipRequestErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AcceptIdeaMembershipRequestError = AcceptIdeaMembershipRequestErrors[keyof AcceptIdeaMembershipRequestErrors];
+
+export type AcceptIdeaMembershipRequestResponses = {
+    /**
+     * Successful Response
+     */
+    200: JoinRequestResponse;
+};
+
+export type AcceptIdeaMembershipRequestResponse = AcceptIdeaMembershipRequestResponses[keyof AcceptIdeaMembershipRequestResponses];
+
+export type RejectIdeaMembershipRequestData = {
+    body: RejectJoinBody;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+        /**
+         * Request Id
+         */
+        request_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/join-requests/{request_id}/reject';
+};
+
+export type RejectIdeaMembershipRequestErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RejectIdeaMembershipRequestError = RejectIdeaMembershipRequestErrors[keyof RejectIdeaMembershipRequestErrors];
+
+export type RejectIdeaMembershipRequestResponses = {
+    /**
+     * Successful Response
+     */
+    200: JoinRequestResponse;
+};
+
+export type RejectIdeaMembershipRequestResponse = RejectIdeaMembershipRequestResponses[keyof RejectIdeaMembershipRequestResponses];
+
+export type LeaveIdeaTeamData = {
+    body?: never;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/leave';
+};
+
+export type LeaveIdeaTeamErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type LeaveIdeaTeamError = LeaveIdeaTeamErrors[keyof LeaveIdeaTeamErrors];
+
+export type LeaveIdeaTeamResponses = {
+    /**
+     * Response Leave Idea Team
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type LeaveIdeaTeamResponse = LeaveIdeaTeamResponses[keyof LeaveIdeaTeamResponses];
+
+export type RemoveIdeaMemberData = {
+    /**
+     * Body
+     */
+    body: RemoveMemberBody | null;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+        /**
+         * Member Id
+         */
+        member_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/members/{member_id}/remove';
+};
+
+export type RemoveIdeaMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RemoveIdeaMemberError = RemoveIdeaMemberErrors[keyof RemoveIdeaMemberErrors];
+
+export type RemoveIdeaMemberResponses = {
+    /**
+     * Response Remove Idea Member
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type RemoveIdeaMemberResponse = RemoveIdeaMemberResponses[keyof RemoveIdeaMemberResponses];
 
 export type LaunchConstraintAnalysisData = {
     body: LaunchAnalysisRequest;
@@ -776,7 +1229,7 @@ export type AcceptIdeaIterationResponses = {
 export type AcceptIdeaIterationResponse = AcceptIdeaIterationResponses[keyof AcceptIdeaIterationResponses];
 
 export type RejectIdeaIterationData = {
-    body?: never;
+    body: RejectProposalRequest;
     path: {
         /**
          * Idea Id
@@ -869,9 +1322,13 @@ export type ListWorkspaceIdeasData = {
          */
         stage?: 'seed' | 'iterating' | 'team_formed' | null;
         /**
-         * Domain
+         * Sought Role
          */
-        domain?: string | null;
+        sought_role?: string | null;
+        /**
+         * Realism Min
+         */
+        realism_min?: number | null;
     };
     url: '/workspaces/{workspace_id}/ideas';
 };
@@ -894,6 +1351,36 @@ export type ListWorkspaceIdeasResponses = {
 
 export type ListWorkspaceIdeasResponse = ListWorkspaceIdeasResponses[keyof ListWorkspaceIdeasResponses];
 
+export type DepositWorkspaceIdeaData = {
+    body: DepositIdeaRequest;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/ideas';
+};
+
+export type DepositWorkspaceIdeaErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DepositWorkspaceIdeaError = DepositWorkspaceIdeaErrors[keyof DepositWorkspaceIdeaErrors];
+
+export type DepositWorkspaceIdeaResponses = {
+    /**
+     * Successful Response
+     */
+    201: IdeaResponse;
+};
+
+export type DepositWorkspaceIdeaResponse = DepositWorkspaceIdeaResponses[keyof DepositWorkspaceIdeaResponses];
+
 export type ListWorkspacesData = {
     body?: never;
     path?: never;
@@ -911,3 +1398,33 @@ export type ListWorkspacesResponses = {
 };
 
 export type ListWorkspacesResponse = ListWorkspacesResponses[keyof ListWorkspacesResponses];
+
+export type GetProfileData = {
+    body?: never;
+    path: {
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/users/{user_id}';
+};
+
+export type GetProfileErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetProfileError = GetProfileErrors[keyof GetProfileErrors];
+
+export type GetProfileResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProfileResponse;
+};
+
+export type GetProfileResponse = GetProfileResponses[keyof GetProfileResponses];

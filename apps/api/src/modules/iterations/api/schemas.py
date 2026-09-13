@@ -4,6 +4,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from src.modules.ideas.api.schemas import AnalysisResponse
+
 
 class IdeaSnapshot(BaseModel):
     title: str = Field(min_length=1, max_length=240)
@@ -26,6 +28,10 @@ class ResolveProposalRequest(BaseModel):
     expected_main_parent_id: UUID | None = None
 
 
+class RejectProposalRequest(BaseModel):
+    rationale: str = Field(min_length=1, max_length=500)
+
+
 class RollbackRequest(BaseModel):
     expected_main_parent_id: UUID | None = None
     message: str = Field(min_length=1, max_length=500)
@@ -44,6 +50,8 @@ class IterationResponse(BaseModel):
     payload: IdeaSnapshot
     branch: str
     proposal_status: Literal["pending", "accepted", "rejected"] | None
+    rationale: str | None = None
     short_hash: str
     revision: int
     created_at: datetime
+    analysis: AnalysisResponse | None = None

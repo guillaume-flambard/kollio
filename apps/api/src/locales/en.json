@@ -4,5 +4,6 @@
   "conflict": "The idea changed. Refresh it and try again",
   "unauthorized": "Sign in required",
   "unavailable": "Service unavailable",
-  "invalid": "Invalid request"
+  "invalid": "Invalid request",
+  "initial_deposit": "Initial deposit"
 }

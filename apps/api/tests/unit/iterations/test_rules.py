@@ -6,6 +6,7 @@ from src.modules.iterations.domain.rules import (
     AuthorizationError,
     ConflictError,
     InvalidTransitionError,
+    IterationRuleError,
     decide_acceptance,
     decide_creation,
     decide_rejection,
@@ -91,7 +92,27 @@ def test_resolved_or_main_iteration_cannot_be_resolved_again() -> None:
             current_main_head_id=HEAD,
         )
     with pytest.raises(InvalidTransitionError):
-        decide_rejection(is_owner=True, branch="main", proposal_status=None)
+        decide_rejection(
+            is_owner=True, branch="main", proposal_status=None, rationale="Closed for now"
+        )
+
+
+def test_rejection_requires_a_short_rationale() -> None:
+    with pytest.raises(IterationRuleError):
+        decide_rejection(
+            is_owner=True, branch="proposal/research", proposal_status="pending", rationale="   "
+        )
+
+
+def test_rejection_records_the_rationale() -> None:
+    decision = decide_rejection(
+        is_owner=True,
+        branch="proposal/research",
+        proposal_status="pending",
+        rationale="Offline-first is the wedge, not this.",
+    )
+    assert decision.status == "rejected"
+    assert decision.rationale == "Offline-first is the wedge, not this."
 
 
 def test_rollback_is_an_owner_main_append() -> None:

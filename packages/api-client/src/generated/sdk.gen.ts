@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses } from './types.gen';
+import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, AcceptIdeaMembershipRequestData, AcceptIdeaMembershipRequestErrors, AcceptIdeaMembershipRequestResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, DepositWorkspaceIdeaData, DepositWorkspaceIdeaErrors, DepositWorkspaceIdeaResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, GetProfileData, GetProfileErrors, GetProfileResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, LeaveIdeaTeamData, LeaveIdeaTeamErrors, LeaveIdeaTeamResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RejectIdeaMembershipRequestData, RejectIdeaMembershipRequestErrors, RejectIdeaMembershipRequestResponses, RemoveIdeaMemberData, RemoveIdeaMemberErrors, RemoveIdeaMemberResponses, RequestIdeaMembershipData, RequestIdeaMembershipErrors, RequestIdeaMembershipResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -35,6 +35,63 @@ export const getIdea = <ThrowOnError extends boolean = false>(options: Options<G
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/ideas/{idea_id}',
     ...options
+});
+
+/**
+ * Request Idea Membership
+ */
+export const requestIdeaMembership = <ThrowOnError extends boolean = false>(options: Options<RequestIdeaMembershipData, ThrowOnError>): RequestResult<RequestIdeaMembershipResponses, RequestIdeaMembershipErrors, ThrowOnError> => (options.client ?? client).post<RequestIdeaMembershipResponses, RequestIdeaMembershipErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/join-requests',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Accept Idea Membership Request
+ */
+export const acceptIdeaMembershipRequest = <ThrowOnError extends boolean = false>(options: Options<AcceptIdeaMembershipRequestData, ThrowOnError>): RequestResult<AcceptIdeaMembershipRequestResponses, AcceptIdeaMembershipRequestErrors, ThrowOnError> => (options.client ?? client).post<AcceptIdeaMembershipRequestResponses, AcceptIdeaMembershipRequestErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/join-requests/{request_id}/accept',
+    ...options
+});
+
+/**
+ * Reject Idea Membership Request
+ */
+export const rejectIdeaMembershipRequest = <ThrowOnError extends boolean = false>(options: Options<RejectIdeaMembershipRequestData, ThrowOnError>): RequestResult<RejectIdeaMembershipRequestResponses, RejectIdeaMembershipRequestErrors, ThrowOnError> => (options.client ?? client).post<RejectIdeaMembershipRequestResponses, RejectIdeaMembershipRequestErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/join-requests/{request_id}/reject',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Leave Idea Team
+ */
+export const leaveIdeaTeam = <ThrowOnError extends boolean = false>(options: Options<LeaveIdeaTeamData, ThrowOnError>): RequestResult<LeaveIdeaTeamResponses, LeaveIdeaTeamErrors, ThrowOnError> => (options.client ?? client).post<LeaveIdeaTeamResponses, LeaveIdeaTeamErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/leave',
+    ...options
+});
+
+/**
+ * Remove Idea Member
+ */
+export const removeIdeaMember = <ThrowOnError extends boolean = false>(options: Options<RemoveIdeaMemberData, ThrowOnError>): RequestResult<RemoveIdeaMemberResponses, RemoveIdeaMemberErrors, ThrowOnError> => (options.client ?? client).post<RemoveIdeaMemberResponses, RemoveIdeaMemberErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/members/{member_id}/remove',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 /**
@@ -113,7 +170,11 @@ export const acceptIdeaIteration = <ThrowOnError extends boolean = false>(option
 export const rejectIdeaIteration = <ThrowOnError extends boolean = false>(options: Options<RejectIdeaIterationData, ThrowOnError>): RequestResult<RejectIdeaIterationResponses, RejectIdeaIterationErrors, ThrowOnError> => (options.client ?? client).post<RejectIdeaIterationResponses, RejectIdeaIterationErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/ideas/{idea_id}/iterations/{iteration_id}/reject',
-    ...options
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 /**
@@ -139,10 +200,32 @@ export const listWorkspaceIdeas = <ThrowOnError extends boolean = false>(options
 });
 
 /**
+ * Deposit Workspace Idea
+ */
+export const depositWorkspaceIdea = <ThrowOnError extends boolean = false>(options: Options<DepositWorkspaceIdeaData, ThrowOnError>): RequestResult<DepositWorkspaceIdeaResponses, DepositWorkspaceIdeaErrors, ThrowOnError> => (options.client ?? client).post<DepositWorkspaceIdeaResponses, DepositWorkspaceIdeaErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/ideas',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * List Workspaces
  */
 export const listWorkspaces = <ThrowOnError extends boolean = false>(options?: Options<ListWorkspacesData, ThrowOnError>): RequestResult<ListWorkspacesResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListWorkspacesResponses, unknown, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/workspaces',
+    ...options
+});
+
+/**
+ * Read Profile
+ */
+export const getProfile = <ThrowOnError extends boolean = false>(options: Options<GetProfileData, ThrowOnError>): RequestResult<GetProfileResponses, GetProfileErrors, ThrowOnError> => (options.client ?? client).get<GetProfileResponses, GetProfileErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/users/{user_id}',
     ...options
 });

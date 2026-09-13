@@ -419,7 +419,9 @@ async def test_member_browses_only_their_workspace_ideas(database):
                         "stage": "iterating",
                         "lang": "fr",
                         "created_at": "2026-02-01T00:00:00Z",
-                        "domain": "Developer tools",
+                        "sought_roles": [],
+                        "realism_score": None,
+                        "last_activity_at": None,
                         "collaborators": [],
                     }
                 ],
@@ -439,7 +441,7 @@ async def test_member_browses_only_their_workspace_ideas(database):
             assert staged.json()["total"] == 1
             assert staged.json()["items"][0]["id"] == str(older_id)
             assert domain.status_code == 200
-            assert domain.json()["total"] == 1
+            assert domain.json()["total"] == 2
             assert domain.json()["items"][0]["id"] == str(newer_id)
         await transaction.rollback()
 

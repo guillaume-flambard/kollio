@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, cast
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import (
@@ -46,6 +46,7 @@ class Iteration(Base):
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB)
     branch: Mapped[str] = mapped_column(String(64), default="main")
     proposal_status: Mapped[str | None] = mapped_column(String(16))
+    rationale: Mapped[str | None] = mapped_column(String(500))
     short_hash: Mapped[str] = mapped_column(String(12))
     revision: Mapped[int] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -69,8 +70,7 @@ class PostgresIterations:
         )
         if lock:
             query = query.with_for_update(of=Idea)
-        row = (await self.session.execute(query)).one_or_none()
-        return (row[0], row[1]) if row is not None else None
+        return (await self.session.execute(query)).one_or_none()
 
     async def history(self, idea_id: UUID) -> list[Iteration]:
         query = (
@@ -81,25 +81,19 @@ class PostgresIterations:
         return list((await self.session.scalars(query)).all())
 
     async def get(self, idea_id: UUID, iteration_id: UUID) -> Iteration | None:
-        return cast(
-            Iteration | None,
-            await self.session.scalar(
-                select(Iteration).where(
-                    Iteration.id == iteration_id,
-                    Iteration.idea_id == idea_id,
-                )
-            ),
+        return await self.session.scalar(
+            select(Iteration).where(
+                Iteration.id == iteration_id,
+                Iteration.idea_id == idea_id,
+            )
         )
 
     async def head(self, idea_id: UUID, branch: str) -> Iteration | None:
-        return cast(
-            Iteration | None,
-            await self.session.scalar(
-                select(Iteration)
-                .where(Iteration.idea_id == idea_id, Iteration.branch == branch)
-                .order_by(Iteration.revision.desc())
-                .limit(1)
-            ),
+        return await self.session.scalar(
+            select(Iteration)
+            .where(Iteration.idea_id == idea_id, Iteration.branch == branch)
+            .order_by(Iteration.revision.desc())
+            .limit(1)
         )
 
     async def next_revision(self, idea_id: UUID) -> int:
