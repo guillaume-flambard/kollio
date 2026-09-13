@@ -205,5 +205,105 @@
         }
       }
     }
+  },
+  "landing": {
+    "meta": {
+      "title": "Kollio | From ideas to team decisions",
+      "description": "Centralize your team’s ideas, test them against reality and document the decisions that move them forward."
+    },
+    "navigation": {
+      "platform": "Platform",
+      "teams": "Teams",
+      "method": "Method",
+      "security": "Security",
+      "demo": "Request a demo",
+      "workspace": "Open my workspace"
+    },
+    "hero": {
+      "eyebrow": "The workspace for ideas that matter",
+      "title": "From intuition to decision, without losing the thread.",
+      "titleLead": "From intuition to decision,",
+      "titleEmphasis": "without losing the thread.",
+      "description": "Centralize your team’s ideas, test them against real constraints and turn the strongest ones into deliberate initiatives.",
+      "primaryAction": "Try it with my team",
+      "secondaryAction": "Discover the method",
+      "leftNote": "From today’s ideas to tomorrow’s real impact.",
+      "rightNote": "Shared context. Better decisions. Together."
+    },
+    "preview": {
+      "label": "Initiative workflow preview",
+      "workspace": "Innovation Portfolio",
+      "count": "12 initiatives",
+      "search": "Search initiatives…",
+      "signal": {
+        "title": "Signal",
+        "description": "Ideas and opportunities",
+        "primary": "Automate field quality control",
+        "secondary": "Unlock unused machine data",
+        "tertiary": "Simplify SMB customer onboarding"
+      },
+      "validation": {
+        "title": "In validation",
+        "description": "Analysis and challenge",
+        "evidence": "Verified evidence",
+        "evidenceCopy": "32% fewer non-conformities across pilot sites.",
+        "source": "Source: field pilot report",
+        "question": "Open question",
+        "questionCopy": "How should edge cases outside specifications be handled?",
+        "owner": "Claire Martin",
+        "role": "Product owner"
+      },
+      "decision": {
+        "title": "Decision",
+        "description": "Deliberate initiatives",
+        "documented": "Documented decision",
+        "copy": "Start an industrialization phase across three regions next quarter.",
+        "open": "Read the complete decision",
+        "team": "Team involved",
+        "note": "Complementary expertise",
+        "morePeople": "+2"
+      }
+    },
+    "outcomes": {
+      "label": "What Kollio gives teams",
+      "context": {
+        "title": "Shared context",
+        "description": "Bring ideas, data, constraints and expertise together in one place."
+      },
+      "decisions": {
+        "title": "Explainable decisions",
+        "description": "Keep the analyses, trade-offs and reasoning behind every decision."
+      },
+      "ai": {
+        "title": "AI under control",
+        "description": "Assistants summarize, compare and structure within a framework aligned with your rules."
+      }
+    },
+    "trust": "Private spaces · Roles and permissions · Traceable analysis",
+    "method": {
+      "overline": "A decision memory, not an idea box",
+      "title": "Your team’s reasoning becomes an asset.",
+      "description": "Kollio preserves what was proposed, what was verified and why you decided. New teammates can pick up the thread without replaying every meeting.",
+      "capture": {
+        "number": "01",
+        "title": "Capture the signal",
+        "description": "An intuition enters a private space with its context, owner and the problem it aims to solve."
+      },
+      "challenge": {
+        "number": "02",
+        "title": "Challenge it with reality",
+        "description": "The team connects constraints, questions and evidence. Assistants structure the analysis without hiding its sources."
+      },
+      "decide": {
+        "number": "03",
+        "title": "Document the decision",
+        "description": "The decision, its owners and its reasoning remain attached to the initiative to guide what happens next."
+      }
+    },
+    "finalCta": {
+      "note": "One clear idea. One aligned team.",
+      "title": "Give your next decisions a better starting point.",
+      "action": "Try Kollio with my team"
+    }
   }
 }

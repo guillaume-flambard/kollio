@@ -35,6 +35,7 @@ export default defineNuxtConfig({
     { name: 'Bricolage Grotesque', provider: 'google', weights: [600, 700, 800] },
     { name: 'Geist', provider: 'google', weights: [400, 500, 600] },
     { name: 'Geist Mono', provider: 'google', weights: [400] },
+    { name: 'Caveat', provider: 'google', weights: [500, 600] },
   ] },
   colorMode: { preference: 'light' },
 })

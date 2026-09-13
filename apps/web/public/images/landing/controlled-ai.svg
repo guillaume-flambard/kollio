@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <defs>
+    <filter id="paper" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.74" numOctaves="3" seed="34" result="noise"/>
+      <feColorMatrix in="noise" values="0 0 0 0 0.28 0 0 0 0 0.23 0 0 0 0 0.32 0 0 0 .11 0" result="grain"/>
+      <feComposite in="grain" in2="SourceGraphic" operator="in" result="texture"/>
+      <feBlend in="SourceGraphic" in2="texture" mode="multiply"/>
+    </filter>
+  </defs>
+  <g filter="url(#paper)" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#F5EFE6" stroke="#49335E" stroke-opacity=".2" d="m13 28 53 6-5 47-54-6z"/>
+    <circle cx="28" cy="46" r="6" fill="#C5B3D4"/><path stroke="#49335E" stroke-width="3" d="m39 46 16 2m-31 12 28 3"/>
+    <path fill="#DDD3E8" stroke="#49335E" stroke-opacity=".18" d="m8 92 57-4 4 49-57 4z"/>
+    <path fill="#899744" d="m20 119 10-12 10 8 11-15 6 24z" opacity=".86"/><path stroke="#49335E" stroke-width="3" d="m20 130 36-3"/>
+    <path fill="#F5EFE6" stroke="#49335E" stroke-opacity=".2" d="m16 153 54 8-7 49-55-8z"/>
+    <path fill="#D47A70" d="m27 170 13 1-2 13-13-2z" opacity=".85"/><path stroke="#49335E" stroke-width="3" d="m45 175 15 2m-36 17 32 5"/>
+    <path stroke="#49335E" stroke-width="4" d="M65 54c26 4 21 39 49 58M66 112c21 0 24 0 47 0m-47 67c24-4 22-39 48-59"/>
+    <circle cx="114" cy="112" r="5" fill="#49335E"/>
+    <path fill="#F5EFE6" stroke="#49335E" stroke-width="3" stroke-dasharray="6 6" d="m108 66 78 2-2 91-78-2z"/>
+    <path fill="#C5B3D4" d="m122 85 50 1-1 17-50-1z" opacity=".82"/>
+    <path fill="#899744" d="m121 110 51 1-1 16-50-1z" opacity=".82"/>
+    <path fill="#D47A70" d="m120 135 51 1-1 14-50-1z" opacity=".78"/>
+    <circle cx="148" cy="61" r="15" fill="#899744"/>
+    <path stroke="#F5EFE6" stroke-width="5" d="m140 61 6 6 11-14"/>
+    <path stroke="#49335E" stroke-width="4" d="M185 112h28"/><path fill="#49335E" d="m207 103 15 9-15 9z"/>
+    <path fill="#DDD3E8" d="m202 91 43 4-4 93-45-3z" opacity=".9"/>
+    <path fill="#F5EFE6" stroke="#49335E" stroke-opacity=".22" d="m194 84 48 5-5 92-49-5z"/>
+    <path fill="#C5B3D4" d="m202 103 29 3-2 20-29-3z" opacity=".78"/>
+    <path stroke="#49335E" stroke-width="3" d="m199 140 30 3m-32 11 28 3m-30 10 21 2"/>
+    <path stroke="#899744" stroke-width="4" d="M229 179c3 9 8 13 15 16m-11-22c8 0 13 3 17 8"/>
+  </g>
+</svg>

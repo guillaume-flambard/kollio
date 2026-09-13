@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" fill="none">
+  <defs>
+    <filter id="paper" x="-8%" y="-12%" width="116%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="3" seed="41" result="noise"/>
+      <feColorMatrix in="noise" values="0 0 0 0 0.28 0 0 0 0 0.23 0 0 0 0 0.32 0 0 0 .1 0" result="grain"/>
+      <feComposite in="grain" in2="SourceGraphic" operator="in" result="texture"/>
+      <feBlend in="SourceGraphic" in2="texture" mode="multiply"/>
+    </filter>
+  </defs>
+  <g filter="url(#paper)" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#49335E" stroke-width="5" d="M51 151c54-69 93 58 151-4 56-60 95 43 142-11 28-33 48-27 80-5"/>
+    <path stroke="#C5B3D4" stroke-width="16" opacity=".38" d="M49 156c55-67 94 57 153-5 55-58 93 43 141-10 28-31 51-25 82-5"/>
+    <circle cx="55" cy="148" r="9" fill="#D47A70"/><circle cx="176" cy="165" r="9" fill="#899744"/><circle cx="294" cy="157" r="9" fill="#49335E"/><circle cx="422" cy="132" r="10" fill="#899744"/>
+    <path fill="#F5EFE6" stroke="#49335E" stroke-opacity=".2" d="m23 55 95-11 8 74-96 11z"/>
+    <circle cx="51" cy="76" r="9" fill="#D47A70" opacity=".82"/><path stroke="#49335E" stroke-width="4" d="m68 76 39-5M43 96l64-8"/>
+    <path fill="#DDD3E8" stroke="#49335E" stroke-opacity=".18" d="m130 185 94 7-7 73-94-8z"/>
+    <path stroke="#49335E" stroke-width="4" d="m145 226 15-16 17 12 22-23"/><circle cx="145" cy="226" r="4" fill="#49335E"/><circle cx="199" cy="199" r="4" fill="#49335E"/>
+    <path fill="#F5EFE6" stroke="#49335E" stroke-opacity=".2" d="m245 50 101 3-3 77-101-4z"/>
+    <path fill="#C5B3D4" d="m260 70 68 2-1 19-68-2z" opacity=".72"/><path stroke="#49335E" stroke-width="4" d="m260 104 56 2"/>
+    <path fill="#D47A70" d="m369 67 89 7-12 101-90-8z" opacity=".72"/>
+    <path fill="#F5EFE6" stroke="#49335E" stroke-opacity=".24" d="m359 57 89 7-9 99-91-7z"/>
+    <circle cx="399" cy="98" r="23" fill="#899744"/>
+    <path stroke="#F5EFE6" stroke-width="7" d="m387 98 9 9 18-24"/>
+    <path stroke="#80638F" stroke-width="4" d="m374 132 49 4m-52 11 39 3"/>
+    <path stroke="#49335E" stroke-width="3" opacity=".65" d="M54 130v18m122 17v20m118-55v27m128-25v-1"/>
+  </g>
+</svg>
