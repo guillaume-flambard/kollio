@@ -69,6 +69,8 @@ jobs:
           uv run alembic upgrade head
           uv run pytest -m 'not live'
           uv run alembic check
+      - name: Test web behavior
+        run: pnpm --dir apps/web test:ui
       - name: Check generated contract drift
         run: |
           cd apps/api

@@ -35,7 +35,24 @@ Temporal remains outside the current architecture. LangGraph checkpoints plus a 
 
 ## Current evidence boundary
 
-The pull request verifies the complete workflow with recorded model results and a real PostgreSQL checkpointer. It does not spend provider budget on a live `b.ai / qwen3.8-flash` analysis. That live acceptance run remains an environment check after the branch is deployed with the approved provider credential. The earlier production OpenTelemetry to Langfuse ingestion evidence remains valid, while this new API to Taskiq trace chain still requires one deployed trace inspection.
+The pull request verifies the complete provider-free path across FastAPI, Redis Streams, a real Taskiq worker process, LangGraph, the PostgreSQL checkpointer and an OpenAI-compatible fake provider. It proves that human approval resumes the same checkpoint without a second model request. Dispatch outage simulations also prove that launch and review retries do not duplicate the workflow.
+
+Production configuration now fails at startup when PostgreSQL, Redis, Logto, LiteLLM or OTLP configuration is missing. The API and worker use distinct OpenTelemetry service names while retaining one propagated W3C trace identifier.
+
+The test does not spend provider budget on a live `b.ai / qwen3.8-flash` analysis. That acceptance run remains an environment check after this branch is deployed with the approved provider credential. The earlier production OpenTelemetry to Langfuse ingestion evidence remains valid, while the new API to Taskiq trace chain still requires one deployed trace inspection.
+
+## Regression matrix
+
+| Boundary | Automated evidence |
+| --- | --- |
+| Pure lifecycle and output policy | Unit tests cover transitions, locale drift, unsupported citations and evidence-free claims |
+| API authorization and idempotence | PostgreSQL integration tests cover workspace isolation, owner review and duplicate suppression |
+| Queue failure recovery | Integration simulation fails the first launch and review dispatch, then verifies safe retry |
+| Durable execution | E2E test rejects one malformed model response, retries through Taskiq and resumes a real LangGraph PostgreSQL checkpoint |
+| Provider contract | The E2E fake server verifies the model alias and strict JSON Schema response format |
+| Trace continuity | Integration coverage verifies that the incoming W3C trace identifier reaches the queued command |
+| Web behavior | Vitest runs in the required CI job alongside backend verification |
+| Generated contract | CI exports OpenAPI, regenerates the TypeScript client and rejects drift |
 
 ## Primary references
 

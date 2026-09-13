@@ -31,3 +31,10 @@
 - [x] 6.1 Extend recorded fixtures for the full five-factor schema and deterministic validators.
 - [x] 6.2 Run Ruff, strict Mypy, unit and PostgreSQL integration tests.
 - [x] 6.3 Validate the OpenSpec change strictly and document remaining live-provider evidence.
+
+## 7. Failure simulation and regression coverage
+
+- [x] 7.1 Reject incomplete production identity, model gateway and telemetry configuration at startup.
+- [x] 7.2 Simulate queue dispatch outages and prove idempotent launch and review recovery.
+- [x] 7.3 Exercise API, Redis Streams, Taskiq, LangGraph and PostgreSQL through one provider-free E2E scenario.
+- [x] 7.4 Run deterministic web behavior tests in the required CI job.

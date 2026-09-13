@@ -94,6 +94,13 @@ async def request_review(
     workflow, idea, actor = context
     if idea.owner_id != actor.id:
         raise AnalysisAuthorizationError
+    if (
+        workflow.status == AnalysisStatus.REVIEW_QUEUED.value
+        and workflow.current_step == "dispatch_review"
+        and workflow.review_decision is approved
+    ):
+        workflow.trace_context = dict(trace_context)
+        return workflow
     workflow.status = queue_review(AnalysisStatus(workflow.status)).value
     workflow.current_step = "dispatch_review"
     workflow.review_decision = approved

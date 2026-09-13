@@ -107,7 +107,6 @@ class PostgresAnalysisWorkflows:
 
     async def add(self, workflow: AnalysisWorkflow) -> AnalysisWorkflow:
         self.session.add(workflow)
-        await self.session.flush()
         return workflow
 
     async def accessible_workflow(
@@ -134,7 +133,7 @@ class PostgresAnalysisWorkflows:
     ) -> AnalysisWorkflow | None:
         query = select(AnalysisWorkflow).where(AnalysisWorkflow.id == workflow_id)
         if lock:
-            query = query.with_for_update()
+            query = query.with_for_update().execution_options(populate_existing=True)
         return cast(AnalysisWorkflow | None, await self.session.scalar(query))
 
     async def final_result(self, workflow_id: UUID) -> ConstraintAnalysis | None:

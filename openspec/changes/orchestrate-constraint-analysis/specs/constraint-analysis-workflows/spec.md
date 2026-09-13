@@ -64,3 +64,29 @@ The system SHALL propagate W3C trace context from the launch request through tas
 - **WHEN** a Taskiq worker receives a workflow command
 - **THEN** its execution span is a descendant of the launch request trace
 - **AND** the trace identifies the workflow, idea and requested locale without containing provider secrets
+
+### Requirement: Dispatch failures remain recoverable
+The system SHALL retain durable workflow intent when Redis is temporarily unavailable and SHALL
+allow the same idempotent request to finish dispatching after the queue recovers.
+
+#### Scenario: Initial dispatch fails
+- **WHEN** PostgreSQL commits a workflow but Redis rejects its first dispatch attempt
+- **THEN** the API reports temporary unavailability
+- **AND** repeating the same idempotent request dispatches the existing workflow without creating another workflow
+
+#### Scenario: Two launches arrive concurrently
+- **WHEN** two requests use the same idea and idempotency key at the same time
+- **THEN** both requests return the same workflow
+- **AND** the system creates and dispatches that workflow exactly once
+
+#### Scenario: Review dispatch fails
+- **WHEN** the owner records a review decision but Redis rejects its first dispatch attempt
+- **THEN** repeating the same decision dispatches the existing review without changing the decision
+
+### Requirement: Production configuration fails closed
+The API and worker SHALL refuse production startup when identity validation, model gateway or
+OpenTelemetry export configuration is incomplete.
+
+#### Scenario: Required production setting is missing
+- **WHEN** a production process starts without a required identity, model gateway or trace export setting
+- **THEN** configuration validation fails before the process accepts work

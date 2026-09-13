@@ -7,7 +7,10 @@ from src.modules.constraint_analysis.domain.lifecycle import (
     queue_review,
     start_execution,
 )
-from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
+from src.modules.constraint_analysis.domain.models import (
+    ConstraintAnalysisResult,
+    validate_analysis_result,
+)
 
 
 def test_only_active_work_can_start() -> None:
@@ -68,4 +71,57 @@ def test_constraint_result_requires_each_factor_once() -> None:
                 "factors": factors,
                 "locale": "en",
             }
+        )
+
+
+def test_validated_result_rejects_unsupported_claims_and_locale_drift() -> None:
+    factors = [
+        {
+            "name": name,
+            "score": 70,
+            "summary": "Supported by the supplied evidence.",
+            "source_ids": ["source-1"],
+        }
+        for name in (
+            "competition",
+            "build_cost",
+            "time_to_market",
+            "defensibility",
+            "acquisition",
+        )
+    ]
+    result = ConstraintAnalysisResult.model_validate(
+        {
+            "overall_score": 70,
+            "verdict": "conditional",
+            "summary": "The idea remains conditional.",
+            "factors": factors,
+            "locale": "en",
+        }
+    )
+
+    with pytest.raises(ValueError, match="wrong locale"):
+        validate_analysis_result(
+            result,
+            requested_locale="fr",
+            evidence_ids=frozenset({"source-1"}),
+        )
+
+    with pytest.raises(ValueError, match="unknown evidence"):
+        validate_analysis_result(
+            result,
+            requested_locale="en",
+            evidence_ids=frozenset({"another-source"}),
+        )
+
+    unsupported = result.model_copy(
+        update={
+            "factors": [factor.model_copy(update={"source_ids": []}) for factor in result.factors]
+        }
+    )
+    with pytest.raises(ValueError, match="requires evidence"):
+        validate_analysis_result(
+            unsupported,
+            requested_locale="en",
+            evidence_ids=frozenset(),
         )

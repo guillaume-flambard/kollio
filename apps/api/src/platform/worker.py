@@ -42,7 +42,7 @@ async def startup(state: TaskiqState) -> None:
     engine = create_async_engine(settings.database_url, pool_pre_ping=True)
     state.engine = engine
     state.sessions = async_sessionmaker(engine, expire_on_commit=False)
-    state.telemetry = configure_telemetry(settings)
+    state.telemetry = configure_telemetry(settings, service_name="kollio-worker")
 
 
 @broker.on_event(TaskiqEvents.WORKER_SHUTDOWN)

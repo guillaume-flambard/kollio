@@ -31,9 +31,12 @@ class RecordedQueue:
     def __init__(self) -> None:
         self.launches: list[UUID] = []
         self.reviews: list[tuple[UUID, bool]] = []
+        self.launch_trace_contexts: list[dict[str, str]] = []
+        self.review_trace_contexts: list[dict[str, str]] = []
 
     async def dispatch(self, workflow_id: UUID, trace_context: Mapping[str, str]) -> None:
         self.launches.append(workflow_id)
+        self.launch_trace_contexts.append(dict(trace_context))
 
     async def dispatch_review(
         self,
@@ -42,6 +45,7 @@ class RecordedQueue:
         trace_context: Mapping[str, str],
     ) -> None:
         self.reviews.append((workflow_id, approved))
+        self.review_trace_contexts.append(dict(trace_context))
 
 
 @pytest_asyncio.fixture
@@ -109,13 +113,18 @@ async def test_workflow_launch_is_idempotent_and_review_is_owner_controlled(
             async with httpx.AsyncClient(
                 transport=httpx.ASGITransport(app=app), base_url="http://test"
             ) as client:
-                headers = {"Idempotency-Key": "analysis-request-1"}
+                trace_id = "0af7651916cd43dd8448eb211c80319c"
+                headers = {
+                    "Idempotency-Key": "analysis-request-1",
+                    "traceparent": f"00-{trace_id}-b7ad6b7169203331-01",
+                }
                 launched = await client.post(
                     f"/ideas/{idea_id}/analyses", json={"evidence": []}, headers=headers
                 )
                 assert launched.status_code == 202
                 workflow_id = UUID(launched.json()["id"])
                 assert queue.launches == [workflow_id]
+                assert queue.launch_trace_contexts[0]["traceparent"].split("-")[1] == trace_id
 
                 repeated = await client.post(
                     f"/ideas/{idea_id}/analyses", json={"evidence": []}, headers=headers

@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
 from opentelemetry.propagate import inject
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.constraint_analysis.adapters.postgres import PostgresAnalysisWorkflows
@@ -15,6 +16,7 @@ from src.modules.constraint_analysis.domain.lifecycle import InvalidAnalysisTran
 from src.modules.constraint_analysis.service.operations import (
     AnalysisAuthorizationError,
     AnalysisNotFoundError,
+    LaunchOutcome,
     get_analysis,
     launch_analysis,
     request_review,
@@ -53,8 +55,9 @@ async def launch(
     idempotency_key: Annotated[str, Header(min_length=8, max_length=200)],
 ) -> AnalysisWorkflowResponse:
     try:
+        repository = PostgresAnalysisWorkflows(session)
         outcome = await launch_analysis(
-            PostgresAnalysisWorkflows(session),
+            repository,
             idea_id,
             identity.subject,
             idempotency_key=idempotency_key,
@@ -62,15 +65,38 @@ async def launch(
             evidence=body.evidence,
             trace_context=_trace_context(),
         )
-        await session.commit()
+        try:
+            await session.commit()
+        except IntegrityError:
+            await session.rollback()
+            existing = await repository.find_launch(idea_id, idempotency_key)
+            if existing is None:
+                raise
+            outcome = LaunchOutcome(existing, created=False)
         await session.refresh(outcome.workflow)
-        if outcome.created:
-            await queue.dispatch(outcome.workflow.id, outcome.workflow.trace_context)
+        response_workflow = outcome.workflow
+        dispatch_pending = outcome.workflow.current_step == "dispatch"
+        if outcome.created or dispatch_pending:
+            locked_workflow = await repository.get_for_worker(outcome.workflow.id, lock=True)
+            if locked_workflow is None:
+                raise AnalysisNotFoundError
+            if locked_workflow.current_step == "dispatch":
+                try:
+                    await queue.dispatch(locked_workflow.id, locked_workflow.trace_context)
+                except Exception as error:
+                    raise HTTPException(
+                        status.HTTP_503_SERVICE_UNAVAILABLE,
+                        MESSAGES[request.state.locale]["unavailable"],
+                    ) from error
+                locked_workflow.current_step = "queued"
+                await session.commit()
+                await session.refresh(locked_workflow)
+            response_workflow = locked_workflow
     except AnalysisNotFoundError as error:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND, MESSAGES[request.state.locale]["not_found"]
         ) from error
-    return AnalysisWorkflowResponse.model_validate(outcome.workflow)
+    return AnalysisWorkflowResponse.model_validate(response_workflow)
 
 
 @router.get(
@@ -113,8 +139,9 @@ async def review(
 ) -> AnalysisWorkflowResponse:
     trace_context = _trace_context()
     try:
+        repository = PostgresAnalysisWorkflows(session)
         workflow = await request_review(
-            PostgresAnalysisWorkflows(session),
+            repository,
             idea_id,
             workflow_id,
             identity.subject,
@@ -123,7 +150,21 @@ async def review(
         )
         await session.commit()
         await session.refresh(workflow)
-        await queue.dispatch_review(workflow.id, body.approved, trace_context)
+        locked_workflow = await repository.get_for_worker(workflow.id, lock=True)
+        if locked_workflow is None:
+            raise AnalysisNotFoundError
+        if locked_workflow.current_step == "dispatch_review":
+            try:
+                await queue.dispatch_review(locked_workflow.id, body.approved, trace_context)
+            except Exception as error:
+                raise HTTPException(
+                    status.HTTP_503_SERVICE_UNAVAILABLE,
+                    MESSAGES[request.state.locale]["unavailable"],
+                ) from error
+            locked_workflow.current_step = "review_queued"
+            await session.commit()
+            await session.refresh(locked_workflow)
+        workflow = locked_workflow
     except AnalysisNotFoundError as error:
         raise HTTPException(
             status.HTTP_404_NOT_FOUND, MESSAGES[request.state.locale]["not_found"]

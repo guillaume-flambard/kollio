@@ -45,7 +45,11 @@ pythonpath = ["."]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-markers = ["integration: requires Postgres and Redis", "live: requires configured external providers"]
+markers = [
+    "integration: requires Postgres and Redis",
+    "e2e: exercises the complete local runtime across process boundaries",
+    "live: requires configured external providers",
+]
 
 [tool.ruff]
 line-length = 100
