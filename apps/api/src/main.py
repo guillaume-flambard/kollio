@@ -9,16 +9,20 @@ from redis.asyncio import Redis
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+from src.modules.constraint_analysis.adapters.taskiq import TaskiqAnalysisQueue
+from src.modules.constraint_analysis.api.routes import router as analysis_router
 from src.modules.ideas.api.routes import (
     router as ideas_router,
 )
 from src.modules.ideas.api.routes import (
     workspace_ideas_router,
 )
+from src.modules.iterations.api.routes import router as iterations_router
 from src.modules.workspaces.api.routes import router as workspaces_router
 from src.platform.config import Settings, get_settings
 from src.platform.locale import MESSAGES, resolve_locale
 from src.platform.telemetry import configure_telemetry
+from src.platform.worker import broker
 
 
 class Health(BaseModel):
@@ -40,9 +44,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.redis = Redis.from_url(
             settings.redis_url, socket_connect_timeout=2, socket_timeout=2
         )
+        await broker.startup()
         try:
             yield
         finally:
+            await broker.shutdown()
             await app.state.redis.aclose()
             if engine:
                 await engine.dispose()
@@ -50,6 +56,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 provider.shutdown()
 
     app = FastAPI(title="Kollio API", lifespan=lifespan)
+    app.state.analysis_queue = TaskiqAnalysisQueue()
     app.dependency_overrides[get_settings] = lambda: settings
 
     @app.middleware("http")
@@ -83,6 +90,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return Health(status="ok")
 
     app.include_router(ideas_router)
+    app.include_router(analysis_router)
+    app.include_router(iterations_router)
     app.include_router(workspace_ideas_router)
     app.include_router(workspaces_router)
     FastAPIInstrumentor.instrument_app(app, excluded_urls="health/live,health/ready")

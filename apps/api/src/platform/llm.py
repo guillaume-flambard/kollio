@@ -5,6 +5,7 @@ from opentelemetry import trace
 
 from src.agents.schemas import Evidence, GateFinding
 from src.platform.config import Settings
+from src.platform.locale import language_name
 
 SYSTEM = (
     "Assess competition using only the supplied evidence. The presence of a competitor alone "
@@ -15,7 +16,6 @@ SYSTEM = (
     "in {language}, locale {locale}. "
     "Respond with one JSON object and no Markdown. Required JSON schema: {schema}"
 )
-LANGUAGES = {"fr": "French", "en": "English"}
 
 
 def validate_finding(
@@ -44,7 +44,7 @@ class Gateway:
                 {
                     "role": "system",
                     "content": SYSTEM.format(
-                        language=LANGUAGES[locale],
+                        language=language_name(locale),
                         locale=locale,
                         schema=json.dumps(GateFinding.model_json_schema()),
                     ),

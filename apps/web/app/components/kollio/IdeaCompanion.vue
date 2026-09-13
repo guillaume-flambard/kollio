@@ -15,6 +15,7 @@ const { t } = useI18n()
 const relationshipTarget = ref<HTMLElement>()
 const panels = ['team', 'questions', 'evidence'] as const
 const panelCounts = { questions: 0, evidence: 0 } as const
+const collaborators = computed(() => props.idea.collaborators ?? [])
 const tabs = computed(() => panels.map(panel => ({
   id: panel,
   label: panel === 'team'
@@ -24,9 +25,8 @@ const tabs = computed(() => panels.map(panel => ({
         count: panelCounts[panel],
       }),
 })))
-const sourceLabel = computed(() => props.idea.legacy_context?.source === 'prospecteur'
-  ? 'Prospecteur'
-  : props.idea.legacy_context?.source)
+const sourceDisplayName = useSourceDisplayName()
+const sourceLabel = computed(() => sourceDisplayName(props.idea.legacy_context?.source))
 
 function selectPanel(panel: string) {
   if (panels.includes(panel as typeof panels[number])) {
@@ -63,16 +63,21 @@ onBeforeUnmount(() => emit('targetReady', undefined))
         <section class="team-panel-primary">
           <div class="idea-panel-heading">
             <h2>{{ t('ideas.detail.companion.team.contributors') }}</h2>
-            <span>{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
+            <span>{{ t('ideas.detail.stats.contributors', { count: collaborators.length }) }}</span>
           </div>
-          <div v-if="idea.legacy_context" ref="relationshipTarget" class="mt-5">
+          <div v-if="collaborators.length" ref="relationshipTarget" class="mt-5 space-y-4">
             <KollioPersonRow
-              :name="sourceLabel || t('ideas.detail.companion.team.importedBy')"
-              :meta="t('ideas.detail.companion.team.source')"
-              :initials="sourceLabel?.charAt(0)"
+              v-for="(person, index) in collaborators"
+              :key="person.id"
+              :name="person.display_name"
+              :meta="t(`ideas.detail.roles.${person.role}`)"
+              :initials="personInitials(person.display_name)"
+              :avatar-key="person.avatar_key || undefined"
+              :online="index === 0"
             />
           </div>
           <KollioEmptyState
+            v-else
             class="mt-6"
             image-src="/images/empty-states/team.png"
             :description="t('ideas.detail.companion.team.empty')"

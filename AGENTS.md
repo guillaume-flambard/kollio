@@ -20,7 +20,7 @@ Un "GitHub des idées" collaboratif : dépôt d'idée → tueur de contraintes (
 - Commandes détaillées et ordre exact : **`docs/10-project-init.md`** — à suivre avant d'écrire du code.
 
 ## À NE PAS faire (over-engineering)
-Kubernetes · Kafka/microservices tant que < ~50 req/min · base vectorielle dédiée jour 1 (pgvector d'abord) · framework de mémoire (Mem0/Zep) prématuré · Celery+RabbitMQ (utiliser ARQ) · empiler plusieurs frameworks d'agents · sandbox microVM si les agents n'exécutent pas de code arbitraire · la couche investisseurs (régulée — hors V1).
+Kubernetes · Kafka/microservices tant que < ~50 req/min · base vectorielle dédiée jour 1 (pgvector d'abord) · framework de mémoire (Mem0/Zep) prématuré · Celery+RabbitMQ (utiliser Taskiq avec Redis) · empiler plusieurs frameworks d'agents · sandbox microVM si les agents n'exécutent pas de code arbitraire · la couche investisseurs (régulée — hors V1).
 
 ## Périmètre V1
 Dépôt d'idée · tueur de contraintes · itération façon GitHub · formation d'équipe · explorer. **Hors V1 :** couche investisseurs. Cible d'attaque : **B2B-first en PLG** (espace d'équipe privé), le public/B2C étant l'expansion. Voir `docs/02-strategy-and-moat.md` et `docs/09-roadmap.md`.

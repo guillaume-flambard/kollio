@@ -27,6 +27,7 @@ const panels = ['team', 'questions', 'evidence'] as const
 const pitchParagraphs = computed(() => idea.value?.pitch.split(/\n\s*\n/).filter(Boolean) ?? [])
 const pitchSentences = computed(() => idea.value?.pitch.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ])/).map(sentence => sentence.trim()).filter(Boolean) ?? [])
 const ideaSummary = computed(() => pitchSentences.value[0] ?? pitchParagraphs.value[0] ?? '')
+const collaborators = computed(() => idea.value?.collaborators ?? [])
 const detailParagraphs = computed(() => pitchSentences.value.length > 1 ? pitchSentences.value.slice(1) : pitchParagraphs.value)
 const legacyTopics = computed(() => idea.value?.legacy_context?.domain?.split('·').map(topic => topic.trim()).filter(Boolean) ?? [])
 const iterationCount = computed(() => idea.value?.legacy_context ? 1 : 0)
@@ -43,7 +44,8 @@ const problemAnnotation = computed(() => {
     after: ` ${words.slice(end).join(' ')}`,
   }
 })
-const legacySourceLabel = computed(() => idea.value?.legacy_context?.source === 'prospecteur' ? 'Prospecteur' : idea.value?.legacy_context?.source)
+const sourceDisplayName = useSourceDisplayName()
+const legacySourceLabel = computed(() => sourceDisplayName(idea.value?.legacy_context?.source))
 const errorTitle = computed(() => error.value?.statusCode === 404 ? t('ideas.detail.notFound') : t('ideas.detail.loadError.title'))
 const errorDescription = computed(() => error.value?.statusCode === 404 ? t('ideas.detail.notFoundDescription') : t('ideas.detail.loadError.description'))
 
@@ -115,6 +117,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
     v-else-if="error"
     :title="errorTitle"
     :description="errorDescription"
+    :reassurance="t('ideas.detail.loadError.reassurance')"
     :retry-label="t('ideas.detail.retry')"
     :back-label="t('ideas.detail.explore')"
     :back-to="$localePath('/workspace')"
@@ -134,18 +137,18 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         <header class="idea-header">
           <NuxtLink :to="$localePath('/workspace')" class="idea-breadcrumb inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-default">
             {{ t('navigation.ideas') }}
-            <svg aria-hidden="true" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6" /></svg>
+            <KollioIcon name="chevron-right" class="size-4" />
             {{ t(`ideas.stage.${idea.stage}`) }}
           </NuxtLink>
           <div class="idea-header-actions flex items-center gap-3">
             <KollioPrimaryAction :label="t('ideas.detail.advance')" @click="selectPanel('questions')" />
             <button type="button" class="idea-more-action" :aria-label="t('ideas.detail.moreActions')">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="currentColor"><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /></svg>
+              <KollioIcon name="ellipsis" class="size-5" />
             </button>
           </div>
           <h1 class="idea-title max-w-[630px]">{{ idea.title }}</h1>
           <div class="idea-topics flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
-            <KollioFeltMark active variant="status">{{ t(`ideas.stage.${idea.stage}`) }}</KollioFeltMark>
+            <KollioSketchAnnotation active kind="swash">{{ t(`ideas.stage.${idea.stage}`) }}</KollioSketchAnnotation>
             <template v-for="topic in legacyTopics" :key="topic">
               <span class="inline-flex items-center gap-5">
                 <span aria-hidden="true" class="idea-dot" />
@@ -153,12 +156,17 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               </span>
             </template>
             <button type="button" class="idea-topic-add" :aria-label="t('ideas.detail.enrich')" @click="selectPanel('questions')">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" /></svg>
+              <KollioIcon name="plus" class="size-5" />
             </button>
           </div>
           <p class="idea-summary line-clamp-2 max-w-[70ch] text-muted">{{ ideaSummary }}</p>
           <div class="idea-stats flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
-            <span>{{ t('ideas.detail.stats.contributors', { count: 0 }) }}</span>
+            <KollioAvatarStack
+              v-if="collaborators.length"
+              :people="collaborators"
+              :label="t('ideas.detail.stats.contributors', { count: collaborators.length })"
+            />
+            <span>{{ t('ideas.detail.stats.contributors', { count: collaborators.length }) }}</span>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
             <button type="button" class="transition-colors hover:text-default" @click="selectPanel('questions')">{{ t('ideas.detail.stats.questions', { count: 0 }) }}</button>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
@@ -179,7 +187,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           >
             <div class="idea-prose space-y-5 text-muted">
               <p v-if="problemAnnotation">
-                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><KollioFeltMark active variant="passage">{{ problemAnnotation.highlight }}</KollioFeltMark></button><br class="linked-passage-break">{{ problemAnnotation.after }}
+                {{ problemAnnotation.before }}<button ref="annotationRef" type="button" class="linked-passage text-left" :aria-label="t('ideas.detail.annotation.provenance', { excerpt: problemAnnotation.highlight })" :aria-pressed="activePanel === 'team'" @click="selectPanel('team')"><KollioSketchAnnotation active kind="swash">{{ problemAnnotation.highlight }}</KollioSketchAnnotation></button><br class="linked-passage-break">{{ problemAnnotation.after }}
               </p>
               <p v-else-if="detailParagraphs[0]">{{ detailParagraphs[0] }}</p>
               <p v-for="(paragraph, index) in detailParagraphs.slice(1)" :key="index">{{ paragraph }}</p>

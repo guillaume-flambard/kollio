@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses } from './types.gen';
+import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -35,6 +35,98 @@ export const getIdea = <ThrowOnError extends boolean = false>(options: Options<G
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/ideas/{idea_id}',
     ...options
+});
+
+/**
+ * Launch
+ */
+export const launchConstraintAnalysis = <ThrowOnError extends boolean = false>(options: Options<LaunchConstraintAnalysisData, ThrowOnError>): RequestResult<LaunchConstraintAnalysisResponses, LaunchConstraintAnalysisErrors, ThrowOnError> => (options.client ?? client).post<LaunchConstraintAnalysisResponses, LaunchConstraintAnalysisErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/analyses',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Read
+ */
+export const getConstraintAnalysis = <ThrowOnError extends boolean = false>(options: Options<GetConstraintAnalysisData, ThrowOnError>): RequestResult<GetConstraintAnalysisResponses, GetConstraintAnalysisErrors, ThrowOnError> => (options.client ?? client).get<GetConstraintAnalysisResponses, GetConstraintAnalysisErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/analyses/{workflow_id}',
+    ...options
+});
+
+/**
+ * Review
+ */
+export const reviewConstraintAnalysis = <ThrowOnError extends boolean = false>(options: Options<ReviewConstraintAnalysisData, ThrowOnError>): RequestResult<ReviewConstraintAnalysisResponses, ReviewConstraintAnalysisErrors, ThrowOnError> => (options.client ?? client).post<ReviewConstraintAnalysisResponses, ReviewConstraintAnalysisErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/analyses/{workflow_id}/review',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Read Iterations
+ */
+export const listIdeaIterations = <ThrowOnError extends boolean = false>(options: Options<ListIdeaIterationsData, ThrowOnError>): RequestResult<ListIdeaIterationsResponses, ListIdeaIterationsErrors, ThrowOnError> => (options.client ?? client).get<ListIdeaIterationsResponses, ListIdeaIterationsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/iterations',
+    ...options
+});
+
+/**
+ * Append Iteration
+ */
+export const createIdeaIteration = <ThrowOnError extends boolean = false>(options: Options<CreateIdeaIterationData, ThrowOnError>): RequestResult<CreateIdeaIterationResponses, CreateIdeaIterationErrors, ThrowOnError> => (options.client ?? client).post<CreateIdeaIterationResponses, CreateIdeaIterationErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/iterations',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Accept Iteration
+ */
+export const acceptIdeaIteration = <ThrowOnError extends boolean = false>(options: Options<AcceptIdeaIterationData, ThrowOnError>): RequestResult<AcceptIdeaIterationResponses, AcceptIdeaIterationErrors, ThrowOnError> => (options.client ?? client).post<AcceptIdeaIterationResponses, AcceptIdeaIterationErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/iterations/{iteration_id}/accept',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Reject Iteration
+ */
+export const rejectIdeaIteration = <ThrowOnError extends boolean = false>(options: Options<RejectIdeaIterationData, ThrowOnError>): RequestResult<RejectIdeaIterationResponses, RejectIdeaIterationErrors, ThrowOnError> => (options.client ?? client).post<RejectIdeaIterationResponses, RejectIdeaIterationErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/iterations/{iteration_id}/reject',
+    ...options
+});
+
+/**
+ * Restore Iteration
+ */
+export const rollbackIdeaIteration = <ThrowOnError extends boolean = false>(options: Options<RollbackIdeaIterationData, ThrowOnError>): RequestResult<RollbackIdeaIterationResponses, RollbackIdeaIterationErrors, ThrowOnError> => (options.client ?? client).post<RollbackIdeaIterationResponses, RollbackIdeaIterationErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/iterations/{iteration_id}/rollback',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 /**

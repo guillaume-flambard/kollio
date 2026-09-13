@@ -4,17 +4,19 @@ withDefaults(defineProps<{
   meta: string
   initials?: string
   imageUrl?: string
+  avatarKey?: string
   online?: boolean
 }>(), {
   initials: '',
   imageUrl: undefined,
+  avatarKey: 'lilac',
   online: false,
 })
 </script>
 
 <template>
   <div class="person-row">
-    <span class="person-row-avatar" aria-hidden="true">
+    <span class="person-row-avatar" :data-avatar="avatarKey" aria-hidden="true">
       <img v-if="imageUrl" :src="imageUrl" alt="">
       <span v-else>{{ initials || name.charAt(0) }}</span>
     </span>

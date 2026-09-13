@@ -65,10 +65,47 @@
   "ideas": {
     "eyebrow": "Idea library",
     "title": "Ideas to explore",
+    "collectionTitle": "The idea stream",
     "page": "Page {current} of {total}",
     "pagination": "Idea pages",
     "previous": "Previous",
     "next": "Next",
+    "retry": "Try again",
+    "explorer": {
+      "description": "Find an idea that needs you.",
+      "search": "Search for an idea, domain or need",
+      "create": "Submit an idea",
+      "library": "Idea library",
+      "explore": "Explore",
+      "all": "All ideas",
+      "forYou": "For you",
+      "recent": "Recent",
+      "validation": "In validation",
+      "domains": "Domains",
+      "results": "{count} result | {count} results",
+      "found": "{count} idea found | {count} ideas found",
+      "sortBy": "Sort by:",
+      "relevance": "Relevance",
+      "contributors": "{count} contributor | {count} contributors",
+      "contributorTitle": "Contributors",
+      "expertiseTitle": "Team expertise",
+      "noContributors": "This idea has no contributors yet.",
+      "domainGroups": {
+        "ai": "AI and society",
+        "data": "Data",
+        "trust": "Trust",
+        "governance": "Governance",
+        "education": "Education",
+        "product": "Product"
+      },
+      "preview": "Idea preview",
+      "open": "Open idea",
+      "domain": "Domain",
+      "language": "Language",
+      "updated": "Updated",
+      "closePreview": "Close preview",
+      "noResults": "No ideas match these filters."
+    },
     "stage": {
       "seed": "Seed",
       "iterating": "Iterating",
@@ -94,7 +131,8 @@
       "retry": "Try again",
       "loadError": {
         "title": "This idea could not be loaded",
-        "description": "An error interrupted loading. Try again in a moment."
+        "description": "An error interrupted loading. Try again in a moment.",
+        "reassurance": "The idea and your team’s contributions are still safe."
       },
       "explore": "Explore ideas",
       "advance": "Move idea forward",
@@ -113,6 +151,21 @@
         "questions": "{count} open question | {count} open questions",
         "evidence": "{count} piece of evidence | {count} pieces of evidence"
       },
+      "roles": {
+        "product": "Product and strategy",
+        "design": "Design and research",
+        "engineering": "Engineering",
+        "ai_data": "AI and data",
+        "growth": "Growth",
+        "operations": "Operations",
+        "strategy": "Strategy",
+        "research": "Research",
+        "platform": "Platform",
+        "ai": "Artificial intelligence",
+        "data": "Data",
+        "sales": "Sales",
+        "finance": "Finance"
+      },
       "iterations": {
         "title": "Latest iterations",
         "count": "{count} so far",
@@ -122,6 +175,9 @@
       "legacy": {
         "constraint": "Historical constraint",
         "channel": "Proposed channel"
+      },
+      "sources": {
+        "prospecteur": "Prospecteur"
       },
       "companion": {
         "label": "Idea context",

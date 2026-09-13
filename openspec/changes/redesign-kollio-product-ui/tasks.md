@@ -21,3 +21,10 @@
 - [x] 4.1 Add meaningful UI tests for semantic active state, keyboard relationships, and reduced motion; verify the focused test suite passes.
 - [x] 4.2 Run ESLint, Nuxt typecheck, production build, and OpenSpec strict validation; record the commands and results.
 - [x] 4.3 Perform a visual review against the approved Aubergine reference using real French and English content, then correct hierarchy, overflow, contrast, and motion defects.
+
+## 5. Development collaboration fixtures
+
+- [x] 5.1 Add persisted collaborator profiles and idea memberships with an Alembic migration and generated API contract.
+- [x] 5.2 Add a production-guarded, idempotent seed and reset command using stable identifiers.
+- [x] 5.3 Render collaborator counts, avatar stacks, names, and localized roles from the API on idea detail.
+- [x] 5.4 Verify migration, idempotency, workspace isolation, locale parity, frontend types, and the populated detail screen.

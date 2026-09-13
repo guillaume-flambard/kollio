@@ -1,11 +1,16 @@
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
   title: string
   description: string
+  reassurance?: string
   retryLabel: string
   backLabel: string
   backTo: string
-}>()
+  imageSrc?: string
+}>(), {
+  reassurance: undefined,
+  imageSrc: '/images/states/idea-load-error.png',
+})
 
 defineEmits<{
   retry: []
@@ -13,18 +18,37 @@ defineEmits<{
 </script>
 
 <template>
-  <section class="kollio-surface idea-detail-error mx-auto max-w-2xl" role="alert">
-    <div class="idea-detail-error-mark" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7.5v5M12 16.5h.01" />
-      </svg>
+  <section class="kollio-surface idea-detail-error" role="alert">
+    <div class="idea-detail-error-copy">
+      <div class="idea-detail-error-signal" aria-hidden="true">
+        <span />
+        <i />
+        <span />
+      </div>
+
+      <div class="idea-detail-error-message">
+        <h1>{{ title }}</h1>
+        <p>{{ description }}</p>
+        <p v-if="reassurance" class="idea-detail-error-reassurance">{{ reassurance }}</p>
+
+        <div class="idea-detail-error-actions">
+          <KollioPrimaryAction :label="retryLabel" @click="$emit('retry')" />
+          <NuxtLink :to="backTo" class="idea-detail-error-back">
+            {{ backLabel }}
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M5 12h14m-5-5 5 5-5 5" />
+            </svg>
+          </NuxtLink>
+        </div>
+      </div>
     </div>
-    <h1>{{ title }}</h1>
-    <p>{{ description }}</p>
-    <div class="mt-7 flex flex-wrap gap-3">
-      <KollioPrimaryAction :label="retryLabel" @click="$emit('retry')" />
-      <NuxtLink :to="backTo" class="idea-detail-error-back">{{ backLabel }}</NuxtLink>
+
+    <div class="idea-detail-error-visual" aria-hidden="true">
+      <img :src="imageSrc" alt="">
+      <div class="idea-detail-error-caption-line">
+        <span />
+        <i />
+      </div>
     </div>
   </section>
 </template>

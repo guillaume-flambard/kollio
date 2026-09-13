@@ -1,5 +1,7 @@
 {
   "not_found": "Idea not found",
+  "forbidden": "You cannot perform this action",
+  "conflict": "The idea changed. Refresh it and try again",
   "unauthorized": "Sign in required",
   "unavailable": "Service unavailable",
   "invalid": "Invalid request"
