@@ -4,7 +4,14 @@ import type { CollaboratorResponse } from '@kollio/api-client'
 defineProps<{
   people: CollaboratorResponse[]
   label: string
+  profileLinks?: boolean
 }>()
+
+const localePath = useLocalePath()
+
+function personLink(id: string) {
+  return localePath({ name: 'workspace-people-userId', params: { userId: id } })
+}
 
 function initials(name: string) {
   return name.split(/\s+/).slice(0, 2).map(part => part.charAt(0)).join('').toUpperCase()
@@ -14,8 +21,14 @@ function initials(name: string) {
 <template>
   <ul class="avatar-stack" :aria-label="label">
     <li v-for="person in people.slice(0, 4)" :key="person.id" :data-avatar="person.avatar_key || 'lilac'">
-      <span class="avatar-stack-fallback" aria-hidden="true">{{ initials(person.display_name) }}</span>
-      <span class="sr-only">{{ person.display_name }}</span>
+      <NuxtLink v-if="profileLinks" :to="personLink(person.id)">
+        <span class="avatar-stack-fallback" aria-hidden="true">{{ initials(person.display_name) }}</span>
+        <span class="sr-only">{{ person.display_name }}</span>
+      </NuxtLink>
+      <template v-else>
+        <span class="avatar-stack-fallback" aria-hidden="true">{{ initials(person.display_name) }}</span>
+        <span class="sr-only">{{ person.display_name }}</span>
+      </template>
     </li>
   </ul>
 </template>

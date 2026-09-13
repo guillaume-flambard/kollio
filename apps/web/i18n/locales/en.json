@@ -246,6 +246,25 @@
       "growth": "Growth",
       "data": "Data",
       "product": "Product"
+    },
+    "profile": {
+      "metaTitle": "Profile | Kollio",
+      "back": "Back",
+      "rolesTitle": "Roles",
+      "ownedTitle": "Ideas deposited",
+      "teamsTitle": "Teams",
+      "actsTitle": "Recorded acts",
+      "ownedEmpty": "No ideas in this workspace.",
+      "teamsEmpty": "No teams yet.",
+      "actsEmpty": "No recorded acts yet.",
+      "roleIn": "in {idea}",
+      "onIdea": "on {idea}",
+      "notFound": "Profile not found",
+      "notFoundDescription": "This profile does not exist or shares no workspace with you.",
+      "loadError": {
+        "title": "Profile unavailable",
+        "description": "The profile could not be loaded."
+      }
     }
   }
 }

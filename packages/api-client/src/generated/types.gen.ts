@@ -540,6 +540,10 @@ export type ProfileResponse = {
      */
     bio?: string | null;
     /**
+     * Avatar Key
+     */
+    avatar_key?: string | null;
+    /**
      * Owned Ideas
      */
     owned_ideas: Array<OwnedIdeaResponse>;

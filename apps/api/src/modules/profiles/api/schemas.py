@@ -38,6 +38,7 @@ class ProfileResponse(BaseModel):
     handle: str | None = None
     roles: list[str]
     bio: str | None = None
+    avatar_key: str | None = None
     owned_ideas: list[OwnedIdeaResponse]
     memberships: list[MembershipResponse]
     contributions: list[ContributionResponse]

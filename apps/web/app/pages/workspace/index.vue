@@ -195,6 +195,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           v-if="selectedIdea"
           :idea="selectedIdea"
           :stage-label="t(`ideas.stage.${selectedIdea.stage}`)"
+          :profile-links="true"
           :open-label="t('ideas.explorer.open')"
           :contributor-title="t('ideas.explorer.contributorTitle')"
           :expertise-title="t('ideas.explorer.expertiseTitle')"

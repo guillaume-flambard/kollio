@@ -12,6 +12,7 @@ const props = defineProps<{
   domainLabel?: string
   realismLabel?: string
   rolesLabel?: string
+  profileLinks?: boolean
 }>()
 
 defineEmits<{ select: [] }>()
@@ -44,7 +45,7 @@ function initials(name: string) {
       </span>
     </span>
     <span class="explorer-row-activity">
-      <KollioAvatarStack v-if="collaborators.length" :people="collaborators" :label="avatarLabel" />
+      <KollioAvatarStack v-if="collaborators.length" :people="collaborators" :label="avatarLabel" :profile-links="profileLinks" />
       <span>{{ contributorLabel }}</span>
       <time :datetime="idea.created_at">{{ dateLabel }}</time>
     </span>

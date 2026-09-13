@@ -1967,6 +1967,17 @@
             ],
             "title": "Bio"
           },
+          "avatar_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Key"
+          },
           "owned_ideas": {
             "items": {
               "$ref": "#/components/schemas/OwnedIdeaResponse"

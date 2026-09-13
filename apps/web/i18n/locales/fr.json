@@ -246,6 +246,25 @@
       "growth": "Growth",
       "data": "Data",
       "product": "Produit"
+    },
+    "profile": {
+      "metaTitle": "Profil | Kollio",
+      "back": "Retour",
+      "rolesTitle": "Rôles",
+      "ownedTitle": "Idées déposées",
+      "teamsTitle": "Équipes",
+      "actsTitle": "Actes enregistrés",
+      "ownedEmpty": "Aucune idée dans cet espace.",
+      "teamsEmpty": "Aucune équipe pour le moment.",
+      "actsEmpty": "Aucun acte enregistré pour le moment.",
+      "roleIn": "dans {idea}",
+      "onIdea": "sur {idea}",
+      "notFound": "Profil introuvable",
+      "notFoundDescription": "Ce profil n'existe pas ou ne partage aucun espace avec vous.",
+      "loadError": {
+        "title": "Profil indisponible",
+        "description": "Le profil n'a pas pu être chargé."
+      }
     }
   }
 }

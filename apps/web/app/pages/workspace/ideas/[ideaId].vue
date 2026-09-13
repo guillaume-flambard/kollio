@@ -6,6 +6,7 @@ definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 const { t, locale } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
+const localePath = useLocalePath()
 const ideaId = String(route.params.ideaId)
 const activePanel = ref<'team' | 'questions' | 'evidence'>('team')
 const descriptionExpanded = ref(false)
@@ -19,6 +20,10 @@ let canvasObserver: ResizeObserver | undefined
 const { data: idea, error, status, refresh } = useLazyAsyncData(`idea-${ideaId}`, () =>
   requestFetch<IdeaResponse>(`/api/ideas/${encodeURIComponent(ideaId)}`),
 )
+
+function personLink(id: string) {
+  return localePath({ name: 'workspace-people-userId', params: { userId: id } })
+}
 
 const dateFormatter = computed(() =>
   new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
@@ -274,6 +279,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
             <KollioAvatarStack
               v-if="collaborators.length"
               :people="collaborators"
+              :profile-links="true"
               :label="t('ideas.detail.stats.contributors', { count: collaborators.length })"
             />
             <span>{{ t('ideas.detail.stats.contributors', { count: collaborators.length }) }}</span>
@@ -325,13 +331,13 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               <h3 class="text-sm font-medium text-muted">{{ t('ideas.detail.team.membersTitle') }}</h3>
               <ul class="mt-2 grid gap-1" role="list">
                 <li v-for="member in collaborators" :key="member.id" class="flex items-center justify-between gap-3">
-                  <KollioPersonRow :name="member.display_name" :meta="member.role" :avatar-key="member.avatar_key ?? 'lilac'" />
-              <button v-if="isOwner && member.id !== idea.owner_id" type="button" class="team-link" @click="removeTeamMember(member.id)">
-                {{ t('ideas.detail.team.remove') }}
-              </button>
-              <button v-else-if="!isOwner" type="button" class="team-link" @click="leaveTeam()">
-                {{ t('ideas.detail.team.leave') }}
-              </button>
+                  <KollioPersonRow :name="member.display_name" :meta="member.role" :avatar-key="member.avatar_key ?? 'lilac'" :to="personLink(member.id)" />
+                  <button v-if="isOwner && member.id !== idea.owner_id" type="button" class="team-link" @click="removeTeamMember(member.id)">
+                    {{ t('ideas.detail.team.remove') }}
+                  </button>
+                  <button v-else-if="!isOwner" type="button" class="team-link" @click="leaveTeam()">
+                    {{ t('ideas.detail.team.leave') }}
+                  </button>
                 </li>
               </ul>
               <p v-if="!collaborators.length" class="text-sm text-muted">{{ t('ideas.detail.foundationNote') }}</p>
@@ -339,7 +345,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
             <div>
               <h3 class="text-sm font-medium text-muted">{{ t('ideas.detail.team.soughtTitle') }}</h3>
               <ul class="mt-2 flex flex-wrap gap-1">
-                <li v-for="role in soughtRoles" :key="role" class="team-role-pill">{{ t(`ideas.detail.team.roles.${role}`) }}</li>
+                <li v-for="role in soughtRoles" :key="role" class="team-role-pill">{{ t(`ideas.role.${role}`) }}</li>
               </ul>
             </div>
           </div>

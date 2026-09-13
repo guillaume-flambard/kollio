@@ -35,6 +35,7 @@ async def read_profile(
         handle=record.user.handle,
         roles=record.user.roles,
         bio=record.user.bio,
+        avatar_key=record.user.avatar_key,
         owned_ideas=[OwnedIdeaResponse.model_validate(row) for row in record.owned_ideas],
         memberships=[MembershipResponse.model_validate(row) for row in record.memberships],
         contributions=[ContributionResponse.model_validate(row) for row in record.contributions],
