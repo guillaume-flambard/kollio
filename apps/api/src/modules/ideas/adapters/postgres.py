@@ -15,6 +15,9 @@ from sqlalchemy import (
     select,
     text,
 )
+from sqlalchemy import (
+    true as sa_true,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
@@ -245,11 +248,16 @@ class PostgresIdeas:
             filters.append(Idea.stage == stage)
         if sought_role:
             filters.append(Idea.sought_roles.contains([sought_role]))
-        activity, _analysis = self._activity_binding()
+        activity, _analysis, head = self._activity_binding()
         if realism_min is not None:
             filters.append(_analysis >= realism_min)
         query = (
-            select(Idea, _analysis.label("realism_score"), activity.label("last_activity_at"))
+            select(
+                Idea,
+                _analysis.label("realism_score"),
+                activity.label("last_activity_at"),
+            )
+            .outerjoin(head, sa_true())
             .where(*filters)
             .order_by(activity.desc().nulls_last(), Idea.created_at.desc(), Idea.id.desc())
             .limit(limit)
@@ -278,7 +286,9 @@ class PostgresIdeas:
             .subquery()
             .lateral()
         )
-        analysis = select(IdeaAnalysis.realism_score).where(
-            IdeaAnalysis.iteration_id == head.c.id
-        ).scalar_subquery()
+        analysis = (
+            select(IdeaAnalysis.realism_score)
+            .where(IdeaAnalysis.iteration_id == head.c.id)
+            .scalar_subquery()
+        )
         return head.c.created_at, analysis, head
