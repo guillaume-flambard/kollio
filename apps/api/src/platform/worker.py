@@ -29,6 +29,7 @@ from src.modules.constraint_analysis.domain.lifecycle import (
 )
 from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
 from src.platform.config import get_settings
+from src.platform.locale import UnsupportedLocaleError
 from src.platform.telemetry import configure_telemetry
 
 settings = get_settings()
@@ -165,6 +166,15 @@ async def execute_constraint_analysis(
                     current.finished_at = datetime.now(UTC)
                 await session.commit()
             return {"workflow_id": workflow_id, "status": current.status}
+    except UnsupportedLocaleError as error:
+        await _record_failure(
+            task_context.state.sessions,
+            identifier,
+            type(error).__name__,
+            retrying=False,
+            review=approved is not None,
+        )
+        return {"workflow_id": workflow_id, "status": AnalysisStatus.FAILED.value}
     except Exception as error:
         retries = int(task_context.message.labels.get("_retries", 0)) + 1
         max_retries = int(task_context.message.labels.get("max_retries", 3))

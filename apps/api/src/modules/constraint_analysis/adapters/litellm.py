@@ -9,6 +9,7 @@ from src.modules.constraint_analysis.domain.models import (
     validate_analysis_result,
 )
 from src.platform.config import Settings
+from src.platform.locale import language_name
 
 SYSTEM_PROMPT = (
     "Pressure-test the supplied idea using only the supplied evidence. Assess exactly these "
@@ -19,7 +20,6 @@ SYSTEM_PROMPT = (
     "Write all summaries in {language}, locale {locale}. Return one JSON object matching this "
     "schema and no Markdown: {schema}"
 )
-LANGUAGES = {"fr": "French", "en": "English"}
 
 
 class LiteLLMConstraintAnalysisGateway:
@@ -41,7 +41,7 @@ class LiteLLMConstraintAnalysisGateway:
                 {
                     "role": "system",
                     "content": SYSTEM_PROMPT.format(
-                        language=LANGUAGES[locale],
+                        language=language_name(locale),
                         locale=locale,
                         schema=json.dumps(schema),
                     ),

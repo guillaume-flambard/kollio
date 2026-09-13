@@ -24,9 +24,7 @@ defineEmits<{
       @click="$emit('update:modelValue', !modelValue)"
     >
       <span>{{ modelValue ? collapseLabel : expandLabel }}</span>
-      <svg aria-hidden="true" viewBox="0 0 20 20" class="size-4" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path :d="modelValue ? 'm5 12 5-5 5 5' : 'm5 8 5 5 5-5'" />
-      </svg>
+      <KollioIcon :name="modelValue ? 'chevron-up' : 'chevron-down'" class="size-4" />
     </button>
   </div>
 </template>

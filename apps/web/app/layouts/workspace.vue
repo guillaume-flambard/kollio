@@ -5,7 +5,7 @@ const switchLocalePath = useSwitchLocalePath()
 
 <template>
   <div class="workspace-canvas workspace-shell min-h-screen bg-default text-default">
-    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default/95 px-5 backdrop-blur lg:hidden">
+    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default px-5 lg:hidden">
       <NuxtLink :to="$localePath('/workspace')" :aria-label="t('brand')">
         <KollioBrand />
       </NuxtLink>

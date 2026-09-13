@@ -831,6 +831,16 @@
               }
             ]
           },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConstraintAnalysisResult"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "error_code": {
             "anyOf": [
               {

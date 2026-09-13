@@ -25,13 +25,8 @@ const tabs = computed(() => panels.map(panel => ({
         count: panelCounts[panel],
       }),
 })))
-const sourceLabel = computed(() => props.idea.legacy_context?.source === 'prospecteur'
-  ? 'Prospecteur'
-  : props.idea.legacy_context?.source)
-
-function initials(name: string) {
-  return name.split(/\s+/).slice(0, 2).map(part => part.charAt(0)).join('').toUpperCase()
-}
+const sourceDisplayName = useSourceDisplayName()
+const sourceLabel = computed(() => sourceDisplayName(props.idea.legacy_context?.source))
 
 function selectPanel(panel: string) {
   if (panels.includes(panel as typeof panels[number])) {
@@ -76,7 +71,7 @@ onBeforeUnmount(() => emit('targetReady', undefined))
               :key="person.id"
               :name="person.display_name"
               :meta="t(`ideas.detail.roles.${person.role}`)"
-              :initials="initials(person.display_name)"
+              :initials="personInitials(person.display_name)"
               :avatar-key="person.avatar_key || undefined"
               :online="index === 0"
             />

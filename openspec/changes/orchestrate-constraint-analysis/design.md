@@ -35,7 +35,7 @@ Redis transports commands only. PostgreSQL stores workflow status, immutable inp
 
 ### Use explicit lifecycle transitions
 
-The lifecycle is `queued`, `running`, `awaiting_review`, `completed`, `rejected` or `failed`. Pure transition rules reject stale or repeated review decisions. The worker updates state transactionally around graph execution.
+The lifecycle is `queued`, `running`, `awaiting_review`, `review_queued`, `completed`, `rejected` or `failed`. Pure transition rules reject stale or repeated review decisions. The worker updates state transactionally around graph execution. `review_queued` is a dispatch-pending state: it records the reviewer's decision after `POST review` and before the worker resumes the graph, so a queue retry observes the same durable decision and cannot run the review twice.
 
 ### Propagate standard trace context
 

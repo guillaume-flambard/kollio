@@ -40,6 +40,7 @@ class AnalysisWorkflowResponse(BaseModel):
     ]
     current_step: str
     draft_result: ConstraintAnalysisResult | None
+    result: ConstraintAnalysisResult | None = None
     error_code: str | None
     created_at: datetime
     updated_at: datetime

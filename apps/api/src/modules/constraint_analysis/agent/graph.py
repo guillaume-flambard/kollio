@@ -3,6 +3,7 @@ from typing import Any, Literal
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
+from opentelemetry import trace
 
 from src.modules.constraint_analysis.agent.state import ConstraintAnalysisState
 from src.modules.constraint_analysis.domain.models import (
@@ -11,35 +12,45 @@ from src.modules.constraint_analysis.domain.models import (
 )
 from src.modules.constraint_analysis.service.ports import ConstraintAnalysisGateway
 
+_tracer = trace.get_tracer("kollio.constraint_analysis")
+
 
 def build_constraint_analysis_graph(
     gateway: ConstraintAnalysisGateway,
     checkpointer: BaseCheckpointSaver[Any],
 ) -> Any:
     async def analyze(state: ConstraintAnalysisState) -> dict[str, object]:
-        result = await gateway.analyze(
-            title=state["title"],
-            pitch=state["pitch"],
-            locale=state["locale"],
-            evidence=[AnalysisEvidence.model_validate(item) for item in state["evidence"]],
-        )
-        return {"result": result.model_dump(mode="json")}
+        with _tracer.start_as_current_span("constraint_analysis.analyze") as span:
+            span.set_attribute("kollio.workflow.id", state["workflow_id"])
+            span.set_attribute("kollio.locale", state["locale"])
+            result = await gateway.analyze(
+                title=state["title"],
+                pitch=state["pitch"],
+                locale=state["locale"],
+                evidence=[AnalysisEvidence.model_validate(item) for item in state["evidence"]],
+            )
+            return {"result": result.model_dump(mode="json")}
 
     async def review(state: ConstraintAnalysisState) -> dict[str, object]:
-        approved = interrupt({"locale": state["locale"], "result": state["result"]})
-        if not isinstance(approved, bool):
-            raise ValueError("Review must provide a boolean decision")
-        return {"approved": approved}
+        with _tracer.start_as_current_span("constraint_analysis.review") as span:
+            span.set_attribute("kollio.workflow.id", state["workflow_id"])
+            approved = interrupt({"locale": state["locale"], "result": state["result"]})
+            if not isinstance(approved, bool):
+                raise ValueError("Review must provide a boolean decision")
+            span.set_attribute("kollio.review.approved", approved)
+            return {"approved": approved}
 
     def after_review(state: ConstraintAnalysisState) -> Literal["complete", "reject"]:
         return "complete" if state["approved"] else "reject"
 
     async def complete(state: ConstraintAnalysisState) -> dict[str, object]:
-        return {
-            "result": ConstraintAnalysisResult.model_validate(state["result"]).model_dump(
-                mode="json"
-            )
-        }
+        with _tracer.start_as_current_span("constraint_analysis.complete") as span:
+            span.set_attribute("kollio.workflow.id", state["workflow_id"])
+            return {
+                "result": ConstraintAnalysisResult.model_validate(state["result"]).model_dump(
+                    mode="json"
+                )
+            }
 
     graph = StateGraph(ConstraintAnalysisState)
     graph.add_node("analyze", analyze)

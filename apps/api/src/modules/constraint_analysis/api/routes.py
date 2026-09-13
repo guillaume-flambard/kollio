@@ -6,13 +6,17 @@ from opentelemetry.propagate import inject
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.modules.constraint_analysis.adapters.postgres import PostgresAnalysisWorkflows
+from src.modules.constraint_analysis.adapters.postgres import (
+    AnalysisWorkflow,
+    PostgresAnalysisWorkflows,
+)
 from src.modules.constraint_analysis.api.schemas import (
     AnalysisWorkflowResponse,
     LaunchAnalysisRequest,
     ReviewAnalysisRequest,
 )
 from src.modules.constraint_analysis.domain.lifecycle import InvalidAnalysisTransition
+from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
 from src.modules.constraint_analysis.service.operations import (
     AnalysisAuthorizationError,
     AnalysisNotFoundError,
@@ -37,6 +41,16 @@ def _trace_context() -> dict[str, str]:
     carrier: dict[str, str] = {}
     inject(carrier)
     return carrier
+
+
+async def _respond(
+    repository: PostgresAnalysisWorkflows, workflow: AnalysisWorkflow
+) -> AnalysisWorkflowResponse:
+    response = AnalysisWorkflowResponse.model_validate(workflow)
+    final = await repository.final_result(workflow.id)
+    if final is not None:
+        response.result = ConstraintAnalysisResult.model_validate(final.result)
+    return response
 
 
 @router.post(
@@ -96,7 +110,7 @@ async def launch(
         raise HTTPException(
             status.HTTP_404_NOT_FOUND, MESSAGES[request.state.locale]["not_found"]
         ) from error
-    return AnalysisWorkflowResponse.model_validate(response_workflow)
+    return await _respond(repository, response_workflow)
 
 
 @router.get(
@@ -119,7 +133,7 @@ async def read(
         raise HTTPException(
             status.HTTP_404_NOT_FOUND, MESSAGES[request.state.locale]["not_found"]
         ) from error
-    return AnalysisWorkflowResponse.model_validate(workflow)
+    return await _respond(PostgresAnalysisWorkflows(session), workflow)
 
 
 @router.post(
@@ -177,4 +191,4 @@ async def review(
         raise HTTPException(
             status.HTTP_409_CONFLICT, MESSAGES[request.state.locale]["conflict"]
         ) from error
-    return AnalysisWorkflowResponse.model_validate(workflow)
+    return await _respond(repository, workflow)

@@ -51,6 +51,7 @@ export type AnalysisWorkflowResponse = {
      */
     current_step: string;
     draft_result: ConstraintAnalysisResult | null;
+    result?: ConstraintAnalysisResult | null;
     /**
      * Error Code
      */
