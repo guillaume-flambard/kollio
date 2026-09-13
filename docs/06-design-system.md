@@ -69,7 +69,9 @@ The primary action is one semantic ink-colored control with a dusty-lilac felt-t
 
 - Map semantic tokens through Nuxt UI and shared CSS.
 - Put every interface string behind FR and EN i18n keys.
-- Use one consistent SVG icon family; never use emoji as icons.
+- Use only Kollio-owned SVG icons and illustrations; never use emoji or third-party icon packs.
+- Author functional icons once in a shared component with a 24px coordinate system, rounded joins, restrained asymmetry, and `currentColor` strokes.
+- Keep narrative spot illustrations as reusable SVG assets. Paper grain and felt-tip texture belong inside the SVG and must remain subtle at small sizes.
 - Raster images may be used as visual exploration references, but recurring product and marketing artwork ships as vector assets. Exception 2026-09-13: the avatar sprite, empty-state, and error illustrations ship as raster; their vector redraw is tracked follow-up work, not a waiver of this rule.
 - Keep keyboard focus visible and touch targets at least 44px.
 - Avoid pill badges, generic card grids, oversized metrics, decorative charts, gradients outside the felt-tip washes defined above, glass effects, and dense simultaneous panels.
