@@ -53,6 +53,7 @@ The test does not spend provider budget on a live `b.ai / qwen3.8-flash` analysi
 | Trace continuity | Integration coverage verifies that the incoming W3C trace identifier reaches the queued command |
 | Web behavior | Vitest runs in the required CI job alongside backend verification |
 | Generated contract | CI exports OpenAPI, regenerates the TypeScript client and rejects drift |
+| Performance | CI caps workspace queries, validation CPU time, compressed client assets and image bytes |
 
 ## Primary references
 

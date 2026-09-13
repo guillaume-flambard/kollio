@@ -81,6 +81,7 @@ jobs:
       - name: Build web and runtime images
         run: |
           pnpm build
+          pnpm performance:budget
           docker compose build
         env:
           POSTGRES_PASSWORD: test-only-password

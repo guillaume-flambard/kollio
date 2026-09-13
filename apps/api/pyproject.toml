@@ -48,6 +48,7 @@ asyncio_default_fixture_loop_scope = "function"
 markers = [
     "integration: requires Postgres and Redis",
     "e2e: exercises the complete local runtime across process boundaries",
+    "performance: guards latency and query-count budgets on critical paths",
     "live: requires configured external providers",
 ]
 

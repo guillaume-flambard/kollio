@@ -38,3 +38,9 @@
 - [x] 7.2 Simulate queue dispatch outages and prove idempotent launch and review recovery.
 - [x] 7.3 Exercise API, Redis Streams, Taskiq, LangGraph and PostgreSQL through one provider-free E2E scenario.
 - [x] 7.4 Run deterministic web behavior tests in the required CI job.
+
+## 8. Performance regression gates
+
+- [x] 8.1 Guard workspace idea pagination against N+1 queries and excessive local latency.
+- [x] 8.2 Enforce compressed JavaScript, compressed CSS and static image budgets after the production web build.
+- [x] 8.3 Guard strict agent-result validation throughput on the CPU hot path.
