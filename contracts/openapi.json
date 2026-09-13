@@ -323,6 +323,84 @@
         }
       }
     },
+    "/ideas/{idea_id}/members/{member_id}/remove": {
+      "post": {
+        "tags": [
+          "ideas"
+        ],
+        "summary": "Remove Idea Member",
+        "operationId": "remove_idea_member",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          },
+          {
+            "name": "member_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Member Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/RemoveMemberBody"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Remove Idea Member"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ideas/{idea_id}/iterations": {
       "get": {
         "tags": [
@@ -1255,6 +1333,20 @@
               }
             ]
           },
+          "sought_roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sought Roles"
+          },
+          "join_requests": {
+            "items": {
+              "$ref": "#/components/schemas/JoinRequestResponse"
+            },
+            "type": "array",
+            "title": "Join Requests"
+          },
           "legacy_context": {
             "anyOf": [
               {
@@ -1647,6 +1739,25 @@
           "rationale"
         ],
         "title": "RejectJoinBody"
+      },
+      "RemoveMemberBody": {
+        "properties": {
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "title": "RemoveMemberBody"
       },
       "ResolveProposalRequest": {
         "properties": {

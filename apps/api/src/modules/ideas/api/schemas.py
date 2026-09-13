@@ -59,6 +59,8 @@ class IdeaResponse(BaseModel):
     visibility: Literal["public", "workspace"]
     created_at: datetime
     analysis: AnalysisResponse | None = None
+    sought_roles: list[str] = Field(default_factory=list)
+    join_requests: list[JoinRequestResponse] = Field(default_factory=list)
     legacy_context: LegacyIdeaContext | None = None
     collaborators: list[CollaboratorResponse] = Field(default_factory=list)
 

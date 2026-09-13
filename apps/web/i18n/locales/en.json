@@ -200,6 +200,24 @@
           "provenanceNote": "This passage comes from the original Prospecteur deposit. Its provenance is not yet verified evidence.",
           "empty": "Sources that support or challenge this idea will appear here."
         }
+      },
+      "team": {
+        "title": "The team",
+        "soughtTitle": "Sought roles",
+        "membersTitle": "Members",
+        "apply": "Join the loop",
+        "applyNote": "What you bring",
+        "send": "Send",
+        "sending": "Sending…",
+        "pending": "Application pending",
+        "rejected": "Rejected: {rationale}",
+        "accept": "Accept",
+        "reject": "Reject",
+        "rejectReason": "Short rejection rationale",
+        "leave": "Leave the loop",
+        "remove": "Remove",
+        "applied": "Application sent.",
+        "error": "The action failed. Try again."
       }
     },
     "deposit": {
@@ -220,6 +238,15 @@
       "abstainedBody": "There is no evidence yet. Enrich the idea and add some: each constraint explains what would unlock its score.",
       "openIdea": "Open the idea",
       "error": "The deposit failed. Try again."
+    },
+    "role": {
+      "owner": "Owner",
+      "designer": "Designer",
+      "dev": "Engineering",
+      "commercial": "Commercial",
+      "growth": "Growth",
+      "data": "Data",
+      "product": "Product"
     }
   }
 }

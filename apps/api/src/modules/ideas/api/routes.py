@@ -4,9 +4,10 @@ from typing import Annotated, Any, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.modules.ideas.adapters.postgres import PostgresIdeas
+from src.modules.ideas.adapters.postgres import Idea, PostgresIdeas
 from src.modules.ideas.api.schemas import (
     AnalysisResponse,
     ApplyJoinBody,
@@ -26,6 +27,7 @@ from src.modules.ideas.service.team_service import (
     TeamNotFoundError,
     apply_to_join,
     leave_team,
+    remove_member,
     resolve_join_request,
 )
 from src.modules.iterations.adapters.postgres import PostgresIterations
@@ -91,13 +93,27 @@ async def read_idea(
     history = await iterations.history(idea.id)
     viewed = history[0] if history else None
     analysis = await analysis_for_view(iterations, idea.id, viewed) if viewed is not None else None
+    join_requests = await _visible_join_requests(repository, idea, identity.subject)
     return response.model_copy(
         update={
             "legacy_context": legacy_context(idea.provenance),
             "collaborators": collaborators,
+            "sought_roles": idea.sought_roles,
+            "join_requests": [
+                JoinRequestResponse.model_validate(join_request) for join_request in join_requests
+            ],
             "analysis": _analysis_response(analysis, viewed=viewed) if viewed else None,
         }
     )
+
+
+async def _visible_join_requests(repository: PostgresIdeas, idea: Idea, subject: str):
+    all_requests = await repository.join_requests_for_idea(idea.id)
+    requests = [item for item in all_requests if item.status == "pending"]
+    if idea.owner_id == (await repository.user_by_subject(subject)).id:
+        return all_requests
+    actor = await repository.user_by_subject(subject)
+    return [item for item in requests if item.requester_id == actor.id]
 
 
 def _analysis_response(analysis, viewed):
@@ -319,6 +335,33 @@ async def leave_idea_team(
     repository = PostgresIdeas(session)
     try:
         outcome = await leave_team(repository, idea_id, identity.subject)
+        await session.commit()
+    except (TeamNotFoundError, ValueError) as error:
+        raise _team_error(request, error) from error
+    return outcome
+
+
+class RemoveMemberBody(BaseModel):
+    reason: str | None = Field(default=None, min_length=1, max_length=500)
+
+
+@router.post(
+    "/{idea_id}/members/{member_id}/remove",
+    operation_id="remove_idea_member",
+)
+async def remove_idea_member(
+    idea_id: UUID,
+    member_id: UUID,
+    body: RemoveMemberBody | None,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> dict:
+    repository = PostgresIdeas(session)
+    try:
+        outcome = await remove_member(
+            repository, idea_id, identity.subject, member_id, reason=body.reason if body else None
+        )
         await session.commit()
     except (TeamNotFoundError, ValueError) as error:
         raise _team_error(request, error) from error

@@ -123,10 +123,11 @@ async def remove_member(
     idea, actor = await _accessible_idea(ideas, idea_id, subject)
     if idea.owner_id != actor.id:
         raise TeamAuthorizationError("Only the owner can remove a member")
+    if member_id == idea.owner_id:
+        raise TeamRuleError("The owner is always in the loop")
     membership = await ideas.membership(idea_id, member_id)
-    if membership is None and member_id == idea.owner_id:
+    if membership is None:
         raise TeamNotFoundError
-    if membership is not None:
-        await ideas.remove_membership(idea_id, member_id)
+    await ideas.remove_membership(idea_id, member_id)
     await ideas.record_departure(idea_id, member_id, "removed", reason)
     return {"recorded": True}

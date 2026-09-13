@@ -200,6 +200,24 @@
           "provenanceNote": "Ce passage vient du dépôt Prospecteur d’origine. Cette provenance ne constitue pas encore une preuve vérifiée.",
           "empty": "Les sources qui soutiennent ou remettent en cause cette idée apparaîtront ici."
         }
+      },
+      "team": {
+        "title": "L’équipe",
+        "soughtTitle": "Rôles recherchés",
+        "membersTitle": "Membres",
+        "apply": "Rejoindre la boucle",
+        "applyNote": "Ce que vous apportez",
+        "send": "Envoyer",
+        "sending": "Envoi…",
+        "pending": "Candidature en attente",
+        "rejected": "Refus : {rationale}",
+        "accept": "Accepter",
+        "reject": "Refuser",
+        "rejectReason": "Motif court du refus",
+        "leave": "Quitter la boucle",
+        "remove": "Retirer",
+        "applied": "Candidature envoyée.",
+        "error": "L’action a échoué. Réessayez."
       }
     },
     "deposit": {
@@ -220,6 +238,15 @@
       "abstainedBody": "Il n'y a pas encore de preuve. Enrichissez l'idée puis ajoutez-en : chaque contrainte indique ce qui ferait basculer sa note.",
       "openIdea": "Ouvrir l’idée",
       "error": "Le dépôt a échoué. Réessayez."
+    },
+    "role": {
+      "owner": "Porteur",
+      "designer": "Designer",
+      "dev": "Développement",
+      "commercial": "Commercial",
+      "growth": "Growth",
+      "data": "Data",
+      "product": "Produit"
     }
   }
 }

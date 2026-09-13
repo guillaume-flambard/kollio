@@ -23,6 +23,117 @@ const { data: idea, error, status, refresh } = useLazyAsyncData(`idea-${ideaId}`
 const dateFormatter = computed(() =>
   new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
 )
+
+const teamRoles = ['designer', 'dev', 'commercial', 'growth', 'data', 'product'] as const
+const joinRequests = computed(() => idea.value?.join_requests ?? [])
+const soughtRoles = computed(() => idea.value?.sought_roles ?? [])
+const sessionSubject = computed(() => sessionData?.value?.subject)
+const isOwner = computed(() => !!idea.value && !!sessionSubject.value && sessionSubject.value === idea.value.owner_id)
+const applyRole = ref<(typeof teamRoles)[number] | ''>('')
+const applyNote = ref('')
+const teamBusy = ref(false)
+const teamError = ref(false)
+const teamApplied = ref(false)
+const rejectTarget = ref<string | null>(null)
+const rejectRationale = ref('')
+
+const { data: sessionData } = await useAsyncData('idea-session', () =>
+  requestFetch<{ signedIn: boolean; subject?: string }>('/api/session'),
+)
+
+async function retryTeamRefresh() {
+  teamError.value = false
+  try {
+    await refresh()
+  }
+  catch {
+    teamError.value = true
+  }
+}
+
+async function applyJoin() {
+  if (!applyRole.value || !applyNote.value.trim() || teamBusy.value) return
+  teamBusy.value = true
+  teamError.value = false
+  try {
+    await requestFetch(`/api/ideas/${encodeURIComponent(ideaId)}/join-requests`, {
+      method: 'POST',
+      body: { role: applyRole.value, note: applyNote.value.trim() },
+    })
+    applyRole.value = ''
+    applyNote.value = ''
+    teamApplied.value = true
+    await retryTeamRefresh()
+  }
+  catch {
+    teamError.value = true
+  }
+  finally {
+    teamBusy.value = false
+  }
+}
+
+async function resolveJoin(requestId: string, action: 'accept' | 'reject') {
+  if (teamBusy.value) return
+  if (action === 'reject' && rejectTarget.value !== requestId) {
+    rejectTarget.value = requestId
+    rejectRationale.value = ''
+    return
+  }
+  const rationale = rejectRationale.value
+  rejectTarget.value = null
+  rejectRationale.value = ''
+  teamBusy.value = true
+  teamError.value = false
+  try {
+    await requestFetch(
+      `/api/ideas/${encodeURIComponent(ideaId)}/join-requests/${encodeURIComponent(requestId)}/${action}`,
+      { method: 'POST', body: action === 'reject' ? { rationale } : undefined },
+    )
+    await retryTeamRefresh()
+  }
+  catch {
+    teamError.value = true
+  }
+  finally {
+    teamBusy.value = false
+  }
+}
+
+async function leaveTeam() {
+  teamBusy.value = true
+  teamError.value = false
+  try {
+    await requestFetch(`/api/ideas/${encodeURIComponent(ideaId)}/team/leave`, { method: 'POST' })
+    await retryTeamRefresh()
+  }
+  catch {
+    teamError.value = true
+  }
+  finally {
+    teamBusy.value = false
+  }
+}
+
+async function removeTeamMember(memberId: string) {
+  teamBusy.value = true
+  teamError.value = false
+  try {
+    await requestFetch(
+      `/api/ideas/${encodeURIComponent(ideaId)}/team/remove/${encodeURIComponent(memberId)}`,
+      { method: 'POST' },
+    )
+    await retryTeamRefresh()
+  }
+  catch {
+    teamError.value = true
+  }
+  finally {
+    teamBusy.value = false
+  }
+}
+
+const actionError = computed(() => teamError.value ? t('ideas.detail.team.error') : '')
 const panels = ['team', 'questions', 'evidence'] as const
 const pitchParagraphs = computed(() => idea.value?.pitch.split(/\n\s*\n/).filter(Boolean) ?? [])
 const pitchSentences = computed(() => idea.value?.pitch.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ])/).map(sentence => sentence.trim()).filter(Boolean) ?? [])
@@ -205,6 +316,75 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           :empty-label="t('ideas.detail.iterations.empty')"
           :source-label="legacySourceLabel"
         />
+
+        <section id="team" class="idea-team mt-11 rounded-2xl border border-default p-5 sm:p-6" :aria-labelledby="'idea-team-title'">
+          <h2 id="idea-team-title" class="text-[1.25rem] font-semibold tracking-[-0.025em]">{{ t('ideas.detail.team.title') }}</h2>
+
+          <div class="mt-4 grid gap-2 sm:grid-cols-[2fr_1fr]">
+            <div>
+              <h3 class="text-sm font-medium text-muted">{{ t('ideas.detail.team.membersTitle') }}</h3>
+              <ul class="mt-2 grid gap-1" role="list">
+                <li v-for="member in collaborators" :key="member.id" class="flex items-center justify-between gap-3">
+                  <KollioPersonRow :name="member.display_name" :meta="member.role" :avatar-key="member.avatar_key ?? 'lilac'" />
+              <button v-if="isOwner && member.id !== idea.owner_id" type="button" class="team-link" @click="removeTeamMember(member.id)">
+                {{ t('ideas.detail.team.remove') }}
+              </button>
+              <button v-else-if="!isOwner" type="button" class="team-link" @click="leaveTeam()">
+                {{ t('ideas.detail.team.leave') }}
+              </button>
+                </li>
+              </ul>
+              <p v-if="!collaborators.length" class="text-sm text-muted">{{ t('ideas.detail.foundationNote') }}</p>
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-muted">{{ t('ideas.detail.team.soughtTitle') }}</h3>
+              <ul class="mt-2 flex flex-wrap gap-1">
+                <li v-for="role in soughtRoles" :key="role" class="team-role-pill">{{ t(`ideas.detail.team.roles.${role}`) }}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div v-if="joinRequests.length" class="team-requests mt-4 grid gap-2">
+            <div v-for="request in joinRequests" :key="request.id" class="team-request rounded-xl border border-default p-3" :data-status="request.status">
+              <p class="text-sm font-medium">{{ request.note }}</p>
+              <p class="text-sm text-muted">{{ t('ideas.role.' + request.role) }}</p>
+              <p v-if="request.status === 'rejected' && request.rationale">
+                {{ t('ideas.detail.team.rejected', { rationale: request.rationale }) }}
+              </p>
+              <p v-else-if="request.status === 'pending'">{{ t('ideas.detail.team.pending') }}</p>
+              <div v-if="isOwner && request.status === 'pending'" class="flex gap-2">
+                <button v-if="rejectTarget !== request.id" type="button" class="team-link" @click="resolveJoin(request.id, 'accept')">
+                  {{ t('ideas.detail.team.accept') }}
+                </button>
+                <button type="button" class="team-link" @click="resolveJoin(request.id, 'reject')">
+                  {{ t('ideas.detail.team.reject') }}
+                </button>
+              </div>
+              <form v-if="rejectTarget === request.id" @submit.prevent="resolveJoin(request.id, 'reject')">
+                <input v-model="rejectRationale" type="text" :placeholder="t('ideas.detail.team.rejectReason')" required>
+                <button type="submit" class="team-link">{{ t('ideas.detail.team.reject') }}</button>
+              </form>
+            </div>
+          </div>
+
+          <form v-if="!isOwner && !joinRequests.length" class="team-apply mt-4 grid gap-2" @submit.prevent="applyJoin">
+            <div class="flex flex-wrap items-center gap-2">
+              <label class="text-sm font-medium" for="team-apply-role">{{ t('ideas.detail.team.soughtTitle') }}</label>
+              <select id="team-apply-role" v-model="applyRole" required>
+                <option v-for="role in teamRoles" :key="role" :value="role">{{ t(`ideas.detail.team.roles.${role}`) }}</option>
+              </select>
+            </div>
+            <label class="grid gap-1 text-sm font-medium" for="team-apply-note">
+              {{ t('ideas.detail.team.applyNote') }}
+              <textarea id="team-apply-note" v-model="applyNote" rows="2" required />
+            </label>
+            <p v-if="actionError" role="alert">{{ actionError }}</p>
+            <button type="submit" class="team-link" :disabled="teamBusy">
+              {{ teamBusy ? t('ideas.detail.team.sending') : t('ideas.detail.team.apply') }}
+            </button>
+            <p v-if="teamApplied" class="text-sm text-muted">{{ t('ideas.detail.team.applied') }}</p>
+          </form>
+        </section>
 
         <KollioCommentComposer :label="t('ideas.detail.comment')" @activate="selectPanel('team')" />
       </div>

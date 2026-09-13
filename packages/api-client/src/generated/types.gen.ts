@@ -230,6 +230,14 @@ export type IdeaResponse = {
      */
     created_at: string;
     analysis?: AnalysisResponse | null;
+    /**
+     * Sought Roles
+     */
+    sought_roles?: Array<string>;
+    /**
+     * Join Requests
+     */
+    join_requests?: Array<JoinRequestResponse>;
     legacy_context?: LegacyIdeaContext | null;
     /**
      * Collaborators
@@ -429,6 +437,16 @@ export type RejectJoinBody = {
      * Rationale
      */
     rationale: string;
+};
+
+/**
+ * RemoveMemberBody
+ */
+export type RemoveMemberBody = {
+    /**
+     * Reason
+     */
+    reason?: string | null;
 };
 
 /**
@@ -698,6 +716,47 @@ export type LeaveIdeaTeamResponses = {
 };
 
 export type LeaveIdeaTeamResponse = LeaveIdeaTeamResponses[keyof LeaveIdeaTeamResponses];
+
+export type RemoveIdeaMemberData = {
+    /**
+     * Body
+     */
+    body: RemoveMemberBody | null;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+        /**
+         * Member Id
+         */
+        member_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/members/{member_id}/remove';
+};
+
+export type RemoveIdeaMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RemoveIdeaMemberError = RemoveIdeaMemberErrors[keyof RemoveIdeaMemberErrors];
+
+export type RemoveIdeaMemberResponses = {
+    /**
+     * Response Remove Idea Member
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type RemoveIdeaMemberResponse = RemoveIdeaMemberResponses[keyof RemoveIdeaMemberResponses];
 
 export type ListIdeaIterationsData = {
     body?: never;
