@@ -124,8 +124,8 @@ jobs:
     runs-on: [self-hosted, Linux, X64]
     permissions:
       contents: read
-      packages: write
     strategy:
+      max-parallel: 2
       matrix:
         include:
           - image: api
@@ -138,21 +138,24 @@ jobs:
             dockerfile: infra/litellm/Dockerfile
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: docker/login-action@v4.6.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v7.3.0
-        with:
-          context: .
-          file: ${{ matrix.dockerfile }}
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/kollio-${{ matrix.image }}:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/kollio-${{ matrix.image }}:latest
-          labels: |
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.revision=${{ github.sha }}
-          build-args: |
-            NUXT_PUBLIC_AUTH_ENABLED=true
+      # Kollio est un depot PRIVE : son paquet GHCR est prive lui aussi et le VPS
+      # ne peut pas le tirer (le jeton du serveur n'a pas read:packages). Comme
+      # facture/usine/veilleur, on construit l'image LA ou elle sera servie : sur
+      # le runner self-hosted du VPS, et on la pousse dans le registre local.
+      - name: Build on the VPS
+        run: |
+          docker build \
+            -f ${{ matrix.dockerfile }} \
+            -t 127.0.0.1:5000/kollio-${{ matrix.image }}:${{ github.sha }} \
+            --build-arg NUXT_PUBLIC_AUTH_ENABLED=true \
+            --label org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }} \
+            --label org.opencontainers.image.revision=${{ github.sha }} \
+            .
+      - name: Push sha and latest (main only)
+        run: |
+          docker push 127.0.0.1:5000/kollio-${{ matrix.image }}:${{ github.sha }}
+          docker tag 127.0.0.1:5000/kollio-${{ matrix.image }}:${{ github.sha }} 127.0.0.1:5000/kollio-${{ matrix.image }}:latest
+          docker push 127.0.0.1:5000/kollio-${{ matrix.image }}:latest
+      - name: Prune intermediate images
+        if: always()
+        run: docker image prune -f --filter "until=168h" >/dev/null 2>&1 || true
