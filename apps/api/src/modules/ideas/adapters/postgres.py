@@ -267,7 +267,7 @@ class PostgresIdeas:
             ideas.append(idea)
         return ideas, total, realism_scores, last_activity
 
-    def _activity_binding(self) -> tuple[Any, Any]:
+    def _activity_binding(self) -> tuple[Any, Any, Any]:
         from src.modules.iterations.adapters.postgres import IdeaAnalysis, Iteration
 
         head = (
@@ -280,5 +280,5 @@ class PostgresIdeas:
         )
         analysis = select(IdeaAnalysis.realism_score).where(
             IdeaAnalysis.iteration_id == head.c.id
-        )
-        return head.c.created_at, analysis.scalar_subquery()
+        ).scalar_subquery()
+        return head.c.created_at, analysis, head
