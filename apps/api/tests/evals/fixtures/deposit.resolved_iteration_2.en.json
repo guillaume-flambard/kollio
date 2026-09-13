@@ -1,0 +1,50 @@
+{
+  "input": {
+    "title": "Maintenance planning",
+    "pitch": "A shared planning tool for small maintenance teams, now with an offline mobile app so technicians keep plans without connectivity.",
+    "locale": "en",
+    "evidence": [
+      { "id": "evidence-competitor-report", "url": "https://example.org/competitor", "text": "Two vendors already sell maintenance scheduling at about 40 dollars per technician per month." },
+      { "id": "evidence-team-runway", "url": "https://example.org/runway", "text": "The founding team is two engineers with a six-month runway." },
+      { "id": "evidence-offline-demand", "url": "https://example.org/offline", "text": "Field technicians report losing connectivity in basements and machinery rooms, where most scheduling happens." }
+    ]
+  },
+  "output": {
+    "realism_score": 57,
+    "concurrence": {
+      "score": 45,
+      "note": "The offline gap differentiates against the two priced vendors named in the evidence."
+    },
+    "cout": {
+      "score": 55,
+      "note": "An offline app raises the build cost above the plain planning tool within the same runway."
+    },
+    "temps": {
+      "score": 52,
+      "note": "Two engineers can ship a pilot, but the offline app lengthens the time to a sellable release."
+    },
+    "defendabilite": {
+      "score": 60,
+      "note": "Offline-first for machinery-room conditions is a wedge the named vendors do not show."
+    },
+    "acquisition": {
+      "score": 68,
+      "note": "The offline pain gives crews a concrete reason to switch, per the field-technician evidence."
+    },
+    "locale": "en",
+    "source_ids": ["evidence-competitor-report", "evidence-team-runway", "evidence-offline-demand"],
+    "established_facts": [
+      "Two vendors sell maintenance scheduling around 40 dollars per technician per month.",
+      "Field technicians report losing connectivity where most scheduling happens."
+    ]
+  },
+  "iteration": 2,
+  "previous_realism_score": 48,
+  "model": "b.ai/qwen3.8-flash",
+  "provenance": {
+    "source_system": "prospecteur",
+    "source_case_id": "maintenance-planning-iter-2-en",
+    "reviewed_on": "2026-09-13",
+    "semantic_note": "Iteration-linked recompute in English: the same idea after a payload change scores differently because new evidence arrived; proves recompute per iteration."
+  }
+}

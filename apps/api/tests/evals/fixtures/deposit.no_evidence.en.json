@@ -1,0 +1,41 @@
+{
+  "input": {
+    "title": "Maintenance planning",
+    "pitch": "A shared planning tool for small maintenance teams.",
+    "locale": "en",
+    "evidence": []
+  },
+  "output": {
+    "realism_score": null,
+    "concurrence": {
+      "score": null,
+      "note": "No evidence about competitors yet: name one or two teams serving the same workflow to unlock this score."
+    },
+    "cout": {
+      "score": null,
+      "note": "No build-cost evidence yet: share what the tool would need to charge or cost."
+    },
+    "temps": {
+      "score": null,
+      "note": "No time-to-market evidence yet: describe the team size and runway."
+    },
+    "defendabilite": {
+      "score": null,
+      "note": "No defensibility evidence yet: explain what would be hard to copy."
+    },
+    "acquisition": {
+      "score": null,
+      "note": "No acquisition evidence yet: describe how maintenance teams could first hear about it."
+    },
+    "locale": "en",
+    "source_ids": [],
+    "established_facts": []
+  },
+  "model": "b.ai/qwen3.8-flash",
+  "provenance": {
+    "source_system": "prospecteur",
+    "source_case_id": "maintenance-planning-deposit-en",
+    "reviewed_on": "2026-09-13",
+    "semantic_note": "Deposit-time abstention in English: five nulled dimensions with notes explaining what evidence would unlock each score."
+  }
+}

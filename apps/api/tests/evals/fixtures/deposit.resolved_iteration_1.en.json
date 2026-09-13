@@ -1,0 +1,48 @@
+{
+  "input": {
+    "title": "Maintenance planning",
+    "pitch": "A shared planning tool for small maintenance teams.",
+    "locale": "en",
+    "evidence": [
+      { "id": "evidence-competitor-report", "url": "https://example.org/competitor", "text": "Two vendors already sell maintenance scheduling at about 40 dollars per technician per month." },
+      { "id": "evidence-team-runway", "url": "https://example.org/runway", "text": "The founding team is two engineers with a six-month runway." }
+    ]
+  },
+  "output": {
+    "realism_score": 48,
+    "concurrence": {
+      "score": 35,
+      "note": "Two priced vendors already serve scheduling; the open gap is the smallest crews they price out."
+    },
+    "cout": {
+      "score": 60,
+      "note": "A planning tool is buildable within the six-month runway at the stated team size."
+    },
+    "temps": {
+      "score": 55,
+      "note": "Two engineers with six months of runway can reach a paid pilot, but not full market coverage."
+    },
+    "defendabilite": {
+      "score": 40,
+      "note": "Nothing in the evidence shows a moat beyond being cheaper than the named vendors."
+    },
+    "acquisition": {
+      "score": 50,
+      "note": "Reaching small crews has no named channel in the supplied evidence."
+    },
+    "locale": "en",
+    "source_ids": ["evidence-competitor-report", "evidence-team-runway"],
+    "established_facts": [
+      "Two vendors sell maintenance scheduling around 40 dollars per technician per month.",
+      "The founding team is two engineers with a six-month runway."
+    ]
+  },
+  "iteration": 1,
+  "model": "b.ai/qwen3.8-flash",
+  "provenance": {
+    "source_system": "prospecteur",
+    "source_case_id": "maintenance-planning-iter-1-en",
+    "reviewed_on": "2026-09-13",
+    "semantic_note": "Deposit-time resolved analysis in English: every dimension scored from supplied evidence, score-explanation coupling held."
+  }
+}

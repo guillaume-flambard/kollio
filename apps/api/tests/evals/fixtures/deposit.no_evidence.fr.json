@@ -1,0 +1,41 @@
+{
+  "input": {
+    "title": "Planification de maintenance",
+    "pitch": "Un outil de planification partagé pour les petites équipes de maintenance.",
+    "locale": "fr",
+    "evidence": []
+  },
+  "output": {
+    "realism_score": null,
+    "concurrence": {
+      "score": null,
+      "note": "Pas encore de preuve sur les concurrents : nommez une ou deux équipes qui servent le même besoin pour permettre cette note."
+    },
+    "cout": {
+      "score": null,
+      "note": "Pas encore de preuve sur le coût de build : indiquez ce que l'outil devrait coûter ou facturer."
+    },
+    "temps": {
+      "score": null,
+      "note": "Pas encore de preuve sur le temps au marché : décrivez la taille de l'équipe et la trésorerie."
+    },
+    "defendabilite": {
+      "score": null,
+      "note": "Pas encore de preuve sur la défendabilité : expliquez ce qui serait difficile à copier."
+    },
+    "acquisition": {
+      "score": null,
+      "note": "Pas encore de preuve sur l'acquisition : décrivez comment les équipes de maintenance découvriraient l'outil."
+    },
+    "locale": "fr",
+    "source_ids": [],
+    "established_facts": []
+  },
+  "model": "b.ai/qwen3.8-flash",
+  "provenance": {
+    "source_system": "prospecteur",
+    "source_case_id": "maintenance-planning-deposit-fr",
+    "reviewed_on": "2026-09-13",
+    "semantic_note": "Abstention du tueur de contraintes au dépôt en français : cinq dimensions nulles avec notes expliquant la preuve nécessaire pour chaque score."
+  }
+}
