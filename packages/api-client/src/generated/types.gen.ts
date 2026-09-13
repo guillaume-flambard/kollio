@@ -296,9 +296,17 @@ export type IdeaSummaryResponse = {
      */
     created_at: string;
     /**
-     * Domain
+     * Sought Roles
      */
-    domain?: string | null;
+    sought_roles?: Array<string>;
+    /**
+     * Realism Score
+     */
+    realism_score?: number | null;
+    /**
+     * Last Activity At
+     */
+    last_activity_at?: string | null;
     /**
      * Collaborators
      */
@@ -948,9 +956,13 @@ export type ListWorkspaceIdeasData = {
          */
         stage?: 'seed' | 'iterating' | 'team_formed' | null;
         /**
-         * Domain
+         * Sought Role
          */
-        domain?: string | null;
+        sought_role?: string | null;
+        /**
+         * Realism Min
+         */
+        realism_min?: number | null;
     };
     url: '/workspaces/{workspace_id}/ideas';
 };

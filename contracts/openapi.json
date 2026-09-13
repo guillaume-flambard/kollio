@@ -844,20 +844,38 @@
             }
           },
           {
-            "name": "domain",
+            "name": "sought_role",
             "in": "query",
             "required": false,
             "schema": {
               "anyOf": [
                 {
                   "type": "string",
-                  "maxLength": 120
+                  "maxLength": 20
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Domain"
+              "title": "Sought Role"
+            }
+          },
+          {
+            "name": "realism_min",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 99,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Realism Min"
             }
           }
         ],
@@ -1453,16 +1471,35 @@
             "format": "date-time",
             "title": "Created At"
           },
-          "domain": {
+          "sought_roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sought Roles"
+          },
+          "realism_score": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "integer"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Domain"
+            "title": "Realism Score"
+          },
+          "last_activity_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Activity At"
           },
           "collaborators": {
             "items": {
