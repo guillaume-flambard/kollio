@@ -9,16 +9,25 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.modules.ideas.adapters.postgres import PostgresIdeas
 from src.modules.ideas.api.schemas import (
     AnalysisResponse,
+    ApplyJoinBody,
     CollaboratorResponse,
     DepositIdeaRequest,
     IdeaPageResponse,
     IdeaResponse,
     IdeaSummaryResponse,
+    JoinRequestResponse,
     LegacyIdeaContext,
+    RejectJoinBody,
 )
 from src.modules.ideas.service.deposit_idea import DepositNotFoundError, deposit_idea
 from src.modules.ideas.service.get_idea import get_idea
 from src.modules.ideas.service.list_ideas import list_workspace_ideas
+from src.modules.ideas.service.team_service import (
+    TeamNotFoundError,
+    apply_to_join,
+    leave_team,
+    resolve_join_request,
+)
 from src.modules.iterations.adapters.postgres import PostgresIterations
 from src.modules.iterations.service.operations import create_initial_iteration
 from src.modules.iterations.service.read_analysis import analysis_for_view, analysis_state
@@ -212,3 +221,105 @@ async def read_workspace_ideas(
         limit=limit,
         offset=offset,
     )
+
+
+def _team_error(request: Request, error: Exception) -> HTTPException:
+    messages = MESSAGES[request.state.locale]
+    if isinstance(error, TeamNotFoundError):
+        return HTTPException(404, messages["not_found"])
+    raise error
+
+
+@router.post(
+    "/{idea_id}/join-requests",
+    response_model=JoinRequestResponse,
+    status_code=status.HTTP_201_CREATED,
+    operation_id="request_idea_membership",
+)
+async def request_idea_membership(
+    idea_id: UUID,
+    body: ApplyJoinBody,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> JoinRequestResponse:
+    repository = PostgresIdeas(session)
+    try:
+        applied = await apply_to_join(
+            repository, idea_id, identity.subject, role=body.role, note=body.note
+        )
+        await session.commit()
+    except (TeamNotFoundError, ValueError) as error:
+        raise _team_error(request, error) from error
+    return JoinRequestResponse.model_validate(applied)
+
+
+@router.post(
+    "/{idea_id}/join-requests/{request_id}/accept",
+    response_model=JoinRequestResponse,
+    operation_id="accept_idea_membership_request",
+)
+async def accept_idea_membership_request(
+    idea_id: UUID,
+    request_id: UUID,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> JoinRequestResponse:
+    repository = PostgresIdeas(session)
+    try:
+        resolved = await resolve_join_request(
+            repository, idea_id, request_id, identity.subject, action="accept"
+        )
+        await session.commit()
+    except (TeamNotFoundError, ValueError) as error:
+        raise _team_error(request, error) from error
+    return JoinRequestResponse.model_validate(resolved)
+
+
+@router.post(
+    "/{idea_id}/join-requests/{request_id}/reject",
+    response_model=JoinRequestResponse,
+    operation_id="reject_idea_membership_request",
+)
+async def reject_idea_membership_request(
+    idea_id: UUID,
+    request_id: UUID,
+    body: RejectJoinBody,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> JoinRequestResponse:
+    repository = PostgresIdeas(session)
+    try:
+        resolved = await resolve_join_request(
+            repository,
+            idea_id,
+            request_id,
+            identity.subject,
+            action="reject",
+            rationale=body.rationale,
+        )
+        await session.commit()
+    except (TeamNotFoundError, ValueError) as error:
+        raise _team_error(request, error) from error
+    return JoinRequestResponse.model_validate(resolved)
+
+
+@router.post(
+    "/{idea_id}/leave",
+    operation_id="leave_idea_team",
+)
+async def leave_idea_team(
+    idea_id: UUID,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> dict:
+    repository = PostgresIdeas(session)
+    try:
+        outcome = await leave_team(repository, idea_id, identity.subject)
+        await session.commit()
+    except (TeamNotFoundError, ValueError) as error:
+        raise _team_error(request, error) from error
+    return outcome

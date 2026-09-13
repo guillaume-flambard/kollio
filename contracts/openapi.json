@@ -89,6 +89,240 @@
         }
       }
     },
+    "/ideas/{idea_id}/join-requests": {
+      "post": {
+        "tags": [
+          "ideas"
+        ],
+        "summary": "Request Idea Membership",
+        "operationId": "request_idea_membership",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplyJoinBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ideas/{idea_id}/join-requests/{request_id}/accept": {
+      "post": {
+        "tags": [
+          "ideas"
+        ],
+        "summary": "Accept Idea Membership Request",
+        "operationId": "accept_idea_membership_request",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          },
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ideas/{idea_id}/join-requests/{request_id}/reject": {
+      "post": {
+        "tags": [
+          "ideas"
+        ],
+        "summary": "Reject Idea Membership Request",
+        "operationId": "reject_idea_membership_request",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          },
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectJoinBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinRequestResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ideas/{idea_id}/leave": {
+      "post": {
+        "tags": [
+          "ideas"
+        ],
+        "summary": "Leave Idea Team",
+        "operationId": "leave_idea_team",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Leave Idea Team"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ideas/{idea_id}/iterations": {
       "get": {
         "tags": [
@@ -693,6 +927,28 @@
         ],
         "title": "AnalysisResponse"
       },
+      "ApplyJoinBody": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Role"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "note"
+        ],
+        "title": "ApplyJoinBody"
+      },
       "CollaboratorResponse": {
         "properties": {
           "id": {
@@ -1241,6 +1497,69 @@
         ],
         "title": "IterationResponse"
       },
+      "JoinRequestResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "idea_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Idea Id"
+          },
+          "requester_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Requester Id"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "accepted",
+              "rejected"
+            ],
+            "title": "Status"
+          },
+          "rationale": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rationale"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "idea_id",
+          "requester_id",
+          "role",
+          "note",
+          "status",
+          "created_at"
+        ],
+        "title": "JoinRequestResponse"
+      },
       "LegacyIdeaContext": {
         "properties": {
           "source": {
@@ -1313,6 +1632,21 @@
           "source_id"
         ],
         "title": "LegacyIdeaContext"
+      },
+      "RejectJoinBody": {
+        "properties": {
+          "rationale": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Rationale"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rationale"
+        ],
+        "title": "RejectJoinBody"
       },
       "ResolveProposalRequest": {
         "properties": {

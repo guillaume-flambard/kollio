@@ -82,3 +82,24 @@ class IdeaPageResponse(BaseModel):
     total: int
     limit: int
     offset: int
+
+
+class ApplyJoinBody(BaseModel):
+    role: str = Field(min_length=1, max_length=20)
+    note: str = Field(min_length=1, max_length=500)
+
+
+class RejectJoinBody(BaseModel):
+    rationale: str = Field(min_length=1, max_length=500)
+
+
+class JoinRequestResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    idea_id: UUID
+    requester_id: UUID
+    role: str
+    note: str
+    status: Literal["pending", "accepted", "rejected"]
+    rationale: str | None = None
+    created_at: datetime
