@@ -81,30 +81,29 @@
       "forYou": "For you",
       "recent": "Recent",
       "validation": "In validation",
-      "domains": "Domains",
       "results": "{count} result | {count} results",
       "found": "{count} idea found | {count} ideas found",
       "sortBy": "Sort by:",
-      "relevance": "Relevance",
       "contributors": "{count} contributor | {count} contributors",
       "contributorTitle": "Contributors",
       "expertiseTitle": "Team expertise",
       "noContributors": "This idea has no contributors yet.",
-      "domainGroups": {
-        "ai": "AI and society",
-        "data": "Data",
-        "trust": "Trust",
-        "governance": "Governance",
-        "education": "Education",
-        "product": "Product"
-      },
       "preview": "Idea preview",
       "open": "Open idea",
       "domain": "Domain",
       "language": "Language",
       "updated": "Updated",
       "closePreview": "Close preview",
-      "noResults": "No ideas match these filters."
+      "noResults": "No ideas match these filters.",
+      "activity": "Recent activity",
+      "prism": "Score {score}",
+      "allRoles": "All roles",
+      "realism": {
+        "title": "Realism",
+        "grounded": "Grounded ideas",
+        "badge": "Score {score}",
+        "band": "60+"
+      }
     },
     "stage": {
       "seed": "Seed",
@@ -176,9 +175,6 @@
         "constraint": "Historical constraint",
         "channel": "Proposed channel"
       },
-      "sources": {
-        "prospecteur": "Prospecteur"
-      },
       "companion": {
         "label": "Idea context",
         "tabWithCount": "{label} ({count})",
@@ -203,107 +199,104 @@
           "provenanceNote": "This passage comes from the original Prospecteur deposit. Its provenance is not yet verified evidence.",
           "empty": "Sources that support or challenge this idea will appear here."
         }
-      }
-    }
-  },
-  "landing": {
-    "meta": {
-      "title": "Kollio | From ideas to team decisions",
-      "description": "Centralize your team’s ideas, test them against reality and document the decisions that move them forward."
-    },
-    "navigation": {
-      "platform": "Platform",
-      "teams": "Teams",
-      "method": "Method",
-      "security": "Security",
-      "demo": "Request a demo",
-      "workspace": "Open my workspace"
-    },
-    "hero": {
-      "eyebrow": "The workspace for ideas that matter",
-      "title": "From intuition to decision, without losing the thread.",
-      "titleLead": "From intuition to decision,",
-      "titleEmphasis": "without losing the thread.",
-      "description": "Centralize your team’s ideas, test them against real constraints and turn the strongest ones into deliberate initiatives.",
-      "primaryAction": "Try it with my team",
-      "secondaryAction": "Discover the method",
-      "leftNote": "From today’s ideas to tomorrow’s real impact.",
-      "rightNote": "Shared context. Better decisions. Together."
-    },
-    "preview": {
-      "label": "Initiative workflow preview",
-      "workspace": "Innovation Portfolio",
-      "count": "12 initiatives",
-      "search": "Search initiatives…",
-      "signal": {
-        "title": "Signal",
-        "description": "Ideas and opportunities",
-        "primary": "Automate field quality control",
-        "secondary": "Unlock unused machine data",
-        "tertiary": "Simplify SMB customer onboarding"
       },
-      "validation": {
-        "title": "In validation",
-        "description": "Analysis and challenge",
-        "evidence": "Verified evidence",
-        "evidenceCopy": "32% fewer non-conformities across pilot sites.",
-        "source": "Source: field pilot report",
-        "question": "Open question",
-        "questionCopy": "How should edge cases outside specifications be handled?",
-        "owner": "Claire Martin",
-        "role": "Product owner"
-      },
-      "decision": {
-        "title": "Decision",
-        "description": "Deliberate initiatives",
-        "documented": "Documented decision",
-        "copy": "Start an industrialization phase across three regions next quarter.",
-        "open": "Read the complete decision",
-        "team": "Team involved",
-        "note": "Complementary expertise",
-        "morePeople": "+2"
+      "team": {
+        "title": "The team",
+        "soughtTitle": "Sought roles",
+        "membersTitle": "Members",
+        "apply": "Join the loop",
+        "applyNote": "What you bring",
+        "send": "Send",
+        "sending": "Sending…",
+        "pending": "Application pending",
+        "rejected": "Rejected: {rationale}",
+        "accept": "Accept",
+        "reject": "Reject",
+        "rejectReason": "Short rejection rationale",
+        "leave": "Leave the loop",
+        "remove": "Remove",
+        "applied": "Application sent.",
+        "error": "The action failed. Try again."
       }
     },
-    "outcomes": {
-      "label": "What Kollio gives teams",
-      "context": {
-        "title": "Shared context",
-        "description": "Bring ideas, data, constraints and expertise together in one place."
-      },
-      "decisions": {
-        "title": "Explainable decisions",
-        "description": "Keep the analyses, trade-offs and reasoning behind every decision."
-      },
-      "ai": {
-        "title": "AI under control",
-        "description": "Assistants summarize, compare and structure within a framework aligned with your rules."
+    "deposit": {
+      "metaTitle": "Deposit an idea | Kollio",
+      "title": "Deposit an idea",
+      "description": "Title plus pitch, and the constraint analysis starts immediately.",
+      "titleLabel": "Idea title",
+      "pitchLabel": "Pitch",
+      "langLabel": "Original language",
+      "langAuto": "Interface language",
+      "langFr": "Français",
+      "langEn": "English",
+      "submit": "Deposit the idea",
+      "submitting": "Depositing…",
+      "running": "Constraint analysis running…",
+      "resolvedTitle": "Realism score",
+      "abstainedTitle": "Analysis waiting for evidence",
+      "abstainedBody": "There is no evidence yet. Enrich the idea and add some: each constraint explains what would unlock its score.",
+      "openIdea": "Open the idea",
+      "error": "The deposit failed. Try again."
+    },
+    "role": {
+      "owner": "Owner",
+      "designer": "Designer",
+      "dev": "Engineering",
+      "commercial": "Commercial",
+      "growth": "Growth",
+      "data": "Data",
+      "product": "Product"
+    },
+    "profile": {
+      "metaTitle": "Profile | Kollio",
+      "back": "Back",
+      "rolesTitle": "Roles",
+      "ownedTitle": "Ideas deposited",
+      "teamsTitle": "Teams",
+      "actsTitle": "Recorded acts",
+      "ownedEmpty": "No ideas in this workspace.",
+      "teamsEmpty": "No teams yet.",
+      "actsEmpty": "No recorded acts yet.",
+      "roleIn": "in {idea}",
+      "onIdea": "on {idea}",
+      "notFound": "Profile not found",
+      "notFoundDescription": "This profile does not exist or shares no workspace with you.",
+      "loadError": {
+        "title": "Profile unavailable",
+        "description": "The profile could not be loaded."
       }
     },
-    "trust": "Private spaces · Roles and permissions · Traceable analysis",
-    "method": {
-      "overline": "A decision memory, not an idea box",
-      "title": "Your team’s reasoning becomes an asset.",
-      "description": "Kollio preserves what was proposed, what was verified and why you decided. New teammates can pick up the thread without replaying every meeting.",
-      "capture": {
-        "number": "01",
-        "title": "Capture the signal",
-        "description": "An intuition enters a private space with its context, owner and the problem it aims to solve."
+    "iterations": {
+      "pending": "Pending",
+      "accepted": "Merged",
+      "rejected": "Rejected",
+      "branch": "Branch {name}",
+      "analysisRunning": "Analysis running",
+      "analysisResolved": "Score {score}",
+      "analysisAbstained": "Awaiting evidence",
+      "propose": "Propose a change",
+      "proposeHint": "Your proposal opens a branch; the owner accepts or rejects it.",
+      "message": "Iteration message",
+      "titleField": "Title",
+      "pitchField": "Pitch",
+      "stageField": "Stage",
+      "send": "Send the proposal",
+      "sending": "Sending…",
+      "conflict": "The idea changed while you were writing. Refresh and try again.",
+      "error": "The proposal failed. Try again.",
+      "stages": {
+        "seed": "Seed",
+        "iterating": "Iterating",
+        "team_formed": "Team formed"
       },
-      "challenge": {
-        "number": "02",
-        "title": "Challenge it with reality",
-        "description": "The team connects constraints, questions and evidence. Assistants structure the analysis without hiding its sources."
-      },
-      "decide": {
-        "number": "03",
-        "title": "Document the decision",
-        "description": "The decision, its owners and its reasoning remain attached to the initiative to guide what happens next."
-      }
-    },
-    "finalCta": {
-      "note": "One clear idea. One aligned team.",
-      "title": "Give your next decisions a better starting point.",
-      "action": "Try Kollio with my team"
+      "cancel": "Cancel",
+      "accept": "Accept proposal",
+      "reject": "Reject",
+      "rejectConfirm": "Reject with a rationale",
+      "rationalePlaceholder": "Short rejection rationale",
+      "rollback": "Restore this iteration",
+      "rollbackMessage": "Rollback to {hash}",
+      "actionsError": "The action failed. Refresh and try again."
     }
   }
 }

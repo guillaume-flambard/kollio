@@ -10,6 +10,7 @@ const props = defineProps<{
   closeLabel: string
   to: string
   mobileOpen: boolean
+  profileLinks?: boolean
 }>()
 
 defineEmits<{ close: [] }>()
@@ -31,7 +32,7 @@ const roleKeys = computed(() => Array.from(new Set(collaborators.value.flatMap(p
       <p>{{ idea.pitch }}</p>
       <section>
         <h3>{{ contributorTitle }}</h3>
-        <KollioAvatarStack v-if="collaborators.length" :people="collaborators" :label="contributorTitle" class="idea-preview-avatars" />
+        <KollioAvatarStack v-if="collaborators.length" :people="collaborators" :label="contributorTitle" :profile-links="profileLinks" class="idea-preview-avatars" />
         <p v-else class="idea-preview-empty">{{ $t('ideas.explorer.noContributors') }}</p>
       </section>
       <section v-if="roleKeys.length">

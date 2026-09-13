@@ -15,6 +15,7 @@ const validStages = ['seed', 'iterating', 'team_formed'] as const
 const searchInput = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const selectedIdeaId = ref<string>()
 const previewOpen = ref(false)
+const glyphs = Object.freeze({ plus: '＋', down: '⌄' })
 let searchTimer: ReturnType<typeof setTimeout> | undefined
 
 const { data: workspaces } = await useAsyncData('workspaces', () => requestFetch<WorkspaceResponse[]>('/api/workspaces'))
@@ -32,7 +33,11 @@ const activeStage = computed(() => {
   const stage = typeof route.query.stage === 'string' ? route.query.stage : undefined
   return validStages.includes(stage as typeof validStages[number]) ? stage : undefined
 })
-const activeDomain = computed(() => typeof route.query.domain === 'string' ? route.query.domain : undefined)
+const activeSoughtRole = computed(() => typeof route.query.role === 'string' ? route.query.role : undefined)
+const activeRealism = computed(() => {
+  const value = Number(route.query.realism_min)
+  return Number.isInteger(value) && value >= 1 && value <= 99 ? value : undefined
+})
 
 const { data: ideaPage, status, error, refresh } = await useAsyncData(
   'workspace-ideas',
@@ -44,26 +49,18 @@ const { data: ideaPage, status, error, refresh } = await useAsyncData(
         offset: (currentPage.value - 1) * pageSize,
         ...(queryText.value ? { q: queryText.value } : {}),
         ...(activeStage.value ? { stage: activeStage.value } : {}),
-        ...(activeDomain.value ? { domain: activeDomain.value } : {}),
+        ...(activeSoughtRole.value ? { sought_role: activeSoughtRole.value } : {}),
+        ...(activeRealism.value ? { realism_min: activeRealism.value } : {}),
       },
     })
   },
-  { watch: [activeWorkspace, currentPage, queryText, activeStage, activeDomain] },
+  { watch: [activeWorkspace, currentPage, queryText, activeStage, activeSoughtRole, activeRealism] },
 )
 
 const selectedIdea = computed(() => ideaPage.value?.items.find(idea => idea.id === selectedIdeaId.value) ?? ideaPage.value?.items[0])
 const totalPages = computed(() => Math.max(1, Math.ceil((ideaPage.value?.total ?? 0) / pageSize)))
 const relativeFormatter = computed(() => new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }))
-const visibleDomainGroups = computed(() => {
-  const groups = new Map<string, { label: string, value: string, count: number }>()
-  for (const idea of ideaPage.value?.items ?? []) {
-    if (!idea.domain) continue
-    const label = domainLabel(idea.domain)
-    const current = groups.get(label)
-    groups.set(label, { label, value: current?.value ?? idea.domain, count: (current?.count ?? 0) + 1 })
-  }
-  return Array.from(groups.values()).slice(0, 7)
-})
+const teamRoles = ['designer', 'dev', 'commercial', 'growth', 'data', 'product'] as const
 
 watch(() => route.query.q, value => {
   searchInput.value = typeof value === 'string' ? value : ''
@@ -96,19 +93,10 @@ function relativeDate(date: string) {
   }
   return relativeFormatter.value.format(days, 'day')
 }
-function domainLabel(domain: string) {
-  const value = domain.toLocaleLowerCase()
-  if (/llm|ia|ai|modèle/.test(value)) return t('ideas.explorer.domainGroups.ai')
-  if (/data|donnée|base/.test(value)) return t('ideas.explorer.domainGroups.data')
-  if (/confiance|preuve|qualité|fiabil/.test(value)) return t('ideas.explorer.domainGroups.trust')
-  if (/conform|gouvernance|réglement/.test(value)) return t('ideas.explorer.domainGroups.governance')
-  if (/cours|formation|éducation/.test(value)) return t('ideas.explorer.domainGroups.education')
-  return t('ideas.explorer.domainGroups.product')
-}
 function pageLocation(page: number) {
   return {
     path: localePath('/workspace'),
-    query: { ...route.query, ...(activeWorkspace.value ? { workspace: activeWorkspace.value.id } : {}), ...(page > 1 ? { page: String(page) } : {}) },
+    query: { ...route.query, ...(activeWorkspace.value ? { workspace: activeWorkspace.value.id } : {}), page: page > 1 ? String(page) : undefined },
   }
 }
 
@@ -129,11 +117,11 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           <h1>{{ t('ideas.title') }}</h1>
           <p>{{ t('ideas.explorer.description') }}</p>
         </div>
-        <button type="button" class="ideas-create-action">
-          {{ t('ideas.explorer.create') }}<KollioIcon name="plus" class="ideas-create-glyph" />
-        </button>
+        <NuxtLink type="button" class="ideas-create-action" :to="localePath({ name: 'workspace-deposit' })">
+          {{ t('ideas.explorer.create') }}<span aria-hidden="true" v-text="glyphs.plus" />
+        </NuxtLink>
         <label class="ideas-search">
-          <KollioIcon name="search" />
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m16 16 5 5" /></svg>
           <input v-model="searchInput" type="search" :placeholder="t('ideas.explorer.search')" @input="scheduleSearch">
           <span class="ideas-filter-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h10m4 0h2M4 17h2m4 0h10M14 4v6M7 14v6" /></svg></span>
         </label>
@@ -142,13 +130,16 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
       <section class="ideas-explorer-shell" :aria-label="t('ideas.explorer.library')">
         <aside class="ideas-filter-rail">
           <nav :aria-label="t('ideas.explorer.explore')">
-            <button type="button" :aria-pressed="!activeStage && !activeDomain" @click="replaceFilters({ stage: undefined, domain: undefined })">
-              <KollioSketchAnnotation :active="!activeStage && !activeDomain" kind="loop">
+            <button type="button" :aria-pressed="!activeStage && !activeSoughtRole && !activeRealism" @click="replaceFilters({ stage: undefined, role: undefined, realism_min: undefined })">
+              <KollioSketchAnnotation :active="!activeStage && !activeSoughtRole && !activeRealism" kind="loop">
                 <span class="filter-annotation-content"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z" /></svg>{{ t('ideas.explorer.forYou') }}</span>
               </KollioSketchAnnotation>
             </button>
-            <button type="button" :aria-pressed="false" @click="replaceFilters({ stage: undefined, domain: undefined })">
+            <button type="button" :aria-pressed="false" @click="replaceFilters({ stage: undefined, role: undefined, realism_min: undefined })">
               <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><path d="M12 7v5l3 2" /></svg>{{ t('ideas.explorer.recent') }}
+            </button>
+            <button type="button" :aria-pressed="activeStage === 'seed'" @click="replaceFilters({ stage: activeStage === 'seed' ? undefined : 'seed' })">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21V9m0 0L8 13m4-4 4 4" /></svg>{{ t('ideas.stage.seed') }}
             </button>
             <button type="button" :aria-pressed="activeStage === 'iterating'" @click="replaceFilters({ stage: activeStage === 'iterating' ? undefined : 'iterating' })">
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 3h6M10 3v5l-5 9a3 3 0 0 0 2.6 4h8.8a3 3 0 0 0 2.6-4l-5-9V3M8 15h8" /></svg>{{ t('ideas.explorer.validation') }}
@@ -157,18 +148,21 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
               <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M16 20a4 4 0 0 0-8 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 7a3 3 0 0 0-3-3M5 20a3 3 0 0 1 3-3" /></svg>{{ t('ideas.stage.team_formed') }}
             </button>
           </nav>
-          <template v-if="visibleDomainGroups.length">
-            <hr><p>{{ t('ideas.explorer.domains') }}</p>
-            <button v-for="domain in visibleDomainGroups" :key="domain.label" type="button" class="domain-filter" :aria-pressed="activeDomain === domain.value" @click="replaceFilters({ domain: activeDomain === domain.value ? undefined : domain.value })">
-              <span>{{ domain.label }}</span><small>{{ domain.count }}</small>
-            </button>
-          </template>
+          <hr><p>{{ t('ideas.detail.team.soughtTitle') }}</p>
+          <select class="rail-select" :value="activeSoughtRole ?? ''" :aria-label="t('ideas.detail.team.soughtTitle')" @change="replaceFilters({ role: ($event.target as HTMLSelectElement).value || undefined })">
+            <option value="">{{ t('ideas.explorer.allRoles') }}</option>
+            <option v-for="role in teamRoles" :key="role" :value="role">{{ t(`ideas.role.${role}`) }}</option>
+          </select>
+          <hr><p>{{ t('ideas.explorer.realism.title') }}</p>
+          <button type="button" class="domain-filter" :aria-pressed="activeRealism != null" @click="replaceFilters({ realism_min: activeRealism != null ? undefined : '60' })">
+            <span>{{ t('ideas.explorer.realism.grounded') }}</span><small>{{ t('ideas.explorer.realism.band') }}</small>
+          </button>
         </aside>
 
         <main class="ideas-results">
           <header class="ideas-results-header">
             <strong>{{ t('ideas.explorer.found', { count: ideaPage?.total ?? 0 }) }}</strong>
-            <span>{{ t('ideas.explorer.sortBy') }} <b>{{ t('ideas.explorer.relevance') }}</b><KollioIcon name="chevron-down" class="ideas-sort-glyph" /></span>
+            <span>{{ t('ideas.explorer.sortBy') }} <b>{{ t('ideas.explorer.activity') }}</b></span>
           </header>
           <div v-if="status === 'pending'" aria-live="polite">
             <div v-for="index in pageSize" :key="index" class="explorer-row-skeleton"><span class="skeleton-circle" /><span><i class="skeleton-line w-3/4" /><i class="skeleton-line mt-3 w-full" /></span></div>
@@ -184,8 +178,9 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
               :date-label="relativeDate(idea.created_at)"
               :contributor-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
               :avatar-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
-              :expertise-label="idea.collaborators?.[0]?.roles[0] ? t(`ideas.detail.roles.${idea.collaborators[0].roles[0]}`) : undefined"
-              :domain-label="idea.domain ? domainLabel(idea.domain) : undefined"
+              :expertise-label="idea.collaborators?.[0]?.roles[0] ? t(`ideas.role.${idea.collaborators[0].roles[0]}`) : undefined"
+              :realism-label="idea.realism_score != null ? t('ideas.explorer.prism', { score: idea.realism_score }) : undefined"
+              :roles-label="idea.sought_roles?.length ? idea.sought_roles.map(role => t(`ideas.role.${role}`)).join(' · ') : undefined"
               @select="selectIdea(idea)"
             />
           </div>
@@ -200,6 +195,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           v-if="selectedIdea"
           :idea="selectedIdea"
           :stage-label="t(`ideas.stage.${selectedIdea.stage}`)"
+          :profile-links="true"
           :open-label="t('ideas.explorer.open')"
           :contributor-title="t('ideas.explorer.contributorTitle')"
           :expertise-title="t('ideas.explorer.expertiseTitle')"
@@ -222,8 +218,6 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-create-action { display: flex; min-height: 48px; align-items: center; gap: 24px; border-radius: 12px; background: var(--kollio-heading); padding: 0 20px; color: white; font-size: .78rem; font-weight: 570; box-shadow: 0 8px 22px color-mix(in srgb, var(--kollio-heading) 17%, transparent); transition: transform 180ms ease, box-shadow 180ms ease; }
 .ideas-create-action:hover { transform: translateY(-1px); box-shadow: 0 11px 28px color-mix(in srgb, var(--kollio-heading) 22%, transparent); }
 .ideas-create-action span { font-size: 1.2rem; font-weight: 300; }
-.ideas-create-action .ideas-create-glyph { width: 20px; flex: none; }
-.ideas-sort-glyph { display: inline-block; width: 14px; vertical-align: -2px; }
 .ideas-search { display: flex; min-height: 56px; grid-column: 1 / -1; align-items: center; gap: 13px; border: 1px solid var(--ui-border); border-radius: 12px; background: var(--ui-bg-elevated); padding-left: 16px; }
 .ideas-search:focus-within { border-color: color-mix(in srgb, var(--kollio-active-ink) 42%, var(--ui-border)); }
 .ideas-search > svg { width: 21px; flex: none; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-width: 1.7; }
