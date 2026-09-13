@@ -14,12 +14,16 @@ export default defineEventHandler(async (event) => {
   const stage = typeof query.stage === 'string' && ['seed', 'iterating', 'team_formed'].includes(query.stage)
     ? query.stage as 'seed' | 'iterating' | 'team_formed'
     : undefined
-  const domain = typeof query.domain === 'string' ? query.domain : undefined
+  const soughtRole = typeof query.sought_role === 'string' ? query.sought_role : undefined
+  const requestedRealism = Number(query.realism_min)
+  const realismMin = Number.isInteger(requestedRealism) && requestedRealism >= 1 && requestedRealism <= 99
+    ? requestedRealism
+    : undefined
   const client = await createKollioApiClient(event)
   const result = await listWorkspaceIdeas({
     client,
     path: { workspace_id: workspaceId },
-    query: { limit, offset, q, stage, domain },
+    query: { limit, offset, q, stage, sought_role: soughtRole, realism_min: realismMin },
   })
   if (result.error) {
     forwardApiError(result.response?.status ?? 502, result.error)

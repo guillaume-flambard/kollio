@@ -81,30 +81,29 @@
       "forYou": "Pour vous",
       "recent": "Récentes",
       "validation": "En validation",
-      "domains": "Domaines",
       "results": "{count} résultat | {count} résultats",
       "found": "{count} idée trouvée | {count} idées trouvées",
       "sortBy": "Trier par :",
-      "relevance": "Pertinence",
       "contributors": "{count} contributeur | {count} contributeurs",
       "contributorTitle": "Contributeurs",
       "expertiseTitle": "Expertises de l’équipe",
       "noContributors": "Cette idée n’a pas encore de contributeur.",
-      "domainGroups": {
-        "ai": "IA et société",
-        "data": "Données",
-        "trust": "Confiance",
-        "governance": "Gouvernance",
-        "education": "Éducation",
-        "product": "Produit"
-      },
       "preview": "Aperçu de l’idée",
       "open": "Ouvrir l’idée",
       "domain": "Domaine",
       "language": "Langue",
       "updated": "Mise à jour",
       "closePreview": "Fermer l’aperçu",
-      "noResults": "Aucune idée ne correspond à ces critères."
+      "noResults": "Aucune idée ne correspond à ces critères.",
+      "activity": "Activité récente",
+      "prism": "Score {score}",
+      "allRoles": "Tous les rôles",
+      "realism": {
+        "title": "Réalisme",
+        "grounded": "Idées ancrées",
+        "badge": "Score {score}",
+        "band": "60+"
+      }
     },
     "stage": {
       "seed": "Graine",

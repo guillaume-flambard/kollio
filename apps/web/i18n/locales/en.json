@@ -81,30 +81,29 @@
       "forYou": "For you",
       "recent": "Recent",
       "validation": "In validation",
-      "domains": "Domains",
       "results": "{count} result | {count} results",
       "found": "{count} idea found | {count} ideas found",
       "sortBy": "Sort by:",
-      "relevance": "Relevance",
       "contributors": "{count} contributor | {count} contributors",
       "contributorTitle": "Contributors",
       "expertiseTitle": "Team expertise",
       "noContributors": "This idea has no contributors yet.",
-      "domainGroups": {
-        "ai": "AI and society",
-        "data": "Data",
-        "trust": "Trust",
-        "governance": "Governance",
-        "education": "Education",
-        "product": "Product"
-      },
       "preview": "Idea preview",
       "open": "Open idea",
       "domain": "Domain",
       "language": "Language",
       "updated": "Updated",
       "closePreview": "Close preview",
-      "noResults": "No ideas match these filters."
+      "noResults": "No ideas match these filters.",
+      "activity": "Recent activity",
+      "prism": "Score {score}",
+      "allRoles": "All roles",
+      "realism": {
+        "title": "Realism",
+        "grounded": "Grounded ideas",
+        "badge": "Score {score}",
+        "band": "60+"
+      }
     },
     "stage": {
       "seed": "Seed",

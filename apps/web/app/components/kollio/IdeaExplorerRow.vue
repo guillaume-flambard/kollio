@@ -10,6 +10,8 @@ const props = defineProps<{
   avatarLabel: string
   expertiseLabel?: string
   domainLabel?: string
+  realismLabel?: string
+  rolesLabel?: string
 }>()
 
 defineEmits<{ select: [] }>()
@@ -34,8 +36,10 @@ function initials(name: string) {
       <strong>{{ idea.title }}</strong>
       <span class="explorer-row-pitch">{{ idea.pitch }}</span>
       <span class="explorer-row-topics">
-        <span v-if="domainLabel">{{ domainLabel }}</span>
+        <span v-if="realismLabel" class="explorer-row-realism">{{ realismLabel }}</span>
         <span>{{ stageLabel }}</span>
+        <span v-if="rolesLabel">{{ rolesLabel }}</span>
+        <span v-if="domainLabel">{{ domainLabel }}</span>
         <span v-if="expertiseLabel">{{ expertiseLabel }}</span>
       </span>
     </span>
@@ -70,6 +74,7 @@ function initials(name: string) {
 .explorer-row-topics { display: flex; overflow: hidden; align-items: center; gap: 0; margin-top: 10px; color: var(--ui-text-muted); font-size: .72rem; white-space: nowrap; }
 .explorer-row-topics span { overflow: hidden; text-overflow: ellipsis; }
 .explorer-row-topics span + span::before { margin: 0 10px; color: var(--kollio-active-ink); content: '•'; }
+.explorer-row-realism { font-weight: 600; color: var(--kollio-active-ink); }
 .explorer-row-activity { display: grid; align-content: center; justify-items: start; gap: 5px; color: var(--ui-text-muted); font-size: .71rem; line-height: 1.25; }
 .explorer-row-activity :deep(.avatar-stack) { margin-bottom: 3px; }
 @media (max-width: 760px) {
