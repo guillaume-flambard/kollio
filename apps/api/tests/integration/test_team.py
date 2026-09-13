@@ -104,13 +104,13 @@ async def test_join_handshake_full_loop(team_database):
                 accepted = await client.post(f"/ideas/{idea_id}/join-requests/{request_id}/accept")
                 assert accepted.status_code in (201, 200)
 
+                subject["value"] = str(member_id)
                 read = await client.get(f"/ideas/{idea_id}")
                 team = read.json()["collaborators"]
                 assert any(
                     member["id"] == str(member_id) and member["role"] == "dev" for member in team
                 )
 
-                subject["value"] = str(member_id)
                 left = await client.post(
                     f"/ideas/{idea_id}/leave",
                     headers={"Accept-Language": "en"},
@@ -122,6 +122,9 @@ async def test_join_handshake_full_loop(team_database):
                 assert not any(
                     member["id"] == str(member_id) for member in read_after.json()["collaborators"]
                 )
+
+                read_before = read.json()
+                assert "sought_roles" in read_before
 
         await transaction.rollback()
 
