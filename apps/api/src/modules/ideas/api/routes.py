@@ -2,19 +2,23 @@ import json
 from typing import Annotated, Any, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.ideas.adapters.postgres import PostgresIdeas
 from src.modules.ideas.api.schemas import (
     CollaboratorResponse,
+    DepositIdeaRequest,
     IdeaPageResponse,
     IdeaResponse,
     IdeaSummaryResponse,
     LegacyIdeaContext,
 )
+from src.modules.ideas.service.deposit_idea import DepositNotFoundError, deposit_idea
 from src.modules.ideas.service.get_idea import get_idea
 from src.modules.ideas.service.list_ideas import list_workspace_ideas
+from src.modules.iterations.adapters.postgres import PostgresIterations
+from src.modules.iterations.service.operations import create_initial_iteration
 from src.platform.auth import Identity, current_identity
 from src.platform.db import get_session
 from src.platform.locale import MESSAGES
@@ -76,6 +80,42 @@ async def read_idea(
             "collaborators": collaborators,
         }
     )
+
+
+@workspace_ideas_router.post(
+    "/{workspace_id}/ideas",
+    response_model=IdeaResponse,
+    status_code=status.HTTP_201_CREATED,
+    operation_id="deposit_workspace_idea",
+)
+async def deposit_workspace_idea(
+    workspace_id: UUID,
+    body: DepositIdeaRequest,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> IdeaResponse:
+    messages = MESSAGES[request.state.locale]
+    try:
+        idea = await deposit_idea(
+            PostgresIdeas(session),
+            workspace_id,
+            identity.subject,
+            title=body.title,
+            pitch=body.pitch,
+            lang=body.lang or request.state.locale,
+        )
+        await create_initial_iteration(
+            PostgresIterations(session),
+            idea,
+            idea.owner_id,
+            message=messages["initial_deposit"],
+            lang=idea.lang,
+        )
+        await session.commit()
+    except DepositNotFoundError as error:
+        raise HTTPException(404, messages["not_found"]) from error
+    return IdeaResponse.model_validate(idea)
 
 
 @workspace_ideas_router.get(

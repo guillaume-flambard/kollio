@@ -392,6 +392,62 @@
       }
     },
     "/workspaces/{workspace_id}/ideas": {
+      "post": {
+        "tags": [
+          "ideas"
+        ],
+        "summary": "Deposit Workspace Idea",
+        "operationId": "deposit_workspace_idea",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepositIdeaRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdeaResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "ideas"
@@ -660,6 +716,43 @@
           "snapshot"
         ],
         "title": "CreateIterationRequest"
+      },
+      "DepositIdeaRequest": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "pitch": {
+            "type": "string",
+            "maxLength": 5000,
+            "minLength": 1,
+            "title": "Pitch"
+          },
+          "lang": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fr",
+                  "en"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lang"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "pitch"
+        ],
+        "title": "DepositIdeaRequest"
       },
       "HTTPValidationError": {
         "properties": {

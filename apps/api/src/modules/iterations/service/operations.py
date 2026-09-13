@@ -1,5 +1,6 @@
 from uuid import UUID, uuid4
 
+from src.modules.ideas.adapters.postgres import Idea
 from src.modules.iterations.adapters.postgres import Iteration, PostgresIterations
 from src.modules.iterations.api.schemas import IdeaSnapshot
 from src.modules.iterations.domain.rules import (
@@ -18,6 +19,32 @@ class IterationNotFoundError(LookupError):
 
 def _short_hash(identifier: UUID) -> str:
     return identifier.hex[:12]
+
+
+async def create_initial_iteration(
+    repository: PostgresIterations,
+    idea: Idea,
+    author_id: UUID,
+    *,
+    message: str,
+    lang: str,
+) -> Iteration:
+    identifier = uuid4()
+    revision = await repository.next_revision(idea.id)
+    iteration = Iteration(
+        id=identifier,
+        idea_id=idea.id,
+        parent_id=None,
+        author_id=author_id,
+        message=message,
+        lang=lang,
+        payload={"title": idea.title, "pitch": idea.pitch, "stage": idea.stage},
+        branch="main",
+        proposal_status=None,
+        short_hash=_short_hash(identifier),
+        revision=revision,
+    )
+    return await repository.append(iteration, idea, project=True)
 
 
 async def list_iterations(

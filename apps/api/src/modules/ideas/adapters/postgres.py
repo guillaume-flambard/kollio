@@ -101,6 +101,12 @@ class PostgresIdeas:
         )
         return frozenset((await self.session.scalars(query)).all())
 
+    async def user_by_subject(self, subject: str) -> User | None:
+        return await self.session.scalar(select(User).where(User.auth_subject == subject))
+
+    def add_idea(self, idea: Idea) -> None:
+        self.session.add(idea)
+
     async def collaborators(self, idea_id: UUID) -> list[tuple[User, str]]:
         query = (
             select(User, IdeaMembership.role)

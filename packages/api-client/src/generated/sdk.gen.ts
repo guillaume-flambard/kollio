@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses } from './types.gen';
+import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, DepositWorkspaceIdeaData, DepositWorkspaceIdeaErrors, DepositWorkspaceIdeaResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspacesData, ListWorkspacesResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -101,6 +101,19 @@ export const listWorkspaceIdeas = <ThrowOnError extends boolean = false>(options
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/workspaces/{workspace_id}/ideas',
     ...options
+});
+
+/**
+ * Deposit Workspace Idea
+ */
+export const depositWorkspaceIdea = <ThrowOnError extends boolean = false>(options: Options<DepositWorkspaceIdeaData, ThrowOnError>): RequestResult<DepositWorkspaceIdeaResponses, DepositWorkspaceIdeaErrors, ThrowOnError> => (options.client ?? client).post<DepositWorkspaceIdeaResponses, DepositWorkspaceIdeaErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/ideas',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 /**

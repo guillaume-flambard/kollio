@@ -25,6 +25,12 @@ class CollaboratorResponse(BaseModel):
     avatar_key: str | None = None
 
 
+class DepositIdeaRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=180)
+    pitch: str = Field(min_length=1, max_length=5000)
+    lang: Literal["fr", "en"] | None = None
+
+
 class IdeaResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: UUID

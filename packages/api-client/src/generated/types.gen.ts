@@ -62,6 +62,24 @@ export type CreateIterationRequest = {
 };
 
 /**
+ * DepositIdeaRequest
+ */
+export type DepositIdeaRequest = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Pitch
+     */
+    pitch: string;
+    /**
+     * Lang
+     */
+    lang?: 'fr' | 'en' | null;
+};
+
+/**
  * HTTPValidationError
  */
 export type HttpValidationError = {
@@ -649,6 +667,36 @@ export type ListWorkspaceIdeasResponses = {
 };
 
 export type ListWorkspaceIdeasResponse = ListWorkspaceIdeasResponses[keyof ListWorkspaceIdeasResponses];
+
+export type DepositWorkspaceIdeaData = {
+    body: DepositIdeaRequest;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/ideas';
+};
+
+export type DepositWorkspaceIdeaErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DepositWorkspaceIdeaError = DepositWorkspaceIdeaErrors[keyof DepositWorkspaceIdeaErrors];
+
+export type DepositWorkspaceIdeaResponses = {
+    /**
+     * Successful Response
+     */
+    201: IdeaResponse;
+};
+
+export type DepositWorkspaceIdeaResponse = DepositWorkspaceIdeaResponses[keyof DepositWorkspaceIdeaResponses];
 
 export type ListWorkspacesData = {
     body?: never;
