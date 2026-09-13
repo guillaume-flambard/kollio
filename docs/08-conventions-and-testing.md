@@ -49,3 +49,11 @@ Outils : **uv workspaces** (Python) + **pnpm workspaces** (JS). Pas de Nx/Turbor
 
 ## Frontière LLM (rappel non négociable)
 Tout ce que renvoie un LLM passe par un schéma Pydantic avant exécution. Locale toujours dans l'état du graphe. Secrets jamais dans le contexte d'un agent (moindre privilège des outils = 1re défense anti-injection).
+
+## Delivery and browser acceptance
+
+Use [the delivery workflow](12-delivery-workflow.md) to connect these conventions
+to OpenSpec scenarios, acceptance evidence and ADRs. `pnpm test:ui` runs component
+tests; `pnpm test:browser` runs the browser acceptance suite. Both are required by
+`make verify` and CI. The initial browser fixture simulates API responses and is
+not evidence of real authentication or backend isolation.

@@ -606,6 +606,93 @@
   },
   "components": {
     "schemas": {
+      "AnalysisResponse": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "resolved",
+              "abstained",
+              "running",
+              "unavailable"
+            ],
+            "title": "State"
+          },
+          "iteration_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Iteration Id"
+          },
+          "realism_score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Realism Score"
+          },
+          "constraints": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ConstraintScoreResponse"
+            },
+            "type": "object",
+            "title": "Constraints"
+          },
+          "locale": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fr",
+                  "en"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locale"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "title": "AnalysisResponse"
+      },
       "CollaboratorResponse": {
         "properties": {
           "id": {
@@ -670,6 +757,31 @@
           "roles"
         ],
         "title": "CollaboratorResponse"
+      },
+      "ConstraintScoreResponse": {
+        "properties": {
+          "score": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "score",
+          "note"
+        ],
+        "title": "ConstraintScoreResponse"
       },
       "CreateIterationRequest": {
         "properties": {
@@ -876,6 +988,16 @@
             "type": "string",
             "format": "date-time",
             "title": "Created At"
+          },
+          "analysis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnalysisResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "legacy_context": {
             "anyOf": [
@@ -1090,6 +1212,16 @@
             "type": "string",
             "format": "date-time",
             "title": "Created At"
+          },
+          "analysis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnalysisResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",

@@ -5,6 +5,42 @@ export type ClientOptions = {
 };
 
 /**
+ * AnalysisResponse
+ */
+export type AnalysisResponse = {
+    /**
+     * State
+     */
+    state: 'resolved' | 'abstained' | 'running' | 'unavailable';
+    /**
+     * Iteration Id
+     */
+    iteration_id?: string | null;
+    /**
+     * Realism Score
+     */
+    realism_score?: number | null;
+    /**
+     * Constraints
+     */
+    constraints?: {
+        [key: string]: ConstraintScoreResponse;
+    };
+    /**
+     * Locale
+     */
+    locale?: 'fr' | 'en' | null;
+    /**
+     * Model
+     */
+    model?: string | null;
+    /**
+     * Created At
+     */
+    created_at?: string | null;
+};
+
+/**
  * CollaboratorResponse
  */
 export type CollaboratorResponse = {
@@ -36,6 +72,20 @@ export type CollaboratorResponse = {
      * Avatar Key
      */
     avatar_key?: string | null;
+};
+
+/**
+ * ConstraintScoreResponse
+ */
+export type ConstraintScoreResponse = {
+    /**
+     * Score
+     */
+    score: number | null;
+    /**
+     * Note
+     */
+    note: string;
 };
 
 /**
@@ -165,6 +215,7 @@ export type IdeaResponse = {
      * Created At
      */
     created_at: string;
+    analysis?: AnalysisResponse | null;
     legacy_context?: LegacyIdeaContext | null;
     /**
      * Collaborators
@@ -281,6 +332,7 @@ export type IterationResponse = {
      * Created At
      */
     created_at: string;
+    analysis?: AnalysisResponse | null;
 };
 
 /**

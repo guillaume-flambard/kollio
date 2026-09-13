@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "test:ui": "vitest run",
     "typecheck": "nuxt typecheck",
-    "start": "node .output/server/index.mjs"
+    "start": "node .output/server/index.mjs",
+    "test:browser": "playwright test"
   },
   "dependencies": {
     "@kollio/api-client": "workspace:*",

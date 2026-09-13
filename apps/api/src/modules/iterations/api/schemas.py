@@ -4,6 +4,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from src.modules.ideas.api.schemas import AnalysisResponse
+
 
 class IdeaSnapshot(BaseModel):
     title: str = Field(min_length=1, max_length=240)
@@ -47,3 +49,4 @@ class IterationResponse(BaseModel):
     short_hash: str
     revision: int
     created_at: datetime
+    analysis: AnalysisResponse | None = None

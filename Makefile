@@ -28,6 +28,8 @@ verify:
 	cd apps/api && uv run pytest -m 'not live'
 	pnpm lint
 	pnpm typecheck
+	pnpm test:ui
+	pnpm test:browser
 	node scripts/check_locales.mjs
 
 contract:

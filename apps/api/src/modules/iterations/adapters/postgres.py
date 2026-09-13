@@ -124,6 +124,14 @@ class PostgresIterations:
             select(IdeaAnalysis).where(IdeaAnalysis.iteration_id == iteration_id)
         )
 
+    async def analyses_for_idea(self, idea_id: UUID) -> list[IdeaAnalysis]:
+        query = (
+            select(IdeaAnalysis)
+            .where(IdeaAnalysis.idea_id == idea_id)
+            .order_by(IdeaAnalysis.created_at)
+        )
+        return list((await self.session.scalars(query)).all())
+
     async def append(self, iteration: Iteration, idea: Idea, *, project: bool) -> Iteration:
         self.session.add(iteration)
         if project:

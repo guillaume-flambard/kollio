@@ -7,7 +7,9 @@
     "build": "pnpm --dir apps/web build",
     "lint": "pnpm --dir apps/web lint",
     "typecheck": "pnpm --dir apps/web typecheck",
-    "generate:client": "openapi-ts -i ./contracts/openapi.json -o packages/api-client/src/generated"
+    "generate:client": "openapi-ts -i ./contracts/openapi.json -o packages/api-client/src/generated",
+    "test:ui": "pnpm --dir apps/web test:ui",
+    "test:browser": "pnpm --dir apps/web test:browser"
   },
   "keywords": [],
   "author": "",

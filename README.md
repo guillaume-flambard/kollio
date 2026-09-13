@@ -46,3 +46,9 @@ Provider calls require `KOLLIO_RUN_LIVE_EVALS=1`; ordinary checks use recordings
 See `docs/11-bootstrap-status.md` for resolved versions, evidence and unfinished
 Phase 0 acceptance criteria. The current implementation is a foundation, not the
 complete V1 product.
+
+## Delivery workflow
+
+Read [the delivery workflow](docs/12-delivery-workflow.md) before starting a product
+change. It defines scenario evidence, agent handoffs, contracts, tests, evaluations
+and the merge criteria. Durable decisions live in [ADRs](docs/decisions/).

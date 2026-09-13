@@ -109,7 +109,7 @@ function domainLabel(domain: string) {
 function pageLocation(page: number) {
   return {
     path: localePath('/workspace'),
-    query: { ...route.query, ...(activeWorkspace.value ? { workspace: activeWorkspace.value.id } : {}), ...(page > 1 ? { page: String(page) } : {}) },
+    query: { ...route.query, ...(activeWorkspace.value ? { workspace: activeWorkspace.value.id } : {}), page: page > 1 ? String(page) : undefined },
   }
 }
 

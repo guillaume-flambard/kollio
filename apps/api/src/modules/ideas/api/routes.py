@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.ideas.adapters.postgres import PostgresIdeas
 from src.modules.ideas.api.schemas import (
+    AnalysisResponse,
     CollaboratorResponse,
     DepositIdeaRequest,
     IdeaPageResponse,
@@ -20,6 +21,7 @@ from src.modules.ideas.service.get_idea import get_idea
 from src.modules.ideas.service.list_ideas import list_workspace_ideas
 from src.modules.iterations.adapters.postgres import PostgresIterations
 from src.modules.iterations.service.operations import create_initial_iteration
+from src.modules.iterations.service.read_analysis import analysis_for_view, analysis_state
 from src.platform.auth import Identity, current_identity
 from src.platform.db import get_session
 from src.platform.locale import MESSAGES
@@ -76,11 +78,29 @@ async def read_idea(
         for user, role in await repository.collaborators(idea.id)
     ]
     response = IdeaResponse.model_validate(idea)
+    iterations = PostgresIterations(session)
+    history = await iterations.history(idea.id)
+    viewed = history[0] if history else None
+    analysis = await analysis_for_view(iterations, idea.id, viewed) if viewed is not None else None
     return response.model_copy(
         update={
             "legacy_context": legacy_context(idea.provenance),
             "collaborators": collaborators,
+            "analysis": _analysis_response(analysis, viewed=viewed) if viewed else None,
         }
+    )
+
+
+def _analysis_response(analysis, viewed):
+    state = analysis_state(analysis, expected=True)
+    return AnalysisResponse(
+        state=state,
+        iteration_id=viewed.id if analysis is None else analysis.iteration_id,
+        realism_score=analysis.realism_score if analysis else None,
+        constraints=analysis.constraints if analysis else {},
+        locale=analysis.locale if analysis else None,
+        model=analysis.model if analysis else None,
+        created_at=analysis.created_at if analysis else None,
     )
 
 

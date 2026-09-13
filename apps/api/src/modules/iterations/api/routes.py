@@ -24,6 +24,7 @@ from src.modules.iterations.service.operations import (
     reject_proposal,
     rollback_iteration,
 )
+from src.modules.iterations.service.read_analysis import analysis_for_view, analysis_state
 from src.platform.auth import Identity, current_identity
 from src.platform.db import get_session
 from src.platform.locale import MESSAGES
@@ -53,7 +54,30 @@ async def read_iterations(
         iterations = await list_iterations(PostgresIterations(session), idea_id, identity.subject)
     except IterationNotFoundError as error:
         raise _transition_error(request, error) from error
-    return [IterationResponse.model_validate(iteration) for iteration in iterations]
+    repository = PostgresIterations(session)
+    return [await _iteration_response(repository, idea_id, iteration) for iteration in iterations]
+
+
+async def _iteration_response(repository, idea_id, iteration) -> IterationResponse:
+    from src.modules.ideas.api.schemas import AnalysisResponse
+
+    analysis = await analysis_for_view(repository, idea_id, iteration)
+    state = analysis_state(analysis, expected=True)
+    if analysis is None:
+        analysis_body = AnalysisResponse(state=state, iteration_id=iteration.id)
+    else:
+        analysis_body = AnalysisResponse(
+            state=state,
+            iteration_id=analysis.iteration_id,
+            realism_score=analysis.realism_score,
+            constraints=analysis.constraints,
+            locale=analysis.locale,
+            model=analysis.model,
+            created_at=analysis.created_at,
+        )
+    return IterationResponse.model_validate(iteration).model_copy(
+        update={"analysis": analysis_body}
+    )
 
 
 @router.post(

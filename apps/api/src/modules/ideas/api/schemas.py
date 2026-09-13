@@ -31,6 +31,21 @@ class DepositIdeaRequest(BaseModel):
     lang: Literal["fr", "en"] | None = None
 
 
+class ConstraintScoreResponse(BaseModel):
+    score: int | None
+    note: str
+
+
+class AnalysisResponse(BaseModel):
+    state: Literal["resolved", "abstained", "running", "unavailable"]
+    iteration_id: UUID | None = None
+    realism_score: int | None = None
+    constraints: dict[str, ConstraintScoreResponse] = Field(default_factory=dict)
+    locale: Literal["fr", "en"] | None = None
+    model: str | None = None
+    created_at: datetime | None = None
+
+
 class IdeaResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: UUID
@@ -43,6 +58,7 @@ class IdeaResponse(BaseModel):
     lang: Literal["fr", "en"]
     visibility: Literal["public", "workspace"]
     created_at: datetime
+    analysis: AnalysisResponse | None = None
     legacy_context: LegacyIdeaContext | None = None
     collaborators: list[CollaboratorResponse] = Field(default_factory=list)
 

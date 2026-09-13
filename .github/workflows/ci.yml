@@ -63,6 +63,21 @@ jobs:
           pnpm lint
           pnpm typecheck
           node scripts/check_locales.mjs
+      - name: Component tests
+        run: pnpm test:ui
+      - name: Install browser
+        run: pnpm --dir apps/web exec playwright install --with-deps chromium
+      - name: Browser acceptance scenarios
+        run: pnpm test:browser
+      - name: Upload browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failure-evidence
+          path: |
+            apps/web/playwright-report
+            apps/web/test-results
+          retention-days: 7
       - name: Migrate and test
         working-directory: apps/api
         run: |
