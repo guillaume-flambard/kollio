@@ -932,6 +932,54 @@
           }
         ]
       }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": [
+          "profiles"
+        ],
+        "summary": "Read Profile",
+        "operationId": "get_profile",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1134,6 +1182,50 @@
           "note"
         ],
         "title": "ConstraintScoreResponse"
+      },
+      "ContributionResponse": {
+        "properties": {
+          "idea_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Idea Id"
+          },
+          "idea_title": {
+            "type": "string",
+            "title": "Idea Title"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "short_hash": {
+            "type": "string",
+            "title": "Short Hash"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "idea_id",
+          "idea_title",
+          "message",
+          "lang",
+          "short_hash",
+          "created_at"
+        ],
+        "title": "ContributionResponse"
       },
       "CreateIterationRequest": {
         "properties": {
@@ -1761,6 +1853,152 @@
           "source_id"
         ],
         "title": "LegacyIdeaContext"
+      },
+      "MembershipResponse": {
+        "properties": {
+          "idea_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Idea Id"
+          },
+          "idea_title": {
+            "type": "string",
+            "title": "Idea Title"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          }
+        },
+        "type": "object",
+        "required": [
+          "idea_id",
+          "idea_title",
+          "role"
+        ],
+        "title": "MembershipResponse"
+      },
+      "OwnedIdeaResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "seed",
+              "iterating",
+              "team_formed"
+            ],
+            "title": "Stage"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "title",
+          "stage",
+          "lang",
+          "created_at"
+        ],
+        "title": "OwnedIdeaResponse"
+      },
+      "ProfileResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "handle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Handle"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "bio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bio"
+          },
+          "owned_ideas": {
+            "items": {
+              "$ref": "#/components/schemas/OwnedIdeaResponse"
+            },
+            "type": "array",
+            "title": "Owned Ideas"
+          },
+          "memberships": {
+            "items": {
+              "$ref": "#/components/schemas/MembershipResponse"
+            },
+            "type": "array",
+            "title": "Memberships"
+          },
+          "contributions": {
+            "items": {
+              "$ref": "#/components/schemas/ContributionResponse"
+            },
+            "type": "array",
+            "title": "Contributions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "display_name",
+          "roles",
+          "owned_ideas",
+          "memberships",
+          "contributions"
+        ],
+        "title": "ProfileResponse"
       },
       "RejectJoinBody": {
         "properties": {

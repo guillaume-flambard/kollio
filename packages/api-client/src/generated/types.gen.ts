@@ -103,6 +103,36 @@ export type ConstraintScoreResponse = {
 };
 
 /**
+ * ContributionResponse
+ */
+export type ContributionResponse = {
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Idea Title
+     */
+    idea_title: string;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Short Hash
+     */
+    short_hash: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
  * CreateIterationRequest
  */
 export type CreateIterationRequest = {
@@ -435,6 +465,92 @@ export type LegacyIdeaContext = {
      * Why Now
      */
     why_now?: string | null;
+};
+
+/**
+ * MembershipResponse
+ */
+export type MembershipResponse = {
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Idea Title
+     */
+    idea_title: string;
+    /**
+     * Role
+     */
+    role: string;
+};
+
+/**
+ * OwnedIdeaResponse
+ */
+export type OwnedIdeaResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Slug
+     */
+    slug: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Stage
+     */
+    stage: 'seed' | 'iterating' | 'team_formed';
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * ProfileResponse
+ */
+export type ProfileResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Handle
+     */
+    handle?: string | null;
+    /**
+     * Roles
+     */
+    roles: Array<string>;
+    /**
+     * Bio
+     */
+    bio?: string | null;
+    /**
+     * Owned Ideas
+     */
+    owned_ideas: Array<OwnedIdeaResponse>;
+    /**
+     * Memberships
+     */
+    memberships: Array<MembershipResponse>;
+    /**
+     * Contributions
+     */
+    contributions: Array<ContributionResponse>;
 };
 
 /**
@@ -1032,3 +1148,33 @@ export type ListWorkspacesResponses = {
 };
 
 export type ListWorkspacesResponse = ListWorkspacesResponses[keyof ListWorkspacesResponses];
+
+export type GetProfileData = {
+    body?: never;
+    path: {
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/users/{user_id}';
+};
+
+export type GetProfileErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetProfileError = GetProfileErrors[keyof GetProfileErrors];
+
+export type GetProfileResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProfileResponse;
+};
+
+export type GetProfileResponse = GetProfileResponses[keyof GetProfileResponses];
