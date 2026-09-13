@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Annotated, Any, Literal
 from uuid import UUID
 
@@ -22,6 +23,7 @@ from src.modules.iterations.service.operations import create_initial_iteration
 from src.platform.auth import Identity, current_identity
 from src.platform.db import get_session
 from src.platform.locale import MESSAGES
+from src.platform.queue import AnalysisQueue, get_analysis_queue
 
 router = APIRouter(prefix="/ideas", tags=["ideas"])
 workspace_ideas_router = APIRouter(prefix="/workspaces", tags=["ideas"])
@@ -94,6 +96,7 @@ async def deposit_workspace_idea(
     request: Request,
     identity: Identity = Depends(current_identity),
     session: AsyncSession = Depends(get_session),
+    queue: AnalysisQueue = Depends(get_analysis_queue),
 ) -> IdeaResponse:
     messages = MESSAGES[request.state.locale]
     try:
@@ -105,7 +108,7 @@ async def deposit_workspace_idea(
             pitch=body.pitch,
             lang=body.lang or request.state.locale,
         )
-        await create_initial_iteration(
+        iteration = await create_initial_iteration(
             PostgresIterations(session),
             idea,
             idea.owner_id,
@@ -115,6 +118,20 @@ async def deposit_workspace_idea(
         await session.commit()
     except DepositNotFoundError as error:
         raise HTTPException(404, messages["not_found"]) from error
+    try:
+        await queue.enqueue(
+            workflow_id=f"deposit-{iteration.id}",
+            idea_id=str(idea.id),
+            iteration_id=str(iteration.id),
+            locale=idea.lang,
+            title=idea.title,
+            pitch=idea.pitch,
+        )
+    except Exception:
+        logging.getLogger("kollio.deposit").warning(
+            "Analysis enqueue failed for iteration %s; deposit stands without analysis",
+            iteration.id,
+        )
     return IdeaResponse.model_validate(idea)
 
 

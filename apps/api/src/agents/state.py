@@ -1,4 +1,5 @@
-from typing import Literal, TypedDict
+from typing import Literal, NotRequired, TypedDict
+from uuid import UUID
 
 
 class AgentState(TypedDict):
@@ -8,3 +9,6 @@ class AgentState(TypedDict):
     pitch: str
     evidence: list[dict]
     finding: dict
+    idea_id: NotRequired[UUID]
+    iteration_id: NotRequired[UUID]
+    analysis_id: NotRequired[str]
