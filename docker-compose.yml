@@ -84,7 +84,7 @@ services:
       context: .
       dockerfile: apps/api/Dockerfile
     environment: *api-environment
-    command: ["arq", "src.platform.worker.WorkerSettings"]
+    command: ["taskiq", "worker", "src.platform.worker:broker"]
     depends_on:
       postgres: {condition: service_healthy}
       redis: {condition: service_healthy}
