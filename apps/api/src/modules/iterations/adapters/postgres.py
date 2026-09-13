@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, cast
 from uuid import UUID
 
 from sqlalchemy import (
@@ -69,7 +69,8 @@ class PostgresIterations:
         )
         if lock:
             query = query.with_for_update(of=Idea)
-        return (await self.session.execute(query)).one_or_none()
+        row = (await self.session.execute(query)).one_or_none()
+        return (row[0], row[1]) if row is not None else None
 
     async def history(self, idea_id: UUID) -> list[Iteration]:
         query = (
@@ -80,19 +81,25 @@ class PostgresIterations:
         return list((await self.session.scalars(query)).all())
 
     async def get(self, idea_id: UUID, iteration_id: UUID) -> Iteration | None:
-        return await self.session.scalar(
-            select(Iteration).where(
-                Iteration.id == iteration_id,
-                Iteration.idea_id == idea_id,
-            )
+        return cast(
+            Iteration | None,
+            await self.session.scalar(
+                select(Iteration).where(
+                    Iteration.id == iteration_id,
+                    Iteration.idea_id == idea_id,
+                )
+            ),
         )
 
     async def head(self, idea_id: UUID, branch: str) -> Iteration | None:
-        return await self.session.scalar(
-            select(Iteration)
-            .where(Iteration.idea_id == idea_id, Iteration.branch == branch)
-            .order_by(Iteration.revision.desc())
-            .limit(1)
+        return cast(
+            Iteration | None,
+            await self.session.scalar(
+                select(Iteration)
+                .where(Iteration.idea_id == idea_id, Iteration.branch == branch)
+                .order_by(Iteration.revision.desc())
+                .limit(1)
+            ),
         )
 
     async def next_revision(self, idea_id: UUID) -> int:

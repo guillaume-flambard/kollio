@@ -5,6 +5,72 @@ export type ClientOptions = {
 };
 
 /**
+ * AnalysisEvidence
+ */
+export type AnalysisEvidence = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Url
+     */
+    url: string;
+    /**
+     * Text
+     */
+    text: string;
+};
+
+/**
+ * AnalysisWorkflowResponse
+ */
+export type AnalysisWorkflowResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Source Iteration Id
+     */
+    source_iteration_id: string | null;
+    /**
+     * Locale
+     */
+    locale: 'fr' | 'en';
+    /**
+     * Status
+     */
+    status: 'queued' | 'running' | 'awaiting_review' | 'review_queued' | 'completed' | 'rejected' | 'failed';
+    /**
+     * Current Step
+     */
+    current_step: string;
+    draft_result: ConstraintAnalysisResult | null;
+    result?: ConstraintAnalysisResult | null;
+    /**
+     * Error Code
+     */
+    error_code: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Finished At
+     */
+    finished_at: string | null;
+};
+
+/**
  * CollaboratorResponse
  */
 export type CollaboratorResponse = {
@@ -36,6 +102,60 @@ export type CollaboratorResponse = {
      * Avatar Key
      */
     avatar_key?: string | null;
+};
+
+/**
+ * ConstraintAnalysisResult
+ */
+export type ConstraintAnalysisResult = {
+    /**
+     * Overall Score
+     */
+    overall_score: number;
+    /**
+     * Verdict
+     */
+    verdict: 'viable' | 'conditional' | 'not_viable' | 'unknown';
+    /**
+     * Summary
+     */
+    summary: string;
+    /**
+     * Factors
+     */
+    factors: [
+        ConstraintFactor,
+        ConstraintFactor,
+        ConstraintFactor,
+        ConstraintFactor,
+        ConstraintFactor
+    ];
+    /**
+     * Locale
+     */
+    locale: 'fr' | 'en';
+};
+
+/**
+ * ConstraintFactor
+ */
+export type ConstraintFactor = {
+    /**
+     * Name
+     */
+    name: 'competition' | 'build_cost' | 'time_to_market' | 'defensibility' | 'acquisition';
+    /**
+     * Score
+     */
+    score: number;
+    /**
+     * Summary
+     */
+    summary: string;
+    /**
+     * Source Ids
+     */
+    source_ids: Array<string>;
 };
 
 /**
@@ -266,6 +386,16 @@ export type IterationResponse = {
 };
 
 /**
+ * LaunchAnalysisRequest
+ */
+export type LaunchAnalysisRequest = {
+    /**
+     * Evidence
+     */
+    evidence?: Array<AnalysisEvidence>;
+};
+
+/**
  * LegacyIdeaContext
  */
 export type LegacyIdeaContext = {
@@ -307,6 +437,16 @@ export type ResolveProposalRequest = {
      * Expected Main Parent Id
      */
     expected_main_parent_id?: string | null;
+};
+
+/**
+ * ReviewAnalysisRequest
+ */
+export type ReviewAnalysisRequest = {
+    /**
+     * Approved
+     */
+    approved: boolean;
 };
 
 /**
@@ -434,6 +574,110 @@ export type GetIdeaResponses = {
 };
 
 export type GetIdeaResponse = GetIdeaResponses[keyof GetIdeaResponses];
+
+export type LaunchConstraintAnalysisData = {
+    body: LaunchAnalysisRequest;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'idempotency-key': string;
+    };
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/analyses';
+};
+
+export type LaunchConstraintAnalysisErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type LaunchConstraintAnalysisError = LaunchConstraintAnalysisErrors[keyof LaunchConstraintAnalysisErrors];
+
+export type LaunchConstraintAnalysisResponses = {
+    /**
+     * Successful Response
+     */
+    202: AnalysisWorkflowResponse;
+};
+
+export type LaunchConstraintAnalysisResponse = LaunchConstraintAnalysisResponses[keyof LaunchConstraintAnalysisResponses];
+
+export type GetConstraintAnalysisData = {
+    body?: never;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+        /**
+         * Workflow Id
+         */
+        workflow_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/analyses/{workflow_id}';
+};
+
+export type GetConstraintAnalysisErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetConstraintAnalysisError = GetConstraintAnalysisErrors[keyof GetConstraintAnalysisErrors];
+
+export type GetConstraintAnalysisResponses = {
+    /**
+     * Successful Response
+     */
+    200: AnalysisWorkflowResponse;
+};
+
+export type GetConstraintAnalysisResponse = GetConstraintAnalysisResponses[keyof GetConstraintAnalysisResponses];
+
+export type ReviewConstraintAnalysisData = {
+    body: ReviewAnalysisRequest;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+        /**
+         * Workflow Id
+         */
+        workflow_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/analyses/{workflow_id}/review';
+};
+
+export type ReviewConstraintAnalysisErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReviewConstraintAnalysisError = ReviewConstraintAnalysisErrors[keyof ReviewConstraintAnalysisErrors];
+
+export type ReviewConstraintAnalysisResponses = {
+    /**
+     * Successful Response
+     */
+    202: AnalysisWorkflowResponse;
+};
+
+export type ReviewConstraintAnalysisResponse = ReviewConstraintAnalysisResponses[keyof ReviewConstraintAnalysisResponses];
 
 export type ListIdeaIterationsData = {
     body?: never;

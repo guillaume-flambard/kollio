@@ -176,6 +176,9 @@
         "constraint": "Historical constraint",
         "channel": "Proposed channel"
       },
+      "sources": {
+        "prospecteur": "Prospecteur"
+      },
       "companion": {
         "label": "Idea context",
         "tabWithCount": "{label} ({count})",

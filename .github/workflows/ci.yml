@@ -59,7 +59,7 @@ jobs:
           uv run --project apps/api python scripts/check_private_files.py --tracked
           uv run --project apps/api ruff check apps/api scripts
           uv run --project apps/api ruff format --check apps/api scripts
-          uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain apps/api/src/modules/iterations/domain
+          uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain apps/api/src/modules/iterations/domain apps/api/src/modules/constraint_analysis/domain
           pnpm lint
           pnpm typecheck
           node scripts/check_locales.mjs
@@ -69,6 +69,8 @@ jobs:
           uv run alembic upgrade head
           uv run pytest -m 'not live'
           uv run alembic check
+      - name: Test web behavior
+        run: pnpm --dir apps/web test:ui
       - name: Check generated contract drift
         run: |
           cd apps/api
@@ -79,6 +81,7 @@ jobs:
       - name: Build web and runtime images
         run: |
           pnpm build
+          pnpm performance:budget
           docker compose build
         env:
           POSTGRES_PASSWORD: test-only-password

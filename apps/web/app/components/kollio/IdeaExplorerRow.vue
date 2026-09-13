@@ -15,10 +15,6 @@ const props = defineProps<{
 defineEmits<{ select: [] }>()
 
 const collaborators = computed(() => props.idea.collaborators ?? [])
-
-function initials(name: string) {
-  return name.split(/\s+/).slice(0, 2).map(part => part.charAt(0)).join('').toUpperCase()
-}
 </script>
 
 <template>
@@ -28,7 +24,7 @@ function initials(name: string) {
       <path d="M18 12C12 42 12 98 21 122C270 128 704 128 972 125" />
     </svg>
     <span class="explorer-row-avatar" :data-avatar="collaborators[0]?.avatar_key || 'lilac'" aria-hidden="true">
-      {{ initials(collaborators[0]?.display_name || idea.title) }}
+      {{ personInitials(collaborators[0]?.display_name || idea.title) }}
     </span>
     <span class="explorer-row-copy">
       <strong>{{ idea.title }}</strong>

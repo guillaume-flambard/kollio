@@ -186,7 +186,7 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   bottom: 0;
   left: 0;
   height: 62px;
-  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--ui-bg-elevated) 94%, transparent) 76%);
+  background: var(--ui-bg-elevated);
   content: '';
   pointer-events: none;
 }
@@ -294,7 +294,7 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--ui-primary) 15%, transparent);
   border-radius: 50%;
-  background: linear-gradient(145deg, var(--kollio-wash), color-mix(in srgb, var(--kollio-wash) 35%, white));
+  background: var(--kollio-wash);
   color: var(--ui-primary);
   font-weight: 700;
   overflow: hidden;
@@ -510,9 +510,8 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 .skeleton-line,
 .skeleton-card,
 .skeleton-circle {
-  background: linear-gradient(100deg, var(--ui-bg-muted) 30%, var(--ui-bg-accented) 48%, var(--ui-bg-muted) 66%);
-  background-size: 220% 100%;
-  animation: skeleton-shimmer 1.35s ease-in-out infinite;
+  background: var(--ui-bg-muted);
+  animation: skeleton-pulse 1.35s ease-in-out infinite;
 }
 
 .skeleton-line {
@@ -531,8 +530,8 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
   border-radius: 50%;
 }
 
-@keyframes skeleton-shimmer {
-  to { background-position-x: -220%; }
+@keyframes skeleton-pulse {
+  50% { opacity: .55; }
 }
 
 .idea-library {
@@ -1059,7 +1058,7 @@ body { min-width: 320px; color: var(--ui-text); text-rendering: optimizeLegibili
 }
 
 .pitch-fade {
-  background: linear-gradient(to top, var(--ui-bg-elevated), transparent);
+  background: var(--ui-bg-elevated);
 }
 
 .linked-passage {

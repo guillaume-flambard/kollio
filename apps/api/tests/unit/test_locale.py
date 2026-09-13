@@ -1,6 +1,6 @@
 import pytest
 
-from src.platform.locale import resolve_locale
+from src.platform.locale import UnsupportedLocaleError, language_name, resolve_locale
 
 
 @pytest.mark.parametrize(
@@ -16,3 +16,13 @@ from src.platform.locale import resolve_locale
 )
 def test_locale_negotiation(header, expected):
     assert resolve_locale(header) == expected
+
+
+@pytest.mark.parametrize(("locale", "expected"), [("fr", "French"), ("en", "English")])
+def test_supported_locales_resolve_to_a_language_name(locale, expected):
+    assert language_name(locale) == expected
+
+
+def test_unsupported_locale_fails_deterministically():
+    with pytest.raises(UnsupportedLocaleError, match="de"):
+        language_name("de")

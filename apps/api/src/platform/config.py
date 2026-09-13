@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import SecretStr, field_validator
+from pydantic import SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -28,6 +28,31 @@ class Settings(BaseSettings):
         if value and not value.startswith("postgresql+asyncpg://"):
             raise ValueError("DATABASE_URL must use postgresql+asyncpg")
         return value
+
+    @model_validator(mode="after")
+    def require_production_integrations(self) -> Settings:
+        if self.environment != "production":
+            return self
+        missing: list[str] = []
+        if not self.database_url:
+            missing.append("database_url")
+        if not self.redis_url or "localhost" in self.redis_url:
+            missing.append("redis_url")
+        if not self.logto_issuer:
+            missing.append("logto_issuer")
+        if not self.logto_jwks_url:
+            missing.append("logto_jwks_url")
+        if not self.llm_base_url or "localhost" in self.llm_base_url:
+            missing.append("llm_base_url")
+        if not self.llm_api_key.get_secret_value():
+            missing.append("llm_api_key")
+        if not self.otel_exporter_otlp_traces_endpoint:
+            missing.append("otel_exporter_otlp_traces_endpoint")
+        if not self.otel_exporter_otlp_headers.get_secret_value():
+            missing.append("otel_exporter_otlp_headers")
+        if missing:
+            raise ValueError(f"Missing production configuration: {', '.join(missing)}")
+        return self
 
     @property
     def checkpoint_url(self) -> str:

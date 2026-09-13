@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "alembic>=1.19.2",
-    "arq>=0.28.0",
     "asyncpg>=0.31.0",
     "fastapi[standard]>=0.141.1",
     "httpx>=0.28.1",
@@ -26,6 +25,8 @@ dependencies = [
     "pyjwt[crypto]>=2.14.0",
     "redis>=5.3.1",
     "sqlalchemy[asyncio]>=2.0.52",
+    "taskiq>=0.12.6",
+    "taskiq-redis>=1.2.3",
 ]
 
 [dependency-groups]
@@ -44,7 +45,12 @@ pythonpath = ["."]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
-markers = ["integration: requires Postgres and Redis", "live: requires configured external providers"]
+markers = [
+    "integration: requires Postgres and Redis",
+    "e2e: exercises the complete local runtime across process boundaries",
+    "performance: guards latency and query-count budgets on critical paths",
+    "live: requires configured external providers",
+]
 
 [tool.ruff]
 line-length = 100
@@ -54,7 +60,11 @@ select = ["E", "F", "I", "UP", "B", "ASYNC"]
 
 [tool.mypy]
 strict = true
-files = ["src/modules/ideas/domain", "src/modules/iterations/domain"]
+files = [
+    "src/modules/ideas/domain",
+    "src/modules/iterations/domain",
+    "src/modules/constraint_analysis/domain",
+]
 
 [tool.ruff.lint.flake8-bugbear]
 extend-immutable-calls = ["fastapi.Depends"]
