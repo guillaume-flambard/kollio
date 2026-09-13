@@ -27,3 +27,26 @@ Dépôt d'idée · tueur de contraintes · itération façon GitHub · formation
 
 ## Implementation language
 All code, identifiers, comments and docstrings must be in English. Localized user-facing text belongs in FR/EN translation catalogs. Preserve original field names only at legacy data boundaries.
+
+
+## Delivery contract
+
+Follow `docs/12-delivery-workflow.md` for every product change. Start with observable
+OpenSpec scenarios, define boundary contracts, and deliver one complete behavior
+per slice. Link scenarios to evidence in the change's `acceptance.md`. Read relevant
+ADRs in `docs/decisions/`. Run the applicable checks before claiming completion;
+record simulated boundaries and unfinished acceptance criteria explicitly.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs are tracked in GitHub Issues for `guillaume-flambard/kollio`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the default Matt Pocock triage labels. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Use a multi-context layout for the API, web app, API client, and UI package. See `docs/agents/domain.md`.
