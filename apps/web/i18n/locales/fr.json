@@ -201,6 +201,25 @@
           "empty": "Les sources qui soutiennent ou remettent en cause cette idée apparaîtront ici."
         }
       }
+    },
+    "deposit": {
+      "metaTitle": "Déposer une idée | Kollio",
+      "title": "Déposer une idée",
+      "description": "Un titre, un pitch, et l’analyse des contraintes démarre aussitôt.",
+      "titleLabel": "Titre de l’idée",
+      "pitchLabel": "Pitch",
+      "langLabel": "Langue d’origine",
+      "langAuto": "Langue de l’interface",
+      "langFr": "Français",
+      "langEn": "English",
+      "submit": "Déposer l’idée",
+      "submitting": "Dépôt en cours…",
+      "running": "Analyse des contraintes en cours…",
+      "resolvedTitle": "Score de réalisme",
+      "abstainedTitle": "Analyse en attente de preuves",
+      "abstainedBody": "Il n'y a pas encore de preuve. Enrichissez l'idée puis ajoutez-en : chaque contrainte indique ce qui ferait basculer sa note.",
+      "openIdea": "Ouvrir l’idée",
+      "error": "Le dépôt a échoué. Réessayez."
     }
   }
 }

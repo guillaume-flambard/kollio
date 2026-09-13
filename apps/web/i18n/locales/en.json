@@ -201,6 +201,25 @@
           "empty": "Sources that support or challenge this idea will appear here."
         }
       }
+    },
+    "deposit": {
+      "metaTitle": "Deposit an idea | Kollio",
+      "title": "Deposit an idea",
+      "description": "Title plus pitch, and the constraint analysis starts immediately.",
+      "titleLabel": "Idea title",
+      "pitchLabel": "Pitch",
+      "langLabel": "Original language",
+      "langAuto": "Interface language",
+      "langFr": "Français",
+      "langEn": "English",
+      "submit": "Deposit the idea",
+      "submitting": "Depositing…",
+      "running": "Constraint analysis running…",
+      "resolvedTitle": "Realism score",
+      "abstainedTitle": "Analysis waiting for evidence",
+      "abstainedBody": "There is no evidence yet. Enrich the idea and add some: each constraint explains what would unlock its score.",
+      "openIdea": "Open the idea",
+      "error": "The deposit failed. Try again."
     }
   }
 }

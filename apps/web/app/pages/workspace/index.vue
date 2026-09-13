@@ -130,9 +130,9 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           <h1>{{ t('ideas.title') }}</h1>
           <p>{{ t('ideas.explorer.description') }}</p>
         </div>
-        <button type="button" class="ideas-create-action">
+        <NuxtLink type="button" class="ideas-create-action" :to="localePath({ name: 'workspace-deposit' })">
           {{ t('ideas.explorer.create') }}<span aria-hidden="true" v-text="glyphs.plus" />
-        </button>
+        </NuxtLink>
         <label class="ideas-search">
           <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m16 16 5 5" /></svg>
           <input v-model="searchInput" type="search" :placeholder="t('ideas.explorer.search')" @input="scheduleSearch">
