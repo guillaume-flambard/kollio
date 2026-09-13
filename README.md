@@ -17,6 +17,8 @@ Ces documents sont la **source de vérité** du projet. Ils sont destinés à ê
 10. `docs/08-conventions-and-testing.md` — conventions, monorepo, tests
 11. `docs/09-roadmap.md` — les phases
 12. `docs/10-project-init.md` — **bootstrap** : commandes d'initialisation (CLIs officiels, dernières versions) — à lire avant d'écrire du code
+13. `docs/11-bootstrap-status.md` — versions résolues, preuves de bootstrap et critères Phase 0 restants
+14. `docs/12-agentic-stack-2026.md` — décision agentique vérifiée en 2026 et responsabilités de chaque brique
 
 ## Statut
 Pré-PMF. Un back-end existe déjà (Python + Langfuse + SQLite sur VPS Netcup) et sera solidifié/migré selon `docs/03-architecture.md`. Ne pas partir de zéro : migrer.

@@ -1,0 +1,21 @@
+{
+  "input": {
+    "title": "Paiement des artistes le soir même",
+    "pitch": "Une billetterie locale qui paie les artistes après le concert.",
+    "locale": "fr",
+    "evidence": []
+  },
+  "output": {
+    "overall_score": 50,
+    "verdict": "unknown",
+    "summary": "Les informations fournies ne suffisent pas pour établir le réalisme.",
+    "factors": [
+      {"name": "competition", "score": 50, "summary": "Aucune preuve sur la concurrence n'est fournie.", "source_ids": []},
+      {"name": "build_cost", "score": 50, "summary": "Aucune preuve sur le coût de construction n'est fournie.", "source_ids": []},
+      {"name": "time_to_market", "score": 50, "summary": "Aucune preuve sur le délai n'est fournie.", "source_ids": []},
+      {"name": "defensibility", "score": 50, "summary": "Aucune preuve sur la défendabilité n'est fournie.", "source_ids": []},
+      {"name": "acquisition", "score": 50, "summary": "Aucune preuve sur l'acquisition n'est fournie.", "source_ids": []}
+    ],
+    "locale": "fr"
+  }
+}

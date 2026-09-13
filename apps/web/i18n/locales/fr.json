@@ -176,6 +176,9 @@
         "constraint": "Contrainte historique",
         "channel": "Canal envisagé"
       },
+      "sources": {
+        "prospecteur": "Prospecteur"
+      },
       "companion": {
         "label": "Contexte de l’idée",
         "tabWithCount": "{label} ({count})",

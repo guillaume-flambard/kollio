@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "baseline": {
+    "commit": "319468b",
+    "compressedJavaScriptTotal": 222902,
+    "compressedJavaScriptLargest": 117031,
+    "compressedCssTotal": 43463,
+    "compressedCssLargest": 35091,
+    "imageTotal": 2575936,
+    "imageLargest": 1145217
+  },
+  "budgets": {
+    "compressedJavaScriptTotal": 260000,
+    "compressedJavaScriptLargest": 135000,
+    "compressedCssTotal": 52000,
+    "compressedCssLargest": 42000,
+    "imageTotal": 3000000,
+    "imageLargest": 1250000
+  }
+}

@@ -44,7 +44,8 @@ const problemAnnotation = computed(() => {
     after: ` ${words.slice(end).join(' ')}`,
   }
 })
-const legacySourceLabel = computed(() => idea.value?.legacy_context?.source === 'prospecteur' ? 'Prospecteur' : idea.value?.legacy_context?.source)
+const sourceDisplayName = useSourceDisplayName()
+const legacySourceLabel = computed(() => sourceDisplayName(idea.value?.legacy_context?.source))
 const errorTitle = computed(() => error.value?.statusCode === 404 ? t('ideas.detail.notFound') : t('ideas.detail.loadError.title'))
 const errorDescription = computed(() => error.value?.statusCode === 404 ? t('ideas.detail.notFoundDescription') : t('ideas.detail.loadError.description'))
 
@@ -136,13 +137,13 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         <header class="idea-header">
           <NuxtLink :to="$localePath('/workspace')" class="idea-breadcrumb inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-default">
             {{ t('navigation.ideas') }}
-            <svg aria-hidden="true" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6" /></svg>
+            <KollioIcon name="chevron-right" class="size-4" />
             {{ t(`ideas.stage.${idea.stage}`) }}
           </NuxtLink>
           <div class="idea-header-actions flex items-center gap-3">
             <KollioPrimaryAction :label="t('ideas.detail.advance')" @click="selectPanel('questions')" />
             <button type="button" class="idea-more-action" :aria-label="t('ideas.detail.moreActions')">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="currentColor"><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /></svg>
+              <KollioIcon name="ellipsis" class="size-5" />
             </button>
           </div>
           <h1 class="idea-title max-w-[630px]">{{ idea.title }}</h1>
@@ -155,7 +156,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               </span>
             </template>
             <button type="button" class="idea-topic-add" :aria-label="t('ideas.detail.enrich')" @click="selectPanel('questions')">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" /></svg>
+              <KollioIcon name="plus" class="size-5" />
             </button>
           </div>
           <p class="idea-summary line-clamp-2 max-w-[70ch] text-muted">{{ ideaSummary }}</p>

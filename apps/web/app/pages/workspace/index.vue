@@ -15,7 +15,6 @@ const validStages = ['seed', 'iterating', 'team_formed'] as const
 const searchInput = ref(typeof route.query.q === 'string' ? route.query.q : '')
 const selectedIdeaId = ref<string>()
 const previewOpen = ref(false)
-const glyphs = Object.freeze({ plus: '＋', down: '⌄' })
 let searchTimer: ReturnType<typeof setTimeout> | undefined
 
 const { data: workspaces } = await useAsyncData('workspaces', () => requestFetch<WorkspaceResponse[]>('/api/workspaces'))
@@ -131,10 +130,10 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           <p>{{ t('ideas.explorer.description') }}</p>
         </div>
         <button type="button" class="ideas-create-action">
-          {{ t('ideas.explorer.create') }}<span aria-hidden="true" v-text="glyphs.plus" />
+          {{ t('ideas.explorer.create') }}<KollioIcon name="plus" class="ideas-create-glyph" />
         </button>
         <label class="ideas-search">
-          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m16 16 5 5" /></svg>
+          <KollioIcon name="search" />
           <input v-model="searchInput" type="search" :placeholder="t('ideas.explorer.search')" @input="scheduleSearch">
           <span class="ideas-filter-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h10m4 0h2M4 17h2m4 0h10M14 4v6M7 14v6" /></svg></span>
         </label>
@@ -169,7 +168,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
         <main class="ideas-results">
           <header class="ideas-results-header">
             <strong>{{ t('ideas.explorer.found', { count: ideaPage?.total ?? 0 }) }}</strong>
-            <span>{{ t('ideas.explorer.sortBy') }} <b>{{ t('ideas.explorer.relevance') }}</b><i aria-hidden="true" v-text="glyphs.down" /></span>
+            <span>{{ t('ideas.explorer.sortBy') }} <b>{{ t('ideas.explorer.relevance') }}</b><KollioIcon name="chevron-down" class="ideas-sort-glyph" /></span>
           </header>
           <div v-if="status === 'pending'" aria-live="polite">
             <div v-for="index in pageSize" :key="index" class="explorer-row-skeleton"><span class="skeleton-circle" /><span><i class="skeleton-line w-3/4" /><i class="skeleton-line mt-3 w-full" /></span></div>
@@ -223,6 +222,8 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-create-action { display: flex; min-height: 48px; align-items: center; gap: 24px; border-radius: 12px; background: var(--kollio-heading); padding: 0 20px; color: white; font-size: .78rem; font-weight: 570; box-shadow: 0 8px 22px color-mix(in srgb, var(--kollio-heading) 17%, transparent); transition: transform 180ms ease, box-shadow 180ms ease; }
 .ideas-create-action:hover { transform: translateY(-1px); box-shadow: 0 11px 28px color-mix(in srgb, var(--kollio-heading) 22%, transparent); }
 .ideas-create-action span { font-size: 1.2rem; font-weight: 300; }
+.ideas-create-action .ideas-create-glyph { width: 20px; flex: none; }
+.ideas-sort-glyph { display: inline-block; width: 14px; vertical-align: -2px; }
 .ideas-search { display: flex; min-height: 56px; grid-column: 1 / -1; align-items: center; gap: 13px; border: 1px solid var(--ui-border); border-radius: 12px; background: var(--ui-bg-elevated); padding-left: 16px; }
 .ideas-search:focus-within { border-color: color-mix(in srgb, var(--kollio-active-ink) 42%, var(--ui-border)); }
 .ideas-search > svg { width: 21px; flex: none; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-width: 1.7; }
