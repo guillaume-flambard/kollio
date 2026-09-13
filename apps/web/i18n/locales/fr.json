@@ -265,6 +265,15 @@
         "title": "Profil indisponible",
         "description": "Le profil n'a pas pu être chargé."
       }
+    },
+    "iterations": {
+      "pending": "En attente",
+      "accepted": "Fusionnée",
+      "rejected": "Refusée",
+      "branch": "Branche {name}",
+      "analysisRunning": "Analyse en cours",
+      "analysisResolved": "Score {score}",
+      "analysisAbstained": "En attente de preuves"
     }
   }
 }

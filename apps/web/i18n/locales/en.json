@@ -265,6 +265,15 @@
         "title": "Profile unavailable",
         "description": "The profile could not be loaded."
       }
+    },
+    "iterations": {
+      "pending": "Pending",
+      "accepted": "Merged",
+      "rejected": "Rejected",
+      "branch": "Branch {name}",
+      "analysisRunning": "Analysis running",
+      "analysisResolved": "Score {score}",
+      "analysisAbstained": "Awaiting evidence"
     }
   }
 }

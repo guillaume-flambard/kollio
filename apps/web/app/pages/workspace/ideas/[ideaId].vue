@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { IdeaResponse } from '@kollio/api-client'
+import type { IdeaResponse, IterationResponse, ProfileResponse } from '@kollio/api-client'
+import type { TimelineView } from '~/utils/timeline'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
@@ -146,7 +147,49 @@ const ideaSummary = computed(() => pitchSentences.value[0] ?? pitchParagraphs.va
 const collaborators = computed(() => idea.value?.collaborators ?? [])
 const detailParagraphs = computed(() => pitchSentences.value.length > 1 ? pitchSentences.value.slice(1) : pitchParagraphs.value)
 const legacyTopics = computed(() => idea.value?.legacy_context?.domain?.split('·').map(topic => topic.trim()).filter(Boolean) ?? [])
-const iterationCount = computed(() => idea.value?.legacy_context ? 1 : 0)
+
+const { data: iterations } = await useAsyncData(`idea-${ideaId}-iterations`, async () => {
+  if (!idea.value) return [] as IterationResponse[]
+  return requestFetch<IterationResponse[]>(`/api/ideas/${encodeURIComponent(ideaId)}/iterations`)
+}, { watch: [idea] })
+
+const { data: ownerProfile } = await useAsyncData(`idea-${ideaId}-owner`, async () => {
+  const ownerId = idea.value?.owner_id
+  if (!ownerId) return null
+  try {
+    return await requestFetch<ProfileResponse>(`/api/users/${encodeURIComponent(ownerId)}`)
+  }
+  catch {
+    return null
+  }
+}, { watch: [idea] })
+
+const authorNames = computed(() => {
+  const names = new Map<string, string>()
+  for (const member of collaborators.value) names.set(member.id, member.display_name)
+  if (ownerProfile.value && idea.value) names.set(idea.value.owner_id, ownerProfile.value.display_name)
+  return names
+})
+
+function authorLabel(id: string) {
+  return authorNames.value.get(id) ?? id.slice(0, 8)
+}
+
+function analysisLabel(analysis: IterationResponse['analysis']) {
+  if (!analysis) return undefined
+  if (analysis.state === 'resolved' && analysis.realism_score != null)
+    return t('ideas.iterations.analysisResolved', { score: analysis.realism_score })
+  if (analysis.state === 'abstained') return t('ideas.iterations.analysisAbstained')
+  if (analysis.state === 'running') return t('ideas.iterations.analysisRunning')
+  return undefined
+}
+
+const timelineView = computed<TimelineView>(() => toTimelineView(buildTimeline(iterations.value ?? []), {
+  authorName: authorLabel,
+  formatDate: iso => dateFormatter.value.format(new Date(iso)),
+  statusLabel: status => t(`ideas.iterations.${status}`),
+  analysisLabel,
+}))
 const problemAnnotation = computed(() => {
   const paragraph = detailParagraphs.value[0] ?? ''
   if (!idea.value?.legacy_context || !paragraph) return undefined
@@ -313,14 +356,12 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         </section>
 
         <KollioIterationTimeline
-          :context="idea.legacy_context"
-          :created-at="idea.created_at"
-          :date-label="dateFormatter.format(new Date(idea.created_at))"
-          :count-label="t('ideas.detail.iterations.count', { count: iterationCount })"
+          :view="timelineView"
+          :count-label="t('ideas.detail.iterations.count', { count: iterations?.length ?? 0 })"
           :title="t('ideas.detail.iterations.title')"
-          :imported-label="t('ideas.detail.iterations.imported')"
           :empty-label="t('ideas.detail.iterations.empty')"
-          :source-label="legacySourceLabel"
+          :imported-label="legacySourceLabel ? t('ideas.detail.iterations.imported') : undefined"
+          :branch-label="name => t('ideas.iterations.branch', { name })"
         />
 
         <section id="team" class="idea-team mt-11 rounded-2xl border border-default p-5 sm:p-6" :aria-labelledby="'idea-team-title'">
