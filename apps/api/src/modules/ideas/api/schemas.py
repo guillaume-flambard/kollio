@@ -2,7 +2,27 @@ from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class LegacyIdeaContext(BaseModel):
+    source: str
+    source_id: str
+    domain: str | None = None
+    verdict: str | None = None
+    fatal_constraint: str | None = None
+    channel: str | None = None
+    why_now: str | None = None
+
+
+class CollaboratorResponse(BaseModel):
+    id: UUID
+    handle: str | None = None
+    display_name: str
+    role: str
+    roles: list[str]
+    bio: str | None = None
+    avatar_key: str | None = None
 
 
 class IdeaResponse(BaseModel):
@@ -17,6 +37,8 @@ class IdeaResponse(BaseModel):
     lang: Literal["fr", "en"]
     visibility: Literal["public", "workspace"]
     created_at: datetime
+    legacy_context: LegacyIdeaContext | None = None
+    collaborators: list[CollaboratorResponse] = Field(default_factory=list)
 
 
 class IdeaSummaryResponse(BaseModel):
@@ -29,6 +51,8 @@ class IdeaSummaryResponse(BaseModel):
     stage: Literal["seed", "iterating", "team_formed"]
     lang: Literal["fr", "en"]
     created_at: datetime
+    domain: str | None = None
+    collaborators: list[CollaboratorResponse] = Field(default_factory=list)
 
 
 class IdeaPageResponse(BaseModel):

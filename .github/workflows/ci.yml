@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     services:
       postgres:
         image: pgvector/pgvector@sha256:78bf48b801e792f99e3ac62b5036fd3876e9be48afda16c1e331af1c75ceb2ff
@@ -56,10 +56,10 @@ jobs:
           uv sync --locked --all-packages
       - name: Lint and types
         run: |
-          python scripts/check_private_files.py --tracked
+          uv run --project apps/api python scripts/check_private_files.py --tracked
           uv run --project apps/api ruff check apps/api scripts
           uv run --project apps/api ruff format --check apps/api scripts
-          uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain
+          uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain apps/api/src/modules/iterations/domain apps/api/src/modules/constraint_analysis/domain
           pnpm lint
           pnpm typecheck
           node scripts/check_locales.mjs
@@ -69,6 +69,8 @@ jobs:
           uv run alembic upgrade head
           uv run pytest -m 'not live'
           uv run alembic check
+      - name: Test web behavior
+        run: pnpm --dir apps/web test:ui
       - name: Check generated contract drift
         run: |
           cd apps/api
@@ -79,6 +81,7 @@ jobs:
       - name: Build web and runtime images
         run: |
           pnpm build
+          pnpm performance:budget
           docker compose build
         env:
           POSTGRES_PASSWORD: test-only-password
@@ -86,7 +89,7 @@ jobs:
   live-evaluations:
     if: github.event_name == 'workflow_dispatch' && inputs.run_live_evals
     needs: verify
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     permissions:
       contents: read
     env:
@@ -118,7 +121,7 @@ jobs:
   publish:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: verify
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64]
     permissions:
       contents: read
       packages: write

@@ -3,7 +3,14 @@
   "navigation": {
     "label": "Navigation principale",
     "ideas": "Idées",
-    "workspace": "Espace"
+    "workshops": "Ateliers",
+    "community": "Communauté",
+    "resources": "Ressources",
+    "search": "Recherche",
+    "notifications": "Notifications",
+    "upcoming": "Fonctionnalités à venir",
+    "workspace": "Espace",
+    "promise": "Des idées à impact, ensemble."
   },
   "meta": {
     "title": "Kollio | Des idées aux projets collectifs",
@@ -58,10 +65,47 @@
   "ideas": {
     "eyebrow": "Bibliothèque d’idées",
     "title": "Idées à explorer",
+    "collectionTitle": "Le fil des idées",
     "page": "Page {current} sur {total}",
     "pagination": "Pages d’idées",
     "previous": "Précédent",
     "next": "Suivant",
+    "retry": "Réessayer",
+    "explorer": {
+      "description": "Trouvez une idée qui a besoin de vous.",
+      "search": "Rechercher une idée, un domaine ou un besoin",
+      "create": "Déposer une idée",
+      "library": "Bibliothèque des idées",
+      "explore": "Explorer",
+      "all": "Toutes les idées",
+      "forYou": "Pour vous",
+      "recent": "Récentes",
+      "validation": "En validation",
+      "domains": "Domaines",
+      "results": "{count} résultat | {count} résultats",
+      "found": "{count} idée trouvée | {count} idées trouvées",
+      "sortBy": "Trier par :",
+      "relevance": "Pertinence",
+      "contributors": "{count} contributeur | {count} contributeurs",
+      "contributorTitle": "Contributeurs",
+      "expertiseTitle": "Expertises de l’équipe",
+      "noContributors": "Cette idée n’a pas encore de contributeur.",
+      "domainGroups": {
+        "ai": "IA et société",
+        "data": "Données",
+        "trust": "Confiance",
+        "governance": "Gouvernance",
+        "education": "Éducation",
+        "product": "Produit"
+      },
+      "preview": "Aperçu de l’idée",
+      "open": "Ouvrir l’idée",
+      "domain": "Domaine",
+      "language": "Langue",
+      "updated": "Mise à jour",
+      "closePreview": "Fermer l’aperçu",
+      "noResults": "Aucune idée ne correspond à ces critères."
+    },
     "stage": {
       "seed": "Graine",
       "iterating": "En itération",
@@ -79,9 +123,87 @@
       "metaTitle": "Idée | Kollio",
       "back": "Retour aux idées",
       "eyebrow": "Idée originale",
-      "pitchTitle": "Point de départ",
+      "pitchTitle": "Description de l’idée",
       "foundationNote": "L’analyse des contraintes, les itérations et l’activité de l’équipe apparaîtront ici à mesure que l’idée avance.",
-      "notFound": "Idée introuvable"
+      "notFound": "Idée introuvable",
+      "notFoundDescription": "Cette idée n’existe pas ou vous n’avez pas accès à son espace de travail.",
+      "loading": "Chargement de l’idée…",
+      "retry": "Réessayer",
+      "loadError": {
+        "title": "Impossible de charger cette idée",
+        "description": "Une erreur a interrompu le chargement. Réessayez dans un instant.",
+        "reassurance": "L’idée et les contributions de votre équipe restent intactes."
+      },
+      "explore": "Explorer les idées",
+      "advance": "Faire avancer l’idée",
+      "moreActions": "Plus d’actions",
+      "inspectSource": "Explorer le contexte source",
+      "enrich": "Explorer les questions ouvertes",
+      "writeToEnrich": "Écrire pour enrichir cette idée, ou saisir / pour plus d’options…",
+      "showFull": "Lire la description complète",
+      "showLess": "Réduire la description",
+      "comment": "Voir qui contribue à cette idée",
+      "annotation": {
+        "provenance": "Afficher la provenance du passage : {excerpt}"
+      },
+      "stats": {
+        "contributors": "{count} contributeur | {count} contributeurs",
+        "questions": "{count} question ouverte | {count} questions ouvertes",
+        "evidence": "{count} preuve | {count} preuves"
+      },
+      "roles": {
+        "product": "Produit et stratégie",
+        "design": "Design et recherche",
+        "engineering": "Développement",
+        "ai_data": "IA et données",
+        "growth": "Croissance",
+        "operations": "Opérations",
+        "strategy": "Stratégie",
+        "research": "Recherche",
+        "platform": "Plateforme",
+        "ai": "Intelligence artificielle",
+        "data": "Données",
+        "sales": "Vente",
+        "finance": "Finance"
+      },
+      "iterations": {
+        "title": "Dernières itérations",
+        "count": "{count} pour le moment",
+        "imported": "Dépôt initial importé",
+        "empty": "La première évolution de cette idée apparaîtra ici avec son auteur et sa décision."
+      },
+      "legacy": {
+        "constraint": "Contrainte historique",
+        "channel": "Canal envisagé"
+      },
+      "sources": {
+        "prospecteur": "Prospecteur"
+      },
+      "companion": {
+        "label": "Contexte de l’idée",
+        "tabWithCount": "{label} ({count})",
+        "seeAll": "Tout voir",
+        "team": {
+          "tab": "Équipe",
+          "title": "Autour de cette idée",
+          "contributors": "Contributeurs",
+          "source": "Source originale",
+          "importedBy": "Dépôt original importé",
+          "empty": "Les personnes qui rejoignent cette idée et leurs contributions apparaîtront ici."
+        },
+        "questions": {
+          "tab": "Questions",
+          "title": "Questions ouvertes",
+          "empty": "Les questions encore sans réponse apparaîtront ici lorsqu’elles seront liées à l’idée."
+        },
+        "evidence": {
+          "tab": "Preuves",
+          "title": "Preuves liées",
+          "sourceTitle": "Provenance du passage",
+          "provenanceNote": "Ce passage vient du dépôt Prospecteur d’origine. Cette provenance ne constitue pas encore une preuve vérifiée.",
+          "empty": "Les sources qui soutiennent ou remettent en cause cette idée apparaîtront ici."
+        }
+      }
     }
   }
 }

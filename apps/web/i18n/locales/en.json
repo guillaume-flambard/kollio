@@ -3,7 +3,14 @@
   "navigation": {
     "label": "Main navigation",
     "ideas": "Ideas",
-    "workspace": "Workspace"
+    "workshops": "Workshops",
+    "community": "Community",
+    "resources": "Resources",
+    "search": "Search",
+    "notifications": "Notifications",
+    "upcoming": "Upcoming features",
+    "workspace": "Workspace",
+    "promise": "Ideas with impact, together."
   },
   "meta": {
     "title": "Kollio | From ideas to shared projects",
@@ -58,10 +65,47 @@
   "ideas": {
     "eyebrow": "Idea library",
     "title": "Ideas to explore",
+    "collectionTitle": "The idea stream",
     "page": "Page {current} of {total}",
     "pagination": "Idea pages",
     "previous": "Previous",
     "next": "Next",
+    "retry": "Try again",
+    "explorer": {
+      "description": "Find an idea that needs you.",
+      "search": "Search for an idea, domain or need",
+      "create": "Submit an idea",
+      "library": "Idea library",
+      "explore": "Explore",
+      "all": "All ideas",
+      "forYou": "For you",
+      "recent": "Recent",
+      "validation": "In validation",
+      "domains": "Domains",
+      "results": "{count} result | {count} results",
+      "found": "{count} idea found | {count} ideas found",
+      "sortBy": "Sort by:",
+      "relevance": "Relevance",
+      "contributors": "{count} contributor | {count} contributors",
+      "contributorTitle": "Contributors",
+      "expertiseTitle": "Team expertise",
+      "noContributors": "This idea has no contributors yet.",
+      "domainGroups": {
+        "ai": "AI and society",
+        "data": "Data",
+        "trust": "Trust",
+        "governance": "Governance",
+        "education": "Education",
+        "product": "Product"
+      },
+      "preview": "Idea preview",
+      "open": "Open idea",
+      "domain": "Domain",
+      "language": "Language",
+      "updated": "Updated",
+      "closePreview": "Close preview",
+      "noResults": "No ideas match these filters."
+    },
     "stage": {
       "seed": "Seed",
       "iterating": "Iterating",
@@ -79,9 +123,87 @@
       "metaTitle": "Idea | Kollio",
       "back": "Back to ideas",
       "eyebrow": "Original idea",
-      "pitchTitle": "Starting point",
+      "pitchTitle": "Idea description",
       "foundationNote": "Constraint analysis, iterations and team activity will appear here as the idea develops.",
-      "notFound": "Idea not found"
+      "notFound": "Idea not found",
+      "notFoundDescription": "This idea does not exist or you do not have access to its workspace.",
+      "loading": "Loading idea…",
+      "retry": "Try again",
+      "loadError": {
+        "title": "This idea could not be loaded",
+        "description": "An error interrupted loading. Try again in a moment.",
+        "reassurance": "The idea and your team’s contributions are still safe."
+      },
+      "explore": "Explore ideas",
+      "advance": "Move idea forward",
+      "moreActions": "More actions",
+      "inspectSource": "Explore source context",
+      "enrich": "Explore open questions",
+      "writeToEnrich": "Write to enrich this idea, or type / for more options...",
+      "showFull": "Read the full description",
+      "showLess": "Collapse the description",
+      "comment": "See who contributes to this idea",
+      "annotation": {
+        "provenance": "Show the source of this passage: {excerpt}"
+      },
+      "stats": {
+        "contributors": "{count} contributor | {count} contributors",
+        "questions": "{count} open question | {count} open questions",
+        "evidence": "{count} piece of evidence | {count} pieces of evidence"
+      },
+      "roles": {
+        "product": "Product and strategy",
+        "design": "Design and research",
+        "engineering": "Engineering",
+        "ai_data": "AI and data",
+        "growth": "Growth",
+        "operations": "Operations",
+        "strategy": "Strategy",
+        "research": "Research",
+        "platform": "Platform",
+        "ai": "Artificial intelligence",
+        "data": "Data",
+        "sales": "Sales",
+        "finance": "Finance"
+      },
+      "iterations": {
+        "title": "Latest iterations",
+        "count": "{count} so far",
+        "imported": "Initial deposit imported",
+        "empty": "The first change to this idea will appear here with its author and decision."
+      },
+      "legacy": {
+        "constraint": "Historical constraint",
+        "channel": "Proposed channel"
+      },
+      "sources": {
+        "prospecteur": "Prospecteur"
+      },
+      "companion": {
+        "label": "Idea context",
+        "tabWithCount": "{label} ({count})",
+        "seeAll": "See all",
+        "team": {
+          "tab": "Team",
+          "title": "Around this idea",
+          "contributors": "Contributors",
+          "source": "Original source",
+          "importedBy": "Original imported deposit",
+          "empty": "People who join this idea and their contributions will appear here."
+        },
+        "questions": {
+          "tab": "Questions",
+          "title": "Open questions",
+          "empty": "Questions that still need an answer will appear here when they are linked to the idea."
+        },
+        "evidence": {
+          "tab": "Evidence",
+          "title": "Linked evidence",
+          "sourceTitle": "Passage provenance",
+          "provenanceNote": "This passage comes from the original Prospecteur deposit. Its provenance is not yet verified evidence.",
+          "empty": "Sources that support or challenge this idea will appear here."
+        }
+      }
     }
   }
 }

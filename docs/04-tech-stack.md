@@ -19,7 +19,7 @@
 | Agents | **LangGraph** | Graphes d'états, HITL, checkpointer Postgres |
 | Validation | **Pydantic v2** | Structured outputs à la frontière LLM |
 | Durabilité | **LangGraph checkpointer** (DBOS seulement si besoin au-delà du graphe) | Reprise/HITL sans infra en plus |
-| File | **ARQ** | Async, Redis, match FastAPI |
+| File | **Taskiq + Redis** | Async natif, worker maintenu, port applicatif remplaçable |
 
 ## Données & LLM ops
 | Brique | Choix |

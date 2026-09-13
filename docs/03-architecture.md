@@ -9,7 +9,7 @@ Client ──SSE──> FastAPI (Docker)
    ├─ LangGraph            ← agents (graphes d'états, HITL) + checkpointer Postgres
    ├─ Postgres            ← relationnel + pgvector + mémoire agent (+ état LangGraph)
    ├─ Redis              ← cache + rate-limit + pub/sub + broker
-   ├─ ARQ worker          ← jobs LLM longs / RAG / outils (async, colle à FastAPI)
+   ├─ Taskiq worker       ← jobs LLM longs / RAG / outils (async, colle à FastAPI)
    └─ LiteLLM (gateway)   ← fallback multi-fournisseurs, budgets par clé, cache
 Observabilité : Langfuse (garder, v4 = backend OTel-natif) — instrumenter en OpenTelemetry, PAS en API vendor
 Eval : DeepEval en CI (gates de régression) + online evals Langfuse (LLM-as-judge CALIBRÉ)
@@ -21,7 +21,7 @@ Sécurité : validation Pydantic stricte · secrets env plateforme · plafonds $
 - **Postgres** (une seule base) : relationnel + **pgvector** (matching sémantique = le moat) + mémoire agent + état LangGraph. Migration SQLite→Postgres = priorité 1 (`pgloader` + Alembic, ~½ journée).
 - **pgvector** (avec pgvectorscale) tient jusqu'à ~50 M vecteurs. **Qdrant** seulement si scale/latence p99 critique plus tard. **Embeddings multilingues obligatoires** (voir `07-i18n.md`).
 - **Mémoire agent = tables Postgres** (conversations, résumés glissants, faits en vecteurs). Mem0/Zep/Letta = seulement après un besoin mesuré.
-- **File : ARQ** (async, Redis, match FastAPI). Pas Celery.
+- **File : Taskiq** (async natif, Redis, intégration FastAPI). Pas Celery. ARQ a été remplacé après son passage officiel en maintenance seule.
 - **Streaming : SSE** (token-stream) ; WebSockets seulement pour le vrai bidirectionnel (interrompre un agent). Redis pub/sub découple worker↔endpoint.
 - **Gateway : LiteLLM** self-host (1 conteneur sur le VPS, zéro markup, budgets par clé). OpenRouter acceptable pour un tout premier jet.
 - **Observabilité : Langfuse**, instrumenté en **OpenTelemetry** (portabilité, pas de lock-in ; conventions GenAI encore expérimentales → pinner les versions, ne pas inventer d'attributs `gen_ai.*`).
@@ -37,7 +37,7 @@ Sécurité : validation Pydantic stricte · secrets env plateforme · plafonds $
 1. SQLite → Postgres + Alembic.
 2. Enrober la logique d'agent existante en graphes LangGraph propres (+ checkpointer Postgres).
 3. Basculer l'instrumentation en OTel ; durcir idempotence + structured outputs.
-4. Ajouter gateway LiteLLM, worker ARQ, DeepEval en CI, online evals Langfuse.
+4. Ajouter gateway LiteLLM, worker Taskiq, DeepEval en CI, online evals Langfuse.
 
 ## À éviter (over-engineering solo)
 Kubernetes · Kafka/microservices < ~50 req/min · base vectorielle dédiée jour 1 · framework mémoire prématuré · Celery+RabbitMQ · Temporal (piège d'ops solo — pas avant multi-service/fan-out massif) · sandbox microVM si pas d'exécution de code arbitraire.

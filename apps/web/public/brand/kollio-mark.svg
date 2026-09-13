@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title description">
+  <title id="title">Kollio</title>
+  <desc id="description">An open K shaped mark representing ideas moving forward together.</desc>
+  <path
+    fill="none"
+    stroke="#493B57"
+    stroke-linecap="round"
+    stroke-width="9"
+    d="M19.5 10.5v43"
+  />
+  <path
+    fill="none"
+    stroke="#A68BB8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="9"
+    d="M51.5 13.5c-8.8 1.8-14.7 7.6-20.2 17.7 6.3 1.9 12 8.2 18.8 19.3"
+  />
+  <circle cx="30.5" cy="31.5" r="4.25" fill="#AAB65C" />
+</svg>

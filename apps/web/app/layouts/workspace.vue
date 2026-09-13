@@ -4,45 +4,74 @@ const switchLocalePath = useSwitchLocalePath()
 </script>
 
 <template>
-  <div class="min-h-screen bg-default text-default">
-    <header class="sticky top-0 z-20 border-b border-default bg-default/90 backdrop-blur-xl">
-      <div class="mx-auto flex h-18 max-w-7xl items-center justify-between px-6 sm:px-10">
-        <div class="flex items-center gap-8">
-          <NuxtLink
-            :to="$localePath('/workspace')"
-            class="font-display text-2xl font-extrabold tracking-tight"
-            :aria-label="t('brand')"
-          >
-            {{ t('brand') }}<span class="text-primary" aria-hidden="true">.</span>
-          </NuxtLink>
-          <nav class="hidden items-center gap-1 sm:flex" :aria-label="t('navigation')">
-            <NuxtLink
-              :to="$localePath('/workspace')"
-              class="rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-elevated hover:text-default"
-              active-class="bg-elevated text-default"
-            >
-              {{ t('navigation.ideas') }}
-            </NuxtLink>
-          </nav>
-        </div>
-        <div class="flex items-center gap-2">
-          <NuxtLink
-            :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')"
-            class="rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-elevated hover:text-default"
-            :hreflang="locale === 'fr' ? 'en' : 'fr'"
-          >
-            {{ t('language.switch') }}
-          </NuxtLink>
-          <a
-            href="/sign-out"
-            class="rounded-lg border border-default bg-elevated px-3 py-2 text-sm font-medium shadow-xs transition-colors hover:bg-accented"
-          >
-            {{ t('auth.signOut') }}
-          </a>
-        </div>
+  <div class="workspace-canvas workspace-shell min-h-screen bg-default text-default">
+    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default px-5 lg:hidden">
+      <NuxtLink :to="$localePath('/workspace')" :aria-label="t('brand')">
+        <KollioBrand />
+      </NuxtLink>
+      <div class="flex items-center gap-2">
+        <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="min-h-11 rounded-xl px-3 text-sm font-medium leading-11 text-muted">
+          {{ t('language.switch') }}
+        </NuxtLink>
+        <a href="/sign-out" class="min-h-11 rounded-xl border border-default bg-elevated px-3 text-sm font-medium leading-11">
+          {{ t('auth.signOut') }}
+        </a>
       </div>
     </header>
-    <main id="main" class="mx-auto max-w-7xl px-6 py-10 sm:px-10 sm:py-14">
+
+    <aside class="workspace-rail sticky hidden flex-col border border-default bg-elevated/80 lg:flex">
+      <NuxtLink :to="$localePath('/workspace')" class="px-2" :aria-label="t('brand')">
+        <KollioBrand />
+      </NuxtLink>
+      <p class="mt-1 px-2 text-sm leading-snug text-muted">{{ t('navigation.promise') }}</p>
+
+      <nav class="mt-12" :aria-label="t('navigation.label')">
+        <NuxtLink
+          :to="$localePath('/workspace')"
+          class="workspace-nav-active group flex min-h-11 w-full items-center rounded-xl text-sm font-medium text-muted transition-colors hover:text-default"
+          active-class="workspace-nav-active text-default"
+        >
+          <KollioSketchAnnotation active kind="loop" class="workspace-nav-sketch">
+            <span class="flex items-center gap-3">
+              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18h6m-5 3h4m4.5-10.5a6.5 6.5 0 1 0-10.7 5l.7.6c.9.8 1.5 1.9 1.5 3.1h4c0-1.2.6-2.3 1.5-3.1l.7-.6a6.5 6.5 0 0 0 2.3-5Z" /></svg>
+              {{ t('navigation.ideas') }}
+            </span>
+          </KollioSketchAnnotation>
+        </NuxtLink>
+
+        <div class="mt-2 space-y-1" :aria-label="t('navigation.upcoming')">
+          <span v-for="item in ['workshops', 'community', 'resources']" :key="item" class="flex min-h-11 cursor-default items-center gap-3 rounded-xl px-3 text-sm text-muted/75" aria-disabled="true">
+            <svg v-if="item === 'workshops'" aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M7 4v6m10-6v6M5 11h14v9H5z" /></svg>
+            <svg v-else-if="item === 'community'" aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 20a4 4 0 0 0-8 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 7a3 3 0 0 0-3-3m1-9a3 3 0 0 1 0 6M5 20a3 3 0 0 1 3-3M7 8a3 3 0 0 0 0 6" /></svg>
+            <svg v-else aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z" /></svg>
+            {{ t(`navigation.${item}`) }}
+          </span>
+        </div>
+
+        <div class="mt-7 space-y-1 border-t border-default pt-5">
+          <span v-for="item in ['search', 'notifications']" :key="item" class="flex min-h-11 cursor-default items-center gap-3 rounded-xl px-3 text-sm text-muted/75" aria-disabled="true">
+            <svg v-if="item === 'search'" aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7" /><path d="m16 16 5 5" /></svg>
+            <svg v-else aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" /></svg>
+            {{ t(`navigation.${item}`) }}
+          </span>
+        </div>
+      </nav>
+
+      <div class="mt-auto space-y-1 border-t border-default pt-5">
+        <NuxtLink
+          :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')"
+          class="flex min-h-11 items-center rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:bg-muted hover:text-default"
+          :hreflang="locale === 'fr' ? 'en' : 'fr'"
+        >
+          {{ t('language.switch') }}
+        </NuxtLink>
+        <a href="/sign-out" class="flex min-h-11 items-center rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:bg-muted hover:text-default" :aria-label="t('auth.signOut')">
+          {{ t('auth.signOut') }}
+        </a>
+      </div>
+    </aside>
+
+    <main id="main" class="workspace-main min-w-0">
       <slot />
     </main>
   </div>

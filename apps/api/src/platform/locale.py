@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Literal
+from typing import Literal, cast
 
 Locale = Literal["fr", "en"]
 MESSAGES = {
@@ -23,4 +23,18 @@ def resolve_locale(header: str) -> Locale:
             continue
         if language in ("fr", "en") and 0 < quality <= 1:
             candidates.append((quality, -position, language))
-    return max(candidates)[2] if candidates else "fr"
+    return cast(Locale, max(candidates)[2]) if candidates else "fr"
+
+
+LANGUAGE_NAMES = {"fr": "French", "en": "English"}
+
+
+class UnsupportedLocaleError(ValueError):
+    """Raised when an unsupported locale reaches an LLM gateway."""
+
+
+def language_name(locale: str) -> str:
+    try:
+        return LANGUAGE_NAMES[locale]
+    except KeyError:
+        raise UnsupportedLocaleError(f"Unsupported analysis locale: {locale!r}") from None

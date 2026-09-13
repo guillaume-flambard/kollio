@@ -4,7 +4,9 @@ from logging.config import fileConfig
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from alembic import context
+from src.modules.constraint_analysis.adapters import postgres as analysis_postgres  # noqa: F401
 from src.modules.ideas.adapters import postgres  # noqa: F401
+from src.modules.iterations.adapters import postgres as iterations_postgres  # noqa: F401
 from src.platform import effects, embeddings, import_legacy  # noqa: F401
 from src.platform.config import get_settings
 from src.platform.db import Base

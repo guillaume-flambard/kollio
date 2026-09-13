@@ -1,0 +1,21 @@
+{
+  "input": {
+    "title": "Same-day artist payouts",
+    "pitch": "A local ticketing product that pays artists after the show.",
+    "locale": "en",
+    "evidence": []
+  },
+  "output": {
+    "overall_score": 50,
+    "verdict": "unknown",
+    "summary": "The supplied information is not enough to establish realism.",
+    "factors": [
+      {"name": "competition", "score": 50, "summary": "No competition evidence was supplied.", "source_ids": []},
+      {"name": "build_cost", "score": 50, "summary": "No build evidence was supplied.", "source_ids": []},
+      {"name": "time_to_market", "score": 50, "summary": "No delivery evidence was supplied.", "source_ids": []},
+      {"name": "defensibility", "score": 50, "summary": "No defensibility evidence was supplied.", "source_ids": []},
+      {"name": "acquisition", "score": 50, "summary": "No acquisition evidence was supplied.", "source_ids": []}
+    ],
+    "locale": "en"
+  }
+}
