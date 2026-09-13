@@ -148,7 +148,7 @@ const collaborators = computed(() => idea.value?.collaborators ?? [])
 const detailParagraphs = computed(() => pitchSentences.value.length > 1 ? pitchSentences.value.slice(1) : pitchParagraphs.value)
 const legacyTopics = computed(() => idea.value?.legacy_context?.domain?.split('·').map(topic => topic.trim()).filter(Boolean) ?? [])
 
-const { data: iterations } = await useAsyncData(`idea-${ideaId}-iterations`, async () => {
+const { data: iterations, refresh: refreshIterations } = await useAsyncData(`idea-${ideaId}-iterations`, async () => {
   if (!idea.value) return [] as IterationResponse[]
   return requestFetch<IterationResponse[]>(`/api/ideas/${encodeURIComponent(ideaId)}/iterations`)
 }, { watch: [idea] })
@@ -190,6 +190,52 @@ const timelineView = computed<TimelineView>(() => toTimelineView(buildTimeline(i
   statusLabel: status => t(`ideas.iterations.${status}`),
   analysisLabel,
 }))
+
+const mainHead = computed(() => headEntry(buildTimeline(iterations.value ?? [])))
+const proposing = ref(false)
+const proposeOpen = ref(false)
+const proposeError = ref<'conflict' | 'other' | ''>('')
+const proposeForm = reactive({ message: '', title: '', pitch: '', stage: 'seed' as 'seed' | 'iterating' | 'team_formed' })
+
+function openPropose() {
+  proposeOpen.value = true
+  proposeError.value = ''
+  proposeForm.title = idea.value?.title ?? ''
+  proposeForm.pitch = idea.value?.pitch ?? ''
+  proposeForm.stage = (idea.value?.stage ?? 'seed') as typeof proposeForm.stage
+  proposeForm.message = ''
+}
+
+function branchSlug(message: string) {
+  const stem = message.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40)
+  return `proposal/${stem || 'change'}`
+}
+
+async function submitProposal() {
+  if (!proposeForm.message.trim() || !proposeForm.title.trim() || !proposeForm.pitch.trim() || proposing.value) return
+  proposing.value = true
+  proposeError.value = ''
+  try {
+    await requestFetch(`/api/ideas/${encodeURIComponent(ideaId)}/iterations`, {
+      method: 'POST',
+      body: {
+        message: proposeForm.message.trim(),
+        lang: idea.value?.lang ?? 'en',
+        snapshot: { title: proposeForm.title.trim(), pitch: proposeForm.pitch.trim(), stage: proposeForm.stage },
+        branch: branchSlug(proposeForm.message),
+        expected_parent_id: mainHead.value?.id ?? null,
+      },
+    })
+    proposeOpen.value = false
+    await refreshIterations()
+  }
+  catch (error: unknown) {
+    proposeError.value = (error as { statusCode?: number })?.statusCode === 409 ? 'conflict' : 'other'
+  }
+  finally {
+    proposing.value = false
+  }
+}
 const problemAnnotation = computed(() => {
   const paragraph = detailParagraphs.value[0] ?? ''
   if (!idea.value?.legacy_context || !paragraph) return undefined
@@ -363,6 +409,33 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           :imported-label="legacySourceLabel ? t('ideas.detail.iterations.imported') : undefined"
           :branch-label="name => t('ideas.iterations.branch', { name })"
         />
+
+        <div class="mt-6">
+          <button v-if="!proposeOpen" type="button" class="team-link" @click="openPropose()">{{ t('ideas.iterations.propose') }}</button>
+          <p v-if="!proposeOpen" class="mt-2 text-sm text-muted">{{ t('ideas.iterations.proposeHint') }}</p>
+          <form v-else class="mt-4 grid max-w-[560px] gap-3" @submit.prevent="submitProposal">
+            <label class="grid gap-1 text-sm font-medium">{{ t('ideas.iterations.message') }}
+              <input v-model="proposeForm.message" type="text" required maxlength="500" name="iteration-message" class="rounded-xl border border-default bg-elevated px-3 py-2 text-sm font-normal">
+            </label>
+            <label class="grid gap-1 text-sm font-medium">{{ t('ideas.iterations.titleField') }}
+              <input v-model="proposeForm.title" type="text" required maxlength="240" name="iteration-title" class="rounded-xl border border-default bg-elevated px-3 py-2 text-sm font-normal">
+            </label>
+            <label class="grid gap-1 text-sm font-medium">{{ t('ideas.iterations.pitchField') }}
+              <textarea v-model="proposeForm.pitch" rows="4" required maxlength="12000" name="iteration-pitch" class="rounded-xl border border-default bg-elevated px-3 py-2 text-sm font-normal" />
+            </label>
+            <label class="grid gap-1 text-sm font-medium">{{ t('ideas.iterations.stageField') }}
+              <select v-model="proposeForm.stage" name="iteration-stage" class="w-fit rounded-xl border border-default bg-elevated px-3 py-2 text-sm font-normal">
+                <option v-for="stage in ['seed', 'iterating', 'team_formed']" :key="stage" :value="stage">{{ t(`ideas.iterations.stages.${stage}`) }}</option>
+              </select>
+            </label>
+            <p v-if="proposeError === 'conflict'" role="alert" class="text-sm text-red-500">{{ t('ideas.iterations.conflict') }}</p>
+            <p v-else-if="proposeError" role="alert" class="text-sm text-red-500">{{ t('ideas.iterations.error') }}</p>
+            <div class="flex items-center gap-3">
+              <button type="button" class="team-link" @click="proposeOpen = false">{{ t('ideas.iterations.cancel') }}</button>
+              <button type="submit" class="team-link" :disabled="proposing">{{ proposing ? t('ideas.iterations.sending') : t('ideas.iterations.send') }}</button>
+            </div>
+          </form>
+        </div>
 
         <section id="team" class="idea-team mt-11 rounded-2xl border border-default p-5 sm:p-6" :aria-labelledby="'idea-team-title'">
           <h2 id="idea-team-title" class="text-[1.25rem] font-semibold tracking-[-0.025em]">{{ t('ideas.detail.team.title') }}</h2>

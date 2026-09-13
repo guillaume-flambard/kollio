@@ -273,7 +273,23 @@
       "branch": "Branch {name}",
       "analysisRunning": "Analysis running",
       "analysisResolved": "Score {score}",
-      "analysisAbstained": "Awaiting evidence"
+      "analysisAbstained": "Awaiting evidence",
+      "propose": "Propose a change",
+      "proposeHint": "Your proposal opens a branch; the owner accepts or rejects it.",
+      "message": "Iteration message",
+      "titleField": "Title",
+      "pitchField": "Pitch",
+      "stageField": "Stage",
+      "send": "Send the proposal",
+      "sending": "Sending…",
+      "conflict": "The idea changed while you were writing. Refresh and try again.",
+      "error": "The proposal failed. Try again.",
+      "stages": {
+        "seed": "Seed",
+        "iterating": "Iterating",
+        "team_formed": "Team formed"
+      },
+      "cancel": "Cancel"
     }
   }
 }

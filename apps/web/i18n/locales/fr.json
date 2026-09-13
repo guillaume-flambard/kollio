@@ -273,7 +273,23 @@
       "branch": "Branche {name}",
       "analysisRunning": "Analyse en cours",
       "analysisResolved": "Score {score}",
-      "analysisAbstained": "En attente de preuves"
+      "analysisAbstained": "En attente de preuves",
+      "propose": "Proposer une évolution",
+      "proposeHint": "Votre proposition ouvre une branche ; le porteur l'accepte ou la refuse.",
+      "message": "Message de l'itération",
+      "titleField": "Titre",
+      "pitchField": "Pitch",
+      "stageField": "Stade",
+      "send": "Envoyer la proposition",
+      "sending": "Envoi…",
+      "conflict": "L'idée a changé pendant la rédaction. Rechargez et réessayez.",
+      "error": "La proposition a échoué. Réessayez.",
+      "stages": {
+        "seed": "Graine",
+        "iterating": "En itération",
+        "team_formed": "Équipe formée"
+      },
+      "cancel": "Annuler"
     }
   }
 }
