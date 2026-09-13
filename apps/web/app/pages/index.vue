@@ -12,8 +12,8 @@ useSeoMeta({ title: () => t('meta.title'), description: () => t('meta.descriptio
 <template>
   <div class="mx-auto flex min-h-screen max-w-7xl flex-col px-6 sm:px-12">
     <header class="flex items-center justify-between border-b border-default py-6">
-      <NuxtLink :to="$localePath('/')" class="font-display text-3xl font-extrabold tracking-tight" :aria-label="t('brand')">
-        {{ t('brand') }}<span class="text-primary" aria-hidden="true">.</span>
+      <NuxtLink :to="$localePath('/')" :aria-label="t('brand')">
+        <KollioBrand />
       </NuxtLink>
       <nav class="flex items-center gap-4" :aria-label="t('navigation')">
         <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="text-sm font-medium underline-offset-4 hover:underline" :hreflang="locale === 'fr' ? 'en' : 'fr'">

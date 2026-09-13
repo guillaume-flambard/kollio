@@ -3,13 +3,17 @@ from typing import Any
 from uuid import UUID
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     DateTime,
     ForeignKey,
     String,
     UniqueConstraint,
+    false,
     func,
+    or_,
     select,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -29,6 +33,13 @@ class User(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True)
     auth_subject: Mapped[str | None] = mapped_column(unique=True)
     display_name: Mapped[str]
+    handle: Mapped[str | None] = mapped_column(unique=True)
+    roles: Mapped[list[str]] = mapped_column(
+        JSONB, default=list, server_default=text("'[]'::jsonb")
+    )
+    bio: Mapped[str | None]
+    avatar_key: Mapped[str | None]
+    is_demo: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
 
 
 class WorkspaceMembership(Base):
@@ -65,6 +76,18 @@ class Idea(Base):
     provenance: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
 
 
+class IdeaMembership(Base):
+    __tablename__ = "idea_memberships"
+    idea_id: Mapped[UUID] = mapped_column(
+        ForeignKey("ideas.id", ondelete="CASCADE"), primary_key=True
+    )
+    user_id: Mapped[UUID] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+    role: Mapped[str]
+    joined_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class PostgresIdeas:
     def __init__(self, session: AsyncSession):
         self.session = session
@@ -78,13 +101,57 @@ class PostgresIdeas:
         )
         return frozenset((await self.session.scalars(query)).all())
 
+    async def collaborators(self, idea_id: UUID) -> list[tuple[User, str]]:
+        query = (
+            select(User, IdeaMembership.role)
+            .join(IdeaMembership, IdeaMembership.user_id == User.id)
+            .where(IdeaMembership.idea_id == idea_id)
+            .order_by(IdeaMembership.joined_at, User.display_name)
+        )
+        return [(user, role) for user, role in (await self.session.execute(query)).all()]
+
+    async def collaborators_for_ideas(
+        self, idea_ids: list[UUID]
+    ) -> dict[UUID, list[tuple[User, str]]]:
+        if not idea_ids:
+            return {}
+        query = (
+            select(IdeaMembership.idea_id, User, IdeaMembership.role)
+            .join(User, User.id == IdeaMembership.user_id)
+            .where(IdeaMembership.idea_id.in_(idea_ids))
+            .order_by(IdeaMembership.idea_id, IdeaMembership.joined_at, User.display_name)
+        )
+        collaborators: dict[UUID, list[tuple[User, str]]] = {}
+        for idea_id, user, role in (await self.session.execute(query)).all():
+            collaborators.setdefault(idea_id, []).append((user, role))
+        return collaborators
+
     async def list_for_workspace(
-        self, workspace_id: UUID, limit: int, offset: int
+        self,
+        workspace_id: UUID,
+        limit: int,
+        offset: int,
+        query_text: str | None = None,
+        stage: str | None = None,
+        domain: str | None = None,
     ) -> tuple[list[Idea], int]:
-        filters = (
+        filters: list[Any] = [
             Idea.workspace_id == workspace_id,
             Idea.visibility == "workspace",
-        )
+        ]
+        if query_text:
+            pattern = f"%{query_text.strip()}%"
+            filters.append(
+                or_(
+                    Idea.title.ilike(pattern),
+                    Idea.pitch.ilike(pattern),
+                    Idea.provenance["domaine"].astext.ilike(pattern),
+                )
+            )
+        if stage:
+            filters.append(Idea.stage == stage)
+        if domain:
+            filters.append(Idea.provenance["domaine"].astext == domain)
         query = (
             select(Idea)
             .where(*filters)

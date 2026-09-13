@@ -4,6 +4,21 @@ Defines how workspace members understand an idea, follow its active relationship
 
 ## ADDED Requirements
 
+### Requirement: Calm idea library
+The system SHALL present the idea library as a three-zone explorer with stable filters, readable idea summaries, and a contextual preview on wide viewports.
+
+#### Scenario: Member scans available ideas
+- **WHEN** a workspace member opens the idea library on a wide viewport
+- **THEN** filters remain in a narrow rail, enriched results remain visible in the center, and the selected idea appears in a persistent preview
+
+#### Scenario: Member selects and opens an idea
+- **WHEN** a workspace member activates an idea row
+- **THEN** the preview updates without changing the list position and an explicit preview action opens the complete idea page
+
+#### Scenario: Member uses a narrow viewport
+- **WHEN** the filter rail and result list no longer fit side by side
+- **THEN** stage filters become an in-flow horizontal control and the preview becomes a drawer on tablet or a full-screen surface on mobile
+
 ### Requirement: Focused idea canvas
 The system SHALL present the idea narrative as the primary content and SHALL reveal detailed constraints, evidence, and history progressively.
 
@@ -53,3 +68,18 @@ The system SHALL express interface colors through semantic roles so future works
 #### Scenario: Default theme is used
 - **WHEN** no workspace theme is configured
 - **THEN** the Aubergine palette supplies the semantic colors
+
+### Requirement: Reproducible development collaborators
+The system SHALL provide an explicit development seed that creates stable synthetic user profiles and idea memberships without creating authentication credentials.
+
+#### Scenario: Developer seeds collaboration data
+- **WHEN** the seed runs against a non-production environment containing imported Prospecteur ideas
+- **THEN** each seeded profile and membership is persisted with a stable identifier and rerunning the seed creates no duplicate records
+
+#### Scenario: Member opens a seeded idea
+- **WHEN** a workspace member opens an idea with seeded memberships
+- **THEN** the API returns its collaborators and the interface displays their names, roles, and distinguishable avatars
+
+#### Scenario: Seed is attempted in production
+- **WHEN** the demo seed detects the production environment
+- **THEN** it stops before creating or changing any demo record

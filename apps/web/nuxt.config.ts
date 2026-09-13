@@ -1,6 +1,11 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-09-11',
   devtools: { enabled: true },
+  app: {
+    head: {
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/brand/kollio-mark.svg' }],
+    },
+  },
   modules: ['@nuxt/ui', '@nuxtjs/i18n', '@nuxt/eslint',
     ...(process.env.NUXT_PUBLIC_AUTH_ENABLED === 'true' ? ['@logto/nuxt'] : [])],
   css: ['~/assets/css/main.css'],

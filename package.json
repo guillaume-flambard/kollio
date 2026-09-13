@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "pnpm --dir apps/web dev --dotenv ../../.env",
+    "dev": "pnpm --dir apps/web dev",
     "build": "pnpm --dir apps/web build",
     "lint": "pnpm --dir apps/web lint",
+    "performance:budget": "node scripts/check_web_performance_budgets.mjs",
     "typecheck": "pnpm --dir apps/web typecheck",
     "generate:client": "openapi-ts -i ./contracts/openapi.json -o packages/api-client/src/generated"
   },

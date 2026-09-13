@@ -99,6 +99,10 @@ components:
 
 **Creative North Star: "The Living Canvas"**
 
+The canonical visual reference is stored at
+`docs/assets/design/approved-idea-detail.png`. Desktop implementation reviews
+must compare against it at 1536 by 1024 before changing the shared primitives.
+
 Kollio's authenticated workspace is a quiet, collaborative canvas. Porcelain surrounds white working surfaces, deep aubergine carries intent, and soft felt-tip marks reveal the current thread of attention. The interface keeps the idea narrative dominant while related people, questions, and evidence remain close enough to inspect without breaking the reading flow.
 
 The system reveals detail through deliberate interaction. A selected phrase can expose its provenance, a companion panel changes with the user's focus, and long content expands only on request. The interface is bilingual, light first, responsive, keyboard usable, and honest when collaboration or evidence has not arrived yet.
@@ -106,7 +110,7 @@ The system reveals detail through deliberate interaction. A selected phrase can 
 **Key Characteristics:**
 
 - Airy reading surfaces with restrained structural depth.
-- Lower-third felt-tip marks that carry active state and provenance.
+- Three felt-tip gestures: short lower-edge marks for labels, broad lower-edge bands for status, and full-height washes for linked passages.
 - One visible relationship between the narrative and its current context.
 - Progressive disclosure that preserves the idea as the main reading object.
 - Real source labels, identifiers, and empty states instead of invented activity.
@@ -136,7 +140,7 @@ The palette pairs warm porcelain neutrals with a low-chroma aubergine family. Cl
 
 ### Named Rules
 
-**The Felt-Tip Rule.** Use Dusty Lilac Wash as a partial mark behind content. It never becomes a full-width selection bar or decorative block.
+**The Felt-Tip Rule.** Active labels use a short lower-edge brush mark. Status text sits above a pale, diffuse band that extends beyond the label. Linked passages use an irregular full-height wash. Every treatment follows the text width and stays soft-edged; none becomes a generic badge or full-row selection bar.
 
 **The Semantic Accent Rule.** Clay, citron, and ochre communicate product meaning. Do not use them as arbitrary decoration.
 
@@ -165,13 +169,13 @@ The palette pairs warm porcelain neutrals with a low-chroma aubergine family. Cl
 
 ## Layout
 
-The desktop workspace uses a persistent 190px navigation rail and a fluid main region. Idea detail is capped at 1320px and divides into a narrative column plus a 280px contextual companion, growing to 360px on wider screens. A 16px gap leaves room for the active curved relationship without weakening the two-column composition.
+At the 1536px reference viewport, the desktop workspace uses a 180px navigation rail, a 870px narrative surface, and a 392px contextual companion. The outer margin and 14px content gap preserve the geometry of the approved reference while fluid clamps scale the same proportions down to the desktop breakpoint.
 
-At widths below 1024px, navigation becomes a compact top bar, the idea and companion stack in one column, and the curved relationship is hidden. Content padding grows from 20px on compact screens to 28px, then 36px on wide screens. The main narrative keeps the largest uninterrupted reading area at every width.
+At widths below 1024px, navigation becomes a compact top bar, the idea and companion stack in one column, and the curved relationship is hidden. The companion drops its viewport-height minimum so its real content determines its height. On narrow screens the primary action follows the idea summary and metadata instead of preceding the title. Subject separators remain attached to their labels when rows wrap.
 
 Long pitches begin in a bounded reading window with a tonal fade and an explicit expand control. Companion tabs replace content in place. Detailed evidence, history, and team context appear only when relevant or requested.
 
-**The One Relationship Rule.** Show at most one active link between a passage and its contextual target. Render it only while both endpoints are visible.
+**The One Relationship Rule.** Show at most one active link between a passage and its contextual target. Route it through the gutter between the narrative and companion so it does not cross unrelated controls or prose. Render it only while both endpoints are visible.
 
 ## Elevation & Depth
 
@@ -192,10 +196,13 @@ Main surfaces and nested content blocks use gently rounded 16px corners. Navigat
 ## Components
 
 The production primitives live in `apps/web/app/components/kollio`. Reuse
-`KollioFeltMark`, `KollioPrimaryAction`, and `KollioContextTabs` across workspace
-screens. Structural surfaces use the shared `kollio-surface` class. New screens
-must consume these primitives and the semantic tokens from `@kollio/ui` instead
-of duplicating their geometry, colors, or interaction states.
+`KollioFeltMark`, `KollioPrimaryAction`, `KollioContextTabs`, `KollioEmptyState`,
+and `KollioPersonRow` across workspace screens. Idea detail composes these with
+`KollioIdeaCompanion`, `KollioIterationTimeline`, `KollioCommentComposer`,
+`KollioIdeaDetailSkeleton`, and `KollioIdeaDetailError`. Structural surfaces use
+the shared `kollio-surface` class. New screens must consume these primitives and
+the semantic tokens from `@kollio/ui` instead of duplicating their geometry,
+colors, or interaction states.
 
 ### Primary Actions
 
@@ -218,14 +225,14 @@ of duplicating their geometry, colors, or interaction states.
 
 ### Contextual Companion
 
-- **Tabs:** Team, questions, and evidence share an accessible three-tab rail. Arrow keys move between tabs; Home and End jump to the first and last tab.
+- **Tabs:** Team, questions, and evidence share an accessible three-tab rail. Labels use 17px Geist with `-0.07em` tracking and intrinsic widths; the rail distributes the remaining space instead of forcing equal columns. Arrow keys move between tabs; Home and End jump to the first and last tab.
 - **Panel change:** Content enters with a short 200ms spatial transition. Reduced-motion users receive the final state immediately.
 - **Empty state:** A muted 16px surface explains the absence of data in plain language and keeps counts at zero.
 
 ### Linked Passages
 
-- **Annotation:** A translucent Dusty Lilac stroke covers only the lower third of the selected words. The passage remains readable and behaves as a real button.
-- **Connection:** Activating the passage opens its related panel and draws one 1.5px curved aubergine line in 260ms. The line disappears when either endpoint leaves the viewport and stays hidden in the stacked layout.
+- **Annotation:** A translucent Dusty Lilac wash follows the selected words with softly blurred, irregular edges. The passage remains readable and behaves as a real button.
+- **Connection:** Activating the passage opens its related panel and draws one 1.75px curved aubergine line through the inter-panel gutter in 260ms. A 4.5px source dot anchors the curve. The line disappears when either endpoint leaves the viewport and stays hidden in the stacked layout.
 - **Provenance:** The target names the typed source, such as Prospecteur, preserves the source identifier, and exposes available constraint and channel data without fabricating missing evidence.
 
 ## Do's and Don'ts
@@ -233,7 +240,7 @@ of duplicating their geometry, colors, or interaction states.
 ### Do:
 
 - **Do** keep the idea narrative wider and visually stronger than its metadata or companion content.
-- **Do** use lower-third marks to connect active navigation, selected passages, and the current companion tab.
+- **Do** use lower-edge marks for active labels and full-height washes for linked passages.
 - **Do** reveal long text, evidence, history, and collaboration context only when the user asks or the current state needs them.
 - **Do** preserve real provenance labels and identifiers exactly at the data boundary.
 - **Do** state zero activity and missing evidence plainly.

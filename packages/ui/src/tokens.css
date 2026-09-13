@@ -21,15 +21,17 @@
   --ui-bg-muted: #f2eff3;
   --ui-bg-accented: #eee8f2;
   --ui-border: #e8e3ea;
-  --ui-text: #252229;
-  --ui-text-muted: #6f6877;
+  --ui-text: #25213a;
+  --ui-text-muted: #696a8f;
   --ui-success: #899744;
   --ui-warning: #a57932;
   --ui-error: #d47a70;
   --kollio-wash: #ddd3e8;
   --kollio-active-ink: #49335e;
-  --kollio-active-wash: #cbb7d8;
+  --kollio-active-wash: #c4b4d0;
   --kollio-action: #2e2938;
+  --kollio-heading: #242039;
+  --kollio-connector: #583c6c;
   --kollio-tab-ink: #625c78;
   --kollio-question: #d47a70;
   --kollio-question-wash: #f5dedb;
@@ -59,6 +61,7 @@
   --kollio-active-ink: #d7c2e4;
   --kollio-active-wash: #765d84;
   --kollio-action: #e8e0ed;
+  --kollio-connector: #c5b3d4;
   --kollio-tab-ink: #c1b4ca;
   --kollio-question-wash: #593735;
 }
