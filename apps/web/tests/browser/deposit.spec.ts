@@ -23,10 +23,36 @@ const resolved: IdeaResponse['analysis'] = {
     concurrence: { score: 70, note: 'La marché montre des desks concurrents, l’opportunité demeure.' },
     cout: { score: 55, note: 'Le coût de flotte reste le premier poste, à aplatir par le mutualisé.' },
   },
+  contradictions: [],
   locale: 'fr',
   model: 'test-model',
   created_at: '2026-09-13T10:01:00Z',
 }
+
+const explained = {
+  ...resolved,
+  constraints: {
+    concurrence: {
+      score: 70,
+      note: 'La marché montre des desks concurrents, l’opportunité demeure.',
+      basis: 'assumed',
+      gap: null,
+    },
+    cout: {
+      score: null,
+      note: 'La flotte reste le premier poste de coût.',
+      basis: 'unknown',
+      gap: 'Aucun devis fournisseur.',
+    },
+  },
+  contradictions: [
+    {
+      target: 'constraint',
+      ref_id: 'constraint:2',
+      detail: 'La remise casse la marge brute.',
+    },
+  ],
+} as unknown as IdeaResponse['analysis']
 
 async function mockIo(
   page: import('@playwright/test').Page,
@@ -68,6 +94,27 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(page.getByRole('heading', { name: deposit.resolvedTitle, exact: true })).toBeVisible()
       await expect(page.getByText('62', { exact: true })).toBeVisible()
       await expect(page.getByRole('link', { name: deposit.openIdea, exact: true })).toBeVisible()
+    })
+
+    test('DEPOSIT-05 explains the basis, the missing evidence and the contradictions', async ({ page }) => {
+      const analysis = messages.ideas.analysis as {
+        basis: Record<string, string>
+        gapLine: string
+        contradictionsTitle: string
+        contradictionTarget: Record<string, string>
+      }
+      await mockIo(page, explained)
+      await page.goto(`${prefix}/workspace/deposit`)
+      await page.getByLabel(deposit.titleLabel).fill('Vélos en libre-service')
+      await page.getByLabel(deposit.pitchLabel).fill('Une flotte coopérative.')
+      await page.getByRole('button', { name: deposit.submit, exact: true }).click()
+      await expect(page.getByText(analysis.basis.assumed, { exact: true })).toBeVisible()
+      await expect(page.getByText(analysis.basis.unknown, { exact: true })).toBeVisible()
+      await expect(page.getByText('Aucun devis fournisseur.')).toBeVisible()
+      await expect(
+        page.getByRole('heading', { name: analysis.contradictionsTitle, exact: true }),
+      ).toBeVisible()
+      await expect(page.getByText('La remise casse la marge brute.')).toBeVisible()
     })
 
     test('DEPOSIT-03 shows the running state before the verdict', async ({ page }) => {

@@ -373,6 +373,19 @@
       "decision_maker": "Décideur",
       "contributor": "Contributeur",
       "observer": "Observateur"
+    },
+    "analysis": {
+      "basis": {
+        "known": "Établi",
+        "assumed": "Supposé",
+        "unknown": "Inconnu"
+      },
+      "contradictionsTitle": "Contradictions",
+      "contradictionTarget": {
+        "objective": "Objectif",
+        "constraint": "Contrainte"
+      },
+      "gapLine": "Preuve manquante : {gap}"
     }
   }
 }
