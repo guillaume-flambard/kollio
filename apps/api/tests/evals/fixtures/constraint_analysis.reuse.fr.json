@@ -1,0 +1,90 @@
+{
+  "input": {
+    "title": "Application terrain hors ligne",
+    "pitch": "Une application terrain qui ne bloque jamais quand le signal disparaît.",
+    "locale": "fr",
+    "evidence": [
+      {
+        "id": "learning:7c1f0b8e-0f2a-4a6f-9c2e-2f6c9a51d3b7",
+        "url": "kollio://learning/7c1f0b8e-0f2a-4a6f-9c2e-2f6c9a51d3b7",
+        "text": "Crews tolerate sync conflicts when the app never blocks; 18 of 40 target sessions completed offline."
+      }
+    ],
+    "company_context": {
+      "profile": {
+        "name": "Faktus",
+        "lang": "en"
+      },
+      "objectives": [
+        {
+          "id": "objective:1",
+          "title": "Reach five paying pilots",
+          "priority": true,
+          "lang": "en"
+        }
+      ],
+      "constraints": [
+        {
+          "id": "constraint:2",
+          "title": "Bootstrapped, no field hiring",
+          "detail": null,
+          "lang": "en"
+        }
+      ]
+    },
+    "reused_learning_ids": [
+      "learning:7c1f0b8e-0f2a-4a6f-9c2e-2f6c9a51d3b7"
+    ]
+  },
+  "output": {
+    "overall_score": 62,
+    "verdict": "conditional",
+    "summary": "La réutilisation de l'essai terrain soutient un verdict conditionnel.",
+    "factors": [
+      {
+        "name": "competition",
+        "basis": "assumed",
+        "score": 55,
+        "gap": null,
+        "summary": "Le marché des outils terrain est chargé mais le hors ligne est mal servi.",
+        "source_ids": []
+      },
+      {
+        "name": "build_cost",
+        "basis": "assumed",
+        "score": 45,
+        "gap": null,
+        "summary": "Le périmètre autofinancé contient le coût.",
+        "source_ids": []
+      },
+      {
+        "name": "time_to_market",
+        "basis": "known",
+        "score": 70,
+        "gap": null,
+        "summary": "L'essai précédent a déjà tourné sur le terrain.",
+        "source_ids": [
+          "learning:7c1f0b8e-0f2a-4a6f-9c2e-2f6c9a51d3b7"
+        ]
+      },
+      {
+        "name": "defensibility",
+        "basis": "unknown",
+        "score": null,
+        "gap": "Aucune preuve de rétention après le pilote.",
+        "summary": "La rétention n'est pas démontrée.",
+        "source_ids": []
+      },
+      {
+        "name": "acquisition",
+        "basis": "assumed",
+        "score": 50,
+        "gap": null,
+        "summary": "Les équipes de l'essai constituent un canal chaud.",
+        "source_ids": []
+      }
+    ],
+    "contradictions": [],
+    "locale": "fr"
+  }
+}

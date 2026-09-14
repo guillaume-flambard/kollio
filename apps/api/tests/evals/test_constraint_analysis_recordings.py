@@ -19,6 +19,10 @@ CONTRADICTION_FIXTURES = sorted(
     (Path(__file__).parent / "fixtures").glob("constraint_analysis.contradiction.*.json")
 )
 
+REUSE_FIXTURES = sorted(
+    (Path(__file__).parent / "fixtures").glob("constraint_analysis.reuse.*.json")
+)
+
 
 class ConstraintAbstentionMetric(BaseMetric):
     threshold = 1.0
@@ -109,5 +113,47 @@ def test_recorded_constraint_analysis_contradicts_supplied_context(path: Path) -
             expected_output=json.dumps(fixture["input"]),
         ),
         [ContradictionMetric()],
+        run_async=False,
+    )
+
+
+class ReuseMetric(BaseMetric):
+    threshold = 1.0
+    async_mode = False
+    strict_mode = True
+
+    def measure(self, test_case, *args, **kwargs):
+        result = ConstraintAnalysisResult.model_validate_json(test_case.actual_output)
+        supplied = {item["id"] for item in json.loads(test_case.expected_output)["evidence"]}
+        reused = {
+            source_id for factor in result.factors for source_id in factor.source_ids if source_id
+        }
+        self.success = (
+            bool(reused)
+            and reused.issubset(supplied)
+            and any(source_id.startswith("learning:") for source_id in reused)
+        )
+        self.score = float(self.success)
+        self.reason = "A reused learning is cited among the supplied evidence ids."
+        return self.score
+
+    async def a_measure(self, test_case, *args, **kwargs):
+        return self.measure(test_case)
+
+    @property
+    def __name__(self):
+        return "Constraint analysis learning reuse"
+
+
+@pytest.mark.parametrize("path", REUSE_FIXTURES, ids=lambda path: path.stem)
+def test_recorded_constraint_analysis_reuses_a_learning(path: Path) -> None:
+    fixture = json.loads(path.read_text())
+    assert_test(
+        LLMTestCase(
+            input=json.dumps(fixture["input"]),
+            actual_output=json.dumps(fixture["output"]),
+            expected_output=json.dumps(fixture["input"]),
+        ),
+        [ReuseMetric()],
         run_async=False,
     )

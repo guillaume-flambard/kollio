@@ -110,6 +110,13 @@ class PostgresAnalysisWorkflows:
             ),
         )
 
+    async def memberships(self, subject: str) -> frozenset[UUID]:
+        """The workspaces the viewer may read, for scoped retrieval."""
+        query = (
+            select(WorkspaceMembership.workspace_id).join(User).where(User.auth_subject == subject)
+        )
+        return frozenset((await self.session.scalars(query)).all())
+
     async def active_company_context(self, workspace_id: UUID) -> dict[str, Any]:
         """The active objectives and constraints the analysis may contradict."""
         profile = await self.session.get(CompanyProfile, workspace_id)

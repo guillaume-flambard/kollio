@@ -22,6 +22,8 @@ from src.modules.experiments.domain.lifecycle import (
     decide_learning_status,
     decide_transition,
 )
+from src.modules.experiments.service.reuse import embed_confirmed_learning
+from src.platform.config import get_settings
 
 __all__ = [
     "ExperimentNotFoundError",
@@ -164,7 +166,7 @@ async def write_learning(
     actor = await repo.experiment_actor(experiment_id, subject)
     if actor is None:
         raise ExperimentNotFoundError("This experiment is not visible to you")
-    experiment, _idea, user = actor
+    experiment, idea, user = actor
     existing = await repo.learning(experiment.id)
     outcomes = await repo.outcomes(experiment.id)
     body = text
@@ -191,12 +193,24 @@ async def write_learning(
         current=existing.status if existing is not None else "draft",
         target="confirmed" if confirm else "draft",
     )
-    return await repo.save_learning(
+    learning = await repo.save_learning(
         experiment=experiment,
         text=body,
         status=status,
         confirmed_by_id=user.id if status == "confirmed" else None,
     )
+    if status == "confirmed":
+        await embed_confirmed_learning(
+            repo.session,
+            learning_id=learning.id,
+            text=learning.text,
+            language=idea.lang,
+            workspace_id=idea.workspace_id,
+            idea_id=learning.idea_id,
+            experiment_id=experiment.id,
+            settings=get_settings(),
+        )
+    return learning
 
 
 async def list_learnings(
