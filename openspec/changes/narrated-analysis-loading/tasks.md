@@ -1,11 +1,14 @@
 # Tasks
 
-- [x] `KollioAnalysisNarration` component: five localized stages, one current,
-  timed build-up, reduced-motion settles all, state independent of the
-  animation.
-- [x] Wire it into the deposit running state, replacing the bare line.
+- [x] Backend: `running` reads expose a real `progress` (profile, active
+  objective titles, constraint titles, reused-learning texts, evidence sources,
+  area count) built from the frozen launch snapshot and effective evidence.
+- [x] `AnalysisResponse.progress` + client regen.
+- [x] `KollioAnalysisNarration` renders the real groups with count-aware,
+  localized sentences, omits empty groups, caps long lists with "+N more", and
+  settles all groups under reduced motion.
+- [x] Wire `progress` from the deposit running state.
 - [x] FR and EN catalogs.
-- [x] Strengthen DEPOSIT-03 to assert the five steps, the current marker and the
-  absence of a verdict while running, in FR and EN.
-- [x] `make verify` and the browser suite green; #78 left open (three items
-  remain).
+- [x] Integration test for the running `progress`; DEPOSIT-03 asserts the real
+  items, the "+N more" cap and no verdict while running, FR and EN.
+- [x] `make verify` and browser suite green; #78 stays open (remaining items).

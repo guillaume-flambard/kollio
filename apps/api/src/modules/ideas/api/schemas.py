@@ -35,6 +35,7 @@ class AnalysisResponse(BaseModel):
     locale: Literal["fr", "en"] | None = None
     model: str | None = None
     created_at: datetime | None = None
+    progress: dict | None = None
 
 
 InitiativeType = Literal[

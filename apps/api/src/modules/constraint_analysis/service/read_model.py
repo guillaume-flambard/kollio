@@ -26,13 +26,52 @@ class AnalysisDisplay:
     locale: str | None
     model: str | None
     created_at: Any | None
+    progress: dict[str, Any] | None = None
+
+
+def _running_progress(workflow: AnalysisWorkflow) -> dict[str, Any]:
+    """The real inputs an in-flight analysis is working from, so the screen can
+    narrate actual objectives, constraints, reused learnings and sources rather
+    than generic stages. Everything here already exists in the frozen snapshot."""
+    snapshot = workflow.input_snapshot or {}
+    context = snapshot.get("company_context") or {}
+    profile = context.get("profile") or {}
+    objectives = [str(item["title"]) for item in context.get("objectives", []) if item.get("title")]
+    constraints = [
+        str(item["title"]) for item in context.get("constraints", []) if item.get("title")
+    ]
+    learnings: list[dict[str, str]] = []
+    sources: list[dict[str, str]] = []
+    for item in workflow.evidence or []:
+        entry_id = str(item.get("id", ""))
+        text = str(item.get("text", ""))
+        if entry_id.startswith("learning:"):
+            learnings.append({"id": entry_id, "text": text})
+        else:
+            sources.append({"id": entry_id, "url": str(item.get("url", "")), "snippet": text[:140]})
+    return {
+        "profile": profile.get("name"),
+        "objectives": objectives,
+        "constraints": constraints,
+        "learnings": learnings,
+        "sources": sources,
+        "areas": 5,
+    }
 
 
 def display_from(workflow: AnalysisWorkflow | None, final: ConstraintAnalysis | None):
     if final is None:
         if workflow is not None and workflow.status in OPEN_STATUSES:
             return AnalysisDisplay(
-                "running", workflow.source_iteration_id, None, {}, [], None, None, None
+                "running",
+                workflow.source_iteration_id,
+                None,
+                {},
+                [],
+                None,
+                None,
+                None,
+                _running_progress(workflow),
             )
         return AnalysisDisplay("unavailable", None, None, {}, [], None, None, None)
     result = final.result
@@ -121,5 +160,6 @@ async def head_analysis(session: AsyncSession, idea_id: UUID) -> AnalysisDisplay
             display.locale,
             display.model,
             display.created_at,
+            display.progress,
         )
     return display

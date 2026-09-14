@@ -92,6 +92,12 @@ export type AnalysisResponse = {
      * Created At
      */
     created_at?: string | null;
+    /**
+     * Progress
+     */
+    progress?: {
+        [key: string]: unknown;
+    } | null;
 };
 
 /**
