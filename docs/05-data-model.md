@@ -21,8 +21,9 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - **Branches / propositions (PR)** : une proposition = une itération sur une branche + un statut `pending|accepted|rejected` ; l'acceptation par le porteur fusionne (nouvelle itération sur `main`) et peut créer une `Membership` d'idée.
 
 ### ConstraintAnalysis (le tueur de contraintes)
-`id, idea_id, iteration_id, realism_score(0-100), constraints(jsonb: [{key: concurrence|cout|temps|defendabilite|acquisition, score, note}]), model, created_at`
+`id, idea_id, iteration_id, realism_score(0-100), constraints(jsonb: [{key: concurrence|cout|temps|defendabilite|acquisition, score, note}]), steps(jsonb), model, created_at`
 - Recalculé par un agent à chaque itération majeure. Historisé (lié à l'itération).
+- `steps` persiste le pipeline de raisonnement adversarial (#76) derrière une seule analyse : `[{name, tier, model, output}]` dans l'ordre analyste → challenger → critique de preuves → company fit → synthétiseur. Le membre ne voit qu'un résultat ; les étapes restent rejouables et auditées. La colonne `draft_steps` sur l'`AnalysisWorkflow` porte les mêmes étapes avant revue humaine.
 
 ### IdeaMembership (l'équipe qui se forme) — **le flux du moat**
 - `participation(owner|decision_maker|contributor|observer)` + `business_function` (12 fonctions métier) : deux axes,cf. décision #48.

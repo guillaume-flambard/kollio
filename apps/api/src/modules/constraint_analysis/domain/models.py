@@ -132,3 +132,38 @@ def validate_analysis_result(
     if referenced and not referenced.issubset(context_ids):
         raise ValueError("The model contradicted a context item that was not supplied")
     return result
+
+
+class AnalystReport(BaseModel):
+    """Step 1, the case in favour. Cheap work: it only has to be grounded."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    arguments: list[str] = Field(min_length=1)
+
+
+class ChallengerReport(BaseModel):
+    """Step 2, why this fails specifically at this company. Visible work."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    risks: list[str] = Field(min_length=1)
+    missing_evidence: list[str] = Field(default_factory=list)
+
+
+class EvidenceReport(BaseModel):
+    """Step 3, separating stated fact from speculation. Visible work."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    facts: list[str] = Field(default_factory=list)
+    speculation: list[str] = Field(default_factory=list)
+
+
+class CompanyFitReport(BaseModel):
+    """Step 4, comparison against the active objectives and constraints."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    supports: list[str] = Field(default_factory=list)
+    conflicts: list[str] = Field(default_factory=list)

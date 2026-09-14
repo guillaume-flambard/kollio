@@ -28,6 +28,7 @@ from src.modules.constraint_analysis.domain.lifecycle import (
     start_execution,
 )
 from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
+from src.modules.constraint_analysis.domain.pipeline import PipelineIncompleteError
 from src.platform.config import get_settings
 from src.platform.locale import UnsupportedLocaleError
 from src.platform.task_class import resolve_model
@@ -145,9 +146,11 @@ async def execute_constraint_analysis(
                 current = await repository.get_for_worker(identifier, lock=True)
                 if current is None:
                     return {"workflow_id": workflow_id, "ignored": True}
+                steps = result.get("steps", [])
                 if result.get("__interrupt__"):
                     draft = ConstraintAnalysisResult.model_validate(result["result"])
                     current.draft_result = draft.model_dump(mode="json")
+                    current.draft_steps = steps
                     current.status = await_review(AnalysisStatus(current.status)).value
                     current.current_step = "human_review"
                 elif approved is False:
@@ -164,6 +167,7 @@ async def execute_constraint_analysis(
                             source_iteration_id=current.source_iteration_id,
                             result=final.model_dump(mode="json"),
                             model=analysis_model,
+                            steps=steps,
                             locale=current.locale,
                         )
                     )
@@ -173,7 +177,7 @@ async def execute_constraint_analysis(
                     current.finished_at = datetime.now(UTC)
                 await session.commit()
             return {"workflow_id": workflow_id, "status": current.status}
-    except UnsupportedLocaleError as error:
+    except (UnsupportedLocaleError, PipelineIncompleteError) as error:
         await _record_failure(
             task_context.state.sessions,
             identifier,

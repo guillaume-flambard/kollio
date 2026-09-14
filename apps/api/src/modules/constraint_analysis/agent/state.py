@@ -1,4 +1,4 @@
-from typing import Literal, TypedDict
+from typing import Any, Literal, TypedDict
 
 
 class ConstraintAnalysisState(TypedDict):
@@ -8,5 +8,6 @@ class ConstraintAnalysisState(TypedDict):
     pitch: str
     evidence: list[dict[str, str]]
     context: dict[str, object]
-    result: dict[str, object]
+    result: dict[str, Any]
+    steps: list[dict[str, Any]]
     approved: bool | None
