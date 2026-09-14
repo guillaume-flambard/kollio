@@ -1,0 +1,90 @@
+{
+  "input": {
+    "title": "Campagne de remise profonde",
+    "pitch": "Financer la croissance avec 60 pour cent de remise la première année.",
+    "locale": "fr",
+    "evidence": [],
+    "company_context": {
+      "profile": {
+        "name": "Faktus",
+        "lang": "en"
+      },
+      "objectives": [
+        {
+          "id": "objective:1",
+          "title": "Reach five paying pilots",
+          "priority": true,
+          "lang": "fr"
+        }
+      ],
+      "constraints": [
+        {
+          "id": "constraint:2",
+          "title": "Gross margin stays above 60 percent",
+          "detail": "Board constraint",
+          "lang": "fr"
+        }
+      ]
+    }
+  },
+  "output": {
+    "overall_score": 35,
+    "verdict": "not_viable",
+    "summary": "La remise viole la contrainte de marge énoncée.",
+    "factors": [
+      {
+        "name": "competition",
+        "basis": "assumed",
+        "score": 40,
+        "gap": null,
+        "summary": "La remise est courante sur ce marché.",
+        "source_ids": []
+      },
+      {
+        "name": "build_cost",
+        "basis": "assumed",
+        "score": 50,
+        "gap": null,
+        "summary": "Aucun changement de coût de livraison n'est attendu.",
+        "source_ids": []
+      },
+      {
+        "name": "time_to_market",
+        "basis": "assumed",
+        "score": 45,
+        "gap": null,
+        "summary": "La campagne peut être lancée rapidement.",
+        "source_ids": []
+      },
+      {
+        "name": "defensibility",
+        "basis": "unknown",
+        "score": null,
+        "gap": "Aucune preuve sur la rétention après la fin de la remise.",
+        "summary": "La rétention après la fin de la remise n'est pas démontrée.",
+        "source_ids": []
+      },
+      {
+        "name": "acquisition",
+        "basis": "assumed",
+        "score": 30,
+        "gap": null,
+        "summary": "Une acquisition peu coûteuse est attendue mais non prouvée.",
+        "source_ids": []
+      }
+    ],
+    "contradictions": [
+      {
+        "target": "constraint",
+        "ref_id": "constraint:2",
+        "detail": "Une remise de 60 pour cent ne tient pas la marge brute au-dessus de 60 pour cent."
+      },
+      {
+        "target": "objective",
+        "ref_id": "objective:1",
+        "detail": "La pression sur la marge réduit la capacité à mener cinq pilotes."
+      }
+    ],
+    "locale": "fr"
+  }
+}

@@ -44,13 +44,16 @@ class FakeOpenAIHandler(BaseHTTPRequestHandler):
         system_prompt = payload["messages"][0]["content"]
         locale = "fr" if "locale fr" in system_prompt else "en"
         result = {
-            "overall_score": 50,
+            "overall_score": None,
             "verdict": "unknown",
             "summary": "More evidence is required.",
+            "contradictions": [],
             "factors": [
                 {
                     "name": name,
-                    "score": 50,
+                    "basis": "unknown",
+                    "score": None,
+                    "gap": "No market evidence was supplied",
                     "summary": "No evidence was supplied.",
                     "source_ids": [],
                 }

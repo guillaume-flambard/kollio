@@ -47,6 +47,7 @@ async def launch_analysis(
         if head is not None
         else {"title": idea.title, "pitch": idea.pitch, "stage": idea.stage}
     )
+    snapshot["company_context"] = await repository.active_company_context(idea.workspace_id)
     workflow = AnalysisWorkflow(
         id=uuid4(),
         idea_id=idea.id,

@@ -16,6 +16,11 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
+from src.modules.company_context.adapters.postgres import (
+    CompanyConstraint,
+    CompanyObjective,
+    CompanyProfile,
+)
 from src.modules.constraint_analysis.domain.lifecycle import AnalysisStatus
 from src.modules.ideas.adapters.postgres import Idea, User, WorkspaceMembership
 from src.modules.iterations.adapters.postgres import Iteration
@@ -104,6 +109,58 @@ class PostgresAnalysisWorkflows:
                 )
             ),
         )
+
+    async def active_company_context(self, workspace_id: UUID) -> dict[str, Any]:
+        """The active objectives and constraints the analysis may contradict."""
+        profile = await self.session.get(CompanyProfile, workspace_id)
+        objectives = await self.session.scalars(
+            select(CompanyObjective)
+            .where(
+                CompanyObjective.workspace_id == workspace_id,
+                CompanyObjective.state == "active",
+            )
+            .order_by(CompanyObjective.priority.desc(), CompanyObjective.created_at)
+        )
+        constraints = await self.session.scalars(
+            select(CompanyConstraint)
+            .where(
+                CompanyConstraint.workspace_id == workspace_id,
+                CompanyConstraint.state == "active",
+            )
+            .order_by(CompanyConstraint.created_at)
+        )
+        return {
+            "profile": (
+                {
+                    "name": profile.name,
+                    "description": profile.description,
+                    "business_model": profile.business_model,
+                    "customer_segments": profile.customer_segments,
+                    "markets": profile.markets,
+                    "lang": profile.lang,
+                }
+                if profile is not None
+                else None
+            ),
+            "objectives": [
+                {
+                    "id": f"objective:{item.id}",
+                    "title": item.title,
+                    "priority": item.priority,
+                    "lang": item.lang,
+                }
+                for item in objectives
+            ],
+            "constraints": [
+                {
+                    "id": f"constraint:{item.id}",
+                    "title": item.title,
+                    "detail": item.detail,
+                    "lang": item.lang,
+                }
+                for item in constraints
+            ],
+        }
 
     async def add(self, workflow: AnalysisWorkflow) -> AnalysisWorkflow:
         self.session.add(workflow)

@@ -28,6 +28,7 @@ def build_constraint_analysis_graph(
                 pitch=state["pitch"],
                 locale=state["locale"],
                 evidence=[AnalysisEvidence.model_validate(item) for item in state["evidence"]],
+                context=state.get("context") or {},
             )
             return {"result": result.model_dump(mode="json")}
 

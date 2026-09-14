@@ -6,16 +6,52 @@
     "evidence": []
   },
   "output": {
-    "overall_score": 50,
+    "overall_score": null,
     "verdict": "unknown",
     "summary": "Les informations fournies ne suffisent pas pour établir le réalisme.",
     "factors": [
-      {"name": "competition", "score": 50, "summary": "Aucune preuve sur la concurrence n'est fournie.", "source_ids": []},
-      {"name": "build_cost", "score": 50, "summary": "Aucune preuve sur le coût de construction n'est fournie.", "source_ids": []},
-      {"name": "time_to_market", "score": 50, "summary": "Aucune preuve sur le délai n'est fournie.", "source_ids": []},
-      {"name": "defensibility", "score": 50, "summary": "Aucune preuve sur la défendabilité n'est fournie.", "source_ids": []},
-      {"name": "acquisition", "score": 50, "summary": "Aucune preuve sur l'acquisition n'est fournie.", "source_ids": []}
+      {
+        "name": "competition",
+        "score": null,
+        "summary": "Aucune preuve sur la concurrence n'est fournie.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "Aucune étude de marché ni preuve sur la concurrence n'a été fournie."
+      },
+      {
+        "name": "build_cost",
+        "score": null,
+        "summary": "Aucune preuve sur le coût de construction n'est fournie.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "Aucune estimation de coût n'a été fournie."
+      },
+      {
+        "name": "time_to_market",
+        "score": null,
+        "summary": "Aucune preuve sur le délai n'est fournie.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "Aucun délai de mise sur le marché n'a été fourni."
+      },
+      {
+        "name": "defensibility",
+        "score": null,
+        "summary": "Aucune preuve sur la défendabilité n'est fournie.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "Aucune preuve sur la défendabilité n'a été fournie."
+      },
+      {
+        "name": "acquisition",
+        "score": null,
+        "summary": "Aucune preuve sur l'acquisition n'est fournie.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "Aucune preuve sur le canal d'acquisition n'a été fournie."
+      }
     ],
-    "locale": "fr"
+    "locale": "fr",
+    "contradictions": []
   }
 }

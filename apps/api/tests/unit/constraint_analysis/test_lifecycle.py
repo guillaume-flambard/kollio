@@ -38,7 +38,9 @@ def test_constraint_result_requires_each_factor_once() -> None:
     factors = [
         {
             "name": name,
+            "basis": "known",
             "score": 70,
+            "gap": None,
             "summary": "Supported by the supplied evidence.",
             "source_ids": ["source-1"],
         }
@@ -56,6 +58,7 @@ def test_constraint_result_requires_each_factor_once() -> None:
             "verdict": "conditional",
             "summary": "The idea is viable if the acquisition risk is addressed.",
             "factors": factors,
+            "contradictions": [],
             "locale": "en",
         }
     )
@@ -69,6 +72,7 @@ def test_constraint_result_requires_each_factor_once() -> None:
                 "verdict": "conditional",
                 "summary": "Invalid duplicate factors.",
                 "factors": factors,
+                "contradictions": [],
                 "locale": "en",
             }
         )
@@ -78,7 +82,9 @@ def test_validated_result_rejects_unsupported_claims_and_locale_drift() -> None:
     factors = [
         {
             "name": name,
+            "basis": "known",
             "score": 70,
+            "gap": None,
             "summary": "Supported by the supplied evidence.",
             "source_ids": ["source-1"],
         }
@@ -96,6 +102,7 @@ def test_validated_result_rejects_unsupported_claims_and_locale_drift() -> None:
             "verdict": "conditional",
             "summary": "The idea remains conditional.",
             "factors": factors,
+            "contradictions": [],
             "locale": "en",
         }
     )
@@ -116,7 +123,10 @@ def test_validated_result_rejects_unsupported_claims_and_locale_drift() -> None:
 
     unsupported = result.model_copy(
         update={
-            "factors": [factor.model_copy(update={"source_ids": []}) for factor in result.factors]
+            "factors": [
+                factor.model_copy(update={"basis": "assumed", "source_ids": []})
+                for factor in result.factors
+            ]
         }
     )
     with pytest.raises(ValueError, match="requires evidence"):
