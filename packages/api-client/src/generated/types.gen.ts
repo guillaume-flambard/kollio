@@ -465,6 +465,104 @@ export type DepositIdeaRequest = {
 };
 
 /**
+ * ExperimentCreateBody
+ */
+export type ExperimentCreateBody = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Hypothesis
+     */
+    hypothesis: string;
+    /**
+     * Success Metric
+     */
+    success_metric: string;
+    /**
+     * Baseline
+     */
+    baseline?: string | null;
+    /**
+     * Target
+     */
+    target?: string | null;
+};
+
+/**
+ * ExperimentDetailResponse
+ */
+export type ExperimentDetailResponse = {
+    experiment: ExperimentResponse;
+    /**
+     * Outcomes
+     */
+    outcomes: Array<OutcomeResponse>;
+    learning: LearningResponse | null;
+};
+
+/**
+ * ExperimentResponse
+ */
+export type ExperimentResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Hypothesis
+     */
+    hypothesis: string;
+    /**
+     * Success Metric
+     */
+    success_metric: string;
+    /**
+     * Baseline
+     */
+    baseline: string | null;
+    /**
+     * Target
+     */
+    target: string | null;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * Started At
+     */
+    started_at: string | null;
+    /**
+     * Ended At
+     */
+    ended_at: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * ExperimentStatusBody
+ */
+export type ExperimentStatusBody = {
+    /**
+     * Status
+     */
+    status: string;
+};
+
+/**
  * HTTPValidationError
  */
 export type HttpValidationError = {
@@ -747,6 +845,62 @@ export type LaunchAnalysisRequest = {
 };
 
 /**
+ * LearningResponse
+ */
+export type LearningResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Experiment Id
+     */
+    experiment_id: string;
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * Text
+     */
+    text: string;
+    /**
+     * Outcome Ids
+     */
+    outcome_ids: Array<string>;
+    /**
+     * Confirmed By Id
+     */
+    confirmed_by_id: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
+ * LearningWriteBody
+ */
+export type LearningWriteBody = {
+    /**
+     * Text
+     */
+    text?: string | null;
+    /**
+     * Confirm
+     */
+    confirm?: boolean;
+};
+
+/**
  * LegacyIdeaContext
  */
 export type LegacyIdeaContext = {
@@ -850,6 +1004,78 @@ export type ObjectiveUpdate = {
      * Priority
      */
     priority?: boolean | null;
+};
+
+/**
+ * OutcomeCreateBody
+ */
+export type OutcomeCreateBody = {
+    /**
+     * Metric
+     */
+    metric: string;
+    /**
+     * Value
+     */
+    value: string;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+    /**
+     * Observed At
+     */
+    observed_at?: string | null;
+    /**
+     * Comment
+     */
+    comment?: string | null;
+    /**
+     * Qualitative
+     */
+    qualitative?: string | null;
+};
+
+/**
+ * OutcomeResponse
+ */
+export type OutcomeResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Experiment Id
+     */
+    experiment_id: string;
+    /**
+     * Metric
+     */
+    metric: string;
+    /**
+     * Value
+     */
+    value: string;
+    /**
+     * Unit
+     */
+    unit: string | null;
+    /**
+     * Observed At
+     */
+    observed_at: string | null;
+    /**
+     * Comment
+     */
+    comment: string | null;
+    /**
+     * Qualitative
+     */
+    qualitative: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
 };
 
 /**
@@ -1938,3 +2164,217 @@ export type UpdateCompanyConstraintResponses = {
 };
 
 export type UpdateCompanyConstraintResponse = UpdateCompanyConstraintResponses[keyof UpdateCompanyConstraintResponses];
+
+export type ListIdeaExperimentsData = {
+    body?: never;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/experiments';
+};
+
+export type ListIdeaExperimentsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListIdeaExperimentsError = ListIdeaExperimentsErrors[keyof ListIdeaExperimentsErrors];
+
+export type ListIdeaExperimentsResponses = {
+    /**
+     * Response List Idea Experiments
+     *
+     * Successful Response
+     */
+    200: Array<ExperimentResponse>;
+};
+
+export type ListIdeaExperimentsResponse = ListIdeaExperimentsResponses[keyof ListIdeaExperimentsResponses];
+
+export type CreateExperimentData = {
+    body: ExperimentCreateBody;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/experiments';
+};
+
+export type CreateExperimentErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateExperimentError = CreateExperimentErrors[keyof CreateExperimentErrors];
+
+export type CreateExperimentResponses = {
+    /**
+     * Successful Response
+     */
+    201: ExperimentResponse;
+};
+
+export type CreateExperimentResponse = CreateExperimentResponses[keyof CreateExperimentResponses];
+
+export type ListIdeaLearningsData = {
+    body?: never;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/learnings';
+};
+
+export type ListIdeaLearningsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListIdeaLearningsError = ListIdeaLearningsErrors[keyof ListIdeaLearningsErrors];
+
+export type ListIdeaLearningsResponses = {
+    /**
+     * Response List Idea Learnings
+     *
+     * Successful Response
+     */
+    200: Array<LearningResponse>;
+};
+
+export type ListIdeaLearningsResponse = ListIdeaLearningsResponses[keyof ListIdeaLearningsResponses];
+
+export type GetExperimentData = {
+    body?: never;
+    path: {
+        /**
+         * Experiment Id
+         */
+        experiment_id: string;
+    };
+    query?: never;
+    url: '/experiments/{experiment_id}';
+};
+
+export type GetExperimentErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetExperimentError = GetExperimentErrors[keyof GetExperimentErrors];
+
+export type GetExperimentResponses = {
+    /**
+     * Successful Response
+     */
+    200: ExperimentDetailResponse;
+};
+
+export type GetExperimentResponse = GetExperimentResponses[keyof GetExperimentResponses];
+
+export type ChangeExperimentStatusData = {
+    body: ExperimentStatusBody;
+    path: {
+        /**
+         * Experiment Id
+         */
+        experiment_id: string;
+    };
+    query?: never;
+    url: '/experiments/{experiment_id}/status';
+};
+
+export type ChangeExperimentStatusErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ChangeExperimentStatusError = ChangeExperimentStatusErrors[keyof ChangeExperimentStatusErrors];
+
+export type ChangeExperimentStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: ExperimentResponse;
+};
+
+export type ChangeExperimentStatusResponse = ChangeExperimentStatusResponses[keyof ChangeExperimentStatusResponses];
+
+export type RecordExperimentOutcomeData = {
+    body: OutcomeCreateBody;
+    path: {
+        /**
+         * Experiment Id
+         */
+        experiment_id: string;
+    };
+    query?: never;
+    url: '/experiments/{experiment_id}/outcomes';
+};
+
+export type RecordExperimentOutcomeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RecordExperimentOutcomeError = RecordExperimentOutcomeErrors[keyof RecordExperimentOutcomeErrors];
+
+export type RecordExperimentOutcomeResponses = {
+    /**
+     * Successful Response
+     */
+    201: OutcomeResponse;
+};
+
+export type RecordExperimentOutcomeResponse = RecordExperimentOutcomeResponses[keyof RecordExperimentOutcomeResponses];
+
+export type WriteExperimentLearningData = {
+    body: LearningWriteBody;
+    path: {
+        /**
+         * Experiment Id
+         */
+        experiment_id: string;
+    };
+    query?: never;
+    url: '/experiments/{experiment_id}/learnings';
+};
+
+export type WriteExperimentLearningErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type WriteExperimentLearningError = WriteExperimentLearningErrors[keyof WriteExperimentLearningErrors];
+
+export type WriteExperimentLearningResponses = {
+    /**
+     * Successful Response
+     */
+    200: LearningResponse;
+};
+
+export type WriteExperimentLearningResponse = WriteExperimentLearningResponses[keyof WriteExperimentLearningResponses];
