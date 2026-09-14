@@ -1,10 +1,11 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
+    Date,
     DateTime,
     ForeignKey,
     String,
@@ -72,6 +73,45 @@ class CompanyConstraint(Base):
     )
     title: Mapped[str] = mapped_column(String(300))
     detail: Mapped[str | None] = mapped_column(Text)
+    state: Mapped[str] = mapped_column(String(16), default="active")
+    lang: Mapped[str] = mapped_column(String(2))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class CompanyPrinciple(Base):
+    __tablename__ = "company_principles"
+    __table_args__ = (CheckConstraint(STATE_CHECK), CheckConstraint(LANG_CHECK))
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    workspace_id: Mapped[UUID] = mapped_column(
+        ForeignKey("workspaces.id", ondelete="CASCADE"), index=True
+    )
+    title: Mapped[str] = mapped_column(String(300))
+    detail: Mapped[str | None] = mapped_column(Text)
+    state: Mapped[str] = mapped_column(String(16), default="active")
+    lang: Mapped[str] = mapped_column(String(2))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class CompanyMetric(Base):
+    __tablename__ = "company_metrics"
+    __table_args__ = (CheckConstraint(STATE_CHECK), CheckConstraint(LANG_CHECK))
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    workspace_id: Mapped[UUID] = mapped_column(
+        ForeignKey("workspaces.id", ondelete="CASCADE"), index=True
+    )
+    name: Mapped[str] = mapped_column(String(200))
+    value: Mapped[str | None] = mapped_column(String(200))
+    unit: Mapped[str | None] = mapped_column(String(50))
+    observed_at: Mapped[date | None] = mapped_column(Date)
+    source: Mapped[str | None] = mapped_column(String(300))
     state: Mapped[str] = mapped_column(String(16), default="active")
     lang: Mapped[str] = mapped_column(String(2))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -190,3 +230,100 @@ class PostgresCompanyContext:
         constraint.lang = lang
         await self.session.flush()
         return constraint
+
+    async def principles(self, workspace_id: UUID) -> list[CompanyPrinciple]:
+        query = (
+            select(CompanyPrinciple)
+            .where(CompanyPrinciple.workspace_id == workspace_id)
+            .order_by(CompanyPrinciple.created_at, CompanyPrinciple.id)
+        )
+        return list((await self.session.scalars(query)).all())
+
+    async def create_principle(
+        self, workspace_id: UUID, title: str, detail: str | None, lang: str
+    ) -> CompanyPrinciple:
+        principle = CompanyPrinciple(
+            id=uuid4(),
+            workspace_id=workspace_id,
+            title=title,
+            detail=detail,
+            state="active",
+            lang=lang,
+        )
+        self.session.add(principle)
+        await self.session.flush()
+        return principle
+
+    async def principle(self, workspace_id: UUID, principle_id: UUID) -> CompanyPrinciple | None:
+        return await self.session.scalar(
+            select(CompanyPrinciple).where(
+                CompanyPrinciple.id == principle_id,
+                CompanyPrinciple.workspace_id == workspace_id,
+            )
+        )
+
+    async def update_principle(
+        self, workspace_id: UUID, principle_id: UUID, changes: dict[str, Any], lang: str
+    ) -> CompanyPrinciple | None:
+        principle = await self.principle(workspace_id, principle_id)
+        if principle is None:
+            return None
+        for key, value in changes.items():
+            setattr(principle, key, value)
+        principle.lang = lang
+        await self.session.flush()
+        return principle
+
+    async def metrics(self, workspace_id: UUID) -> list[CompanyMetric]:
+        query = (
+            select(CompanyMetric)
+            .where(CompanyMetric.workspace_id == workspace_id)
+            .order_by(CompanyMetric.created_at, CompanyMetric.id)
+        )
+        return list((await self.session.scalars(query)).all())
+
+    async def create_metric(
+        self,
+        workspace_id: UUID,
+        *,
+        name: str,
+        value: str | None,
+        unit: str | None,
+        observed_at: date | None,
+        source: str | None,
+        lang: str,
+    ) -> CompanyMetric:
+        metric = CompanyMetric(
+            id=uuid4(),
+            workspace_id=workspace_id,
+            name=name,
+            value=value,
+            unit=unit,
+            observed_at=observed_at,
+            source=source,
+            state="active",
+            lang=lang,
+        )
+        self.session.add(metric)
+        await self.session.flush()
+        return metric
+
+    async def metric(self, workspace_id: UUID, metric_id: UUID) -> CompanyMetric | None:
+        return await self.session.scalar(
+            select(CompanyMetric).where(
+                CompanyMetric.id == metric_id,
+                CompanyMetric.workspace_id == workspace_id,
+            )
+        )
+
+    async def update_metric(
+        self, workspace_id: UUID, metric_id: UUID, changes: dict[str, Any], lang: str
+    ) -> CompanyMetric | None:
+        metric = await self.metric(workspace_id, metric_id)
+        if metric is None:
+            return None
+        for key, value in changes.items():
+            setattr(metric, key, value)
+        metric.lang = lang
+        await self.session.flush()
+        return metric

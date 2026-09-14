@@ -1,3 +1,4 @@
+from datetime import date
 from typing import ClassVar, Literal
 from uuid import UUID
 
@@ -82,7 +83,64 @@ class CompanyConstraintResponse(BaseModel):
     lang: Literal["fr", "en"]
 
 
+class PrincipleCreate(BaseModel):
+    title: str = Field(min_length=1, max_length=300)
+    detail: str | None = None
+
+
+class PrincipleUpdate(_RejectsExplicitNulls):
+    non_nullable_fields: ClassVar[tuple[str, ...]] = ("title", "state")
+
+    title: str | None = Field(default=None, min_length=1, max_length=300)
+    detail: str | None = None
+    state: ContextState | None = None
+
+
+class PrincipleResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    title: str
+    detail: str | None = None
+    state: ContextState
+    lang: Literal["fr", "en"]
+
+
+class MetricCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=200)
+    value: str | None = Field(default=None, max_length=200)
+    unit: str | None = Field(default=None, max_length=50)
+    observed_at: date | None = None
+    source: str | None = Field(default=None, max_length=300)
+
+
+class MetricUpdate(_RejectsExplicitNulls):
+    non_nullable_fields: ClassVar[tuple[str, ...]] = ("name", "state")
+
+    name: str | None = Field(default=None, min_length=1, max_length=200)
+    value: str | None = Field(default=None, max_length=200)
+    unit: str | None = Field(default=None, max_length=50)
+    observed_at: date | None = None
+    source: str | None = Field(default=None, max_length=300)
+    state: ContextState | None = None
+
+
+class MetricResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    name: str
+    value: str | None = None
+    unit: str | None = None
+    observed_at: date | None = None
+    source: str | None = None
+    state: ContextState
+    lang: Literal["fr", "en"]
+
+
 class CompanyContextResponse(BaseModel):
     profile: CompanyProfileResponse
     objectives: list[ObjectiveResponse]
     constraints: list[CompanyConstraintResponse]
+    principles: list[PrincipleResponse]
+    metrics: list[MetricResponse]

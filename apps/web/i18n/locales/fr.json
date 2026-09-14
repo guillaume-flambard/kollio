@@ -100,6 +100,76 @@
         "restore": "Réactiver",
         "empty": "Aucune contrainte pour le moment."
       },
+      "onboarding": {
+        "title": "Amorcer le contexte de l’entreprise",
+        "intro": "Sept questions courtes. Répondez à ce que vous pouvez ; ce que vous passez reste en attente et peut attendre.",
+        "progress": "{answered} sur {total} répondues",
+        "pending": "En attente",
+        "submit": "Enregistrer mes réponses",
+        "saving": "Enregistrement…",
+        "saved": "Contexte enregistré. Vous pourrez l’enrichir ci-dessous à tout moment.",
+        "steps": {
+          "facts": "Faits de l’entreprise",
+          "model": "Modèle économique",
+          "markets": "Marchés et segments",
+          "objectives": "Trois objectifs",
+          "constraints": "Contraintes",
+          "principles": "Non-négociables",
+          "metrics": "Indicateurs clés"
+        },
+        "facts": {
+          "name": "Nom ou marque",
+          "description": "Ce que fait l’entreprise"
+        },
+        "model": {
+          "businessModel": "Comment elle gagne",
+          "productsServices": "Produits ou services principaux"
+        },
+        "markets": {
+          "markets": "Marchés couverts",
+          "customerSegments": "Clients servis"
+        },
+        "objectives": {
+          "first": "Objectif 1",
+          "second": "Objectif 2",
+          "third": "Objectif 3"
+        },
+        "constraints": {
+          "first": "Contrainte 1",
+          "second": "Contrainte 2",
+          "third": "Contrainte 3"
+        },
+        "principles": {
+          "first": "Non-négociable 1",
+          "second": "Non-négociable 2",
+          "third": "Non-négociable 3"
+        },
+        "metrics": {
+          "first": "Indicateur 1",
+          "second": "Indicateur 2",
+          "third": "Indicateur 3"
+        }
+      },
+      "principles": {
+        "title": "Non-négociables",
+        "placeholder": "Nouveau non-négociable",
+        "detailPlaceholder": "Précision (optionnel)",
+        "create": "Ajouter le non-négociable",
+        "archive": "Archiver",
+        "restore": "Réactiver",
+        "empty": "Aucun non-négociable pour le moment."
+      },
+      "metrics": {
+        "title": "Indicateurs clés",
+        "namePlaceholder": "Nouvel indicateur",
+        "valuePlaceholder": "Valeur (optionnel)",
+        "unitPlaceholder": "Unité (optionnel)",
+        "sourcePlaceholder": "Source (optionnel)",
+        "create": "Ajouter l’indicateur",
+        "archive": "Archiver",
+        "restore": "Réactiver",
+        "empty": "Aucun indicateur pour le moment."
+      },
       "error": "L’action a échoué. Vos saisies sont conservées.",
       "loadError": "Le contexte n’a pas pu être chargé."
     }

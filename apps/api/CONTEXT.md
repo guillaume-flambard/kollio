@@ -47,7 +47,7 @@ _Avoid_: Undo, revert, restore
 ### Company context
 
 **CompanyContext**:
-The durable reality of a workspace: its profile, objectives and constraints. Every analysis reads it.
+The durable reality of a workspace: its profile, objectives, constraints, principles and key metrics. Analyses read profile, objectives and constraints today; principles and metrics are stored and edited but not yet injected.
 _Avoid_: Company knowledge base, memory, company settings
 
 **CompanyProfile**:
@@ -61,6 +61,14 @@ _Avoid_: Goal (as a vague noun), KPI
 **CompanyConstraint**:
 A real limitation the company operates under: budget, team size, skills, deadlines, regulation, capacity, brand or product dependencies. `active` or `archived`.
 _Avoid_: Constraint (reserved for the analysis dimensions below), blocker
+
+**Principle**:
+A stated intent or an explicitly refused item the company judges decisions against (vision, positioning, priorities, non-negotiables). `active` or `archived`.
+_Avoid_: Value, rule (as an engine term), constraint
+
+**KeyMetric**:
+A simple tracked number the company references without a BI system: a name with optional value, unit, observed date and source.
+_Avoid_: KPI, Outcome (the experiment result), measure
 
 ### The constraint killer
 
