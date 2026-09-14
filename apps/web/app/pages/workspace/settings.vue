@@ -725,7 +725,7 @@ async function saveWizard() {
 .settings-section { display: grid; gap: 12px; border: 1px solid var(--ui-border); border-radius: 16px; padding: 18px 20px; }
 .settings-section h2 { margin: 0; font-size: 1.05rem; font-weight: 620; }
 .settings-field { display: grid; gap: 6px; font-size: .82rem; font-weight: 560; color: var(--ui-text-muted); }
-.settings-field input, .settings-field textarea { border: 1px solid var(--ui-border); border-radius: 12px; padding: 8px 12px; background: var(--ui-bg); color: var(--ui-text); font: inherit; }
+.settings-field input, .settings-field textarea { border: 1px solid var(--ui-border); border-radius: 12px; padding: 8px 12px; background: var(--ui-bg); color: var(--ui-text); font: inherit; min-width: 0; }
 .settings-field textarea { resize: vertical; }
 .settings-inline { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
 .settings-actions { display: flex; align-items: center; gap: 12px; }
@@ -750,4 +750,9 @@ async function saveWizard() {
 .settings-metric-form .settings-primary { grid-column: 1 / -1; justify-self: start; }
 .settings-metric-value { flex: 0 1 140px; border: 1px solid transparent; border-radius: 10px; padding: 6px 8px; background: transparent; color: var(--ui-text); font: inherit; }
 .settings-metric-value:hover, .settings-metric-value:focus { border-color: var(--ui-border); background: var(--ui-bg); }
+
+@media (max-width: 640px) {
+  .settings-inline { grid-template-columns: 1fr; }
+  .settings-metric-form { grid-template-columns: 1fr; }
+}
 </style>
