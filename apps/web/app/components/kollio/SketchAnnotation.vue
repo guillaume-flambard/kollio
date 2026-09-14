@@ -67,8 +67,8 @@ withDefaults(defineProps<{
 
 <style scoped>
 .sketch-annotation {
-  --sketch-ink: var(--kollio-active-ink, #493b57);
-  --sketch-wash: var(--kollio-wash, #ddd3e8);
+  --sketch-ink: var(--kollio-active-ink);
+  --sketch-wash: var(--kollio-wash);
   --sketch-opacity: .54;
   --sketch-secondary-opacity: .12;
   --sketch-stroke: 1.3px;

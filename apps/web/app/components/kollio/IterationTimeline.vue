@@ -128,7 +128,7 @@ function confirmReject(id: string) {
 .iteration-entry { position: relative; display: grid; grid-template-columns: 110px 1fr; gap: 14px; padding: 14px 0; }
 .iteration-entry::before { position: absolute; top: 20px; left: -23px; width: 8px; height: 8px; border-radius: 50%; background: var(--kollio-active-ink); content: ''; }
 .iteration-entry time { color: var(--ui-text-muted); font-size: .78rem; }
-.iteration-entry-branch::before { background: var(--question-clay, #D47A70); }
+.iteration-entry-branch::before { background: var(--kollio-question); }
 .iteration-entry-title { margin: 0; font-size: .92rem; font-weight: 570; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
 .iteration-entry-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 0; color: var(--ui-text-muted); font-size: .78rem; }
 .iteration-status { border-radius: 999px; padding: 2px 10px; background: var(--ui-bg-inverted); color: var(--ui-text-inverted); font-size: .68rem; font-weight: 600; }
