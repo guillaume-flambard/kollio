@@ -63,6 +63,7 @@ jobs:
           pnpm lint
           pnpm typecheck
           node scripts/check_locales.mjs
+          node scripts/check_design_tokens.mjs
       - name: Migrate and test
         working-directory: apps/api
         run: |
