@@ -394,8 +394,9 @@
         "title": "Apprentissage",
         "draft": "Brouillon",
         "confirmed": "Confirmé",
-        "confirm": "Confirmer l'apprentissage",
-        "confirming": "Confirmation…"
+        "confirm": "Confirmer l’apprentissage",
+        "confirming": "Confirmation…",
+        "confirmedNote": "Ajouté à la mémoire de l’entreprise."
       }
     },
     "deposit": {
@@ -458,15 +459,15 @@
     },
     "iterations": {
       "pending": "En attente",
-      "accepted": "Fusionnée",
+      "accepted": "Acceptée",
       "rejected": "Refusée",
-      "branch": "Branche {name}",
+      "branch": "Alternative {name}",
       "analysisRunning": "Analyse en cours",
       "analysisResolved": "Score {score}",
       "analysisAbstained": "En attente de preuves",
       "propose": "Proposer une évolution",
-      "proposeHint": "Votre proposition ouvre une branche ; le porteur l'accepte ou la refuse.",
-      "message": "Message de l'itération",
+      "proposeHint": "Votre proposition ouvre une ligne alternative ; le porteur l’accepte ou la refuse.",
+      "message": "Message du changement",
       "titleField": "Titre",
       "pitchField": "Pitch",
       "stageField": "Stade",

@@ -364,7 +364,15 @@ onMounted(loadExperiments)
               {{ busy ? t('ideas.experiments.learning.confirming') : t('ideas.experiments.learning.confirm') }}
             </button>
           </template>
-          <p v-else class="mt-3 whitespace-pre-line text-sm leading-relaxed text-default">{{ detail.learning.text }}</p>
+          <template v-else>
+            <p class="mt-3 whitespace-pre-line text-sm leading-relaxed text-default">{{ detail.learning.text }}</p>
+            <p
+              v-if="detail.learning.status === 'confirmed'"
+              class="experiment-confirmed-note"
+            >
+              {{ t('ideas.experiments.learning.confirmedNote') }}
+            </p>
+          </template>
         </div>
       </div>
     </template>
@@ -477,5 +485,27 @@ onMounted(loadExperiments)
   border-radius: var(--kollio-radius-lg);
   background: var(--ui-bg-accented);
   padding: 16px;
+}
+
+.experiment-confirmed-note {
+  display: inline-flex;
+  margin-top: 12px;
+  border-radius: var(--kollio-radius-sm);
+  background: color-mix(in srgb, var(--kollio-wash) 60%, transparent);
+  padding: 4px 10px;
+  color: var(--kollio-active-ink);
+  font-size: .82rem;
+  font-weight: 500;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .experiment-confirmed-note {
+    animation: note-settle 220ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+}
+
+@keyframes note-settle {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>

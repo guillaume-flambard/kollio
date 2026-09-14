@@ -395,7 +395,8 @@
         "draft": "Draft",
         "confirmed": "Confirmed",
         "confirm": "Confirm the learning",
-        "confirming": "Confirming…"
+        "confirming": "Confirming…",
+        "confirmedNote": "Added to the company memory."
       }
     },
     "deposit": {
@@ -458,15 +459,15 @@
     },
     "iterations": {
       "pending": "Pending",
-      "accepted": "Merged",
+      "accepted": "Accepted",
       "rejected": "Rejected",
-      "branch": "Branch {name}",
-      "analysisRunning": "Analysis running",
+      "branch": "Alternative {name}",
+      "analysisRunning": "Analysis in progress",
       "analysisResolved": "Score {score}",
       "analysisAbstained": "Awaiting evidence",
       "propose": "Propose a change",
-      "proposeHint": "Your proposal opens a branch; the owner accepts or rejects it.",
-      "message": "Iteration message",
+      "proposeHint": "Your proposal opens an alternative line; the owner accepts or rejects it.",
+      "message": "Change message",
       "titleField": "Title",
       "pitchField": "Pitch",
       "stageField": "Stage",
