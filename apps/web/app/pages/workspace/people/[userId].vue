@@ -85,7 +85,7 @@ function ideaLink(id: string) {
 .profile-header { display: grid; gap: 10px; }
 .profile-bio { margin: 0; color: var(--ui-text-muted); font-size: .92rem; }
 .profile-roles { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.profile-roles li { border-radius: 999px; padding: 4px 12px; background: var(--kollio-surface-accented, #EEE8F2); font-size: .74rem; font-weight: 600; }
+.profile-roles li { border-radius: 999px; padding: 4px 12px; background: var(--ui-bg-accented); font-size: .74rem; font-weight: 600; }
 .profile-section { display: grid; gap: 10px; }
 .profile-section h2 { margin: 0; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ui-text-muted); }
 .profile-section ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }

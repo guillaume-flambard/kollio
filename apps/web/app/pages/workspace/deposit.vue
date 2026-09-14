@@ -180,15 +180,15 @@ const constraintLabels: Record<string, string> = {
 .deposit-form { display: grid; gap: 14px; }
 .deposit-field { display: grid; gap: 8px; font-size: .875rem; font-weight: 500; }
 .deposit-field input, .deposit-field textarea, .deposit-field select {
-  border: 1px solid var(--kollio-border, #E8E3EA); border-radius: 12px; padding: 10px 14px;
-  font: inherit; background: var(--kollio-surface, #FFFFFF); color: var(--kollio-ink, #252229);
+  border: 1px solid var(--ui-border); border-radius: 12px; padding: 10px 14px;
+  font: inherit; background: var(--ui-bg-elevated); color: var(--ui-text);
 }
 .deposit-submit {
   justify-self: start; border: 0; border-radius: 12px; padding: 12px 22px; cursor: pointer;
-  background: var(--kollio-heading, #493B57); color: white; font-weight: 570;
+  background: var(--kollio-heading); color: white; font-weight: 570;
 }
 .deposit-submit:disabled { opacity: .55; cursor: not-allowed; }
-.deposit-error { color: #D47A70; font-size: .875rem; }
+.deposit-error { color: var(--ui-error); font-size: .875rem; }
 .deposit-verdict { display: grid; gap: 14px; }
 .deposit-score { font-size: 2rem; font-weight: 700; }
 .deposit-constraints { display: grid; gap: 10px; margin: 0; }
@@ -200,5 +200,5 @@ const constraintLabels: Record<string, string> = {
 .deposit-contradictions { margin-top: 18px; }
 .deposit-contradictions ul { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
 .deposit-contradictions li { display: flex; gap: 8px; font-size: .875rem; }
-.deposit-open { color: var(--kollio-heading, #493B57); font-weight: 570; }
+.deposit-open { color: var(--kollio-heading); font-weight: 570; }
 </style>
