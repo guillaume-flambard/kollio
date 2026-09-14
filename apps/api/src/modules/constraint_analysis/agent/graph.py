@@ -5,32 +5,35 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.types import interrupt
 from opentelemetry import trace
 
+from src.modules.constraint_analysis.agent.pipeline import run_constraint_pipeline
 from src.modules.constraint_analysis.agent.state import ConstraintAnalysisState
-from src.modules.constraint_analysis.domain.models import (
-    AnalysisEvidence,
-    ConstraintAnalysisResult,
-)
-from src.modules.constraint_analysis.service.ports import ConstraintAnalysisGateway
+from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
+from src.modules.constraint_analysis.service.ports import ConstraintReasoningGateway
 
 _tracer = trace.get_tracer("kollio.constraint_analysis")
 
 
 def build_constraint_analysis_graph(
-    gateway: ConstraintAnalysisGateway,
+    gateway: ConstraintReasoningGateway,
     checkpointer: BaseCheckpointSaver[Any],
 ) -> Any:
     async def analyze(state: ConstraintAnalysisState) -> dict[str, object]:
         with _tracer.start_as_current_span("constraint_analysis.analyze") as span:
             span.set_attribute("kollio.workflow.id", state["workflow_id"])
             span.set_attribute("kollio.locale", state["locale"])
-            result = await gateway.analyze(
+            # The adversarial steps run here; the member still gets one result.
+            run = await run_constraint_pipeline(
+                gateway,
                 title=state["title"],
                 pitch=state["pitch"],
                 locale=state["locale"],
-                evidence=[AnalysisEvidence.model_validate(item) for item in state["evidence"]],
+                evidence=[dict(item) for item in state["evidence"]],
                 context=state.get("context") or {},
             )
-            return {"result": result.model_dump(mode="json")}
+            return {
+                "result": run.result.model_dump(mode="json"),
+                "steps": [step.model_dump(mode="json") for step in run.steps],
+            }
 
     async def review(state: ConstraintAnalysisState) -> dict[str, object]:
         with _tracer.start_as_current_span("constraint_analysis.review") as span:

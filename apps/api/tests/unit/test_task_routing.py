@@ -1,6 +1,7 @@
 import json as jsonlib
 
 from src.modules.constraint_analysis.adapters.litellm import LiteLLMConstraintAnalysisGateway
+from src.modules.constraint_analysis.agent.pipeline import run_constraint_pipeline
 from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
 from src.platform.config import Settings
 from src.platform.llm import Gateway
@@ -53,21 +54,22 @@ class _FakeResponse:
         return {"choices": [{"message": {"content": self._content}}]}
 
 
-class _CapturingClient:
-    payload: dict[str, object] = {}
+class _QueueClient:
+    payloads: list[dict] = []
+    queue: list[str] = []
 
     def __init__(self, *args: object, **kwargs: object):
         return None
 
-    async def __aenter__(self) -> _CapturingClient:
+    async def __aenter__(self) -> _QueueClient:
         return self
 
     async def __aexit__(self, *exc: object) -> bool:
         return False
 
     async def post(self, url: str, json: dict | None = None, headers: dict | None = None):
-        _CapturingClient.payload = json or {}
-        return _FakeResponse(jsonlib.dumps(_abstention()))
+        self.payloads.append(json or {})
+        return _FakeResponse(self.queue.pop(0))
 
 
 def test_visible_classes_resolve_to_the_premium_model() -> None:
@@ -93,13 +95,30 @@ def test_gateways_declare_a_visible_task_class() -> None:
     assert intelligence_tier(Gateway.task_class) == "visible"
 
 
-async def test_analysis_requests_the_visible_model(monkeypatch) -> None:
+async def test_pipeline_routes_analyst_cheap_and_the_rest_premium(monkeypatch) -> None:
     monkeypatch.setattr(
-        "src.modules.constraint_analysis.adapters.litellm.httpx.AsyncClient", _CapturingClient
+        "src.modules.constraint_analysis.adapters.litellm.httpx.AsyncClient", _QueueClient
     )
-    settings = _settings(llm_model_visible="premium-model")
-    result = await LiteLLMConstraintAnalysisGateway(settings).analyze(
-        title="Offline field app", pitch="Works without signal", locale="fr", evidence=[]
+    _QueueClient.payloads = []
+    _QueueClient.queue = [
+        jsonlib.dumps({"arguments": ["Pilot demand is real"]}),
+        jsonlib.dumps({"risks": ["Cannot staff onboarding"], "missing_evidence": []}),
+        jsonlib.dumps({"facts": [], "speculation": ["Assumes willingness to pay"]}),
+        jsonlib.dumps({"supports": [], "conflicts": []}),
+        jsonlib.dumps(_abstention()),
+    ]
+    settings = _settings(llm_model="cheap-model", llm_model_visible="premium-model")
+    gateway = LiteLLMConstraintAnalysisGateway(settings)
+    run = await run_constraint_pipeline(
+        gateway,
+        title="Offline field app",
+        pitch="Works without signal",
+        locale="fr",
+        evidence=[],
+        context={},
     )
-    assert isinstance(result, ConstraintAnalysisResult)
-    assert _CapturingClient.payload["model"] == "premium-model"
+    assert isinstance(run.result, ConstraintAnalysisResult)
+    models = [payload["model"] for payload in _QueueClient.payloads]
+    assert models[0] == "cheap-model"  # analyst: commodity
+    assert models[1:] == ["premium-model"] * 4  # challenger, critic, company fit, synthesizer
+    assert len(_QueueClient.queue) == 0

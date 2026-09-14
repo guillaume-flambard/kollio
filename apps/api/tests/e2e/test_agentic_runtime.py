@@ -43,7 +43,26 @@ class FakeOpenAIHandler(BaseHTTPRequestHandler):
         self.authorizations.append(self.headers["Authorization"])
         system_prompt = payload["messages"][0]["content"]
         locale = "fr" if "locale fr" in system_prompt else "en"
-        result = {
+        schema_name = payload["response_format"]["json_schema"]["name"]
+        content = json.dumps(self._response_for(schema_name, locale))
+        response = json.dumps({"choices": [{"message": {"content": content}}]}).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(response)))
+        self.end_headers()
+        self.wfile.write(response)
+
+    @staticmethod
+    def _response_for(schema_name: str, locale: str) -> dict[str, object]:
+        if schema_name == "AnalystReport":
+            return {"arguments": ["Early pull from pilot conversations"]}
+        if schema_name == "ChallengerReport":
+            return {"risks": ["A two-person team cannot staff onboarding"], "missing_evidence": []}
+        if schema_name == "EvidenceReport":
+            return {"facts": [], "speculation": ["Assumes willingness to pay"]}
+        if schema_name == "CompanyFitReport":
+            return {"supports": [], "conflicts": []}
+        return {
             "overall_score": None,
             "verdict": "unknown",
             "summary": "More evidence is required.",
@@ -61,13 +80,6 @@ class FakeOpenAIHandler(BaseHTTPRequestHandler):
             ],
             "locale": locale,
         }
-        content = "{}" if len(self.requests) == 1 else json.dumps(result)
-        response = json.dumps({"choices": [{"message": {"content": content}}]}).encode()
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(response)))
-        self.end_headers()
-        self.wfile.write(response)
 
     def log_message(self, format: str, *args: object) -> None:
         return
@@ -203,12 +215,23 @@ async def test_api_worker_graph_and_checkpoint_complete_one_reviewed_analysis() 
                 completed = await wait_for_status(client, path, "completed")
                 assert completed["draft_result"]["verdict"] == "unknown"
 
-        assert len(FakeOpenAIHandler.requests) == 2
-        request = FakeOpenAIHandler.requests[-1]
-        assert request["model"] == "kollio-default"
-        assert request["response_format"]["type"] == "json_schema"
-        assert FakeOpenAIHandler.paths == ["/v1/chat/completions"] * 2
-        assert FakeOpenAIHandler.authorizations == ["Bearer provider-free-test-key"] * 2
+        # The pipeline is five calls: analyst, challenger, evidence critic,
+        # company fit, then the synthesizer that writes the one result.
+        assert len(FakeOpenAIHandler.requests) == 5
+        requested_schemas = [
+            request["response_format"]["json_schema"]["name"]
+            for request in FakeOpenAIHandler.requests
+        ]
+        assert requested_schemas == [
+            "AnalystReport",
+            "ChallengerReport",
+            "EvidenceReport",
+            "CompanyFitReport",
+            "ConstraintAnalysisResult",
+        ]
+        assert all(request["model"] == "kollio-default" for request in FakeOpenAIHandler.requests)
+        assert FakeOpenAIHandler.paths == ["/v1/chat/completions"] * 5
+        assert FakeOpenAIHandler.authorizations == ["Bearer provider-free-test-key"] * 5
     finally:
         worker.terminate()
         try:

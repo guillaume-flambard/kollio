@@ -18,7 +18,13 @@ from src.modules.constraint_analysis.adapters.postgres import (
 from src.modules.constraint_analysis.agent.graph import build_constraint_analysis_graph
 from src.modules.constraint_analysis.api.routes import get_analysis_queue
 from src.modules.constraint_analysis.domain.lifecycle import AnalysisStatus
-from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
+from src.modules.constraint_analysis.domain.models import (
+    AnalystReport,
+    ChallengerReport,
+    CompanyFitReport,
+    ConstraintAnalysisResult,
+    EvidenceReport,
+)
 from src.modules.ideas.adapters.postgres import Idea, User, Workspace, WorkspaceMembership
 from src.platform.auth import Identity, current_identity
 from src.platform.config import Settings
@@ -228,7 +234,24 @@ async def test_constraint_graph_resumes_without_repeating_model_call(analysis_da
     )
 
     class RecordedGateway:
-        async def analyze(self, *, title, pitch, locale, evidence, context=None):
+        model_commodity = "cheap-model"
+        model_visible = "premium-model"
+
+        async def analyst(self, *, brief, locale):
+            return AnalystReport(arguments=["Early pull from pilot conversations"])
+
+        async def challenger(self, *, brief, locale):
+            return ChallengerReport(risks=["A two-person team cannot staff field onboarding"])
+
+        async def evidence_critic(self, *, brief, locale):
+            return EvidenceReport(speculation=["Assumes willingness to pay without a quote"])
+
+        async def company_fit(self, *, brief, locale):
+            return CompanyFitReport()
+
+        async def synthesize(
+            self, *, brief, analyst, challenger, evidence_critic, company_fit, locale
+        ):
             return ConstraintAnalysisResult.model_validate(
                 {
                     "overall_score": None,
@@ -268,10 +291,24 @@ async def test_constraint_graph_resumes_without_repeating_model_call(analysis_da
             config,
         )
         assert paused["__interrupt__"]
+        assert [step["name"] for step in paused["steps"]] == [
+            "analyst",
+            "challenger",
+            "evidence_critic",
+            "company_fit",
+            "synthesizer",
+        ]
+        assert paused["steps"][0]["tier"] == "commodity"
+        assert paused["steps"][1]["tier"] == "visible"
 
     class NoSecondCall:
-        async def analyze(self, **kwargs):
+        model_commodity = "cheap-model"
+        model_visible = "premium-model"
+
+        async def _forbidden(self, **kwargs):
             raise AssertionError("Checkpoint resume must not call the model again")
+
+        analyst = challenger = evidence_critic = company_fit = synthesize = _forbidden
 
     async with AsyncPostgresSaver.from_conn_string(checkpoint_url) as saver:
         graph = build_constraint_analysis_graph(NoSecondCall(), saver)
