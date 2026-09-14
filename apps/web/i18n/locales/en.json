@@ -269,6 +269,65 @@
       },
       "typeError": "Changing the type failed."
     },
+    "experiments": {
+      "title": "Experiments",
+      "count": "{count} so far",
+      "loading": "Loading experiments…",
+      "detailLoading": "Loading the experiment…",
+      "loadError": "Experiments could not be loaded.",
+      "retry": "Try again",
+      "empty": "No experiment yet. Turn this initiative into a test: say what you expect and how you will know.",
+      "newAction": "New experiment",
+      "ruleError": "This action is not possible in the current state.",
+      "actionError": "The action failed. Try again.",
+      "status": {
+        "proposed": "Proposed",
+        "running": "Running",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "create": {
+        "title": "New experiment",
+        "name": "Title",
+        "hypothesis": "Hypothesis",
+        "metric": "Success metric",
+        "baseline": "Baseline (optional)",
+        "target": "Target (optional)",
+        "submit": "Create the experiment",
+        "submitting": "Creating…",
+        "cancel": "Cancel"
+      },
+      "detail": {
+        "hypothesis": "Hypothesis",
+        "metric": "Success metric",
+        "baseline": "Baseline",
+        "target": "Target"
+      },
+      "actions": {
+        "start": "Launch",
+        "complete": "Complete",
+        "cancel": "Cancel"
+      },
+      "outcomes": {
+        "title": "Results",
+        "empty": "No result recorded yet.",
+        "metric": "Metric",
+        "value": "Value",
+        "unit": "Unit (optional)",
+        "observedAt": "Observed on",
+        "comment": "Comment (optional)",
+        "qualitative": "Qualitative note (optional)",
+        "add": "Add a result",
+        "submitting": "Saving…"
+      },
+      "learning": {
+        "title": "Learning",
+        "draft": "Draft",
+        "confirmed": "Confirmed",
+        "confirm": "Confirm the learning",
+        "confirming": "Confirming…"
+      }
+    },
     "deposit": {
       "metaTitle": "Deposit an initiative | Kollio",
       "title": "Deposit an initiative",
