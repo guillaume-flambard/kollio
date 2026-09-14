@@ -1,126 +1,131 @@
 import pytest
 
 from src.modules.ideas.domain.team import (
-    Role,
-    decide_acceptance,
+    BUSINESS_FUNCTIONS,
+    DEFAULT_PARTICIPATION,
+    GRANTABLE_PARTICIPATIONS,
+    LEGACY_ROLE_TO_FUNCTION,
+    PARTICIPATION_ROLES,
+    TeamAuthorizationError,
+    TeamRuleError,
+    decide_addition,
     decide_application,
     decide_departure,
-    decide_rejection,
+    validate_function,
+    validate_grantable_participation,
 )
 
 
-def test_unknown_role_is_rejected():
-    with pytest.raises(ValueError, match="role"):
-        decide_application(
-            actor_is_owner=False,
-            actor_is_member=True,
-            role="wizard",
-            note="Magic.",
-            already_pending=False,
-        )
+def test_the_two_axes_are_closed_lists():
+    assert PARTICIPATION_ROLES == frozenset({"owner", "decision_maker", "contributor", "observer"})
+    assert len(BUSINESS_FUNCTIONS) == 12
+    assert GRANTABLE_PARTICIPATIONS == PARTICIPATION_ROLES - {"owner"}
+    assert DEFAULT_PARTICIPATION == "contributor"
 
 
-def test_owner_role_is_not_selectable():
-    with pytest.raises(ValueError, match="role"):
-        decide_application(
-            actor_is_owner=False,
-            actor_is_member=True,
-            role="owner",
-            note="I lead.",
-            already_pending=False,
-        )
+def test_the_legacy_craft_roles_map_onto_the_function_axis():
+    assert set(LEGACY_ROLE_TO_FUNCTION) == {
+        "designer",
+        "dev",
+        "commercial",
+        "growth",
+        "data",
+        "product",
+        "owner",
+    }
+    assert set(LEGACY_ROLE_TO_FUNCTION.values()) <= BUSINESS_FUNCTIONS
 
 
-def test_member_may_apply():
+def test_an_unknown_function_is_refused():
+    with pytest.raises(TeamRuleError):
+        validate_function("dev")
+
+
+def test_the_owner_participation_cannot_be_granted():
+    with pytest.raises(TeamRuleError):
+        validate_grantable_participation("owner")
+
+
+def test_a_member_applies_with_a_function_and_a_note():
     decision = decide_application(
         actor_is_owner=False,
         actor_is_member=True,
-        role="dev",
-        note="Ten years of frontend.",
+        function="engineering",
+        note=" Ten years of frontend. ",
         already_pending=False,
     )
-    assert decision.role == Role("dev")
+    assert decision.function == "engineering"
+    assert decision.note == " Ten years of frontend. "
 
 
-def test_owner_cannot_apply():
-    with pytest.raises(LookupError):
+def test_the_owner_cannot_apply_to_their_own_initiative():
+    with pytest.raises(TeamAuthorizationError):
         decide_application(
             actor_is_owner=True,
             actor_is_member=True,
-            role="dev",
+            function="engineering",
             note="I made it.",
             already_pending=False,
         )
 
 
-def test_outsider_may_not_apply():
-    with pytest.raises(LookupError):
+def test_an_outsider_cannot_apply():
+    with pytest.raises(TeamAuthorizationError):
         decide_application(
             actor_is_owner=False,
             actor_is_member=False,
-            role="dev",
+            function="engineering",
             note="Sneak in.",
             already_pending=False,
         )
 
 
-def test_empty_note_is_rejected():
-    with pytest.raises(ValueError, match="note"):
+def test_a_second_pending_application_is_refused():
+    with pytest.raises(TeamRuleError):
         decide_application(
             actor_is_owner=False,
             actor_is_member=True,
-            role="dev",
-            note="   ",
-            already_pending=False,
-        )
-
-
-def test_second_pending_application_is_rejected():
-    with pytest.raises(ValueError, match="pending"):
-        decide_application(
-            actor_is_owner=False,
-            actor_is_member=True,
-            role="dev",
-            note="Ten years of frontend.",
+            function="engineering",
+            note="Again.",
             already_pending=True,
         )
 
 
-def test_only_owner_accepts():
-    with pytest.raises(LookupError):
-        decide_acceptance(is_owner=False, current_status="pending")
+def test_the_owner_adds_a_workspace_member_with_both_axes():
+    decision = decide_addition(
+        actor_is_owner=True,
+        target_is_workspace_member=True,
+        participation="decision_maker",
+        function="finance",
+    )
+    assert decision.participation == "decision_maker"
+    assert decision.function == "finance"
 
 
-def test_only_pending_application_is_accepted():
-    with pytest.raises(ValueError, match="pending"):
-        decide_acceptance(is_owner=True, current_status="rejected")
+def test_only_the_owner_adds_a_participant():
+    with pytest.raises(TeamAuthorizationError):
+        decide_addition(
+            actor_is_owner=False,
+            target_is_workspace_member=True,
+            participation="contributor",
+            function="finance",
+        )
 
 
-def test_acceptance_records_role():
-    decision = decide_acceptance(is_owner=True, current_status="pending")
-    assert decision.status == "accepted"
+def test_only_workspace_members_can_be_added():
+    with pytest.raises(TeamRuleError):
+        decide_addition(
+            actor_is_owner=True,
+            target_is_workspace_member=False,
+            participation="contributor",
+            function="finance",
+        )
 
 
-def test_only_owner_rejects():
-    with pytest.raises(LookupError):
-        decide_rejection(is_owner=False, current_status="pending", rationale="Not now.")
+def test_a_departure_is_recorded():
+    assert decide_departure(actor_is_owner=False, actor_is_member=True).record is True
 
 
-def test_rejection_requires_rationale():
-    with pytest.raises(ValueError, match="rationale"):
-        decide_rejection(is_owner=True, current_status="pending", rationale="  ")
-
-
-def test_rejection_records_status():
-    decision = decide_rejection(is_owner=True, current_status="pending", rationale="Not now.")
-    assert decision.status == "rejected"
-
-
-def test_departure_is_always_recorded():
-    decision = decide_departure(actor_is_owner=False, actor_is_member=True)
-    assert decision.record is True
-
-
-def test_only_owner_removes():
-    with pytest.raises(LookupError):
+def test_the_owner_cannot_be_removed_from_their_own_initiative():
+    with pytest.raises(TeamAuthorizationError):
         decide_departure(actor_is_owner=True, actor_is_member=False)

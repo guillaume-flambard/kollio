@@ -10,14 +10,14 @@ function ideaFor(viewer: 'owner' | 'member'): IdeaResponse {
     stage: 'seed', lang: 'fr', created_at: '2026-09-01T10:00:00Z',
     owner_id: 'owner-one', workspace_id: 'workspace-one', visibility: 'workspace',
     collaborators: [
-      { id: 'owner-one', display_name: 'Propriétaire', role: 'owner', roles: [], bio: null, avatar_key: 'lilac' },
+      { id: 'owner-one', display_name: 'Propriétaire', participation: 'owner', business_function: 'direction', roles: [], bio: null, avatar_key: 'lilac' },
     ],
-    sought_roles: ['dev'],
+    sought_roles: ['engineering'],
     join_requests: [],
   }
   if (viewer === 'member') {
     base.join_requests = [
-      { id: 'join-2', idea_id: 'idea-one', requester_id: 'member-two', role: 'growth',
+      { id: 'join-2', idea_id: 'idea-one', requester_id: 'member-two', business_function: 'marketing',
         note: 'Ten years of growth.', status: 'pending', rationale: null,
         created_at: '2026-09-12T09:00:00Z' },
     ] as never
@@ -26,7 +26,7 @@ function ideaFor(viewer: 'owner' | 'member'): IdeaResponse {
 }
 
 const ownerRequests: JoinRequestResponse[] = [{
-  id: 'join-1', idea_id: 'idea-one', requester_id: 'member-two', role: 'designer',
+  id: 'join-1', idea_id: 'idea-one', requester_id: 'member-two', business_function: 'product',
   note: 'Je dessine les écrans.', status: 'pending', rationale: null,
   created_at: '2026-09-12T08:00:00Z',
 }]

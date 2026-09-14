@@ -113,7 +113,7 @@ async def _seed(session, count=3):
                 stage="seed",
                 lang="en",
                 visibility="workspace",
-                sought_roles=["dev"] if index % 2 == 0 else ["growth"],
+                sought_roles=["engineering"] if index % 2 == 0 else ["marketing"],
             )
         )
         latest.append(
@@ -206,10 +206,12 @@ async def test_list_filters_by_sought_role_and_realism(explorer_database):
             await _store_analysis(session, owner_id, ideas[2].id, latest[-1].id, 40)
             app = create_app(Settings(_env_file=None, database_url=url))
             async with _client(session, app, url, owner_id) as client:
-                by_role = await client.get(f"/workspaces/{workspace_id}/ideas?sought_role=dev")
+                by_role = await client.get(
+                    f"/workspaces/{workspace_id}/ideas?sought_role=engineering"
+                )
                 assert by_role.status_code == 200
                 assert {tuple(item["sought_roles"]) for item in by_role.json()["items"]} == {
-                    ("dev",)
+                    ("engineering",)
                 }
 
                 grounded = await client.get(f"/workspaces/{workspace_id}/ideas?realism_min=60")

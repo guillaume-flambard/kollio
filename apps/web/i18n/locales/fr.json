@@ -353,6 +353,26 @@
       "partnership": "Partenariat",
       "internal_improvement": "Amélioration interne"
     },
-    "initiativeTypeLabel": "Type d’initiative"
+    "initiativeTypeLabel": "Type d’initiative",
+    "function": {
+      "marketing": "Marketing",
+      "sales": "Ventes",
+      "finance": "Finance",
+      "product": "Produit",
+      "engineering": "Ingénierie",
+      "customer_success": "Succès client",
+      "operations": "Opérations",
+      "legal": "Juridique",
+      "hr": "RH",
+      "data": "Data",
+      "direction": "Direction",
+      "other": "Autre"
+    },
+    "participation": {
+      "owner": "Porteur",
+      "decision_maker": "Décideur",
+      "contributor": "Contributeur",
+      "observer": "Observateur"
+    }
   }
 }

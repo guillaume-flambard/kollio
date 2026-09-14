@@ -82,12 +82,16 @@ _Avoid_: Criterion, metric, custom dimensions
 One user's place on an idea's team, with a real-world role. An accepted proposal can create one.
 _Avoid_: Assignment, seat
 
-**TeamRole**:
-What a member actually does: `designer`, `dev`, `commercial`, `growth`, and other everyday roles. The owner accepts members into the loop.
-_Avoid_: Title, job, skill (as a job label)
+**Participation**:
+How a person stands in an initiative's loop: `owner`, `decision_maker`, `contributor`, `observer`. The owner accepts members into the loop; `owner` is implicit and never granted.
+_Avoid_: Seat, seniority
 
-**SoughtRole**:
-A team role the idea is still looking for, shown in the explorer.
+**BusinessFunction**:
+What a person brings to an initiative, from a closed list: `marketing`, `sales`, `finance`, `product`, `engineering`, `customer_success`, `operations`, `legal`, `hr`, `data`, `direction`, `other`.
+_Avoid_: Craft role, job title, skill (as a job label)
+
+**SoughtFunction**:
+A business function an initiative is still looking for, shown in the explorer.
 _Avoid_: Open position, vacancy, hiring
 
 **Contribution**:

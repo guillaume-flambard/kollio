@@ -28,7 +28,7 @@ DEMO_PROFILES: tuple[dict[str, Any], ...] = (
         "roles": ["product", "strategy"],
         "bio": "Turns early signals into focused product experiments.",
         "avatar_key": "lilac",
-        "idea_role": "product",
+        "business_function": "product",
     },
     {
         "handle": "sofia.p",
@@ -36,7 +36,7 @@ DEMO_PROFILES: tuple[dict[str, Any], ...] = (
         "roles": ["design", "research"],
         "bio": "Designs clear product flows from messy user needs.",
         "avatar_key": "rose",
-        "idea_role": "design",
+        "business_function": "product",
     },
     {
         "handle": "malik.k",
@@ -44,7 +44,7 @@ DEMO_PROFILES: tuple[dict[str, Any], ...] = (
         "roles": ["engineering", "platform"],
         "bio": "Builds reliable product foundations and developer tools.",
         "avatar_key": "ochre",
-        "idea_role": "engineering",
+        "business_function": "engineering",
     },
     {
         "handle": "noor.r",
@@ -52,7 +52,7 @@ DEMO_PROFILES: tuple[dict[str, Any], ...] = (
         "roles": ["ai", "data"],
         "bio": "Tests where applied AI creates measurable product value.",
         "avatar_key": "citron",
-        "idea_role": "ai_data",
+        "business_function": "data",
     },
     {
         "handle": "elena.r",
@@ -60,7 +60,7 @@ DEMO_PROFILES: tuple[dict[str, Any], ...] = (
         "roles": ["growth", "sales"],
         "bio": "Finds practical routes from a useful idea to its first customers.",
         "avatar_key": "coral",
-        "idea_role": "growth",
+        "business_function": "marketing",
     },
     {
         "handle": "jules.m",
@@ -68,7 +68,7 @@ DEMO_PROFILES: tuple[dict[str, Any], ...] = (
         "roles": ["operations", "finance"],
         "bio": "Challenges assumptions with operational and financial evidence.",
         "avatar_key": "sage",
-        "idea_role": "operations",
+        "business_function": "operations",
     },
 )
 
@@ -134,12 +134,17 @@ async def seed_demo_data(session: AsyncSession) -> dict[str, int]:
                 .values(
                     idea_id=idea.id,
                     user_id=profile_ids[profile_index],
-                    role=profile["idea_role"],
+                    participation="contributor",
+                    business_function=profile["business_function"],
                     joined_at=joined_at,
                 )
                 .on_conflict_do_update(
                     index_elements=[IdeaMembership.idea_id, IdeaMembership.user_id],
-                    set_={"role": profile["idea_role"], "joined_at": joined_at},
+                    set_={
+                        "participation": "contributor",
+                        "business_function": profile["business_function"],
+                        "joined_at": joined_at,
+                    },
                 )
             )
             membership_count += 1

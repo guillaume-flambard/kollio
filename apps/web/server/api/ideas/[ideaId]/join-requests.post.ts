@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event)
-  if (typeof body?.role !== 'string' || body.role === '' || typeof body?.note !== 'string' || body.note.trim() === '') {
+  if (typeof body?.function !== 'string' || body.function === '' || typeof body?.note !== 'string' || body.note.trim() === '') {
     throw createError({ statusCode: 422, statusMessage: 'Role and note are required' })
   }
 
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   const result = await requestIdeaMembership({
     client,
     path: { idea_id: ideaId as never },
-    body: { role: body.role, note: body.note },
+    body: { function: body.function, note: body.note },
   })
   if (result.error) {
     forwardApiError(result.response?.status ?? 502, result.error)

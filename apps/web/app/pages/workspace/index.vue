@@ -60,7 +60,7 @@ const { data: ideaPage, status, error, refresh } = await useAsyncData(
 const selectedIdea = computed(() => ideaPage.value?.items.find(idea => idea.id === selectedIdeaId.value) ?? ideaPage.value?.items[0])
 const totalPages = computed(() => Math.max(1, Math.ceil((ideaPage.value?.total ?? 0) / pageSize)))
 const relativeFormatter = computed(() => new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }))
-const teamRoles = ['designer', 'dev', 'commercial', 'growth', 'data', 'product'] as const
+const teamRoles = ['marketing', 'sales', 'finance', 'product', 'engineering', 'customer_success', 'operations', 'legal', 'hr', 'data', 'direction', 'other'] as const
 
 watch(() => route.query.q, value => {
   searchInput.value = typeof value === 'string' ? value : ''
@@ -151,7 +151,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           <hr><p>{{ t('ideas.detail.team.soughtTitle') }}</p>
           <select class="rail-select" :value="activeSoughtRole ?? ''" :aria-label="t('ideas.detail.team.soughtTitle')" @change="replaceFilters({ role: ($event.target as HTMLSelectElement).value || undefined })">
             <option value="">{{ t('ideas.explorer.allRoles') }}</option>
-            <option v-for="role in teamRoles" :key="role" :value="role">{{ t(`ideas.role.${role}`) }}</option>
+            <option v-for="role in teamRoles" :key="role" :value="role">{{ t(`ideas.function.${role}`) }}</option>
           </select>
           <hr><p>{{ t('ideas.explorer.realism.title') }}</p>
           <button type="button" class="domain-filter" :aria-pressed="activeRealism != null" @click="replaceFilters({ realism_min: activeRealism != null ? undefined : '60' })">
@@ -180,7 +180,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
               :avatar-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
               :expertise-label="idea.collaborators?.[0]?.roles[0] ? t(`ideas.role.${idea.collaborators[0].roles[0]}`) : undefined"
               :realism-label="idea.realism_score != null ? t('ideas.explorer.prism', { score: idea.realism_score }) : undefined"
-              :roles-label="idea.sought_roles?.length ? idea.sought_roles.map(role => t(`ideas.role.${role}`)).join(' · ') : undefined"
+              :roles-label="idea.sought_roles?.length ? idea.sought_roles.map(role => t(`ideas.function.${role}`)).join(' · ') : undefined"
               @select="selectIdea(idea)"
             />
           </div>

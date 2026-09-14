@@ -54,6 +54,13 @@ class WorkspaceMembership(Base):
     role: Mapped[str] = mapped_column(default="member")
 
 
+BUSINESS_FUNCTIONS_SQL = (
+    "'marketing', 'sales', 'finance', 'product', 'engineering', 'customer_success', "
+    "'operations', 'legal', 'hr', 'data', 'direction', 'other'"
+)
+PARTICIPATION_ROLES_SQL = "'owner', 'decision_maker', 'contributor', 'observer'"
+
+
 class Idea(Base):
     __tablename__ = "ideas"
     __table_args__ = (
@@ -92,13 +99,21 @@ class Idea(Base):
 
 class IdeaMembership(Base):
     __tablename__ = "idea_memberships"
+    __table_args__ = (
+        CheckConstraint(f"participation IN ({PARTICIPATION_ROLES_SQL})"),
+        CheckConstraint(f"business_function IN ({BUSINESS_FUNCTIONS_SQL})"),
+    )
+
     idea_id: Mapped[UUID] = mapped_column(
         ForeignKey("ideas.id", ondelete="CASCADE"), primary_key=True
     )
     user_id: Mapped[UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
     )
-    role: Mapped[str]
+    participation: Mapped[str] = mapped_column(
+        String(20), default="contributor", server_default=text("'contributor'")
+    )
+    business_function: Mapped[str] = mapped_column(String(32))
     joined_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
@@ -106,14 +121,14 @@ class JoinRequest(Base):
     __tablename__ = "idea_join_requests"
     __table_args__ = (
         CheckConstraint("status IN ('pending', 'accepted', 'rejected')"),
-        CheckConstraint("role <> 'owner'"),
+        CheckConstraint(f"business_function IN ({BUSINESS_FUNCTIONS_SQL})"),
         UniqueConstraint("idea_id", "requester_id", "status"),
     )
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     idea_id: Mapped[UUID] = mapped_column(ForeignKey("ideas.id", ondelete="CASCADE"), index=True)
     requester_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    role: Mapped[str] = mapped_column(String(20))
+    business_function: Mapped[str] = mapped_column(String(32))
     note: Mapped[str] = mapped_column(String(500))
     status: Mapped[str] = mapped_column(String(16), default="pending")
     rationale: Mapped[str | None] = mapped_column(String(500))
@@ -189,8 +204,15 @@ class PostgresIdeas:
         await self.session.flush()
         return departure
 
-    async def add_idea_membership(self, idea_id: UUID, user_id: UUID, role: str) -> IdeaMembership:
-        membership = IdeaMembership(idea_id=idea_id, user_id=user_id, role=role)
+    async def add_idea_membership(
+        self, idea_id: UUID, user_id: UUID, participation: str, business_function: str
+    ) -> IdeaMembership:
+        membership = IdeaMembership(
+            idea_id=idea_id,
+            user_id=user_id,
+            participation=participation,
+            business_function=business_function,
+        )
         self.session.add(membership)
         await self.session.flush()
         return membership
@@ -201,32 +223,52 @@ class PostgresIdeas:
             await self.session.delete(membership)
             await self.session.flush()
 
+    async def is_workspace_member(self, workspace_id: UUID, user_id: UUID) -> bool:
+        query = select(WorkspaceMembership.workspace_id).where(
+            WorkspaceMembership.workspace_id == workspace_id,
+            WorkspaceMembership.user_id == user_id,
+        )
+        return await self.session.scalar(query) is not None
+
+    async def user(self, user_id: UUID) -> User | None:
+        return await self.session.get(User, user_id)
+
     def add_idea(self, idea: Idea) -> None:
         self.session.add(idea)
 
-    async def collaborators(self, idea_id: UUID) -> list[tuple[User, str]]:
+    async def collaborators(self, idea_id: UUID) -> list[tuple[User, str, str]]:
         query = (
-            select(User, IdeaMembership.role)
+            select(User, IdeaMembership.participation, IdeaMembership.business_function)
             .join(IdeaMembership, IdeaMembership.user_id == User.id)
             .where(IdeaMembership.idea_id == idea_id)
             .order_by(IdeaMembership.joined_at, User.display_name)
         )
-        return [(user, role) for user, role in (await self.session.execute(query)).all()]
+        return [
+            (user, participation, business_function)
+            for user, participation, business_function in (await self.session.execute(query)).all()
+        ]
 
     async def collaborators_for_ideas(
         self, idea_ids: list[UUID]
-    ) -> dict[UUID, list[tuple[User, str]]]:
+    ) -> dict[UUID, list[tuple[User, str, str]]]:
         if not idea_ids:
             return {}
         query = (
-            select(IdeaMembership.idea_id, User, IdeaMembership.role)
+            select(
+                IdeaMembership.idea_id,
+                User,
+                IdeaMembership.participation,
+                IdeaMembership.business_function,
+            )
             .join(User, User.id == IdeaMembership.user_id)
             .where(IdeaMembership.idea_id.in_(idea_ids))
             .order_by(IdeaMembership.idea_id, IdeaMembership.joined_at, User.display_name)
         )
-        collaborators: dict[UUID, list[tuple[User, str]]] = {}
-        for idea_id, user, role in (await self.session.execute(query)).all():
-            collaborators.setdefault(idea_id, []).append((user, role))
+        collaborators: dict[UUID, list[tuple[User, str, str]]] = {}
+        for idea_id, user, participation, business_function in (
+            await self.session.execute(query)
+        ).all():
+            collaborators.setdefault(idea_id, []).append((user, participation, business_function))
         return collaborators
 
     async def list_for_workspace(

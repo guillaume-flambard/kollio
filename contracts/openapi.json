@@ -237,6 +237,23 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/AcceptJoinBody"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -312,6 +329,66 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JoinRequestResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ideas/{idea_id}/members": {
+      "post": {
+        "tags": [
+          "ideas"
+        ],
+        "summary": "Add Idea Participant",
+        "operationId": "add_idea_participant",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddParticipantBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Add Idea Participant"
                 }
               }
             }
@@ -1603,6 +1680,52 @@
   },
   "components": {
     "schemas": {
+      "AcceptJoinBody": {
+        "properties": {
+          "participation": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Participation"
+          }
+        },
+        "type": "object",
+        "title": "AcceptJoinBody"
+      },
+      "AddParticipantBody": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "participation": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Participation"
+          },
+          "function": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Function"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "participation",
+          "function"
+        ],
+        "title": "AddParticipantBody"
+      },
       "AnalysisEvidence": {
         "properties": {
           "id": {
@@ -1839,11 +1962,11 @@
       },
       "ApplyJoinBody": {
         "properties": {
-          "role": {
+          "function": {
             "type": "string",
-            "maxLength": 20,
+            "maxLength": 32,
             "minLength": 1,
-            "title": "Role"
+            "title": "Function"
           },
           "note": {
             "type": "string",
@@ -1854,7 +1977,7 @@
         },
         "type": "object",
         "required": [
-          "role",
+          "function",
           "note"
         ],
         "title": "ApplyJoinBody"
@@ -1881,9 +2004,13 @@
             "type": "string",
             "title": "Display Name"
           },
-          "role": {
+          "participation": {
             "type": "string",
-            "title": "Role"
+            "title": "Participation"
+          },
+          "business_function": {
+            "type": "string",
+            "title": "Business Function"
           },
           "roles": {
             "items": {
@@ -1919,7 +2046,8 @@
         "required": [
           "id",
           "display_name",
-          "role",
+          "participation",
+          "business_function",
           "roles"
         ],
         "title": "CollaboratorResponse"
@@ -2963,9 +3091,9 @@
             "format": "uuid",
             "title": "Requester Id"
           },
-          "role": {
+          "business_function": {
             "type": "string",
-            "title": "Role"
+            "title": "Business Function"
           },
           "note": {
             "type": "string",
@@ -3002,7 +3130,7 @@
           "id",
           "idea_id",
           "requester_id",
-          "role",
+          "business_function",
           "note",
           "status",
           "created_at"

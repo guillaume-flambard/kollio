@@ -353,6 +353,26 @@
       "partnership": "Partnership",
       "internal_improvement": "Internal improvement"
     },
-    "initiativeTypeLabel": "Initiative type"
+    "initiativeTypeLabel": "Initiative type",
+    "function": {
+      "marketing": "Marketing",
+      "sales": "Sales",
+      "finance": "Finance",
+      "product": "Product",
+      "engineering": "Engineering",
+      "customer_success": "Customer success",
+      "operations": "Operations",
+      "legal": "Legal",
+      "hr": "HR",
+      "data": "Data",
+      "direction": "Leadership",
+      "other": "Other"
+    },
+    "participation": {
+      "owner": "Owner",
+      "decision_maker": "Decision maker",
+      "contributor": "Contributor",
+      "observer": "Observer"
+    }
   }
 }

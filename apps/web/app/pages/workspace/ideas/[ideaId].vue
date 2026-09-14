@@ -30,12 +30,12 @@ const dateFormatter = computed(() =>
   new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
 )
 
-const teamRoles = ['designer', 'dev', 'commercial', 'growth', 'data', 'product'] as const
+const teamFunctions = ['marketing', 'sales', 'finance', 'product', 'engineering', 'customer_success', 'operations', 'legal', 'hr', 'data', 'direction', 'other'] as const
 const joinRequests = computed(() => idea.value?.join_requests ?? [])
 const soughtRoles = computed(() => idea.value?.sought_roles ?? [])
 const sessionSubject = computed(() => sessionData?.value?.subject)
 const isOwner = computed(() => !!idea.value && !!sessionSubject.value && sessionSubject.value === idea.value.owner_id)
-const applyRole = ref<(typeof teamRoles)[number] | ''>('')
+const applyRole = ref<(typeof teamFunctions)[number] | ''>('')
 const applyNote = ref('')
 const teamBusy = ref(false)
 const teamError = ref(false)
@@ -535,7 +535,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               <h3 class="text-sm font-medium text-muted">{{ t('ideas.detail.team.membersTitle') }}</h3>
               <ul class="mt-2 grid gap-1" role="list">
                 <li v-for="member in collaborators" :key="member.id" class="flex items-center justify-between gap-3">
-                  <KollioPersonRow :name="member.display_name" :meta="member.role" :avatar-key="member.avatar_key ?? 'lilac'" :to="personLink(member.id)" />
+                  <KollioPersonRow :name="member.display_name" :meta="`${t(`ideas.participation.${member.participation}`)} · ${t(`ideas.function.${member.business_function}`)}`" :avatar-key="member.avatar_key ?? 'lilac'" :to="personLink(member.id)" />
                   <button v-if="isOwner && member.id !== idea.owner_id" type="button" class="team-link" @click="removeTeamMember(member.id)">
                     {{ t('ideas.detail.team.remove') }}
                   </button>
@@ -549,7 +549,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
             <div>
               <h3 class="text-sm font-medium text-muted">{{ t('ideas.detail.team.soughtTitle') }}</h3>
               <ul class="mt-2 flex flex-wrap gap-1">
-                <li v-for="role in soughtRoles" :key="role" class="team-role-pill">{{ t(`ideas.role.${role}`) }}</li>
+                <li v-for="role in soughtRoles" :key="role" class="team-role-pill">{{ t(`ideas.function.${role}`) }}</li>
               </ul>
             </div>
           </div>
@@ -557,7 +557,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           <div v-if="joinRequests.length" class="team-requests mt-4 grid gap-2">
             <div v-for="request in joinRequests" :key="request.id" class="team-request rounded-xl border border-default p-3" :data-status="request.status">
               <p class="text-sm font-medium">{{ request.note }}</p>
-              <p class="text-sm text-muted">{{ t('ideas.role.' + request.role) }}</p>
+              <p class="text-sm text-muted">{{ t('ideas.function.' + request.business_function) }}</p>
               <p v-if="request.status === 'rejected' && request.rationale">
                 {{ t('ideas.detail.team.rejected', { rationale: request.rationale }) }}
               </p>
@@ -581,7 +581,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
             <div class="flex flex-wrap items-center gap-2">
               <label class="text-sm font-medium" for="team-apply-role">{{ t('ideas.detail.team.soughtTitle') }}</label>
               <select id="team-apply-role" v-model="applyRole" required>
-                <option v-for="role in teamRoles" :key="role" :value="role">{{ t(`ideas.detail.team.roles.${role}`) }}</option>
+                <option v-for="role in teamFunctions" :key="role" :value="role">{{ t(`ideas.function.${role}`) }}</option>
               </select>
             </div>
             <label class="grid gap-1 text-sm font-medium" for="team-apply-note">

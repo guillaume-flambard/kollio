@@ -19,7 +19,8 @@ class CollaboratorResponse(BaseModel):
     id: UUID
     handle: str | None = None
     display_name: str
-    role: str
+    participation: str
+    business_function: str
     roles: list[str]
     bio: str | None = None
     avatar_key: str | None = None
@@ -105,8 +106,18 @@ class IdeaPageResponse(BaseModel):
 
 
 class ApplyJoinBody(BaseModel):
-    role: str = Field(min_length=1, max_length=20)
+    function: str = Field(min_length=1, max_length=32)
     note: str = Field(min_length=1, max_length=500)
+
+
+class AcceptJoinBody(BaseModel):
+    participation: str | None = Field(default=None, max_length=20)
+
+
+class AddParticipantBody(BaseModel):
+    user_id: UUID
+    participation: str = Field(min_length=1, max_length=20)
+    function: str = Field(min_length=1, max_length=32)
 
 
 class RejectJoinBody(BaseModel):
@@ -118,7 +129,7 @@ class JoinRequestResponse(BaseModel):
     id: UUID
     idea_id: UUID
     requester_id: UUID
-    role: str
+    business_function: str
     note: str
     status: Literal["pending", "accepted", "rejected"]
     rationale: str | None = None
