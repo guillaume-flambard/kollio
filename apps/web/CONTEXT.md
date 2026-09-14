@@ -12,6 +12,10 @@ _Avoid_: Feed alone, marketplace, directory
 The screen that tells an idea's full story at a glance: current state, constraints, timeline, and team.
 _Avoid_: Idea page, profile (for an idea)
 
+**Initiative**:
+The user-facing B2B word for an Idea, with its InitiativeType. The API glossary is canonical: the web never invents a second meaning.
+_Avoid_: Idea (in user-facing B2B text)
+
 **Deposit**:
 The act of submitting a new idea through the form. The constraint killer runs live during it.
 _Avoid_: Creation, submission (as a cold form), post

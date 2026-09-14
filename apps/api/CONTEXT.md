@@ -10,6 +10,14 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 The living deposit of a project: title, pitch, owner, stage, and original language.
 _Avoid_: Project, startup, repo (in user-facing text)
 
+**Initiative**:
+What an Idea is called in user-facing B2B text. Same object as Idea; the split is deliberate: code, DB and API always say Idea, UX always says Initiative.
+_Avoid_: Idea (in user-facing B2B text)
+
+**InitiativeType**:
+The closed kind of an Initiative, set by the owner at deposit and editable after: idea, hypothesis, campaign, opportunity, decision, experiment, pricing, market, partnership, internal improvement.
+_Avoid_: Free-text type, tag, category
+
 **Stage**:
 Where an idea stands: `seed`, `iterating`, or `team_formed`.
 _Avoid_: Status, phase
