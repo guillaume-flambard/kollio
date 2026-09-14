@@ -86,6 +86,7 @@ function stopPolling() {
 onUnmounted(stopPolling)
 
 const constraints = computed(() => Object.entries(deposited.value?.analysis?.constraints ?? {}))
+const contradictions = computed(() => deposited.value?.analysis?.contradictions ?? [])
 const constraintLabels: Record<string, string> = {
   concurrence: 'ideas.deposit.constraints.concurrence',
   cout: 'ideas.deposit.constraints.cout',
@@ -146,9 +147,24 @@ const constraintLabels: Record<string, string> = {
             <div v-for="[key, dimension] in constraints" :key="key" class="deposit-constraint">
               <dt>{{ t(constraintLabels[key] ?? key) }}</dt>
               <dd>{{ dimension.score ?? '—' }}</dd>
+              <p v-if="dimension.basis" class="deposit-basis">
+                {{ t(`ideas.analysis.basis.${dimension.basis}`) }}
+              </p>
+              <p v-if="dimension.gap" class="deposit-gap">
+                {{ t('ideas.analysis.gapLine', { gap: dimension.gap }) }}
+              </p>
               <p>{{ dimension.note }}</p>
             </div>
           </dl>
+          <section v-if="contradictions.length" class="deposit-contradictions">
+            <h3>{{ t('ideas.analysis.contradictionsTitle') }}</h3>
+            <ul>
+              <li v-for="item in contradictions" :key="`${item.target}-${item.ref_id}`">
+                <strong>{{ t(`ideas.analysis.contradictionTarget.${item.target}`) }}</strong>
+                <span>{{ item.detail }}</span>
+              </li>
+            </ul>
+          </section>
           <NuxtLink class="deposit-open" :to="localePath({ name: 'workspace-ideas-ideaId', params: { ideaId: deposited?.id } })">
             {{ t('ideas.deposit.openIdea') }}
           </NuxtLink>
@@ -179,5 +195,10 @@ const constraintLabels: Record<string, string> = {
 .deposit-constraint { display: grid; gap: 4px; }
 .deposit-constraint dd { margin: 0; font-size: .875rem; font-weight: 600; }
 .deposit-constraint p { margin: 0; font-size: .8rem; }
+.deposit-basis { font-size: .78rem; color: var(--ui-text-muted); text-transform: uppercase; letter-spacing: .06em; }
+.deposit-gap { font-size: .8rem; color: var(--ui-text-muted); }
+.deposit-contradictions { margin-top: 18px; }
+.deposit-contradictions ul { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
+.deposit-contradictions li { display: flex; gap: 8px; font-size: .875rem; }
 .deposit-open { color: var(--kollio-heading, #493B57); font-weight: 570; }
 </style>
