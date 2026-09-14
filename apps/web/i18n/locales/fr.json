@@ -10,7 +10,8 @@
     "notifications": "Notifications",
     "upcoming": "Fonctionnalités à venir",
     "workspace": "Espace",
-    "promise": "Des idées à impact, ensemble."
+    "promise": "Des idées à impact, ensemble.",
+    "settings": "Contexte entreprise"
   },
   "meta": {
     "title": "Kollio | Des idées aux projets collectifs",
@@ -60,6 +61,47 @@
     "empty": {
       "title": "Aucun espace pour le moment",
       "description": "Votre compte est prêt, mais il n’a pas encore été ajouté à un espace de travail."
+    },
+    "settings": {
+      "title": "Contexte de l’entreprise",
+      "description": "Ce que Kollio sait de votre entreprise : il s’en sert pour analyser chaque initiative.",
+      "state": {
+        "active": "Actif",
+        "archived": "Archivé"
+      },
+      "profile": {
+        "title": "Profil",
+        "name": "Nom",
+        "description": "Description",
+        "businessModel": "Modèle économique",
+        "productsServices": "Produits et services",
+        "customerSegments": "Segments clients",
+        "markets": "Marchés",
+        "structure": "Taille et structure",
+        "save": "Enregistrer le profil",
+        "saving": "Enregistrement…",
+        "saved": "Profil enregistré."
+      },
+      "objectives": {
+        "title": "Objectifs",
+        "placeholder": "Nouvel objectif",
+        "create": "Ajouter l’objectif",
+        "priority": "Prioritaire",
+        "archive": "Archiver",
+        "restore": "Réactiver",
+        "empty": "Aucun objectif pour le moment."
+      },
+      "constraints": {
+        "title": "Contraintes",
+        "placeholder": "Nouvelle contrainte",
+        "detailPlaceholder": "Précision (optionnel)",
+        "create": "Ajouter la contrainte",
+        "archive": "Archiver",
+        "restore": "Réactiver",
+        "empty": "Aucune contrainte pour le moment."
+      },
+      "error": "L’action a échoué. Vos saisies sont conservées.",
+      "loadError": "Le contexte n’a pas pu être chargé."
     }
   },
   "ideas": {

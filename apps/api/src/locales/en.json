@@ -5,5 +5,6 @@
   "unauthorized": "Sign in required",
   "unavailable": "Service unavailable",
   "invalid": "Invalid request",
-  "initial_deposit": "Initial deposit"
+  "initial_deposit": "Initial deposit",
+  "not_found_workspace": "Workspace not found"
 }

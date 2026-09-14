@@ -32,6 +32,13 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 `id, idea_id, user_id, iteration_id, kind, impact_note, created_at`
 - **Outcome** (résultat mesurable, quand il existe) : `Outcome(id, idea_id, type, value, measured_at)` — c'est le signal rare et précieux (voir `02`).
 
+### CompanyContext (contexte entreprise, par workspace)
+- `CompanyProfile(workspace_id PK, name, description, business_model, products_services, customer_segments, markets, structure, created_at, updated_at)` — une seule fiche par workspace.
+- `CompanyObjective(id, workspace_id, title, state(active|archived), priority, created_at, updated_at)` — objectifs évolutifs.
+- `CompanyConstraint(id, workspace_id, title, detail?, state(active|archived), created_at, updated_at)` — contraintes réelles de l'entreprise ; à ne pas confondre avec les cinq dimensions d'une `ConstraintAnalysis`.
+- Lus et écrits par tout membre du workspace ; jamais visibles hors du workspace.
+- `lang` (fr|en) est stocké sur les trois tables : il enregistre la langue de la dernière écriture, comme pour `Idea` et `Iteration`.
+
 ### Embedding (matching multilingue)
 `id, subject_type(idea|user|contribution), subject_id, vector(pgvector), model, lang, updated_at`
 - Modèle **multilingue** → cross-lingual (idée FR ↔ profil EN).

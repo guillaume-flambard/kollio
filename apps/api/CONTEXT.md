@@ -1,6 +1,6 @@
 # API
 
-The FastAPI backend. Owns all Kollio domain state: ideas, their versioned history, constraint analyses, teams, and the private-workspace boundary. The agent graphs (LangGraph) also live here.
+The FastAPI backend. Owns all Kollio domain state: ideas, their versioned history, constraint analyses, the company context, teams, and the private-workspace boundary. The agent graphs (LangGraph) and their Taskiq workers also live here.
 
 ## Language
 
@@ -9,6 +9,14 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 **Idea**:
 The living deposit of a project: title, pitch, owner, stage, and original language.
 _Avoid_: Project, startup, repo (in user-facing text)
+
+**Initiative**:
+What an Idea is called in user-facing B2B text. Same object as Idea; the split is deliberate: code, DB and API always say Idea, UX always says Initiative.
+_Avoid_: Idea (in user-facing B2B text)
+
+**InitiativeType**:
+The closed kind of an Initiative, set by the owner at deposit and editable after: idea, hypothesis, campaign, opportunity, decision, experiment, pricing, market, partnership, internal improvement.
+_Avoid_: Free-text type, tag, category
 
 **Stage**:
 Where an idea stands: `seed`, `iterating`, or `team_formed`.
@@ -36,6 +44,24 @@ _Avoid_: Pull request (in user-facing text), suggestion, PR
 A new iteration pointing back at an earlier parent, restoring a previous state without rewriting history.
 _Avoid_: Undo, revert, restore
 
+### Company context
+
+**CompanyContext**:
+The durable reality of a workspace: its profile, objectives and constraints. Every analysis reads it.
+_Avoid_: Company knowledge base, memory, company settings
+
+**CompanyProfile**:
+The company's identity: name, description, business model, products or services, customer segments, markets and structure (size and shape).
+_Avoid_: About page, company card
+
+**Objective**:
+A stated company goal, `active` or `archived`, optionally marked priority.
+_Avoid_: Goal (as a vague noun), KPI
+
+**CompanyConstraint**:
+A real limitation the company operates under: budget, team size, skills, deadlines, regulation, capacity, brand or product dependencies. `active` or `archived`.
+_Avoid_: Constraint (reserved for the analysis dimensions below), blocker
+
 ### The constraint killer
 
 **ConstraintAnalysis**:
@@ -47,7 +73,7 @@ A 0-100 number summarizing how grounded an idea is. Always explained evidence, n
 _Avoid_: Rating, grade
 
 **Constraint**:
-One of five fixed dimensions: `concurrence`, `cout`, `temps`, `defendabilite`, `acquisition`. Each carries a score and a short note.
+One of the five fixed analysis dimensions: `concurrence`, `cout`, `temps`, `defendabilite`, `acquisition`. Each carries a score and a short note.
 _Avoid_: Criterion, metric, custom dimensions
 
 ### Team and moat flow

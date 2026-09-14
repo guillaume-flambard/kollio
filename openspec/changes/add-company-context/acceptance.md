@@ -1,0 +1,98 @@
+# Acceptance evidence — add-company-context
+
+Change: `openspec/changes/add-company-context`
+Tickets: GitHub #53 (backend slice of #52)
+Date: 2026-09-14
+Delivered by this change: the backend capability and its workspace settings screen.
+
+## Scenario → evidence
+
+| Scenario | Evidence | Status |
+| --- | --- | --- |
+| Member reads the context | `tests/integration/test_company_context.py::test_member_reads_empty_context`, `::test_profile_round_trip_and_upsert` | passing |
+| Non-member requests the context | `::test_non_member_is_refused_everywhere` (404, localized FR) | passing |
+| Unauthenticated request | `::test_unauthenticated_request_is_unauthorized` (401) | passing |
+| Profile created then read back | `::test_profile_round_trip_and_upsert` | passing |
+| Profile updated in place (single row) | `::test_profile_round_trip_and_upsert` (second PUT replaces; omitted fields become empty) | passing |
+| Profile untouched on read | `::test_member_reads_empty_context` (empty profile, no error) | passing |
+| Objective created (active, non-priority) | `::test_objective_lifecycle` | passing |
+| Objective lifecycle edited | `::test_objective_lifecycle` | passing |
+| Unknown objective state refused | `::test_objective_lifecycle` (422 on `paused`) | passing |
+| Explicit null refused instead of failing late | `::test_update_refuses_explicit_nulls` (422, not a 500 on flush) | passing |
+| Constraint created | `::test_constraint_lifecycle` | passing |
+| Constraint edited and archived | `::test_constraint_lifecycle` | passing |
+| Non-member cannot write (including PATCH) | `::test_non_member_is_refused_everywhere` (PUT, POST and PATCH refused) | passing |
+| Two workspaces do not leak, including by identifier | `::test_context_items_stay_inside_their_workspace` (a member of the other workspace PATCHing this workspace's objective **and constraint** ids gets 404 while authorization passes — the refusal can only come from id scoping) | passing |
+| Origin language recorded on write | `::test_profile_round_trip_and_upsert` and `::test_objective_lifecycle` assert `lang` follows the request locale (fr on the first write, en after an English update) | passing |
+| Access rule (unit) | `tests/unit/company_context/test_access.py` (3 cases) | passing |
+
+Command: `TEST_DATABASE_URL=… uv run pytest tests/integration/test_company_context.py tests/unit/company_context -q` → 11 passed.
+Full suite: 116 passed, 2 deselected.
+
+## Boundary evidence
+
+- OpenAPI export: `make contract` regenerated `contracts/openapi.json` and the TypeScript client. Diff review: 0 operations removed, 6 added (`get_company_context`, `save_company_profile`, `create_company_objective`, `update_company_objective`, `create_company_constraint`, `update_company_constraint`); 20 → 26 operations.
+- Migration `5a7c1e9d3b48` applied cleanly on the disposable database; `alembic check` reports no drift.
+- Strict Mypy includes `apps/api/src/modules/company_context/domain` (Makefile + CI).
+- Permissions are proved by PostgreSQL integration tests, not browser tests.
+- Vocabulary recorded: `apps/api/CONTEXT.md` (CompanyContext, CompanyProfile, Objective, CompanyConstraint; `Constraint` disambiguated to the analysis dimensions) and `docs/05-data-model.md`.
+
+## Review findings applied
+
+Two-axis review before commit; both findings were fixed rather than deferred:
+
+- PATCH with an explicit `null` for a non-nullable field returned 500 on flush; now validated to 422.
+- The "as if the workspace were not found" path reused the idea `not_found` message; a dedicated localized `not_found_workspace` key now says workspace.
+- The cross-workspace test passed for the wrong reason (authorization refused before id scoping was reached); it now uses a member of the other workspace.
+- Service read/wrote ORM entities and called `session.flush()` (leaky seam); updates now live in the adapter.
+- Profile write/response models duplicated seven fields; both derive from one base.
+
+## Known gaps
+
+- Principles/strategy and key metrics sub-objects are deliberately out of this slice (decision #45: slice 1 ships profile + objectives + constraints).
+- The workspace-membership query exists in several adapters (ideas, profiles, company_context, constraint_analysis) as a two-line read on purpose, to keep modules autonomous; extracting a shared kernel is not part of this change.
+
+## Settings UI evidence (ticket #59)
+
+Browser acceptance: `apps/web/tests/browser/company-context.spec.ts`, 6 scenarios × FR/EN = 12 checks, all passing.
+
+| Scenario | Evidence | Status |
+| --- | --- | --- |
+| Screen shows the saved context | `SETTINGS-01` (populated profile, objective and constraint rendered from the API) | passing |
+| Empty state when nothing is saved | `SETTINGS-02` | passing |
+| Profile saved from the screen | `SETTINGS-03` (asserts the PUT body carries the edited fields and a saved confirmation appears) | passing |
+| Objective created, edited, prioritised, archived and restored | `SETTINGS-04` (asserts POST, PATCH `title`, PATCH `priority: true`, PATCH `state: archived`, then PATCH `state: active`; both state labels rendered) | passing |
+| Constraint created, edited (detail), archived and restored | `SETTINGS-05` | passing |
+| Failure reported, input kept | `SETTINGS-06` (500 surfaces an alert, the field keeps its value) | passing |
+| FR/EN identical | every scenario runs in both locales; FR/EN catalog parity enforced by `scripts/check_locales.mjs` | passing |
+
+Full web evidence: 51 browser checks across the suite (runner-reported), 29 Vitest checks, eslint and nuxt typecheck clean, contract regeneration shows no drift.
+
+**Boundary of this evidence**: every request is served by Playwright route mocks. These checks prove UI behavior only — not authentication, backend authorization, persistence or provider quality. Those are proved by the PostgreSQL integration tests listed above. No production auth bypass was added.
+
+Known limitations:
+- GitHub Actions runs `pnpm --dir apps/web test:ui` (Vitest) but **not** the Playwright suite, so these browser checks are local evidence only. This matches the limitation already recorded in `docs/12-delivery-workflow.md`; adding Playwright to CI is a separate decision.
+- The screen keeps profile, objectives and constraints in one page rather than three components. Judgement call under "keep simple CRUD simple" (docs/08) and consistent with existing pages that mix domains (idea detail); revisit if a fourth editor appears.
+
+## Review findings applied (UI slice)
+
+- Mutations now confirm state from the **API response** (created/updated item applied locally) instead of a follow-up refresh, which removed a stale-UI window if the refresh failed.
+- Objective and constraint titles are editable end to end, closing the ticket's "edit objectives and constraints"; unarchive is covered by tests.
+- The objective PATCH BFF no longer forwards an all-whitespace title (previously a latent 422).
+- Shared `requiredTitle` / `optionalText` guards replaced duplicated BFF validation; generated `ObjectiveUpdate` / `ConstraintUpdate` / `CompanyProfileWrite` types replaced `Record<string, unknown>`; redundant `as never` casts removed.
+- Browser mocks now resolve items by id and 404 on unknown ids, so a wrong-id write fails the test.
+- Dead catalog key removed; the "detail" field label is unique per row.
+
+## Review findings applied (PR review)
+
+A second, branch-level two-axis review ran before the pull request; every finding was applied:
+
+- Public schema names collided with the glossary (`Constraint` is reserved for the analysis dimensions): `ConstraintCreate/Response/Update` renamed to `CompanyConstraint*` across API, generated client and web.
+- `lang` was missing on the three tables, contradicting the platform non-negotiable that user content keeps its origin language: added on all three, set from the request locale on every write, exposed in responses and asserted by tests. `docs/05-data-model.md` updated accordingly.
+- The proposal contradicted the diff ("no frontend change", "the settings UI ships as its own ticket"): corrected, and a `design.md` added so the change carries the same artifact set as its siblings.
+- The settings screen silently edited the first workspace: it now honours `?workspace=` like the explorer.
+- `acceptance.md` over-claimed cross-workspace id scoping (objectives only) and no longer: constraints are covered too.
+- Duplicated null-rejection validators collapsed into one base; the empty `CompanyProfileWrite` subclass now carries a docstring; BFF clears a blank constraint detail to `null` instead of storing an empty string.
+- `CONTEXT-MAP.md` and the API glossary header now name the company context.
+
+Kept as-is, with justification: the `Initiative`/`InitiativeType` glossary commit (decision #44 explicitly authorised writing the glossary now, ahead of the code), and the single-page settings screen (docs/08 "keep simple CRUD simple").

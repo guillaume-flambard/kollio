@@ -10,7 +10,8 @@
     "notifications": "Notifications",
     "upcoming": "Upcoming features",
     "workspace": "Workspace",
-    "promise": "Ideas with impact, together."
+    "promise": "Ideas with impact, together.",
+    "settings": "Company context"
   },
   "meta": {
     "title": "Kollio | From ideas to shared projects",
@@ -60,6 +61,47 @@
     "empty": {
       "title": "No workspace yet",
       "description": "Your account is ready, but it has not been added to a workspace yet."
+    },
+    "settings": {
+      "title": "Company context",
+      "description": "What Kollio knows about your company: it uses this to analyse every initiative.",
+      "state": {
+        "active": "Active",
+        "archived": "Archived"
+      },
+      "profile": {
+        "title": "Profile",
+        "name": "Name",
+        "description": "Description",
+        "businessModel": "Business model",
+        "productsServices": "Products and services",
+        "customerSegments": "Customer segments",
+        "markets": "Markets",
+        "structure": "Size and structure",
+        "save": "Save profile",
+        "saving": "Saving…",
+        "saved": "Profile saved."
+      },
+      "objectives": {
+        "title": "Objectives",
+        "placeholder": "New objective",
+        "create": "Add objective",
+        "priority": "Priority",
+        "archive": "Archive",
+        "restore": "Restore",
+        "empty": "No objective yet."
+      },
+      "constraints": {
+        "title": "Constraints",
+        "placeholder": "New constraint",
+        "detailPlaceholder": "Detail (optional)",
+        "create": "Add constraint",
+        "archive": "Archive",
+        "restore": "Restore",
+        "empty": "No constraint yet."
+      },
+      "error": "The action failed. Your input is kept.",
+      "loadError": "The context could not be loaded."
     }
   },
   "ideas": {
