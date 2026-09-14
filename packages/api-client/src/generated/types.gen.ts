@@ -157,6 +157,89 @@ export type CollaboratorResponse = {
 };
 
 /**
+ * CompanyContextResponse
+ */
+export type CompanyContextResponse = {
+    profile: CompanyProfileResponse;
+    /**
+     * Objectives
+     */
+    objectives: Array<ObjectiveResponse>;
+    /**
+     * Constraints
+     */
+    constraints: Array<ConstraintResponse>;
+};
+
+/**
+ * CompanyProfileResponse
+ */
+export type CompanyProfileResponse = {
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Business Model
+     */
+    business_model?: string | null;
+    /**
+     * Products Services
+     */
+    products_services?: string | null;
+    /**
+     * Customer Segments
+     */
+    customer_segments?: string | null;
+    /**
+     * Markets
+     */
+    markets?: string | null;
+    /**
+     * Structure
+     */
+    structure?: string | null;
+};
+
+/**
+ * CompanyProfileWrite
+ */
+export type CompanyProfileWrite = {
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Business Model
+     */
+    business_model?: string | null;
+    /**
+     * Products Services
+     */
+    products_services?: string | null;
+    /**
+     * Customer Segments
+     */
+    customer_segments?: string | null;
+    /**
+     * Markets
+     */
+    markets?: string | null;
+    /**
+     * Structure
+     */
+    structure?: string | null;
+};
+
+/**
  * ConstraintAnalysisResult
  */
 export type ConstraintAnalysisResult = {
@@ -189,6 +272,20 @@ export type ConstraintAnalysisResult = {
 };
 
 /**
+ * ConstraintCreate
+ */
+export type ConstraintCreate = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+};
+
+/**
  * ConstraintFactor
  */
 export type ConstraintFactor = {
@@ -208,6 +305,46 @@ export type ConstraintFactor = {
      * Source Ids
      */
     source_ids: Array<string>;
+};
+
+/**
+ * ConstraintResponse
+ */
+export type ConstraintResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
+     * State
+     */
+    state: 'active' | 'archived';
+};
+
+/**
+ * ConstraintUpdate
+ */
+export type ConstraintUpdate = {
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
+     * State
+     */
+    state?: 'active' | 'archived' | null;
 };
 
 /**
@@ -605,6 +742,56 @@ export type MembershipResponse = {
      * Role
      */
     role: string;
+};
+
+/**
+ * ObjectiveCreate
+ */
+export type ObjectiveCreate = {
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * ObjectiveResponse
+ */
+export type ObjectiveResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * State
+     */
+    state: 'active' | 'archived';
+    /**
+     * Priority
+     */
+    priority: boolean;
+};
+
+/**
+ * ObjectiveUpdate
+ */
+export type ObjectiveUpdate = {
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * State
+     */
+    state?: 'active' | 'archived' | null;
+    /**
+     * Priority
+     */
+    priority?: boolean | null;
 };
 
 /**
@@ -1428,3 +1615,191 @@ export type GetProfileResponses = {
 };
 
 export type GetProfileResponse = GetProfileResponses[keyof GetProfileResponses];
+
+export type GetCompanyContextData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context';
+};
+
+export type GetCompanyContextErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetCompanyContextError = GetCompanyContextErrors[keyof GetCompanyContextErrors];
+
+export type GetCompanyContextResponses = {
+    /**
+     * Successful Response
+     */
+    200: CompanyContextResponse;
+};
+
+export type GetCompanyContextResponse = GetCompanyContextResponses[keyof GetCompanyContextResponses];
+
+export type SaveCompanyProfileData = {
+    body: CompanyProfileWrite;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/profile';
+};
+
+export type SaveCompanyProfileErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type SaveCompanyProfileError = SaveCompanyProfileErrors[keyof SaveCompanyProfileErrors];
+
+export type SaveCompanyProfileResponses = {
+    /**
+     * Successful Response
+     */
+    200: CompanyProfileResponse;
+};
+
+export type SaveCompanyProfileResponse = SaveCompanyProfileResponses[keyof SaveCompanyProfileResponses];
+
+export type CreateCompanyObjectiveData = {
+    body: ObjectiveCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/objectives';
+};
+
+export type CreateCompanyObjectiveErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateCompanyObjectiveError = CreateCompanyObjectiveErrors[keyof CreateCompanyObjectiveErrors];
+
+export type CreateCompanyObjectiveResponses = {
+    /**
+     * Successful Response
+     */
+    201: ObjectiveResponse;
+};
+
+export type CreateCompanyObjectiveResponse = CreateCompanyObjectiveResponses[keyof CreateCompanyObjectiveResponses];
+
+export type UpdateCompanyObjectiveData = {
+    body: ObjectiveUpdate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Objective Id
+         */
+        objective_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/objectives/{objective_id}';
+};
+
+export type UpdateCompanyObjectiveErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateCompanyObjectiveError = UpdateCompanyObjectiveErrors[keyof UpdateCompanyObjectiveErrors];
+
+export type UpdateCompanyObjectiveResponses = {
+    /**
+     * Successful Response
+     */
+    200: ObjectiveResponse;
+};
+
+export type UpdateCompanyObjectiveResponse = UpdateCompanyObjectiveResponses[keyof UpdateCompanyObjectiveResponses];
+
+export type CreateCompanyConstraintData = {
+    body: ConstraintCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/constraints';
+};
+
+export type CreateCompanyConstraintErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateCompanyConstraintError = CreateCompanyConstraintErrors[keyof CreateCompanyConstraintErrors];
+
+export type CreateCompanyConstraintResponses = {
+    /**
+     * Successful Response
+     */
+    201: ConstraintResponse;
+};
+
+export type CreateCompanyConstraintResponse = CreateCompanyConstraintResponses[keyof CreateCompanyConstraintResponses];
+
+export type UpdateCompanyConstraintData = {
+    body: ConstraintUpdate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Constraint Id
+         */
+        constraint_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/constraints/{constraint_id}';
+};
+
+export type UpdateCompanyConstraintErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateCompanyConstraintError = UpdateCompanyConstraintErrors[keyof UpdateCompanyConstraintErrors];
+
+export type UpdateCompanyConstraintResponses = {
+    /**
+     * Successful Response
+     */
+    200: ConstraintResponse;
+};
+
+export type UpdateCompanyConstraintResponse = UpdateCompanyConstraintResponses[keyof UpdateCompanyConstraintResponses];
