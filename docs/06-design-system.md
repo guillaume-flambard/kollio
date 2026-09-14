@@ -6,6 +6,10 @@ Kollio uses the **Living Canvas** interaction model with the **Aubergine** palet
 
 Earlier Collective.work-inspired mockups and the blue editorial direction are superseded by this document and the root `DESIGN.md`.
 
+## Non negotiable
+
+This direction is the reference. Every later screen **extends** it; nothing replaces it, and no page introduces its own palette, card style or spacing scale. All styling goes through the canonical tokens in `packages/ui/src/tokens.css` and the shared theme in `packages/ui/src/theme.ts`. A page never writes a literal colour or a variable name that does not exist in the token file (the fallback would silently win, and the drift would be invisible). Issues #69 and #70 close the current drift and add the automated guard.
+
 ## Brand mark
 
 The Kollio mark is an open lowercase `k` built from two rounded gestures meeting around a small seed. The aubergine stem represents a stable shared workspace, the lavender stroke represents contributions moving an idea forward, and the muted citron seed marks the point where they meet.
