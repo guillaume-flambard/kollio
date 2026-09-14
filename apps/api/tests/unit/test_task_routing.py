@@ -1,0 +1,105 @@
+import json as jsonlib
+
+from src.modules.constraint_analysis.adapters.litellm import LiteLLMConstraintAnalysisGateway
+from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
+from src.platform.config import Settings
+from src.platform.llm import Gateway
+from src.platform.task_class import TaskClass, intelligence_tier, resolve_model
+
+_FACTOR_NAMES = ("competition", "build_cost", "time_to_market", "defensibility", "acquisition")
+
+
+def _settings(**overrides: object) -> Settings:
+    base: dict[str, object] = {
+        "_env_file": None,
+        "environment": "development",
+        "database_url": "",
+        "llm_api_key": "test-key",
+        "llm_model": "cheap-model",
+    }
+    base.update(overrides)
+    return Settings(**base)  # type: ignore[arg-type]
+
+
+def _abstention(locale: str = "fr") -> dict[str, object]:
+    return {
+        "overall_score": None,
+        "verdict": "unknown",
+        "summary": "Insufficient evidence.",
+        "factors": [
+            {
+                "name": name,
+                "basis": "unknown",
+                "score": None,
+                "gap": "The evidence needed to score this is missing.",
+                "summary": "Unknown.",
+                "source_ids": [],
+            }
+            for name in _FACTOR_NAMES
+        ],
+        "contradictions": [],
+        "locale": locale,
+    }
+
+
+class _FakeResponse:
+    def __init__(self, content: str):
+        self._content = content
+
+    def raise_for_status(self) -> None:
+        return None
+
+    def json(self) -> dict[str, object]:
+        return {"choices": [{"message": {"content": self._content}}]}
+
+
+class _CapturingClient:
+    payload: dict[str, object] = {}
+
+    def __init__(self, *args: object, **kwargs: object):
+        return None
+
+    async def __aenter__(self) -> _CapturingClient:
+        return self
+
+    async def __aexit__(self, *exc: object) -> bool:
+        return False
+
+    async def post(self, url: str, json: dict | None = None, headers: dict | None = None):
+        _CapturingClient.payload = json or {}
+        return _FakeResponse(jsonlib.dumps(_abstention()))
+
+
+def test_visible_classes_resolve_to_the_premium_model() -> None:
+    settings = _settings(llm_model_visible="premium-model")
+    assert resolve_model(settings, TaskClass.REASONING) == "premium-model"
+    assert resolve_model(settings, TaskClass.CHALLENGE) == "premium-model"
+
+
+def test_commodity_classes_do_not() -> None:
+    settings = _settings(llm_model_visible="premium-model")
+    for commodity in (TaskClass.EXTRACTION, TaskClass.EMBEDDING, TaskClass.TRANSLATION):
+        assert intelligence_tier(commodity) == "commodity"
+        assert resolve_model(settings, commodity) == "cheap-model"
+
+
+def test_visible_falls_back_to_the_default_without_premium_credentials() -> None:
+    settings = _settings()
+    assert resolve_model(settings, TaskClass.REASONING) == "cheap-model"
+
+
+def test_gateways_declare_a_visible_task_class() -> None:
+    assert intelligence_tier(LiteLLMConstraintAnalysisGateway.task_class) == "visible"
+    assert intelligence_tier(Gateway.task_class) == "visible"
+
+
+async def test_analysis_requests_the_visible_model(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "src.modules.constraint_analysis.adapters.litellm.httpx.AsyncClient", _CapturingClient
+    )
+    settings = _settings(llm_model_visible="premium-model")
+    result = await LiteLLMConstraintAnalysisGateway(settings).analyze(
+        title="Offline field app", pitch="Works without signal", locale="fr", evidence=[]
+    )
+    assert isinstance(result, ConstraintAnalysisResult)
+    assert _CapturingClient.payload["model"] == "premium-model"
