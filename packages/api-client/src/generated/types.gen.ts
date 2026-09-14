@@ -1293,6 +1293,24 @@ export type ValidationError = {
 };
 
 /**
+ * WorkspaceMemberResponse
+ */
+export type WorkspaceMemberResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Role
+     */
+    role: 'admin' | 'member';
+};
+
+/**
  * WorkspaceResponse
  */
 export type WorkspaceResponse = {
@@ -1982,6 +2000,38 @@ export type ListWorkspacesResponses = {
 };
 
 export type ListWorkspacesResponse = ListWorkspacesResponses[keyof ListWorkspacesResponses];
+
+export type ListWorkspaceMembersData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/members';
+};
+
+export type ListWorkspaceMembersErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListWorkspaceMembersError = ListWorkspaceMembersErrors[keyof ListWorkspaceMembersErrors];
+
+export type ListWorkspaceMembersResponses = {
+    /**
+     * Response List Workspace Members
+     *
+     * Successful Response
+     */
+    200: Array<WorkspaceMemberResponse>;
+};
+
+export type ListWorkspaceMembersResponse = ListWorkspaceMembersResponses[keyof ListWorkspaceMembersResponses];
 
 export type GetProfileData = {
     body?: never;
