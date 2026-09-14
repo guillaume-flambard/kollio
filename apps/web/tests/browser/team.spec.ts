@@ -31,12 +31,22 @@ const ownerRequests: JoinRequestResponse[] = [{
   created_at: '2026-09-12T08:00:00Z',
 }]
 
+const colleagues = [
+  { id: 'owner-one', display_name: 'Propriétaire', role: 'admin' },
+  { id: 'member-two', display_name: 'Thomas', role: 'member' },
+]
+
+async function mockColleagues(page: import('@playwright/test').Page) {
+  await page.route(/\/api\/workspaces\/workspace-one\/members$/, route => route.fulfill({ json: colleagues }))
+}
+
 for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
   test.describe(locale, () => {
     const prefix = locale === 'fr' ? '' : '/en'
     const team = messages.ideas.detail.team as Record<string, string>
 
     test('TEAM-01 shows the team with pending application to the owner', async ({ page }) => {
+      await mockColleagues(page)
       await page.route(/\/api\/session$/, route => route.fulfill({ json: { signedIn: true, subject: 'owner-one' } }))
       await page.route(/\/api\/ideas\/idea-one$/, route => route.fulfill({
         json: { ...ideaFor('owner'), join_requests: ownerRequests } as unknown as IdeaResponse,
@@ -45,6 +55,33 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(page.getByRole('heading', { name: team.title, exact: true })).toBeVisible()
       await expect(page.getByRole('button', { name: team.accept, exact: true }).first()).toBeEnabled()
       await expect(page.getByText(team.pending)).toBeVisible()
+    })
+
+    test('TEAM-07 lets the owner add a colleague directly', async ({ page }) => {
+      let posted: Record<string, unknown> | null = null
+      await page.route(/\/api\/session$/, route => route.fulfill({ json: { signedIn: true, subject: 'owner-one' } }))
+      await page.route(/\/api\/ideas\/idea-one$/, route => route.fulfill({ json: ideaFor('owner') as unknown as IdeaResponse }))
+      await mockColleagues(page)
+      await page.route(/\/api\/ideas\/idea-one\/members$/, async route => {
+        posted = route.request().postDataJSON() as Record<string, unknown>
+        await route.fulfill({ status: 201, json: { id: 'member-two', display_name: 'Thomas', participation: 'decision_maker', business_function: 'sales', roles: [] } })
+      })
+      await page.goto(`${prefix}/workspace/ideas/idea-one`)
+      await expect(page.getByRole('heading', { name: team.title, exact: true })).toBeVisible()
+      await page.getByLabel(team.addTitle, { exact: true }).selectOption('member-two')
+      await page.getByLabel(team.addParticipation, { exact: true }).selectOption('decision_maker')
+      await page.getByLabel(team.addFunction, { exact: true }).selectOption('sales')
+      await page.getByRole('button', { name: team.add, exact: true }).click()
+      await expect(page.getByText(team.added)).toBeVisible()
+      expect(posted).toEqual({ user_id: 'member-two', participation: 'decision_maker', function: 'sales' })
+    })
+
+    test('TEAM-08 hides the add form from a member', async ({ page }) => {
+      await page.route(/\/api\/session$/, route => route.fulfill({ json: { signedIn: true, subject: 'member-nine' } }))
+      await page.route(/\/api\/ideas\/idea-one$/, route => route.fulfill({ json: ideaFor('member') as unknown as IdeaResponse }))
+      await page.goto(`${prefix}/workspace/ideas/idea-one`)
+      await expect(page.getByRole('heading', { name: team.title, exact: true })).toBeVisible()
+      await expect(page.getByLabel(team.addTitle, { exact: true })).toHaveCount(0)
     })
 
     test('TEAM-02 lets the owner reject with a rationale', async ({ page }) => {

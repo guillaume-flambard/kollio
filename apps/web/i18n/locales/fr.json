@@ -258,7 +258,14 @@
         "leave": "Quitter la boucle",
         "remove": "Retirer",
         "applied": "Candidature envoyée.",
-        "error": "L’action a échoué. Réessayez."
+        "error": "L’action a échoué. Réessayez.",
+        "addTitle": "Ajouter un collègue",
+        "addPick": "Choisir un collègue",
+        "addParticipation": "Participation",
+        "addFunction": "Fonction",
+        "add": "Ajouter",
+        "added": "Collègue ajouté à l’initiative.",
+        "addError": "Impossible d’ajouter ce collègue."
       },
       "typeError": "Le changement de type a échoué."
     },
