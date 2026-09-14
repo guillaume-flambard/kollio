@@ -10,6 +10,8 @@ from sqlalchemy.dialects.postgresql import JSONB, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
+from src.modules.experiments.adapters.postgres import Learning
+from src.modules.ideas.adapters.postgres import Idea
 from src.platform.config import Settings
 from src.platform.db import Base
 
@@ -28,6 +30,35 @@ class IdeaEmbedding(Base):
     source_identifier: Mapped[str] = mapped_column(String, nullable=False)
     provenance: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class LearningEmbedding(Base):
+    """A confirmed learning, embedded with the same model and dimensions as an idea."""
+
+    __tablename__ = "learning_embeddings"
+    __table_args__ = (
+        CheckConstraint("source_language IN ('fr', 'en')"),
+        CheckConstraint("dimensions = vector_dims(vector)"),
+    )
+    learning_id: Mapped[UUID] = mapped_column(
+        ForeignKey("learnings.id", ondelete="CASCADE"), primary_key=True
+    )
+    model: Mapped[str] = mapped_column(primary_key=True)
+    dimensions: Mapped[int] = mapped_column(Integer, primary_key=True)
+    vector = mapped_column(Vector(), nullable=False)
+    source_language: Mapped[str]
+    source_identifier: Mapped[str] = mapped_column(String, nullable=False)
+    provenance: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+@dataclass(frozen=True)
+class LearningEmbeddingRecord:
+    learning_id: UUID
+    text: str
+    source_language: str
+    source_identifier: str
+    provenance: dict[str, Any]
 
 
 @dataclass(frozen=True)
@@ -119,16 +150,91 @@ async def similar_idea_ids(
     session: AsyncSession,
     query_vector: list[float],
     settings: Settings,
+    *,
+    workspace_ids: frozenset[UUID],
     limit: int = 10,
 ) -> list[UUID]:
+    """Nearest ideas, restricted to the workspaces the viewer may read."""
     validate_vectors([query_vector], 1, settings.embedding_dimensions)
+    if not workspace_ids:
+        return []
     distance = IdeaEmbedding.vector.cosine_distance(query_vector)
     query = (
         select(IdeaEmbedding.idea_id)
+        .join(Idea, Idea.id == IdeaEmbedding.idea_id)
         .where(
+            Idea.workspace_id.in_(workspace_ids),
             IdeaEmbedding.model == settings.embedding_source_model,
             IdeaEmbedding.dimensions == settings.embedding_dimensions,
             func.vector_dims(IdeaEmbedding.vector) == settings.embedding_dimensions,
+        )
+        .order_by(distance)
+        .limit(limit)
+    )
+    return list((await session.scalars(query)).all())
+
+
+async def store_learning_embeddings(
+    session: AsyncSession,
+    records: list[LearningEmbeddingRecord],
+    vectors: list[list[float]],
+    settings: Settings,
+) -> None:
+    validate_vectors(vectors, len(records), settings.embedding_dimensions)
+    for record, vector in zip(records, vectors, strict=True):
+        if record.source_language not in {"fr", "en"}:
+            raise ValueError("Embedding language is unsupported")
+        await session.execute(
+            insert(LearningEmbedding)
+            .values(
+                learning_id=record.learning_id,
+                model=settings.embedding_source_model,
+                dimensions=settings.embedding_dimensions,
+                vector=vector,
+                source_language=record.source_language,
+                source_identifier=record.source_identifier,
+                provenance=record.provenance,
+            )
+            .on_conflict_do_update(
+                index_elements=[
+                    LearningEmbedding.learning_id,
+                    LearningEmbedding.model,
+                    LearningEmbedding.dimensions,
+                ],
+                set_={
+                    "vector": vector,
+                    "source_language": record.source_language,
+                    "source_identifier": record.source_identifier,
+                    "provenance": record.provenance,
+                    "updated_at": func.now(),
+                },
+            )
+        )
+
+
+async def similar_learning_ids(
+    session: AsyncSession,
+    query_vector: list[float],
+    settings: Settings,
+    *,
+    workspace_ids: frozenset[UUID],
+    limit: int = 3,
+) -> list[UUID]:
+    """Confirmed learnings nearest the query, restricted to the viewer's workspaces."""
+    validate_vectors([query_vector], 1, settings.embedding_dimensions)
+    if not workspace_ids:
+        return []
+    distance = LearningEmbedding.vector.cosine_distance(query_vector)
+    query = (
+        select(LearningEmbedding.learning_id)
+        .join(Learning, Learning.id == LearningEmbedding.learning_id)
+        .join(Idea, Idea.id == Learning.idea_id)
+        .where(
+            Idea.workspace_id.in_(workspace_ids),
+            Learning.status == "confirmed",
+            LearningEmbedding.model == settings.embedding_source_model,
+            LearningEmbedding.dimensions == settings.embedding_dimensions,
+            func.vector_dims(LearningEmbedding.vector) == settings.embedding_dimensions,
         )
         .order_by(distance)
         .limit(limit)

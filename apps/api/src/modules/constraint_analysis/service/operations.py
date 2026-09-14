@@ -8,6 +8,8 @@ from src.modules.constraint_analysis.adapters.postgres import (
 )
 from src.modules.constraint_analysis.domain.lifecycle import AnalysisStatus, queue_review
 from src.modules.constraint_analysis.domain.models import AnalysisEvidence
+from src.modules.experiments.service.reuse import learning_texts, reusable_learning_ids
+from src.platform.config import get_settings
 
 
 class AnalysisNotFoundError(LookupError):
@@ -48,6 +50,25 @@ async def launch_analysis(
         else {"title": idea.title, "pitch": idea.pitch, "stage": idea.stage}
     )
     snapshot["company_context"] = await repository.active_company_context(idea.workspace_id)
+    effective_evidence = list(evidence)
+    settings = get_settings()
+    workspace_ids = await repository.memberships(subject)
+    reusable_ids = await reusable_learning_ids(
+        repository.session,
+        text=f"{snapshot.get('title', '')} {snapshot.get('pitch', '')}".strip(),
+        workspace_ids=workspace_ids,
+        settings=settings,
+    )
+    if reusable_ids:
+        for learning_id, text in await learning_texts(repository.session, reusable_ids):
+            effective_evidence.append(
+                AnalysisEvidence(
+                    id=f"learning:{learning_id}",
+                    url=f"kollio://learning/{learning_id}",
+                    text=text,
+                )
+            )
+    snapshot["reused_learning_ids"] = [str(item) for item in reusable_ids]
     workflow = AnalysisWorkflow(
         id=uuid4(),
         idea_id=idea.id,
@@ -58,7 +79,7 @@ async def launch_analysis(
         status=AnalysisStatus.QUEUED.value,
         current_step="dispatch",
         input_snapshot=snapshot,
-        evidence=[item.model_dump(mode="json") for item in evidence],
+        evidence=[item.model_dump(mode="json") for item in effective_evidence],
         draft_result=None,
         review_decision=None,
         trace_context=dict(trace_context),

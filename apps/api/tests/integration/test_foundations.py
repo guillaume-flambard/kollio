@@ -197,8 +197,16 @@ async def test_embeddings_store_provenance_and_exclude_incompatible_space(databa
                 incompatible_settings,
             )
             await session.flush()
-            matches = await similar_idea_ids(session, expected_vector, settings)
+            matches = await similar_idea_ids(
+                session, expected_vector, settings, workspace_ids=frozenset({workspace_id})
+            )
             assert matches[:2] == [expected_id, unrelated_id]
+            assert (
+                await similar_idea_ids(
+                    session, expected_vector, settings, workspace_ids=frozenset({uuid4()})
+                )
+                == []
+            )
             stored = await session.scalar(
                 select(IdeaEmbedding).where(
                     IdeaEmbedding.idea_id == expected_id,
