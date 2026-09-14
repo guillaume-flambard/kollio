@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, AcceptIdeaMembershipRequestData, AcceptIdeaMembershipRequestErrors, AcceptIdeaMembershipRequestResponses, AddIdeaParticipantData, AddIdeaParticipantErrors, AddIdeaParticipantResponses, ChangeExperimentStatusData, ChangeExperimentStatusErrors, ChangeExperimentStatusResponses, CreateCompanyConstraintData, CreateCompanyConstraintErrors, CreateCompanyConstraintResponses, CreateCompanyObjectiveData, CreateCompanyObjectiveErrors, CreateCompanyObjectiveResponses, CreateExperimentData, CreateExperimentErrors, CreateExperimentResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, DepositWorkspaceIdeaData, DepositWorkspaceIdeaErrors, DepositWorkspaceIdeaResponses, GetCompanyContextData, GetCompanyContextErrors, GetCompanyContextResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetExperimentData, GetExperimentErrors, GetExperimentResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, GetProfileData, GetProfileErrors, GetProfileResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, LeaveIdeaTeamData, LeaveIdeaTeamErrors, LeaveIdeaTeamResponses, ListIdeaExperimentsData, ListIdeaExperimentsErrors, ListIdeaExperimentsResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListIdeaLearningsData, ListIdeaLearningsErrors, ListIdeaLearningsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspaceMembersData, ListWorkspaceMembersErrors, ListWorkspaceMembersResponses, ListWorkspacesData, ListWorkspacesResponses, RecordExperimentOutcomeData, RecordExperimentOutcomeErrors, RecordExperimentOutcomeResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RejectIdeaMembershipRequestData, RejectIdeaMembershipRequestErrors, RejectIdeaMembershipRequestResponses, RemoveIdeaMemberData, RemoveIdeaMemberErrors, RemoveIdeaMemberResponses, RequestIdeaMembershipData, RequestIdeaMembershipErrors, RequestIdeaMembershipResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses, SaveCompanyProfileData, SaveCompanyProfileErrors, SaveCompanyProfileResponses, UpdateCompanyConstraintData, UpdateCompanyConstraintErrors, UpdateCompanyConstraintResponses, UpdateCompanyObjectiveData, UpdateCompanyObjectiveErrors, UpdateCompanyObjectiveResponses, UpdateIdeaInitiativeTypeData, UpdateIdeaInitiativeTypeErrors, UpdateIdeaInitiativeTypeResponses, WriteExperimentLearningData, WriteExperimentLearningErrors, WriteExperimentLearningResponses } from './types.gen';
+import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, AcceptIdeaMembershipRequestData, AcceptIdeaMembershipRequestErrors, AcceptIdeaMembershipRequestResponses, AddIdeaParticipantData, AddIdeaParticipantErrors, AddIdeaParticipantResponses, ChangeExperimentStatusData, ChangeExperimentStatusErrors, ChangeExperimentStatusResponses, CreateCompanyConstraintData, CreateCompanyConstraintErrors, CreateCompanyConstraintResponses, CreateCompanyMetricData, CreateCompanyMetricErrors, CreateCompanyMetricResponses, CreateCompanyObjectiveData, CreateCompanyObjectiveErrors, CreateCompanyObjectiveResponses, CreateCompanyPrincipleData, CreateCompanyPrincipleErrors, CreateCompanyPrincipleResponses, CreateExperimentData, CreateExperimentErrors, CreateExperimentResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, DepositWorkspaceIdeaData, DepositWorkspaceIdeaErrors, DepositWorkspaceIdeaResponses, GetCompanyContextData, GetCompanyContextErrors, GetCompanyContextResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetExperimentData, GetExperimentErrors, GetExperimentResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, GetProfileData, GetProfileErrors, GetProfileResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, LeaveIdeaTeamData, LeaveIdeaTeamErrors, LeaveIdeaTeamResponses, ListIdeaExperimentsData, ListIdeaExperimentsErrors, ListIdeaExperimentsResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListIdeaLearningsData, ListIdeaLearningsErrors, ListIdeaLearningsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspaceMembersData, ListWorkspaceMembersErrors, ListWorkspaceMembersResponses, ListWorkspacesData, ListWorkspacesResponses, RecordExperimentOutcomeData, RecordExperimentOutcomeErrors, RecordExperimentOutcomeResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RejectIdeaMembershipRequestData, RejectIdeaMembershipRequestErrors, RejectIdeaMembershipRequestResponses, RemoveIdeaMemberData, RemoveIdeaMemberErrors, RemoveIdeaMemberResponses, RequestIdeaMembershipData, RequestIdeaMembershipErrors, RequestIdeaMembershipResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses, SaveCompanyProfileData, SaveCompanyProfileErrors, SaveCompanyProfileResponses, UpdateCompanyConstraintData, UpdateCompanyConstraintErrors, UpdateCompanyConstraintResponses, UpdateCompanyMetricData, UpdateCompanyMetricErrors, UpdateCompanyMetricResponses, UpdateCompanyObjectiveData, UpdateCompanyObjectiveErrors, UpdateCompanyObjectiveResponses, UpdateCompanyPrincipleData, UpdateCompanyPrincipleErrors, UpdateCompanyPrincipleResponses, UpdateIdeaInitiativeTypeData, UpdateIdeaInitiativeTypeErrors, UpdateIdeaInitiativeTypeResponses, WriteExperimentLearningData, WriteExperimentLearningErrors, WriteExperimentLearningResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -336,6 +336,58 @@ export const createCompanyConstraint = <ThrowOnError extends boolean = false>(op
 export const updateCompanyConstraint = <ThrowOnError extends boolean = false>(options: Options<UpdateCompanyConstraintData, ThrowOnError>): RequestResult<UpdateCompanyConstraintResponses, UpdateCompanyConstraintErrors, ThrowOnError> => (options.client ?? client).patch<UpdateCompanyConstraintResponses, UpdateCompanyConstraintErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/workspaces/{workspace_id}/company-context/constraints/{constraint_id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Create Company Principle
+ */
+export const createCompanyPrinciple = <ThrowOnError extends boolean = false>(options: Options<CreateCompanyPrincipleData, ThrowOnError>): RequestResult<CreateCompanyPrincipleResponses, CreateCompanyPrincipleErrors, ThrowOnError> => (options.client ?? client).post<CreateCompanyPrincipleResponses, CreateCompanyPrincipleErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/company-context/principles',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Update Company Principle
+ */
+export const updateCompanyPrinciple = <ThrowOnError extends boolean = false>(options: Options<UpdateCompanyPrincipleData, ThrowOnError>): RequestResult<UpdateCompanyPrincipleResponses, UpdateCompanyPrincipleErrors, ThrowOnError> => (options.client ?? client).patch<UpdateCompanyPrincipleResponses, UpdateCompanyPrincipleErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/company-context/principles/{principle_id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Create Company Metric
+ */
+export const createCompanyMetric = <ThrowOnError extends boolean = false>(options: Options<CreateCompanyMetricData, ThrowOnError>): RequestResult<CreateCompanyMetricResponses, CreateCompanyMetricErrors, ThrowOnError> => (options.client ?? client).post<CreateCompanyMetricResponses, CreateCompanyMetricErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/company-context/metrics',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Update Company Metric
+ */
+export const updateCompanyMetric = <ThrowOnError extends boolean = false>(options: Options<UpdateCompanyMetricData, ThrowOnError>): RequestResult<UpdateCompanyMetricResponses, UpdateCompanyMetricErrors, ThrowOnError> => (options.client ?? client).patch<UpdateCompanyMetricResponses, UpdateCompanyMetricErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/company-context/metrics/{metric_id}',
     ...options,
     headers: {
         'Content-Type': 'application/json',

@@ -265,6 +265,14 @@ export type CompanyContextResponse = {
      * Constraints
      */
     constraints: Array<CompanyConstraintResponse>;
+    /**
+     * Principles
+     */
+    principles: Array<PrincipleResponse>;
+    /**
+     * Metrics
+     */
+    metrics: Array<MetricResponse>;
 };
 
 /**
@@ -989,6 +997,100 @@ export type MembershipResponse = {
 };
 
 /**
+ * MetricCreate
+ */
+export type MetricCreate = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Value
+     */
+    value?: string | null;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+    /**
+     * Observed At
+     */
+    observed_at?: string | null;
+    /**
+     * Source
+     */
+    source?: string | null;
+};
+
+/**
+ * MetricResponse
+ */
+export type MetricResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Value
+     */
+    value?: string | null;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+    /**
+     * Observed At
+     */
+    observed_at?: string | null;
+    /**
+     * Source
+     */
+    source?: string | null;
+    /**
+     * State
+     */
+    state: 'active' | 'archived';
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+};
+
+/**
+ * MetricUpdate
+ */
+export type MetricUpdate = {
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Value
+     */
+    value?: string | null;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+    /**
+     * Observed At
+     */
+    observed_at?: string | null;
+    /**
+     * Source
+     */
+    source?: string | null;
+    /**
+     * State
+     */
+    state?: 'active' | 'archived' | null;
+};
+
+/**
  * ObjectiveCreate
  */
 export type ObjectiveCreate = {
@@ -1142,6 +1244,64 @@ export type OwnedIdeaResponse = {
      * Created At
      */
     created_at: string;
+};
+
+/**
+ * PrincipleCreate
+ */
+export type PrincipleCreate = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+};
+
+/**
+ * PrincipleResponse
+ */
+export type PrincipleResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
+     * State
+     */
+    state: 'active' | 'archived';
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+};
+
+/**
+ * PrincipleUpdate
+ */
+export type PrincipleUpdate = {
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
+     * State
+     */
+    state?: 'active' | 'archived' | null;
 };
 
 /**
@@ -2250,6 +2410,134 @@ export type UpdateCompanyConstraintResponses = {
 };
 
 export type UpdateCompanyConstraintResponse = UpdateCompanyConstraintResponses[keyof UpdateCompanyConstraintResponses];
+
+export type CreateCompanyPrincipleData = {
+    body: PrincipleCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/principles';
+};
+
+export type CreateCompanyPrincipleErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateCompanyPrincipleError = CreateCompanyPrincipleErrors[keyof CreateCompanyPrincipleErrors];
+
+export type CreateCompanyPrincipleResponses = {
+    /**
+     * Successful Response
+     */
+    201: PrincipleResponse;
+};
+
+export type CreateCompanyPrincipleResponse = CreateCompanyPrincipleResponses[keyof CreateCompanyPrincipleResponses];
+
+export type UpdateCompanyPrincipleData = {
+    body: PrincipleUpdate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Principle Id
+         */
+        principle_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/principles/{principle_id}';
+};
+
+export type UpdateCompanyPrincipleErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateCompanyPrincipleError = UpdateCompanyPrincipleErrors[keyof UpdateCompanyPrincipleErrors];
+
+export type UpdateCompanyPrincipleResponses = {
+    /**
+     * Successful Response
+     */
+    200: PrincipleResponse;
+};
+
+export type UpdateCompanyPrincipleResponse = UpdateCompanyPrincipleResponses[keyof UpdateCompanyPrincipleResponses];
+
+export type CreateCompanyMetricData = {
+    body: MetricCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/metrics';
+};
+
+export type CreateCompanyMetricErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateCompanyMetricError = CreateCompanyMetricErrors[keyof CreateCompanyMetricErrors];
+
+export type CreateCompanyMetricResponses = {
+    /**
+     * Successful Response
+     */
+    201: MetricResponse;
+};
+
+export type CreateCompanyMetricResponse = CreateCompanyMetricResponses[keyof CreateCompanyMetricResponses];
+
+export type UpdateCompanyMetricData = {
+    body: MetricUpdate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Metric Id
+         */
+        metric_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/metrics/{metric_id}';
+};
+
+export type UpdateCompanyMetricErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateCompanyMetricError = UpdateCompanyMetricErrors[keyof UpdateCompanyMetricErrors];
+
+export type UpdateCompanyMetricResponses = {
+    /**
+     * Successful Response
+     */
+    200: MetricResponse;
+};
+
+export type UpdateCompanyMetricResponse = UpdateCompanyMetricResponses[keyof UpdateCompanyMetricResponses];
 
 export type ListIdeaExperimentsData = {
     body?: never;

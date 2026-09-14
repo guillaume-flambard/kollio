@@ -100,6 +100,76 @@
         "restore": "Restore",
         "empty": "No constraint yet."
       },
+      "onboarding": {
+        "title": "Seed the company context",
+        "intro": "Seven short questions. Answer what you can; anything you skip stays pending and can wait.",
+        "progress": "{answered} of {total} answered",
+        "pending": "Pending",
+        "submit": "Save my answers",
+        "saving": "Saving…",
+        "saved": "Context saved. You can enrich it below at any time.",
+        "steps": {
+          "facts": "Company facts",
+          "model": "Business model",
+          "markets": "Markets and segments",
+          "objectives": "Three objectives",
+          "constraints": "Constraints",
+          "principles": "Non-negotiables",
+          "metrics": "Key indicators"
+        },
+        "facts": {
+          "name": "Legal or brand name",
+          "description": "What the company does"
+        },
+        "model": {
+          "businessModel": "How it earns",
+          "productsServices": "Main products or services"
+        },
+        "markets": {
+          "markets": "Markets covered",
+          "customerSegments": "Who you serve"
+        },
+        "objectives": {
+          "first": "Objective 1",
+          "second": "Objective 2",
+          "third": "Objective 3"
+        },
+        "constraints": {
+          "first": "Constraint 1",
+          "second": "Constraint 2",
+          "third": "Constraint 3"
+        },
+        "principles": {
+          "first": "Non-negotiable 1",
+          "second": "Non-negotiable 2",
+          "third": "Non-negotiable 3"
+        },
+        "metrics": {
+          "first": "Indicator 1",
+          "second": "Indicator 2",
+          "third": "Indicator 3"
+        }
+      },
+      "principles": {
+        "title": "Non-negotiables",
+        "placeholder": "New non-negotiable",
+        "detailPlaceholder": "Detail (optional)",
+        "create": "Add non-negotiable",
+        "archive": "Archive",
+        "restore": "Restore",
+        "empty": "No non-negotiable yet."
+      },
+      "metrics": {
+        "title": "Key indicators",
+        "namePlaceholder": "New indicator",
+        "valuePlaceholder": "Value (optional)",
+        "unitPlaceholder": "Unit (optional)",
+        "sourcePlaceholder": "Source (optional)",
+        "create": "Add indicator",
+        "archive": "Archive",
+        "restore": "Restore",
+        "empty": "No indicator yet."
+      },
       "error": "The action failed. Your input is kept.",
       "loadError": "The context could not be loaded."
     }

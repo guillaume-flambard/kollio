@@ -70,6 +70,8 @@ async def test_member_reads_empty_context(context_database):
             assert body["profile"]["name"] is None
             assert body["objectives"] == []
             assert body["constraints"] == []
+            assert body["principles"] == []
+            assert body["metrics"] == []
         await transaction.rollback()
 
 
@@ -317,6 +319,128 @@ async def test_context_items_stay_inside_their_workspace(context_database):
                 own = await client.get(f"/workspaces/{workspace_id}/company-context")
             assert [item["title"] for item in own.json()["objectives"]] == ["Mine"]
             assert own.json()["objectives"][0]["state"] == "active"
+        await transaction.rollback()
+
+
+async def test_principle_lifecycle(context_database):
+    engine, url = context_database
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            workspace_id, _, member_id, _ = await _seed(session)
+            async with _client(session, url, str(member_id)) as client:
+                created = await client.post(
+                    f"/workspaces/{workspace_id}/company-context/principles",
+                    json={"title": "We refuse discount-led growth", "detail": "No exceptions"},
+                    headers={"Accept-Language": "en"},
+                )
+                assert created.status_code == 201
+                principle = created.json()
+                assert principle["state"] == "active"
+                assert principle["lang"] == "en"
+
+                updated = await client.patch(
+                    f"/workspaces/{workspace_id}/company-context/principles/{principle['id']}",
+                    json={"state": "archived"},
+                    headers={"Accept-Language": "fr"},
+                )
+                assert updated.status_code == 200
+                assert updated.json()["state"] == "archived"
+                assert updated.json()["lang"] == "fr"
+                assert updated.json()["detail"] == "No exceptions"
+
+                invalid = await client.patch(
+                    f"/workspaces/{workspace_id}/company-context/principles/{principle['id']}",
+                    json={"state": "paused"},
+                )
+                assert invalid.status_code == 422
+
+                read = await client.get(f"/workspaces/{workspace_id}/company-context")
+            assert [item["id"] for item in read.json()["principles"]] == [principle["id"]]
+            assert read.json()["principles"][0]["state"] == "archived"
+        await transaction.rollback()
+
+
+async def test_metric_lifecycle(context_database):
+    engine, url = context_database
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            workspace_id, _, member_id, _ = await _seed(session)
+            async with _client(session, url, str(member_id)) as client:
+                created = await client.post(
+                    f"/workspaces/{workspace_id}/company-context/metrics",
+                    json={
+                        "name": "Monthly active accounts",
+                        "value": "128",
+                        "unit": "accounts",
+                        "observed_at": "2026-09-01",
+                        "source": "Product analytics",
+                    },
+                    headers={"Accept-Language": "en"},
+                )
+                assert created.status_code == 201
+                metric = created.json()
+                assert metric["name"] == "Monthly active accounts"
+                assert metric["observed_at"] == "2026-09-01"
+                assert metric["state"] == "active"
+                assert metric["lang"] == "en"
+
+                updated = await client.patch(
+                    f"/workspaces/{workspace_id}/company-context/metrics/{metric['id']}",
+                    json={"value": "140", "state": "archived"},
+                )
+                assert updated.status_code == 200
+                assert updated.json()["value"] == "140"
+                assert updated.json()["state"] == "archived"
+                assert updated.json()["unit"] == "accounts"
+
+                read = await client.get(f"/workspaces/{workspace_id}/company-context")
+            assert [item["id"] for item in read.json()["metrics"]] == [metric["id"]]
+            assert read.json()["metrics"][0]["value"] == "140"
+        await transaction.rollback()
+
+
+async def test_non_member_is_refused_on_principles_and_metrics(context_database):
+    engine, url = context_database
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            workspace_id, _, member_id, outsider_id = await _seed(session)
+            async with _client(session, url, str(member_id)) as client:
+                principle_id = (
+                    await client.post(
+                        f"/workspaces/{workspace_id}/company-context/principles",
+                        json={"title": "Real principle"},
+                    )
+                ).json()["id"]
+                metric_id = (
+                    await client.post(
+                        f"/workspaces/{workspace_id}/company-context/metrics",
+                        json={"name": "Real metric"},
+                    )
+                ).json()["id"]
+
+            async with _client(session, url, str(outsider_id)) as client:
+                principle = await client.post(
+                    f"/workspaces/{workspace_id}/company-context/principles",
+                    json={"title": "Intruder principle"},
+                )
+                assert principle.status_code == 404
+                metric = await client.post(
+                    f"/workspaces/{workspace_id}/company-context/metrics",
+                    json={"name": "Intruder metric"},
+                )
+                assert metric.status_code == 404
+                for path in (
+                    f"/workspaces/{workspace_id}/company-context/principles/{principle_id}",
+                    f"/workspaces/{workspace_id}/company-context/metrics/{metric_id}",
+                ):
+                    refused = await client.patch(path, json={"state": "archived"})
+                    assert refused.status_code == 404
         await transaction.rollback()
 
 
