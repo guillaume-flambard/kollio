@@ -13,6 +13,8 @@ from src.modules.constraint_analysis.service.operations import launch_analysis
 from src.modules.constraint_analysis.service.read_model import head_analysis
 from src.modules.ideas.adapters.postgres import Idea, PostgresIdeas
 from src.modules.ideas.api.schemas import (
+    AcceptJoinBody,
+    AddParticipantBody,
     AnalysisResponse,
     ApplyJoinBody,
     CollaboratorResponse,
@@ -25,6 +27,7 @@ from src.modules.ideas.api.schemas import (
     RejectJoinBody,
     UpdateIdeaInitiativeTypeRequest,
 )
+from src.modules.ideas.domain.team import TeamAuthorizationError, TeamRuleError
 from src.modules.ideas.service.deposit_idea import (
     DepositNotFoundError,
     IdeaNotFoundError,
@@ -36,6 +39,7 @@ from src.modules.ideas.service.get_idea import get_idea
 from src.modules.ideas.service.list_ideas import list_workspace_ideas
 from src.modules.ideas.service.team_service import (
     TeamNotFoundError,
+    add_participant,
     apply_to_join,
     leave_team,
     remove_member,
@@ -90,12 +94,13 @@ async def read_idea(
             id=user.id,
             handle=user.handle,
             display_name=user.display_name,
-            role=role,
+            participation=participation,
+            business_function=business_function,
             roles=user.roles,
             bio=user.bio,
             avatar_key=user.avatar_key,
         )
-        for user, role in await repository.collaborators(idea.id)
+        for user, participation, business_function in await repository.collaborators(idea.id)
     ]
     response = IdeaResponse.model_validate(idea)
     join_requests = await _visible_join_requests(repository, idea, identity.subject)
@@ -276,12 +281,15 @@ async def read_workspace_ideas(
                             id=user.id,
                             handle=user.handle,
                             display_name=user.display_name,
-                            role=role,
+                            participation=participation,
+                            business_function=business_function,
                             roles=user.roles,
                             bio=user.bio,
                             avatar_key=user.avatar_key,
                         )
-                        for user, role in collaborators_by_idea.get(item.id, [])
+                        for user, participation, business_function in collaborators_by_idea.get(
+                            item.id, []
+                        )
                     ],
                 }
             )
@@ -297,6 +305,10 @@ def _team_error(request: Request, error: Exception) -> HTTPException:
     messages = MESSAGES[request.state.locale]
     if isinstance(error, TeamNotFoundError):
         return HTTPException(404, messages["not_found"])
+    if isinstance(error, TeamAuthorizationError):
+        return HTTPException(403, messages["forbidden"])
+    if isinstance(error, TeamRuleError):
+        return HTTPException(422, messages["invalid"])
     raise error
 
 
@@ -316,7 +328,7 @@ async def request_idea_membership(
     repository = PostgresIdeas(session)
     try:
         applied = await apply_to_join(
-            repository, idea_id, identity.subject, role=body.role, note=body.note
+            repository, idea_id, identity.subject, function=body.function, note=body.note
         )
         await session.commit()
     except (TeamNotFoundError, ValueError) as error:
@@ -333,13 +345,19 @@ async def accept_idea_membership_request(
     idea_id: UUID,
     request_id: UUID,
     request: Request,
+    body: AcceptJoinBody | None = None,
     identity: Identity = Depends(current_identity),
     session: AsyncSession = Depends(get_session),
 ) -> JoinRequestResponse:
     repository = PostgresIdeas(session)
     try:
         resolved = await resolve_join_request(
-            repository, idea_id, request_id, identity.subject, action="accept"
+            repository,
+            idea_id,
+            request_id,
+            identity.subject,
+            action="accept",
+            participation=body.participation if body is not None else None,
         )
         await session.commit()
     except (TeamNotFoundError, ValueError) as error:
@@ -374,6 +392,33 @@ async def reject_idea_membership_request(
     except (TeamNotFoundError, ValueError) as error:
         raise _team_error(request, error) from error
     return JoinRequestResponse.model_validate(resolved)
+
+
+@router.post(
+    "/{idea_id}/members",
+    operation_id="add_idea_participant",
+)
+async def add_idea_participant(
+    idea_id: UUID,
+    body: AddParticipantBody,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> dict:
+    repository = PostgresIdeas(session)
+    try:
+        outcome = await add_participant(
+            repository,
+            idea_id,
+            identity.subject,
+            body.user_id,
+            participation=body.participation,
+            function=body.function,
+        )
+        await session.commit()
+    except (TeamNotFoundError, TeamAuthorizationError, TeamRuleError) as error:
+        raise _team_error(request, error) from error
+    return outcome
 
 
 @router.post(

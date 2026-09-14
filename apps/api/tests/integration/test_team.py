@@ -95,7 +95,7 @@ async def test_join_handshake_full_loop(team_database):
             ) as client:
                 applied = await client.post(
                     f"/ideas/{idea_id}/join-requests",
-                    json={"role": "dev", "note": "Ten years of frontend."},
+                    json={"function": "engineering", "note": "Ten years of frontend."},
                 )
                 assert applied.status_code == 201
                 request_id = applied.json()["id"]
@@ -108,7 +108,10 @@ async def test_join_handshake_full_loop(team_database):
                 read = await client.get(f"/ideas/{idea_id}")
                 team = read.json()["collaborators"]
                 assert any(
-                    member["id"] == str(member_id) and member["role"] == "dev" for member in team
+                    member["id"] == str(member_id)
+                    and member["business_function"] == "engineering"
+                    and member["participation"] == "contributor"
+                    for member in team
                 )
 
                 left = await client.post(
@@ -153,7 +156,7 @@ async def test_join_reject_with_rationale_and_departure_record(team_database):
             ) as client:
                 applied = await client.post(
                     f"/ideas/{idea_id}/join-requests",
-                    json={"role": "growth", "note": "I ran campaigns."},
+                    json={"function": "marketing", "note": "I ran campaigns."},
                 )
                 assert applied.status_code == 201
                 request_id = applied.json()["id"]
@@ -167,5 +170,60 @@ async def test_join_reject_with_rationale_and_departure_record(team_database):
                 assert rejected.status_code == 200
                 assert rejected.json()["status"] == "rejected"
                 assert rejected.json()["rationale"] == "Team full on growth."
+
+        await transaction.rollback()
+
+
+async def test_owner_adds_a_workspace_member_directly(team_database):
+    engine, url = team_database
+    workspace_id, owner_id, member_id, outsider_id, idea_id = (uuid4() for _ in range(5))
+    subject = {"value": str(owner_id)}
+
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            await _seed(session, workspace_id, owner_id, member_id, outsider_id, idea_id)
+            await session.flush()
+            app = create_app(Settings(_env_file=None, database_url=url))
+            app.dependency_overrides[current_identity] = lambda: Identity(subject["value"])
+
+            async def override_session():
+                yield session
+
+            app.dependency_overrides[get_session] = override_session
+            async with httpx.AsyncClient(
+                transport=httpx.ASGITransport(app=app), base_url="http://test"
+            ) as client:
+                added = await client.post(
+                    f"/ideas/{idea_id}/members",
+                    json={
+                        "user_id": str(member_id),
+                        "participation": "decision_maker",
+                        "function": "finance",
+                    },
+                )
+                assert added.status_code == 200
+                assert added.json()["recorded"] is True
+
+                read = await client.get(f"/ideas/{idea_id}")
+                team = read.json()["collaborators"]
+                assert any(
+                    member["id"] == str(member_id)
+                    and member["participation"] == "decision_maker"
+                    and member["business_function"] == "finance"
+                    for member in team
+                )
+
+                unknown = await client.post(
+                    f"/ideas/{idea_id}/members",
+                    json={
+                        "user_id": str(outsider_id),
+                        "participation": "contributor",
+                        "function": "wizardry",
+                    },
+                    headers={"Accept-Language": "fr"},
+                )
+                assert unknown.status_code == 422
 
         await transaction.rollback()

@@ -89,7 +89,7 @@ class PostgresProfiles:
         if not workspaces:
             return []
         query = (
-            select(IdeaMembership.idea_id, Idea.title, IdeaMembership.role)
+            select(IdeaMembership.idea_id, Idea.title, IdeaMembership.business_function)
             .join(Idea, Idea.id == IdeaMembership.idea_id)
             .where(
                 IdeaMembership.user_id == user_id,

@@ -84,7 +84,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
     test('TYPE-03 a non-owner sees the type without the selector', async ({ page }) => {
       await mockDetail(page, 'member-two', 'market')
       await page.goto(`${prefix}/workspace/ideas/idea-one`)
-      await expect(page.getByText(labels.market!)).toBeVisible()
+      await expect(page.getByText(labels.market!, { exact: true })).toBeVisible()
       await expect(page.getByLabel(fieldLabel)).toHaveCount(0)
     })
   })

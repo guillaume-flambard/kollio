@@ -97,7 +97,10 @@ async def _seed(session):
 
     session.add(
         IdeaMembership(
-            idea_id=other_idea_id, user_id=person_id, role="growth"
+            idea_id=other_idea_id,
+            user_id=person_id,
+            participation="contributor",
+            business_function="marketing",
         )  # membership on the other workspace
     )
     await session.flush()
@@ -173,7 +176,12 @@ async def test_member_sees_membership_only_in_shared_workspaces(profile_database
             from src.modules.ideas.adapters.postgres import IdeaMembership
 
             session.add(
-                IdeaMembership(idea_id=ids["idea_id"], user_id=ids["person_id"], role="dev")
+                IdeaMembership(
+                    idea_id=ids["idea_id"],
+                    user_id=ids["person_id"],
+                    participation="contributor",
+                    business_function="engineering",
+                )
             )
             await session.flush()
             app = create_app(Settings(_env_file=None, database_url=url))
@@ -184,7 +192,7 @@ async def test_member_sees_membership_only_in_shared_workspaces(profile_database
                     {
                         "idea_id": str(ids["idea_id"]),
                         "idea_title": "Cargo bikes coop",
-                        "role": "dev",
+                        "role": "engineering",
                     }
                 ]
         await transaction.rollback()

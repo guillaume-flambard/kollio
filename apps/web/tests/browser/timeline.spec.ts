@@ -23,7 +23,7 @@ const idea: IdeaResponse = {
   pitch: 'Un contenu original conservé dans les deux langues.',
   stage: 'seed', lang: 'fr', created_at: '2026-09-01T10:00:00Z',
   owner_id: 'owner-one', workspace_id: 'workspace-one', visibility: 'workspace',
-  collaborators: [{ id: 'member-two', display_name: 'Camille', role: 'dev', roles: ['dev'], bio: null, avatar_key: 'sage' }],
+  collaborators: [{ id: 'member-two', display_name: 'Camille', participation: 'contributor', business_function: 'engineering', roles: ['engineering'], bio: null, avatar_key: 'sage' }],
   sought_roles: [], join_requests: [],
 }
 

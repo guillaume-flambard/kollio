@@ -21,13 +21,13 @@ const idea: IdeaResponse = {
   stage: 'seed', lang: 'fr', created_at: '2026-09-01T10:00:00Z',
   owner_id: 'owner-one', workspace_id: 'workspace-one', visibility: 'workspace',
   collaborators: [
-    { id: 'owner-one', display_name: 'Propriétaire', role: 'owner', roles: ['dev'], bio: null, avatar_key: 'lilac' },
+    { id: 'owner-one', display_name: 'Propriétaire', participation: 'owner', business_function: 'direction', roles: [], bio: null, avatar_key: 'lilac' },
   ],
-  sought_roles: ['dev'], join_requests: [],
+  sought_roles: ['engineering'], join_requests: [],
 }
 
 const explorerPage: IdeaPageResponse = {
-  items: [{ ...idea, collaborators: idea.collaborators, sought_roles: ['dev'], realism_score: null, last_activity_at: null } as never],
+  items: [{ ...idea, collaborators: idea.collaborators, sought_roles: ['engineering'], realism_score: null, last_activity_at: null } as never],
   total: 1, limit: 5, offset: 0,
 }
 

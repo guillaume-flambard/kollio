@@ -29,7 +29,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.route('**/api/workspaces/workspace-one/ideas?*', route => route.fulfill({
         json: {
           items: [
-            idea('idea-one', 'Ancrée', { realism_score: 72, sought_roles: ['dev'] }),
+            idea('idea-one', 'Ancrée', { realism_score: 72, sought_roles: ['engineering'] }),
             idea('idea-two', 'En attente'),
           ],
           total: 2, limit: 5, offset: 0,
@@ -51,8 +51,8 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
         json: { items: [], total: 0, limit: 5, offset: 0 } satisfies IdeaPageResponse,
       }))
       await page.goto(`${prefix}/workspace`)
-      await page.getByLabel(messages.ideas.detail.team.soughtTitle).selectOption('growth')
-      await expect.poll(() => requested.some(url => url.includes('sought_role=growth')), { timeout: 15_000 }).toBe(true)
+      await page.getByLabel(messages.ideas.detail.team.soughtTitle).selectOption('marketing')
+      await expect.poll(() => requested.some(url => url.includes('sought_role=marketing')), { timeout: 15_000 }).toBe(true)
     })
 
     test('EXPLORER-03 filters by realism band through the API', async ({ page }) => {

@@ -5,13 +5,15 @@ from uuid import UUID, uuid4
 from src.modules.ideas.adapters.postgres import Idea, JoinRequest, PostgresIdeas
 from src.modules.ideas.domain.permissions import can_read_idea
 from src.modules.ideas.domain.team import (
-    ROLES,
+    DEFAULT_PARTICIPATION,
     TeamAuthorizationError,
     TeamRuleError,
     decide_acceptance,
+    decide_addition,
     decide_application,
     decide_departure,
     decide_rejection,
+    validate_grantable_participation,
 )
 
 logger = logging.getLogger("kollio.team")
@@ -37,7 +39,7 @@ async def _accessible_idea(
 
 
 async def apply_to_join(
-    ideas: PostgresIdeas, idea_id: UUID, subject: str, *, role: str, note: str
+    ideas: PostgresIdeas, idea_id: UUID, subject: str, *, function: str, note: str
 ) -> JoinRequest:
     idea, actor = await _accessible_idea(ideas, idea_id, subject)
     is_owner = idea.owner_id == actor.id
@@ -45,7 +47,7 @@ async def apply_to_join(
     decision = decide_application(
         actor_is_owner=is_owner,
         actor_is_member=True,
-        role=role,
+        function=function,
         note=note,
         already_pending=existing is not None,
     )
@@ -53,7 +55,7 @@ async def apply_to_join(
         id=uuid4(),
         idea_id=idea_id,
         requester_id=actor.id,
-        role=decision.role,
+        business_function=decision.function,
         note=decision.note,
         status="pending",
     )
@@ -69,7 +71,7 @@ async def resolve_join_request(
     subject: str,
     *,
     action: str,
-    role: str | None = None,
+    participation: str | None = None,
     rationale: str | None = None,
 ) -> JoinRequest:
     idea, actor = await _accessible_idea(ideas, idea_id, subject)
@@ -78,12 +80,14 @@ async def resolve_join_request(
         raise TeamNotFoundError
     is_owner = idea.owner_id == actor.id
     if action == "accept":
-        if role is not None and role not in ROLES:
-            raise TeamRuleError(f"Unknown or reserved role: {role}")
+        granted = participation or DEFAULT_PARTICIPATION
+        validate_grantable_participation(granted)
         decide_acceptance(is_owner=is_owner, current_status=request.status)
         request.status = "accepted"
         request.resolved_at = datetime.now(UTC)
-        await ideas.add_idea_membership(idea_id, request.requester_id, role or request.role)
+        await ideas.add_idea_membership(
+            idea_id, request.requester_id, granted, request.business_function
+        )
     elif action == "reject":
         if rationale is None:
             raise TeamRuleError("A rejection explains itself in a short rationale")
@@ -98,6 +102,37 @@ async def resolve_join_request(
     ideas.commit_team_state(request)
     await ideas.session.flush()
     return request
+
+
+async def add_participant(
+    ideas: PostgresIdeas,
+    idea_id: UUID,
+    subject: str,
+    user_id: UUID,
+    *,
+    participation: str,
+    function: str,
+) -> dict:
+    idea, actor = await _accessible_idea(ideas, idea_id, subject)
+    target = await ideas.user(user_id)
+    decision = decide_addition(
+        actor_is_owner=idea.owner_id == actor.id,
+        target_is_workspace_member=bool(
+            target is not None
+            and idea.workspace_id is not None
+            and await ideas.is_workspace_member(idea.workspace_id, user_id)
+        ),
+        participation=participation,
+        function=function,
+    )
+    existing = await ideas.membership(idea_id, user_id)
+    if existing is not None:
+        existing.participation = decision.participation
+        existing.business_function = decision.function
+        await ideas.session.flush()
+        return {"recorded": True}
+    await ideas.add_idea_membership(idea_id, user_id, decision.participation, decision.function)
+    return {"recorded": True}
 
 
 async def leave_team(ideas: PostgresIdeas, idea_id: UUID, subject: str) -> dict:

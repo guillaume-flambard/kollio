@@ -5,6 +5,34 @@ export type ClientOptions = {
 };
 
 /**
+ * AcceptJoinBody
+ */
+export type AcceptJoinBody = {
+    /**
+     * Participation
+     */
+    participation?: string | null;
+};
+
+/**
+ * AddParticipantBody
+ */
+export type AddParticipantBody = {
+    /**
+     * User Id
+     */
+    user_id: string;
+    /**
+     * Participation
+     */
+    participation: string;
+    /**
+     * Function
+     */
+    function: string;
+};
+
+/**
  * AnalysisEvidence
  */
 export type AnalysisEvidence = {
@@ -113,9 +141,9 @@ export type AnalysisWorkflowResponse = {
  */
 export type ApplyJoinBody = {
     /**
-     * Role
+     * Function
      */
-    role: string;
+    function: string;
     /**
      * Note
      */
@@ -139,9 +167,13 @@ export type CollaboratorResponse = {
      */
     display_name: string;
     /**
-     * Role
+     * Participation
      */
-    role: string;
+    participation: string;
+    /**
+     * Business Function
+     */
+    business_function: string;
     /**
      * Roles
      */
@@ -683,9 +715,9 @@ export type JoinRequestResponse = {
      */
     requester_id: string;
     /**
-     * Role
+     * Business Function
      */
-    role: string;
+    business_function: string;
     /**
      * Note
      */
@@ -1139,7 +1171,10 @@ export type RequestIdeaMembershipResponses = {
 export type RequestIdeaMembershipResponse = RequestIdeaMembershipResponses[keyof RequestIdeaMembershipResponses];
 
 export type AcceptIdeaMembershipRequestData = {
-    body?: never;
+    /**
+     * Body
+     */
+    body?: AcceptJoinBody | null;
     path: {
         /**
          * Idea Id
@@ -1205,6 +1240,40 @@ export type RejectIdeaMembershipRequestResponses = {
 };
 
 export type RejectIdeaMembershipRequestResponse = RejectIdeaMembershipRequestResponses[keyof RejectIdeaMembershipRequestResponses];
+
+export type AddIdeaParticipantData = {
+    body: AddParticipantBody;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/members';
+};
+
+export type AddIdeaParticipantErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AddIdeaParticipantError = AddIdeaParticipantErrors[keyof AddIdeaParticipantErrors];
+
+export type AddIdeaParticipantResponses = {
+    /**
+     * Response Add Idea Participant
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type AddIdeaParticipantResponse = AddIdeaParticipantResponses[keyof AddIdeaParticipantResponses];
 
 export type LeaveIdeaTeamData = {
     body?: never;

@@ -25,6 +25,7 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - Recalculé par un agent à chaque itération majeure. Historisé (lié à l'itération).
 
 ### IdeaMembership (l'équipe qui se forme) — **le flux du moat**
+- `participation(owner|decision_maker|contributor|observer)` + `business_function` (12 fonctions métier) : deux axes,cf. décision #48.
 `idea_id, user_id, role(porteur|designer|dev|commercial|growth|…), joined_via_iteration_id, joined_at`
 - `sought_roles` sur l'idée : rôles recherchés (affichés dans l'explorer).
 

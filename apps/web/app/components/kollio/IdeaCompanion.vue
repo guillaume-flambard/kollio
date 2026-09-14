@@ -70,7 +70,7 @@ onBeforeUnmount(() => emit('targetReady', undefined))
               v-for="(person, index) in collaborators"
               :key="person.id"
               :name="person.display_name"
-              :meta="t(`ideas.detail.roles.${person.role}`)"
+              :meta="t(`ideas.function.${person.business_function}`)"
               :initials="personInitials(person.display_name)"
               :avatar-key="person.avatar_key || undefined"
               :online="index === 0"
