@@ -22,6 +22,7 @@ class AnalysisDisplay:
     iteration_id: UUID | None
     realism_score: int | None
     constraints: dict[str, dict[str, Any]]
+    contradictions: list[dict[str, Any]]
     locale: str | None
     model: str | None
     created_at: Any | None
@@ -31,21 +32,35 @@ def display_from(workflow: AnalysisWorkflow | None, final: ConstraintAnalysis | 
     if final is None:
         if workflow is not None and workflow.status in OPEN_STATUSES:
             return AnalysisDisplay(
-                "running", workflow.source_iteration_id, None, {}, None, None, None
+                "running", workflow.source_iteration_id, None, {}, [], None, None, None
             )
-        return AnalysisDisplay("unavailable", None, None, {}, None, None, None)
+        return AnalysisDisplay("unavailable", None, None, {}, [], None, None, None)
     result = final.result
     state = "abstained" if result.get("verdict") == "unknown" else "resolved"
     constraints = {
-        str(factor["name"]): {"score": factor["score"], "note": factor["summary"]}
+        str(factor["name"]): {
+            "score": factor["score"],
+            "note": factor["summary"],
+            "basis": factor.get("basis", "assumed"),
+            "gap": factor.get("gap"),
+        }
         for factor in result.get("factors", [])
     }
+    contradictions = [
+        {
+            "target": item.get("target"),
+            "ref_id": item.get("ref_id"),
+            "detail": item.get("detail"),
+        }
+        for item in result.get("contradictions", [])
+    ]
     score = None if state == "abstained" else result.get("overall_score")
     return AnalysisDisplay(
         state,
         final.source_iteration_id,
         score,
         constraints,
+        contradictions,
         final.locale,
         final.model,
         final.created_at,
@@ -94,7 +109,7 @@ async def head_analysis(session: AsyncSession, idea_id: UUID) -> AnalysisDisplay
             select(ConstraintAnalysis).where(ConstraintAnalysis.workflow_id == workflow.id)
         )
     if head is None and workflow is None:
-        return AnalysisDisplay("unavailable", None, None, {}, None, None, None)
+        return AnalysisDisplay("unavailable", None, None, {}, [], None, None, None)
     display = display_from(workflow, final)
     if display.iteration_id is None and head is not None:
         display = AnalysisDisplay(
@@ -102,6 +117,7 @@ async def head_analysis(session: AsyncSession, idea_id: UUID) -> AnalysisDisplay
             head.id,
             display.realism_score,
             display.constraints,
+            display.contradictions,
             display.locale,
             display.model,
             display.created_at,

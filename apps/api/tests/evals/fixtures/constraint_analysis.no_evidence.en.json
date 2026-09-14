@@ -6,16 +6,52 @@
     "evidence": []
   },
   "output": {
-    "overall_score": 50,
+    "overall_score": null,
     "verdict": "unknown",
     "summary": "The supplied information is not enough to establish realism.",
     "factors": [
-      {"name": "competition", "score": 50, "summary": "No competition evidence was supplied.", "source_ids": []},
-      {"name": "build_cost", "score": 50, "summary": "No build evidence was supplied.", "source_ids": []},
-      {"name": "time_to_market", "score": 50, "summary": "No delivery evidence was supplied.", "source_ids": []},
-      {"name": "defensibility", "score": 50, "summary": "No defensibility evidence was supplied.", "source_ids": []},
-      {"name": "acquisition", "score": 50, "summary": "No acquisition evidence was supplied.", "source_ids": []}
+      {
+        "name": "competition",
+        "score": null,
+        "summary": "No competition evidence was supplied.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "No market study or competitor evidence was supplied."
+      },
+      {
+        "name": "build_cost",
+        "score": null,
+        "summary": "No build evidence was supplied.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "No cost estimate was supplied."
+      },
+      {
+        "name": "time_to_market",
+        "score": null,
+        "summary": "No delivery evidence was supplied.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "No delivery timeline was supplied."
+      },
+      {
+        "name": "defensibility",
+        "score": null,
+        "summary": "No defensibility evidence was supplied.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "No evidence about defensibility was supplied."
+      },
+      {
+        "name": "acquisition",
+        "score": null,
+        "summary": "No acquisition evidence was supplied.",
+        "source_ids": [],
+        "basis": "unknown",
+        "gap": "No acquisition channel evidence was supplied."
+      }
     ],
-    "locale": "en"
+    "locale": "en",
+    "contradictions": []
   }
 }

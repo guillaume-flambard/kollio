@@ -166,13 +166,16 @@ async def test_workflow_launch_is_idempotent_and_review_is_owner_controlled(
                 assert repeated_review.status_code == 409
 
                 result = {
-                    "overall_score": 50,
+                    "overall_score": None,
                     "verdict": "unknown",
                     "summary": "More evidence is required.",
+                    "contradictions": [],
                     "factors": [
                         {
                             "name": name,
-                            "score": 50,
+                            "basis": "unknown",
+                            "score": None,
+                            "gap": "No market evidence was supplied",
                             "summary": "No evidence was supplied.",
                             "source_ids": [],
                         }
@@ -225,16 +228,19 @@ async def test_constraint_graph_resumes_without_repeating_model_call(analysis_da
     )
 
     class RecordedGateway:
-        async def analyze(self, *, title, pitch, locale, evidence):
+        async def analyze(self, *, title, pitch, locale, evidence, context=None):
             return ConstraintAnalysisResult.model_validate(
                 {
-                    "overall_score": 50,
+                    "overall_score": None,
                     "verdict": "unknown",
                     "summary": "More evidence is required.",
+                    "contradictions": [],
                     "factors": [
                         {
                             "name": name,
-                            "score": 50,
+                            "basis": "unknown",
+                            "score": None,
+                            "gap": "No market evidence was supplied",
                             "summary": "No evidence was supplied.",
                             "source_ids": [],
                         }
@@ -271,6 +277,6 @@ async def test_constraint_graph_resumes_without_repeating_model_call(analysis_da
         graph = build_constraint_analysis_graph(NoSecondCall(), saver)
         completed = await graph.ainvoke(Command(resume=True), config)
         assert completed["locale"] == "fr"
-        assert completed["result"]["overall_score"] == 50
+        assert completed["result"]["overall_score"] is None
         state = await graph.aget_state(config)
         assert state.next == ()

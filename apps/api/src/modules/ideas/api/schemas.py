@@ -31,6 +31,7 @@ class AnalysisResponse(BaseModel):
     iteration_id: UUID | None = None
     realism_score: int | None = None
     constraints: dict[str, dict] = Field(default_factory=dict)
+    contradictions: list[dict] = Field(default_factory=list)
     locale: Literal["fr", "en"] | None = None
     model: str | None = None
     created_at: datetime | None = None

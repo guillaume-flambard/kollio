@@ -2157,6 +2157,14 @@
             "type": "object",
             "title": "Constraints"
           },
+          "contradictions": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Contradictions"
+          },
           "locale": {
             "anyOf": [
               {
@@ -2747,9 +2755,16 @@
       "ConstraintAnalysisResult": {
         "properties": {
           "overall_score": {
-            "type": "integer",
-            "maximum": 100.0,
-            "minimum": 0.0,
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Overall Score"
           },
           "verdict": {
@@ -2776,6 +2791,13 @@
             "minItems": 5,
             "title": "Factors"
           },
+          "contradictions": {
+            "items": {
+              "$ref": "#/components/schemas/Contradiction"
+            },
+            "type": "array",
+            "title": "Contradictions"
+          },
           "locale": {
             "type": "string",
             "enum": [
@@ -2792,6 +2814,7 @@
           "verdict",
           "summary",
           "factors",
+          "contradictions",
           "locale"
         ],
         "title": "ConstraintAnalysisResult"
@@ -2809,11 +2832,38 @@
             ],
             "title": "Name"
           },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "known",
+              "assumed",
+              "unknown"
+            ],
+            "title": "Basis"
+          },
           "score": {
-            "type": "integer",
-            "maximum": 100.0,
-            "minimum": 0.0,
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Score"
+          },
+          "gap": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gap"
           },
           "summary": {
             "type": "string",
@@ -2832,11 +2882,43 @@
         "type": "object",
         "required": [
           "name",
+          "basis",
           "score",
+          "gap",
           "summary",
           "source_ids"
         ],
         "title": "ConstraintFactor"
+      },
+      "Contradiction": {
+        "properties": {
+          "target": {
+            "type": "string",
+            "enum": [
+              "objective",
+              "constraint"
+            ],
+            "title": "Target"
+          },
+          "ref_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Ref Id"
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Detail"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "target",
+          "ref_id",
+          "detail"
+        ],
+        "title": "Contradiction"
       },
       "ContributionResponse": {
         "properties": {

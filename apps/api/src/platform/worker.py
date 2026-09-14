@@ -126,6 +126,7 @@ async def execute_constraint_analysis(
                         "title": str(workflow.input_snapshot["title"]),
                         "pitch": str(workflow.input_snapshot["pitch"]),
                         "evidence": workflow.evidence,
+                        "context": dict(workflow.input_snapshot.get("company_context") or {}),
                         "result": {},
                         "approved": None,
                     }

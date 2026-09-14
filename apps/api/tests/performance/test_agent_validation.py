@@ -12,13 +12,16 @@ pytestmark = pytest.mark.performance
 
 def test_ten_thousand_agent_results_validate_within_cpu_budget() -> None:
     raw_result = {
-        "overall_score": 50,
+        "overall_score": None,
         "verdict": "unknown",
         "summary": "More evidence is required.",
+        "contradictions": [],
         "factors": [
             {
                 "name": name,
-                "score": 50,
+                "basis": "unknown",
+                "score": None,
+                "gap": "No market evidence was supplied",
                 "summary": "No evidence was supplied.",
                 "source_ids": [],
             }

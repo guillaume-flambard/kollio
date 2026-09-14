@@ -1,0 +1,30 @@
+{
+  "input": {
+    "title": "Deep discount campaign",
+    "pitch": "Fund growth with a 60 percent discount for the first year.",
+    "locale": "en",
+    "evidence": [],
+    "company_context": {
+      "profile": {"name": "Faktus", "lang": "en"},
+      "objectives": [{"id": "objective:1", "title": "Reach five paying pilots", "priority": true, "lang": "en"}],
+      "constraints": [{"id": "constraint:2", "title": "Gross margin stays above 60 percent", "detail": "Board constraint", "lang": "en"}]
+    }
+  },
+  "output": {
+    "overall_score": 35,
+    "verdict": "not_viable",
+    "summary": "The discount breaks the stated margin constraint.",
+    "factors": [
+      {"name": "competition", "basis": "assumed", "score": 40, "gap": null, "summary": "Discounting is common in this market.", "source_ids": []},
+      {"name": "build_cost", "basis": "assumed", "score": 50, "gap": null, "summary": "No delivery cost change is expected.", "source_ids": []},
+      {"name": "time_to_market", "basis": "assumed", "score": 45, "gap": null, "summary": "The campaign can launch quickly.", "source_ids": []},
+      {"name": "defensibility", "basis": "unknown", "score": null, "gap": "No evidence on retention after the discount ends.", "summary": "Retention after the discount is unproven.", "source_ids": []},
+      {"name": "acquisition", "basis": "assumed", "score": 30, "gap": null, "summary": "Cheap acquisition is expected but unproven.", "source_ids": []}
+    ],
+    "contradictions": [
+      {"target": "constraint", "ref_id": "constraint:2", "detail": "A 60 percent discount cannot keep gross margin above 60 percent."},
+      {"target": "objective", "ref_id": "objective:1", "detail": "Margin pressure reduces the capacity to run five pilots."}
+    ],
+    "locale": "en"
+  }
+}

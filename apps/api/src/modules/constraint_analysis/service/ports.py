@@ -24,4 +24,5 @@ class ConstraintAnalysisGateway(Protocol):
         pitch: str,
         locale: str,
         evidence: list[AnalysisEvidence],
+        context: dict[str, object],
     ) -> ConstraintAnalysisResult: ...

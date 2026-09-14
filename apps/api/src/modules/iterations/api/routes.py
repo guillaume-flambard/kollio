@@ -68,6 +68,7 @@ async def _iteration_response(session, idea_id, iteration) -> IterationResponse:
                 iteration_id=display.iteration_id,
                 realism_score=display.realism_score,
                 constraints=display.constraints,
+                contradictions=display.contradictions,
                 locale=display.locale,
                 model=display.model,
                 created_at=display.created_at,

@@ -7,5 +7,6 @@ class ConstraintAnalysisState(TypedDict):
     title: str
     pitch: str
     evidence: list[dict[str, str]]
+    context: dict[str, object]
     result: dict[str, object]
     approved: bool | None

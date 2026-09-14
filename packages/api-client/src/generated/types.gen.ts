@@ -75,6 +75,12 @@ export type AnalysisResponse = {
         };
     };
     /**
+     * Contradictions
+     */
+    contradictions?: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
      * Locale
      */
     locale?: 'fr' | 'en' | null;
@@ -342,7 +348,7 @@ export type ConstraintAnalysisResult = {
     /**
      * Overall Score
      */
-    overall_score: number;
+    overall_score: number | null;
     /**
      * Verdict
      */
@@ -362,6 +368,10 @@ export type ConstraintAnalysisResult = {
         ConstraintFactor
     ];
     /**
+     * Contradictions
+     */
+    contradictions: Array<Contradiction>;
+    /**
      * Locale
      */
     locale: 'fr' | 'en';
@@ -376,9 +386,17 @@ export type ConstraintFactor = {
      */
     name: 'competition' | 'build_cost' | 'time_to_market' | 'defensibility' | 'acquisition';
     /**
+     * Basis
+     */
+    basis: 'known' | 'assumed' | 'unknown';
+    /**
      * Score
      */
-    score: number;
+    score: number | null;
+    /**
+     * Gap
+     */
+    gap: string | null;
     /**
      * Summary
      */
@@ -387,6 +405,24 @@ export type ConstraintFactor = {
      * Source Ids
      */
     source_ids: Array<string>;
+};
+
+/**
+ * Contradiction
+ */
+export type Contradiction = {
+    /**
+     * Target
+     */
+    target: 'objective' | 'constraint';
+    /**
+     * Ref Id
+     */
+    ref_id: string;
+    /**
+     * Detail
+     */
+    detail: string;
 };
 
 /**
