@@ -3,7 +3,7 @@
 Change: `openspec/changes/add-company-context`
 Tickets: GitHub #53 (backend slice of #52)
 Date: 2026-09-14
-Delivered by this change: the backend capability only.
+Delivered by this change: the backend capability and its workspace settings screen.
 
 ## Scenario → evidence
 
@@ -48,7 +48,37 @@ Two-axis review before commit; both findings were fixed rather than deferred:
 
 ## Known gaps
 
-- The settings UI is a separate ticket (#59); until it lands, the capability is reachable through the API only and no browser/journey evidence exists.
 - Principles/strategy and key metrics sub-objects are deliberately out of this slice (decision #45: slice 1 ships profile + objectives + constraints).
 - Origin language (`lang`) is not stored for context items. Rationale recorded: they are short labels and descriptions, and the existing `User.bio`/`display_name` precedent treats profile-like meta text as exempt. If Faktus asks for translated company text, this needs a decision, not a silent column.
 - The workspace-membership query exists in several adapters (ideas, profiles, company_context, constraint_analysis) as a two-line read on purpose, to keep modules autonomous; extracting a shared kernel is not part of this change.
+
+## Settings UI evidence (ticket #59)
+
+Browser acceptance: `apps/web/tests/browser/company-context.spec.ts`, 6 scenarios × FR/EN = 12 checks, all passing.
+
+| Scenario | Evidence | Status |
+| --- | --- | --- |
+| Screen shows the saved context | `SETTINGS-01` (populated profile, objective and constraint rendered from the API) | passing |
+| Empty state when nothing is saved | `SETTINGS-02` | passing |
+| Profile saved from the screen | `SETTINGS-03` (asserts the PUT body carries the edited fields and a saved confirmation appears) | passing |
+| Objective created, edited, prioritised, archived and restored | `SETTINGS-04` (asserts POST, PATCH `title`, PATCH `priority: true`, PATCH `state: archived`, then PATCH `state: active`; both state labels rendered) | passing |
+| Constraint created, edited (detail), archived and restored | `SETTINGS-05` | passing |
+| Failure reported, input kept | `SETTINGS-06` (500 surfaces an alert, the field keeps its value) | passing |
+| FR/EN identical | every scenario runs in both locales; FR/EN catalog parity enforced by `scripts/check_locales.mjs` | passing |
+
+Full web evidence: 51 browser checks across the suite (runner-reported), 29 Vitest checks, eslint and nuxt typecheck clean, contract regeneration shows no drift.
+
+**Boundary of this evidence**: every request is served by Playwright route mocks. These checks prove UI behavior only — not authentication, backend authorization, persistence or provider quality. Those are proved by the PostgreSQL integration tests listed above. No production auth bypass was added.
+
+Known limitations:
+- GitHub Actions runs `pnpm --dir apps/web test:ui` (Vitest) but **not** the Playwright suite, so these browser checks are local evidence only. This matches the limitation already recorded in `docs/12-delivery-workflow.md`; adding Playwright to CI is a separate decision.
+- The screen keeps profile, objectives and constraints in one page rather than three components. Judgement call under "keep simple CRUD simple" (docs/08) and consistent with existing pages that mix domains (idea detail); revisit if a fourth editor appears.
+
+## Review findings applied (UI slice)
+
+- Mutations now confirm state from the **API response** (created/updated item applied locally) instead of a follow-up refresh, which removed a stale-UI window if the refresh failed.
+- Objective and constraint titles are editable end to end, closing the ticket's "edit objectives and constraints"; unarchive is covered by tests.
+- The objective PATCH BFF no longer forwards an all-whitespace title (previously a latent 422).
+- Shared `requiredTitle` / `optionalText` guards replaced duplicated BFF validation; generated `ObjectiveUpdate` / `ConstraintUpdate` / `CompanyProfileWrite` types replaced `Record<string, unknown>`; redundant `as never` casts removed.
+- Browser mocks now resolve items by id and 404 on unknown ids, so a wrong-id write fails the test.
+- Dead catalog key removed; the "detail" field label is unique per row.

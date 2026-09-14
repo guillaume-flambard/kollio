@@ -79,3 +79,36 @@ The system SHALL scope every context read and write to a single workspace and ne
 - **WHEN** two workspaces each hold a profile, objectives and constraints
 - **THEN** a member of one workspace sees only that workspace's items
 - **AND** cannot read or mutate the other workspace's items, even by identifier
+
+### Requirement: Members maintain the context from a settings screen
+The system SHALL expose the company context on a workspace settings screen in French and English, where every edit round-trips through the API and no state is kept locally only.
+
+#### Scenario: Screen shows the saved context
+- **WHEN** a member opens the workspace settings screen
+- **THEN** the screen shows the saved profile, objectives and constraints
+- **AND** shows empty fields when nothing is saved yet
+
+#### Scenario: Profile saved from the screen
+- **WHEN** a member edits the profile fields and saves
+- **THEN** the screen sends the profile to the API
+- **AND** re-reads or confirms the saved values from the API response
+
+#### Scenario: Objective managed from the screen
+- **WHEN** a member creates an objective, toggles its priority, or archives it
+- **THEN** each action round-trips through the API
+- **AND** the list reflects the persisted state
+
+#### Scenario: Constraint managed from the screen
+- **WHEN** a member creates a constraint or archives one
+- **THEN** each action round-trips through the API
+- **AND** the list reflects the persisted state
+
+#### Scenario: French and English behave identically
+- **WHEN** the same settings journey runs in French and in English
+- **THEN** every label, button and feedback message comes from the translation catalogs
+- **AND** behavior is identical
+
+#### Scenario: Failure is reported
+- **WHEN** a save or update fails
+- **THEN** the screen reports the failure in the user's locale
+- **AND** keeps the entered values so nothing is lost
