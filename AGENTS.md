@@ -20,6 +20,7 @@ Un "GitHub des idées" collaboratif : dépôt d'idée → tueur de contraintes (
 - Commandes détaillées et ordre exact : **`docs/10-project-init.md`** — à suivre avant d'écrire du code.
 
 ## À NE PAS faire (over-engineering)
+Remplacer ou réinterpréter la direction visuelle **Living Canvas** (`docs/06-design-system.md`) : on l'étend, on ne la remplace pas. Tokens canoniques de `packages/ui/src/tokens.css` uniquement, aucun hex littéral, aucun nom de variable inexistant dans les pages.
 Kubernetes · Kafka/microservices tant que < ~50 req/min · base vectorielle dédiée jour 1 (pgvector d'abord) · framework de mémoire (Mem0/Zep) prématuré · Celery+RabbitMQ (utiliser Taskiq avec Redis) · empiler plusieurs frameworks d'agents · sandbox microVM si les agents n'exécutent pas de code arbitraire · la couche investisseurs (régulée — hors V1).
 
 ## Périmètre V1
