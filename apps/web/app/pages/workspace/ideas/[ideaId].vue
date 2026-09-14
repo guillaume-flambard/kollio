@@ -189,6 +189,7 @@ const pitchParagraphs = computed(() => idea.value?.pitch.split(/\n\s*\n/).filter
 const pitchSentences = computed(() => idea.value?.pitch.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ])/).map(sentence => sentence.trim()).filter(Boolean) ?? [])
 const ideaSummary = computed(() => pitchSentences.value[0] ?? pitchParagraphs.value[0] ?? '')
 const collaborators = computed(() => idea.value?.collaborators ?? [])
+const isMember = computed(() => isOwner.value || collaborators.value.some(member => member.id === sessionSubject.value))
 const detailParagraphs = computed(() => pitchSentences.value.length > 1 ? pitchSentences.value.slice(1) : pitchParagraphs.value)
 const legacyTopics = computed(() => idea.value?.legacy_context?.domain?.split('·').map(topic => topic.trim()).filter(Boolean) ?? [])
 
@@ -570,6 +571,11 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
             </div>
           </form>
         </div>
+
+        <KollioExperimentLoop
+          :idea-id="ideaId"
+          :is-member="isMember"
+        />
 
         <section id="team" class="idea-team mt-11 rounded-2xl border border-default p-5 sm:p-6" :aria-labelledby="'idea-team-title'">
           <h2 id="idea-team-title" class="text-[1.25rem] font-semibold tracking-[-0.025em]">{{ t('ideas.detail.team.title') }}</h2>

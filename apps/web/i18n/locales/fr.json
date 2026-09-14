@@ -269,6 +269,65 @@
       },
       "typeError": "Le changement de type a échoué."
     },
+    "experiments": {
+      "title": "Expériences",
+      "count": "{count} à ce jour",
+      "loading": "Chargement des expériences…",
+      "detailLoading": "Chargement de l'expérience…",
+      "loadError": "Les expériences n'ont pas pu être chargées.",
+      "retry": "Réessayer",
+      "empty": "Aucune expérience pour l'instant. Transformez cette initiative en test : dites ce que vous attendez et à quoi vous le verrez.",
+      "newAction": "Nouvelle expérience",
+      "ruleError": "Cette action est impossible dans l'état actuel.",
+      "actionError": "L'action a échoué. Réessayez.",
+      "status": {
+        "proposed": "Proposée",
+        "running": "En cours",
+        "completed": "Terminée",
+        "cancelled": "Annulée"
+      },
+      "create": {
+        "title": "Nouvelle expérience",
+        "name": "Titre",
+        "hypothesis": "Hypothèse",
+        "metric": "Indicateur de succès",
+        "baseline": "Référence (optionnel)",
+        "target": "Cible (optionnel)",
+        "submit": "Créer l'expérience",
+        "submitting": "Création…",
+        "cancel": "Annuler"
+      },
+      "detail": {
+        "hypothesis": "Hypothèse",
+        "metric": "Indicateur de succès",
+        "baseline": "Référence",
+        "target": "Cible"
+      },
+      "actions": {
+        "start": "Lancer",
+        "complete": "Terminer",
+        "cancel": "Annuler"
+      },
+      "outcomes": {
+        "title": "Résultats",
+        "empty": "Aucun résultat enregistré.",
+        "metric": "Indicateur",
+        "value": "Valeur",
+        "unit": "Unité (optionnel)",
+        "observedAt": "Observé le",
+        "comment": "Commentaire (optionnel)",
+        "qualitative": "Note qualitative (optionnel)",
+        "add": "Ajouter un résultat",
+        "submitting": "Enregistrement…"
+      },
+      "learning": {
+        "title": "Apprentissage",
+        "draft": "Brouillon",
+        "confirmed": "Confirmé",
+        "confirm": "Confirmer l'apprentissage",
+        "confirming": "Confirmation…"
+      }
+    },
     "deposit": {
       "metaTitle": "Déposer une initiative | Kollio",
       "title": "Déposer une initiative",

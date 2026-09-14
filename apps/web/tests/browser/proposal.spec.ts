@@ -63,7 +63,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.getByRole('button', { name: it.propose }).click()
       await page.getByLabel(it.message).fill('Trop tard')
       await page.getByRole('button', { name: it.send, exact: true }).click()
-      await expect(page.getByRole('alert')).toContainText(it.conflict)
+      await expect(page.getByRole('alert').filter({ hasText: it.conflict })).toBeVisible()
     })
   })
 }
