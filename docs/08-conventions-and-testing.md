@@ -49,3 +49,11 @@ Outils : **uv workspaces** (Python) + **pnpm workspaces** (JS). Pas de Nx/Turbor
 
 ## Frontière LLM (rappel non négociable)
 Tout ce que renvoie un LLM passe par un schéma Pydantic avant exécution. Locale toujours dans l'état du graphe. Secrets jamais dans le contexte d'un agent (moindre privilège des outils = 1re défense anti-injection).
+
+## Automated guards
+
+`make verify` (and Foundations CI) run three checks beyond the test suites:
+
+- `node scripts/check_locales.mjs` — the FR and EN catalogs expose the same keys.
+- `node scripts/check_design_tokens.mjs` — `apps/web/app` contains no literal colour and no `--kollio-*` name absent from `packages/ui/src/tokens.css`. A typo there is invisible in review because the hardcoded fallback wins at runtime, so the check is the only reliable guard. Run it with `--self-test` to prove it still fails on a fixture. `--ui-*` names come from Nuxt UI and are exempt; a variable declared in the same file is treated as local.
+- the migration drift check, `uv run alembic check` from `apps/api`.

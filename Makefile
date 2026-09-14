@@ -29,6 +29,7 @@ verify:
 	pnpm lint
 	pnpm typecheck
 	node scripts/check_locales.mjs
+	node scripts/check_design_tokens.mjs
 
 contract:
 	cd apps/api && uv run python -m src.platform.export_openapi
