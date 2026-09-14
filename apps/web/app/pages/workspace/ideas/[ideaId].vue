@@ -30,6 +30,49 @@ const dateFormatter = computed(() =>
   new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
 )
 
+const grantableParticipations = ['decision_maker', 'contributor', 'observer'] as const
+const ownerMemberId = ref('')
+const ownerParticipation = ref<(typeof grantableParticipations)[number]>('contributor')
+const ownerFunction = ref<(typeof teamFunctions)[number]>('product')
+const ownerMembers = ref<{ id: string, display_name: string }[]>([])
+const ownerAdding = ref(false)
+const ownerAdded = ref(false)
+const ownerAddError = ref(false)
+
+async function loadOwnerMembers() {
+  const workspaceId = idea.value?.workspace_id
+  if (!workspaceId) return
+  try {
+    ownerMembers.value = await requestFetch(`/api/workspaces/${encodeURIComponent(workspaceId)}/members`)
+  } catch {
+    ownerMembers.value = []
+  }
+}
+
+async function addOwnerParticipant() {
+  if (!ownerMemberId.value || ownerAdding.value) return
+  ownerAdding.value = true
+  ownerAddError.value = false
+  ownerAdded.value = false
+  try {
+    await requestFetch(`/api/ideas/${encodeURIComponent(ideaId)}/members`, {
+      method: 'POST',
+      body: {
+        user_id: ownerMemberId.value,
+        participation: ownerParticipation.value,
+        function: ownerFunction.value,
+      },
+    })
+    ownerMemberId.value = ''
+    ownerAdded.value = true
+    await refresh()
+  } catch {
+    ownerAddError.value = true
+  } finally {
+    ownerAdding.value = false
+  }
+}
+
 const teamFunctions = ['marketing', 'sales', 'finance', 'product', 'engineering', 'customer_success', 'operations', 'legal', 'hr', 'data', 'direction', 'other'] as const
 const joinRequests = computed(() => idea.value?.join_requests ?? [])
 const soughtRoles = computed(() => idea.value?.sought_roles ?? [])
@@ -140,6 +183,7 @@ async function removeTeamMember(memberId: string) {
 }
 
 const actionError = computed(() => teamError.value ? t('ideas.detail.team.error') : '')
+watch(isOwner, (owner) => { if (owner) loadOwnerMembers() }, { immediate: true })
 const panels = ['team', 'questions', 'evidence'] as const
 const pitchParagraphs = computed(() => idea.value?.pitch.split(/\n\s*\n/).filter(Boolean) ?? [])
 const pitchSentences = computed(() => idea.value?.pitch.split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Þ])/).map(sentence => sentence.trim()).filter(Boolean) ?? [])
@@ -576,6 +620,27 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
               </form>
             </div>
           </div>
+
+          <form v-if="isOwner" class="team-add mt-4 grid gap-2" @submit.prevent="addOwnerParticipant">
+            <label class="text-sm font-medium" for="team-add-member">{{ t('ideas.detail.team.addTitle') }}</label>
+            <select id="team-add-member" v-model="ownerMemberId" required>
+              <option value="" disabled>{{ t('ideas.detail.team.addPick') }}</option>
+              <option v-for="member in ownerMembers" :key="member.id" :value="member.id">{{ member.display_name }}</option>
+            </select>
+            <div class="flex flex-wrap gap-2">
+              <select v-model="ownerParticipation" :aria-label="t('ideas.detail.team.addParticipation')">
+                <option v-for="value in grantableParticipations" :key="value" :value="value">{{ t(`ideas.participation.${value}`) }}</option>
+              </select>
+              <select v-model="ownerFunction" :aria-label="t('ideas.detail.team.addFunction')">
+                <option v-for="role in teamFunctions" :key="role" :value="role">{{ t(`ideas.function.${role}`) }}</option>
+              </select>
+            </div>
+            <p v-if="ownerAddError" role="alert">{{ t('ideas.detail.team.addError') }}</p>
+            <button type="submit" class="team-link" :disabled="ownerAdding || !ownerMemberId">
+              {{ ownerAdding ? t('ideas.detail.team.sending') : t('ideas.detail.team.add') }}
+            </button>
+            <p v-if="ownerAdded" class="text-sm text-muted">{{ t('ideas.detail.team.added') }}</p>
+          </form>
 
           <form v-if="!isOwner && !joinRequests.length" class="team-apply mt-4 grid gap-2" @submit.prevent="applyJoin">
             <div class="flex flex-wrap items-center gap-2">

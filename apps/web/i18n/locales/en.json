@@ -258,7 +258,14 @@
         "leave": "Leave the loop",
         "remove": "Remove",
         "applied": "Application sent.",
-        "error": "The action failed. Try again."
+        "error": "The action failed. Try again.",
+        "addTitle": "Add a colleague",
+        "addPick": "Pick a colleague",
+        "addParticipation": "Participation",
+        "addFunction": "Function",
+        "add": "Add",
+        "added": "Colleague added to the initiative.",
+        "addError": "Could not add this colleague."
       },
       "typeError": "Changing the type failed."
     },
