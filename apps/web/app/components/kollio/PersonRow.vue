@@ -6,11 +6,13 @@ withDefaults(defineProps<{
   imageUrl?: string
   avatarKey?: string
   online?: boolean
+  to?: string
 }>(), {
   initials: '',
   imageUrl: undefined,
   avatarKey: 'lilac',
   online: false,
+  to: undefined,
 })
 </script>
 
@@ -21,7 +23,11 @@ withDefaults(defineProps<{
       <span v-else>{{ initials || name.charAt(0) }}</span>
     </span>
     <span class="min-w-0 flex-1">
-      <strong class="person-row-name">
+      <NuxtLink v-if="to" :to="to" class="person-row-name">
+        {{ name }}
+        <span v-if="online" class="person-row-online" aria-hidden="true" />
+      </NuxtLink>
+      <strong v-else class="person-row-name">
         {{ name }}
         <span v-if="online" class="person-row-online" aria-hidden="true" />
       </strong>

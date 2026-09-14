@@ -1,12 +1,13 @@
 from datetime import datetime
 from typing import Any
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
     DateTime,
     ForeignKey,
+    Integer,
     String,
     UniqueConstraint,
     false,
@@ -14,6 +15,9 @@ from sqlalchemy import (
     or_,
     select,
     text,
+)
+from sqlalchemy import (
+    true as sa_true,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -74,6 +78,9 @@ class Idea(Base):
     source: Mapped[str | None]
     source_id: Mapped[str | None]
     provenance: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+    sought_roles: Mapped[list[str]] = mapped_column(
+        JSONB, default=list, server_default=text("'[]'::jsonb")
+    )
 
 
 class IdeaMembership(Base):
@@ -88,6 +95,39 @@ class IdeaMembership(Base):
     joined_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
+class JoinRequest(Base):
+    __tablename__ = "idea_join_requests"
+    __table_args__ = (
+        CheckConstraint("status IN ('pending', 'accepted', 'rejected')"),
+        CheckConstraint("role <> 'owner'"),
+        UniqueConstraint("idea_id", "requester_id", "status"),
+    )
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    idea_id: Mapped[UUID] = mapped_column(ForeignKey("ideas.id", ondelete="CASCADE"), index=True)
+    requester_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    role: Mapped[str] = mapped_column(String(20))
+    note: Mapped[str] = mapped_column(String(500))
+    status: Mapped[str] = mapped_column(String(16), default="pending")
+    rationale: Mapped[str | None] = mapped_column(String(500))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class Departure(Base):
+    __tablename__ = "idea_departures"
+    __table_args__ = (CheckConstraint("direction IN ('left', 'removed')"),)
+
+    id: Mapped[UUID] = mapped_column(primary_key=True)
+    idea_id: Mapped[UUID] = mapped_column(ForeignKey("ideas.id", ondelete="CASCADE"), index=True)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    direction: Mapped[str] = mapped_column(String(10))
+    reason: Mapped[str | None] = mapped_column(String(500))
+    recorded_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
 class PostgresIdeas:
     def __init__(self, session: AsyncSession):
         self.session = session
@@ -100,6 +140,62 @@ class PostgresIdeas:
             select(WorkspaceMembership.workspace_id).join(User).where(User.auth_subject == subject)
         )
         return frozenset((await self.session.scalars(query)).all())
+
+    async def user_by_subject(self, subject: str) -> User | None:
+        return await self.session.scalar(select(User).where(User.auth_subject == subject))
+
+    async def pending_join_request(self, idea_id: UUID, requester_id: UUID) -> JoinRequest | None:
+        return await self.session.scalar(
+            select(JoinRequest).where(
+                JoinRequest.idea_id == idea_id,
+                JoinRequest.requester_id == requester_id,
+                JoinRequest.status == "pending",
+            )
+        )
+
+    async def join_requests_for_idea(self, idea_id: UUID) -> list[JoinRequest]:
+        query = (
+            select(JoinRequest)
+            .where(JoinRequest.idea_id == idea_id)
+            .order_by(JoinRequest.created_at)
+        )
+        return list((await self.session.scalars(query)).all())
+
+    async def join_request(self, idea_id: UUID, request_id: UUID) -> JoinRequest | None:
+        return await self.session.scalar(
+            select(JoinRequest).where(JoinRequest.id == request_id, JoinRequest.idea_id == idea_id)
+        )
+
+    async def membership(self, idea_id: UUID, user_id: UUID) -> IdeaMembership | None:
+        return await self.session.get(IdeaMembership, (idea_id, user_id))
+
+    def commit_team_state(self, join_request: JoinRequest) -> None:
+        self.session.add(join_request)
+
+    async def record_departure(
+        self, idea_id: UUID, user_id: UUID, direction: str, reason: str | None
+    ) -> Departure:
+        departure = Departure(
+            id=uuid4(), idea_id=idea_id, user_id=user_id, direction=direction, reason=reason
+        )
+        self.session.add(departure)
+        await self.session.flush()
+        return departure
+
+    async def add_idea_membership(self, idea_id: UUID, user_id: UUID, role: str) -> IdeaMembership:
+        membership = IdeaMembership(idea_id=idea_id, user_id=user_id, role=role)
+        self.session.add(membership)
+        await self.session.flush()
+        return membership
+
+    async def remove_membership(self, idea_id: UUID, user_id: UUID) -> None:
+        membership = await self.membership(idea_id, user_id)
+        if membership is not None:
+            await self.session.delete(membership)
+            await self.session.flush()
+
+    def add_idea(self, idea: Idea) -> None:
+        self.session.add(idea)
 
     async def collaborators(self, idea_id: UUID) -> list[tuple[User, str]]:
         query = (
@@ -133,7 +229,8 @@ class PostgresIdeas:
         offset: int,
         query_text: str | None = None,
         stage: str | None = None,
-        domain: str | None = None,
+        sought_role: str | None = None,
+        realism_min: int | None = None,
     ) -> tuple[list[Idea], int]:
         filters: list[Any] = [
             Idea.workspace_id == workspace_id,
@@ -150,16 +247,54 @@ class PostgresIdeas:
             )
         if stage:
             filters.append(Idea.stage == stage)
-        if domain:
-            filters.append(Idea.provenance["domaine"].astext == domain)
+        if sought_role:
+            filters.append(Idea.sought_roles.contains([sought_role]))
+        activity, _analysis, head = self._activity_binding()
+        if realism_min is not None:
+            filters.append(_analysis >= realism_min)
         query = (
-            select(Idea)
+            select(
+                Idea,
+                _analysis.label("realism_score"),
+                activity.label("last_activity_at"),
+            )
+            .outerjoin(head, sa_true())
             .where(*filters)
-            .order_by(Idea.created_at.desc(), Idea.id.desc())
+            .order_by(activity.desc().nulls_last(), Idea.created_at.desc(), Idea.id.desc())
             .limit(limit)
             .offset(offset)
         )
         count_query = select(func.count()).select_from(Idea).where(*filters)
-        ideas = list((await self.session.scalars(query)).all())
         total = int((await self.session.scalar(count_query)) or 0)
-        return ideas, total
+        ideas: list[Idea] = []
+        realism_scores: dict[UUID, int | None] = {}
+        last_activity: dict[UUID, datetime | None] = {}
+        for row in (await self.session.execute(query)).all():
+            idea = row[0]
+            realism_scores[idea.id] = row[1]
+            last_activity[idea.id] = row[2]
+            ideas.append(idea)
+        return ideas, total, realism_scores, last_activity
+
+    def _activity_binding(self) -> tuple[Any, Any, Any]:
+        from src.modules.constraint_analysis.adapters.postgres import (
+            ConstraintAnalysis as StoredAnalysis,
+        )
+        from src.modules.iterations.adapters.postgres import Iteration
+
+        head = (
+            select(Iteration)
+            .where(Iteration.idea_id == Idea.id, Iteration.branch == "main")
+            .order_by(Iteration.revision.desc())
+            .limit(1)
+            .subquery()
+            .lateral()
+        )
+        analysis = (
+            select(StoredAnalysis.result["overall_score"].astext.cast(Integer))
+            .where(StoredAnalysis.idea_id == Idea.id)
+            .order_by(StoredAnalysis.created_at.desc())
+            .limit(1)
+            .scalar_subquery()
+        )
+        return head.c.created_at, analysis, head

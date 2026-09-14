@@ -214,10 +214,15 @@ async def test_iteration_lifecycle_is_versioned_and_workspace_isolated(iteration
 
                 subject["value"] = str(owner_id)
                 rejected = await client.post(
-                    f"/ideas/{idea_id}/iterations/{rejected_proposal_id}/reject"
+                    f"/ideas/{idea_id}/iterations/{rejected_proposal_id}/reject",
+                    json={"rationale": "Offline-first belongs on the main line instead."},
                 )
                 assert rejected.status_code == 200
                 assert rejected.json()["proposal_status"] == "rejected"
+                assert (
+                    rejected.json()["rationale"]
+                    == "Offline-first belongs on the main line instead."
+                )
                 assert (await session.get(Idea, idea_id)).title == "Initial title"
 
                 subject["value"] = str(member_id)

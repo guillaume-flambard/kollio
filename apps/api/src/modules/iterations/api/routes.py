@@ -4,10 +4,13 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.modules.constraint_analysis.service.read_model import analysis_for_iteration
 from src.modules.iterations.adapters.postgres import PostgresIterations
 from src.modules.iterations.api.schemas import (
+    AnalysisResponse,
     CreateIterationRequest,
     IterationResponse,
+    RejectProposalRequest,
     ResolveProposalRequest,
     RollbackRequest,
 )
@@ -53,7 +56,24 @@ async def read_iterations(
         iterations = await list_iterations(PostgresIterations(session), idea_id, identity.subject)
     except IterationNotFoundError as error:
         raise _transition_error(request, error) from error
-    return [IterationResponse.model_validate(iteration) for iteration in iterations]
+    return [await _iteration_response(session, idea_id, iteration) for iteration in iterations]
+
+
+async def _iteration_response(session, idea_id, iteration) -> IterationResponse:
+    display = await analysis_for_iteration(session, idea_id, iteration)
+    return IterationResponse.model_validate(iteration).model_copy(
+        update={
+            "analysis": AnalysisResponse(
+                state=display.state,
+                iteration_id=display.iteration_id,
+                realism_score=display.realism_score,
+                constraints=display.constraints,
+                locale=display.locale,
+                model=display.model,
+                created_at=display.created_at,
+            )
+        }
+    )
 
 
 @router.post(
@@ -127,13 +147,18 @@ async def accept_iteration(
 async def reject_iteration(
     idea_id: UUID,
     iteration_id: UUID,
+    body: RejectProposalRequest,
     identity: Annotated[Identity, Depends(current_identity)],
     session: Annotated[AsyncSession, Depends(get_session)],
     request: Request,
 ) -> IterationResponse:
     try:
         iteration = await reject_proposal(
-            PostgresIterations(session), idea_id, iteration_id, identity.subject
+            PostgresIterations(session),
+            idea_id,
+            iteration_id,
+            identity.subject,
+            rationale=body.rationale,
         )
         await session.commit()
     except (

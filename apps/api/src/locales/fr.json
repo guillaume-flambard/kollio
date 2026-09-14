@@ -4,5 +4,6 @@
   "conflict": "L’idée a changé. Actualisez-la puis réessayez",
   "unauthorized": "Connexion requise",
   "unavailable": "Service indisponible",
-  "invalid": "Requête invalide"
+  "invalid": "Requête invalide",
+  "initial_deposit": "Dépôt initial"
 }

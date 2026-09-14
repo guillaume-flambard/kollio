@@ -81,30 +81,29 @@
       "forYou": "Pour vous",
       "recent": "Récentes",
       "validation": "En validation",
-      "domains": "Domaines",
       "results": "{count} résultat | {count} résultats",
       "found": "{count} idée trouvée | {count} idées trouvées",
       "sortBy": "Trier par :",
-      "relevance": "Pertinence",
       "contributors": "{count} contributeur | {count} contributeurs",
       "contributorTitle": "Contributeurs",
       "expertiseTitle": "Expertises de l’équipe",
       "noContributors": "Cette idée n’a pas encore de contributeur.",
-      "domainGroups": {
-        "ai": "IA et société",
-        "data": "Données",
-        "trust": "Confiance",
-        "governance": "Gouvernance",
-        "education": "Éducation",
-        "product": "Produit"
-      },
       "preview": "Aperçu de l’idée",
       "open": "Ouvrir l’idée",
       "domain": "Domaine",
       "language": "Langue",
       "updated": "Mise à jour",
       "closePreview": "Fermer l’aperçu",
-      "noResults": "Aucune idée ne correspond à ces critères."
+      "noResults": "Aucune idée ne correspond à ces critères.",
+      "activity": "Activité récente",
+      "prism": "Score {score}",
+      "allRoles": "Tous les rôles",
+      "realism": {
+        "title": "Réalisme",
+        "grounded": "Idées ancrées",
+        "badge": "Score {score}",
+        "band": "60+"
+      }
     },
     "stage": {
       "seed": "Graine",
@@ -176,9 +175,6 @@
         "constraint": "Contrainte historique",
         "channel": "Canal envisagé"
       },
-      "sources": {
-        "prospecteur": "Prospecteur"
-      },
       "companion": {
         "label": "Contexte de l’idée",
         "tabWithCount": "{label} ({count})",
@@ -203,107 +199,104 @@
           "provenanceNote": "Ce passage vient du dépôt Prospecteur d’origine. Cette provenance ne constitue pas encore une preuve vérifiée.",
           "empty": "Les sources qui soutiennent ou remettent en cause cette idée apparaîtront ici."
         }
-      }
-    }
-  },
-  "landing": {
-    "meta": {
-      "title": "Kollio | Des idées aux décisions d’équipe",
-      "description": "Centralisez les idées de votre équipe, confrontez-les au réel et documentez les décisions qui les font avancer."
-    },
-    "navigation": {
-      "platform": "Plateforme",
-      "teams": "Équipes",
-      "method": "Méthode",
-      "security": "Sécurité",
-      "demo": "Demander une démo",
-      "workspace": "Ouvrir mon espace"
-    },
-    "hero": {
-      "eyebrow": "L’espace de travail des idées qui comptent",
-      "title": "De l’intuition à la décision, sans perdre le fil.",
-      "titleLead": "De l’intuition à la décision,",
-      "titleEmphasis": "sans perdre le fil.",
-      "description": "Centralisez les idées de votre équipe, confrontez-les aux contraintes réelles et transformez les meilleures en initiatives assumées.",
-      "primaryAction": "Essayer avec mon équipe",
-      "secondaryAction": "Découvrir la méthode",
-      "leftNote": "Des idées d’aujourd’hui aux impacts réels de demain.",
-      "rightNote": "Même contexte. Meilleures décisions. Ensemble."
-    },
-    "preview": {
-      "label": "Aperçu du parcours d’une initiative",
-      "workspace": "Portfolio Innovation",
-      "count": "12 initiatives",
-      "search": "Rechercher une initiative…",
-      "signal": {
-        "title": "Signal",
-        "description": "Idées et opportunités",
-        "primary": "Automatiser le contrôle qualité terrain",
-        "secondary": "Valoriser les données machines inexploitées",
-        "tertiary": "Simplifier l’onboarding clients PME"
       },
-      "validation": {
-        "title": "En validation",
-        "description": "Analyses et confrontations",
-        "evidence": "Preuve vérifiée",
-        "evidenceCopy": "32 % de non-conformités en moins sur les sites pilotes.",
-        "source": "Source : rapport pilote terrain",
-        "question": "Question ouverte",
-        "questionCopy": "Comment gérer les cas limites hors spécifications ?",
-        "owner": "Claire Martin",
-        "role": "Responsable produit"
-      },
-      "decision": {
-        "title": "Décision",
-        "description": "Initiatives assumées",
-        "documented": "Décision documentée",
-        "copy": "Lancer une phase d’industrialisation sur trois régions dès le prochain trimestre.",
-        "open": "Voir la décision complète",
-        "team": "Équipe impliquée",
-        "note": "Des expertises complémentaires",
-        "morePeople": "+2"
+      "team": {
+        "title": "L’équipe",
+        "soughtTitle": "Rôles recherchés",
+        "membersTitle": "Membres",
+        "apply": "Rejoindre la boucle",
+        "applyNote": "Ce que vous apportez",
+        "send": "Envoyer",
+        "sending": "Envoi…",
+        "pending": "Candidature en attente",
+        "rejected": "Refus : {rationale}",
+        "accept": "Accepter",
+        "reject": "Refuser",
+        "rejectReason": "Motif court du refus",
+        "leave": "Quitter la boucle",
+        "remove": "Retirer",
+        "applied": "Candidature envoyée.",
+        "error": "L’action a échoué. Réessayez."
       }
     },
-    "outcomes": {
-      "label": "Ce que Kollio apporte aux équipes",
-      "context": {
-        "title": "Un contexte partagé",
-        "description": "Rassemblez idées, données, contraintes et expertises au même endroit."
-      },
-      "decisions": {
-        "title": "Des décisions explicables",
-        "description": "Gardez la trace des analyses, des arbitrages et des raisons qui ont mené à chaque décision."
-      },
-      "ai": {
-        "title": "Une IA sous contrôle",
-        "description": "Des assistants qui synthétisent, comparent et structurent dans un cadre aligné avec vos règles."
+    "deposit": {
+      "metaTitle": "Déposer une idée | Kollio",
+      "title": "Déposer une idée",
+      "description": "Un titre, un pitch, et l’analyse des contraintes démarre aussitôt.",
+      "titleLabel": "Titre de l’idée",
+      "pitchLabel": "Pitch",
+      "langLabel": "Langue d’origine",
+      "langAuto": "Langue de l’interface",
+      "langFr": "Français",
+      "langEn": "English",
+      "submit": "Déposer l’idée",
+      "submitting": "Dépôt en cours…",
+      "running": "Analyse des contraintes en cours…",
+      "resolvedTitle": "Score de réalisme",
+      "abstainedTitle": "Analyse en attente de preuves",
+      "abstainedBody": "Il n'y a pas encore de preuve. Enrichissez l'idée puis ajoutez-en : chaque contrainte indique ce qui ferait basculer sa note.",
+      "openIdea": "Ouvrir l’idée",
+      "error": "Le dépôt a échoué. Réessayez."
+    },
+    "role": {
+      "owner": "Porteur",
+      "designer": "Designer",
+      "dev": "Développement",
+      "commercial": "Commercial",
+      "growth": "Growth",
+      "data": "Data",
+      "product": "Produit"
+    },
+    "profile": {
+      "metaTitle": "Profil | Kollio",
+      "back": "Retour",
+      "rolesTitle": "Rôles",
+      "ownedTitle": "Idées déposées",
+      "teamsTitle": "Équipes",
+      "actsTitle": "Actes enregistrés",
+      "ownedEmpty": "Aucune idée dans cet espace.",
+      "teamsEmpty": "Aucune équipe pour le moment.",
+      "actsEmpty": "Aucun acte enregistré pour le moment.",
+      "roleIn": "dans {idea}",
+      "onIdea": "sur {idea}",
+      "notFound": "Profil introuvable",
+      "notFoundDescription": "Ce profil n'existe pas ou ne partage aucun espace avec vous.",
+      "loadError": {
+        "title": "Profil indisponible",
+        "description": "Le profil n'a pas pu être chargé."
       }
     },
-    "trust": "Espaces privés · Rôles et permissions · Traçabilité des analyses",
-    "method": {
-      "overline": "Une mémoire de décision, pas une boîte à idées",
-      "title": "Votre raisonnement d’équipe devient un actif.",
-      "description": "Kollio conserve ce qui a été proposé, ce qui a été vérifié et pourquoi vous avez décidé. Une nouvelle personne peut reprendre le fil sans refaire toutes les réunions.",
-      "capture": {
-        "number": "01",
-        "title": "Captez le signal",
-        "description": "Une intuition entre dans un espace privé avec son contexte, son propriétaire et le problème qu’elle cherche à résoudre."
+    "iterations": {
+      "pending": "En attente",
+      "accepted": "Fusionnée",
+      "rejected": "Refusée",
+      "branch": "Branche {name}",
+      "analysisRunning": "Analyse en cours",
+      "analysisResolved": "Score {score}",
+      "analysisAbstained": "En attente de preuves",
+      "propose": "Proposer une évolution",
+      "proposeHint": "Votre proposition ouvre une branche ; le porteur l'accepte ou la refuse.",
+      "message": "Message de l'itération",
+      "titleField": "Titre",
+      "pitchField": "Pitch",
+      "stageField": "Stade",
+      "send": "Envoyer la proposition",
+      "sending": "Envoi…",
+      "conflict": "L'idée a changé pendant la rédaction. Rechargez et réessayez.",
+      "error": "La proposition a échoué. Réessayez.",
+      "stages": {
+        "seed": "Graine",
+        "iterating": "En itération",
+        "team_formed": "Équipe formée"
       },
-      "challenge": {
-        "number": "02",
-        "title": "Confrontez-la au réel",
-        "description": "L’équipe relie contraintes, questions et preuves. Les assistants structurent l’analyse sans masquer les sources."
-      },
-      "decide": {
-        "number": "03",
-        "title": "Documentez la décision",
-        "description": "La décision, ses responsables et ses raisons restent attachés à l’initiative pour guider la suite."
-      }
-    },
-    "finalCta": {
-      "note": "Une idée claire. Une équipe alignée.",
-      "title": "Donnez à vos prochaines décisions un meilleur point de départ.",
-      "action": "Essayer Kollio avec mon équipe"
+      "cancel": "Annuler",
+      "accept": "Accepter la proposition",
+      "reject": "Refuser",
+      "rejectConfirm": "Refuser avec un motif",
+      "rationalePlaceholder": "Motif court du refus",
+      "rollback": "Revenir à cette itération",
+      "rollbackMessage": "Retour arrière vers {hash}",
+      "actionsError": "L'action a échoué. Rechargez et réessayez."
     }
   }
 }

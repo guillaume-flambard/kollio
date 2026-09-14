@@ -33,6 +33,12 @@ class ResolutionDecision:
     proposal_status: ProposalStatus
 
 
+@dataclass(frozen=True)
+class RejectionDecision:
+    status: ProposalStatus
+    rationale: str
+
+
 def _require_current_parent(
     expected_parent_id: UUID | None,
     current_parent_id: UUID | None,
@@ -77,12 +83,15 @@ def decide_rejection(
     is_owner: bool,
     branch: str,
     proposal_status: str | None,
-) -> ProposalStatus:
+    rationale: str,
+) -> RejectionDecision:
     if not is_owner:
         raise AuthorizationError("Only the idea owner can reject a proposal")
     if branch == "main" or proposal_status != "pending":
         raise InvalidTransitionError("Only a pending proposal can be rejected")
-    return "rejected"
+    if not rationale.strip():
+        raise IterationRuleError("A rejection explains itself in a short rationale")
+    return RejectionDecision(status="rejected", rationale=rationale.strip())
 
 
 def decide_rollback(

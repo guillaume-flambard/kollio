@@ -25,6 +25,22 @@ class CollaboratorResponse(BaseModel):
     avatar_key: str | None = None
 
 
+class AnalysisResponse(BaseModel):
+    state: Literal["resolved", "abstained", "running", "unavailable"]
+    iteration_id: UUID | None = None
+    realism_score: int | None = None
+    constraints: dict[str, dict] = Field(default_factory=dict)
+    locale: Literal["fr", "en"] | None = None
+    model: str | None = None
+    created_at: datetime | None = None
+
+
+class DepositIdeaRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=180)
+    pitch: str = Field(min_length=1, max_length=5000)
+    lang: Literal["fr", "en"] | None = None
+
+
 class IdeaResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: UUID
@@ -37,6 +53,9 @@ class IdeaResponse(BaseModel):
     lang: Literal["fr", "en"]
     visibility: Literal["public", "workspace"]
     created_at: datetime
+    analysis: AnalysisResponse | None = None
+    sought_roles: list[str] = Field(default_factory=list)
+    join_requests: list[JoinRequestResponse] = Field(default_factory=list)
     legacy_context: LegacyIdeaContext | None = None
     collaborators: list[CollaboratorResponse] = Field(default_factory=list)
 
@@ -51,7 +70,9 @@ class IdeaSummaryResponse(BaseModel):
     stage: Literal["seed", "iterating", "team_formed"]
     lang: Literal["fr", "en"]
     created_at: datetime
-    domain: str | None = None
+    sought_roles: list[str] = Field(default_factory=list)
+    realism_score: int | None = None
+    last_activity_at: datetime | None = None
     collaborators: list[CollaboratorResponse] = Field(default_factory=list)
 
 
@@ -60,3 +81,24 @@ class IdeaPageResponse(BaseModel):
     total: int
     limit: int
     offset: int
+
+
+class ApplyJoinBody(BaseModel):
+    role: str = Field(min_length=1, max_length=20)
+    note: str = Field(min_length=1, max_length=500)
+
+
+class RejectJoinBody(BaseModel):
+    rationale: str = Field(min_length=1, max_length=500)
+
+
+class JoinRequestResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    idea_id: UUID
+    requester_id: UUID
+    role: str
+    note: str
+    status: Literal["pending", "accepted", "rejected"]
+    rationale: str | None = None
+    created_at: datetime
