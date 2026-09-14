@@ -35,10 +35,29 @@ class AnalysisResponse(BaseModel):
     created_at: datetime | None = None
 
 
+InitiativeType = Literal[
+    "idea",
+    "hypothesis",
+    "campaign",
+    "opportunity",
+    "decision",
+    "experiment",
+    "pricing",
+    "market",
+    "partnership",
+    "internal_improvement",
+]
+
+
 class DepositIdeaRequest(BaseModel):
     title: str = Field(min_length=1, max_length=180)
     pitch: str = Field(min_length=1, max_length=5000)
     lang: Literal["fr", "en"] | None = None
+    initiative_type: InitiativeType = "idea"
+
+
+class UpdateIdeaInitiativeTypeRequest(BaseModel):
+    initiative_type: InitiativeType
 
 
 class IdeaResponse(BaseModel):
@@ -50,6 +69,7 @@ class IdeaResponse(BaseModel):
     owner_id: UUID
     workspace_id: UUID | None
     stage: Literal["seed", "iterating", "team_formed"]
+    initiative_type: InitiativeType
     lang: Literal["fr", "en"]
     visibility: Literal["public", "workspace"]
     created_at: datetime
@@ -68,6 +88,7 @@ class IdeaSummaryResponse(BaseModel):
     title: str
     pitch: str
     stage: Literal["seed", "iterating", "team_formed"]
+    initiative_type: InitiativeType
     lang: Literal["fr", "en"]
     created_at: datetime
     sought_roles: list[str] = Field(default_factory=list)

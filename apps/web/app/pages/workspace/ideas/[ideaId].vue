@@ -236,7 +236,26 @@ async function submitProposal() {  if (!proposeForm.message.trim() || !proposeFo
   }
 }
 
-const canManageIterations = computed(() => !!idea.value && sessionSubject.value === idea.value.owner_id)
+const typeOptions = useInitiativeTypeOptions()
+
+const typeError = ref(false)
+
+async function changeInitiativeType(event: Event) {
+  const value = (event.target as HTMLSelectElement).value
+  typeError.value = false
+  try {
+    await requestFetch(`/api/ideas/${encodeURIComponent(ideaId)}`, {
+      method: 'PATCH',
+      body: { initiative_type: value },
+    })
+    await refresh()
+  }
+  catch {
+    typeError.value = true
+  }
+}
+
+const canManageIterations = computed(() => isOwner.value)
 const iterationsActionsError = ref(false)
 
 async function acceptProposal(id: string) {
@@ -402,6 +421,19 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
           <h1 class="idea-title max-w-[630px]">{{ idea.title }}</h1>
           <div class="idea-topics flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-muted">
             <KollioSketchAnnotation active kind="swash">{{ t(`ideas.stage.${idea.stage}`) }}</KollioSketchAnnotation>
+            <label class="initiative-type">
+              <span class="text-muted">{{ t('ideas.initiativeTypeLabel') }}</span>
+              <select
+                v-if="isOwner"
+                :value="idea.initiative_type"
+                name="initiative-type"
+                @change="changeInitiativeType"
+              >
+                <option v-for="(label, value) in typeOptions" :key="value" :value="value">{{ label }}</option>
+              </select>
+              <strong v-else>{{ t(`ideas.initiativeType.${idea.initiative_type}`) }}</strong>
+            </label>
+            <p v-if="typeError" role="alert" class="text-sm text-red-500">{{ t('ideas.detail.typeError') }}</p>
             <template v-for="topic in legacyTopics" :key="topic">
               <span class="inline-flex items-center gap-5">
                 <span aria-hidden="true" class="idea-dot" />
