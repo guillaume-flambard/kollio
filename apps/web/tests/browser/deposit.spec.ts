@@ -117,13 +117,22 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(page.getByText('La remise casse la marge brute.')).toBeVisible()
     })
 
-    test('DEPOSIT-03 shows the running state before the verdict', async ({ page }) => {
+    test('DEPOSIT-03 narrates the analysis while it runs, before the verdict', async ({ page }) => {
+      const narration = (messages.ideas.deposit as unknown as { narration: Record<string, string> }).narration
       await mockIo(page, undefined)
       await page.goto(`${prefix}/workspace/deposit`)
       await page.getByLabel(deposit.titleLabel).fill('Vélos en libre-service')
       await page.getByLabel(deposit.pitchLabel).fill('Une flotte coopérative.')
       await page.getByRole('button', { name: deposit.submit, exact: true }).click()
+      // The bare "running" line is replaced by a narrated build-up of what Kollio is doing.
       await expect(page.getByText(deposit.running)).toBeVisible()
+      for (const label of [narration.context, narration.fit, narration.reuse, narration.weigh, narration.decide]) {
+        await expect(page.getByText(label)).toBeVisible()
+      }
+      await expect(page.locator('.narration-step')).toHaveCount(5)
+      await expect(page.locator('.narration-step[data-current="true"]')).toHaveCount(1)
+      // No verdict yet.
+      await expect(page.getByRole('heading', { name: deposit.resolvedTitle, exact: true })).toHaveCount(0)
     })
 
     test('DEPOSIT-04 shows the honest abstention without a fake score', async ({ page }) => {

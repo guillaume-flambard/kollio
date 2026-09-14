@@ -411,6 +411,13 @@
       "submit": "Deposit the initiative",
       "submitting": "Depositing…",
       "running": "Constraint analysis running…",
+      "narration": {
+        "context": "Reading your company context",
+        "fit": "Checking it against your active objectives and constraints",
+        "reuse": "Reusing what you already learned",
+        "weigh": "Weighing competition, cost, timing, defensibility and reach",
+        "decide": "Deciding, and saying where it disagrees"
+      },
       "resolvedTitle": "Realism score",
       "abstainedTitle": "Analysis waiting for evidence",
       "abstainedBody": "There is no evidence yet. Enrich the initiative and add some: each constraint explains what would unlock its score.",

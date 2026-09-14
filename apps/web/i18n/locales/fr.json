@@ -411,6 +411,13 @@
       "submit": "Déposer l’initiative",
       "submitting": "Dépôt en cours…",
       "running": "Analyse des contraintes en cours…",
+      "narration": {
+        "context": "Lecture de votre contexte d’entreprise",
+        "fit": "Confrontation à vos objectifs et contraintes actifs",
+        "reuse": "Réutilisation de ce que vous avez déjà appris",
+        "weigh": "Pondération de la concurrence, du coût, du délai, de la défendabilité et de l’acquisition",
+        "decide": "Décision, et signalement des désaccords"
+      },
       "resolvedTitle": "Score de réalisme",
       "abstainedTitle": "Analyse en attente de preuves",
       "abstainedBody": "Il n'y a pas encore de preuve. Enrichissez l'initiative puis ajoutez-en : chaque contrainte indique ce qui ferait basculer sa note.",
