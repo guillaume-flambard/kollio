@@ -193,6 +193,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.getByLabel(labels.learning.title, { exact: true }).fill('Les équipes adoptent le dépôt, une fois sur deux.')
       await page.getByRole('button', { name: labels.learning.confirm, exact: true }).click()
       await expect(page.locator('.experiment-learning .experiment-status')).toHaveAttribute('data-status', 'confirmed')
+      await expect(page.getByText(labels.learning.confirmedNote)).toBeVisible()
       expect(state.posted).toEqual({ text: 'Les équipes adoptent le dépôt, une fois sur deux.', confirm: true })
     })
 
