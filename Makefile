@@ -1,4 +1,4 @@
-.PHONY: install services migrate seed-demo reset-demo up verify contract build
+.PHONY: install services migrate seed-demo seed-faktus reset-faktus reset-demo up verify contract build
 
 install:
 	pnpm install --frozen-lockfile
@@ -17,6 +17,12 @@ seed-demo:
 
 reset-demo:
 	cd apps/api && uv run python -m src.platform.seed_demo --reset
+
+seed-faktus:
+	cd apps/api && uv run python -m src.platform.seed_faktus
+
+reset-faktus:
+	cd apps/api && uv run python -m src.platform.seed_faktus --reset
 
 up:
 	docker compose up -d --wait
