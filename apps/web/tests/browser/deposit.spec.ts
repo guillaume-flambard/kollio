@@ -54,6 +54,30 @@ const explained = {
   ],
 } as unknown as IdeaResponse['analysis']
 
+const running: IdeaResponse['analysis'] = {
+  state: 'running',
+  iteration_id: null,
+  realism_score: null,
+  constraints: {},
+  contradictions: [],
+  locale: null,
+  model: null,
+  created_at: null,
+  progress: {
+    profile: 'Faktus',
+    objectives: [
+      'Signer cinq pilotes payants',
+      'Passer sous un jour pour le premier apprentissage',
+      'Une experience par equipe et par semaine',
+      'Un quatrieme objectif',
+    ],
+    constraints: ['Autofinance, pas de recrutement terrain', 'Equipe produit de deux personnes'],
+    learnings: [{ id: 'learning:1', text: 'La refonte tarifaire a gagne 12% d’essais mais pas de conversion payante.' }],
+    sources: [{ id: 'ev-1', url: 'kollio://evidence/ev-1', snippet: '18 des 40 sessions visuelles se sont terminees hors ligne.' }],
+    areas: 5,
+  },
+} as unknown as IdeaResponse['analysis']
+
 async function mockIo(
   page: import('@playwright/test').Page,
   analysis: IdeaResponse['analysis'],
@@ -117,21 +141,27 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(page.getByText('La remise casse la marge brute.')).toBeVisible()
     })
 
-    test('DEPOSIT-03 narrates the analysis while it runs, before the verdict', async ({ page }) => {
+    test('DEPOSIT-03 narrates the real inputs the running analysis is weighing', async ({ page }) => {
       const narration = (messages.ideas.deposit as unknown as { narration: Record<string, string> }).narration
-      await mockIo(page, undefined)
+      const more = narration.more.replace('{count}', '1')
+      await mockIo(page, running)
       await page.goto(`${prefix}/workspace/deposit`)
       await page.getByLabel(deposit.titleLabel).fill('Vélos en libre-service')
       await page.getByLabel(deposit.pitchLabel).fill('Une flotte coopérative.')
       await page.getByRole('button', { name: deposit.submit, exact: true }).click()
-      // The bare "running" line is replaced by a narrated build-up of what Kollio is doing.
-      await expect(page.getByText(deposit.running)).toBeVisible()
-      for (const label of [narration.context, narration.fit, narration.reuse, narration.weigh, narration.decide]) {
-        await expect(page.getByText(label)).toBeVisible()
-      }
-      await expect(page.locator('.narration-step')).toHaveCount(5)
-      await expect(page.locator('.narration-step[data-current="true"]')).toHaveCount(1)
-      // No verdict yet.
+
+      // Real company facts, not generic stage names.
+      await expect(page.getByText('Faktus')).toBeVisible()
+      await expect(page.getByText('Signer cinq pilotes payants')).toBeVisible()
+      await expect(page.getByText('Autofinance, pas de recrutement terrain')).toBeVisible()
+      await expect(page.getByText(/refonte tarifaire/)).toBeVisible()
+      await expect(page.getByText(/sessions visuelles/)).toBeVisible()
+      // Objectives are capped, the overflow is counted honestly.
+      await expect(page.getByText('Un quatrieme objectif')).toHaveCount(0)
+      await expect(page.getByText(more)).toBeVisible()
+      // Seven real groups (context, objectives, constraints, learnings, sources, areas, deciding).
+      await expect(page.locator('.narration-group')).toHaveCount(7)
+      await expect(page.locator('.narration-group[data-current="true"]')).toHaveCount(1)
       await expect(page.getByRole('heading', { name: deposit.resolvedTitle, exact: true })).toHaveCount(0)
     })
 

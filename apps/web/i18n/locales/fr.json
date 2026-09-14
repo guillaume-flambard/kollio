@@ -413,10 +413,14 @@
       "running": "Analyse des contraintes en cours…",
       "narration": {
         "context": "Lecture de votre contexte d’entreprise",
-        "fit": "Confrontation à vos objectifs et contraintes actifs",
-        "reuse": "Réutilisation de ce que vous avez déjà appris",
-        "weigh": "Pondération de la concurrence, du coût, du délai, de la défendabilité et de l’acquisition",
-        "decide": "Décision, et signalement des désaccords"
+        "contextNamed": "Lecture du contexte de {name}",
+        "objectives": "Confrontation à {count} objectif actif | Confrontation à {count} objectifs actifs",
+        "constraints": "Contre {count} contrainte | Contre {count} contraintes",
+        "learnings": "Réutilisation de {count} apprentissage passé | Réutilisation de {count} apprentissages passés",
+        "sources": "Pondération de {count} source | Pondération de {count} sources",
+        "areas": "Sur les cinq domaines de contrainte",
+        "deciding": "Décision, et signalement des désaccords",
+        "more": "+{count} de plus"
       },
       "resolvedTitle": "Score de réalisme",
       "abstainedTitle": "Analyse en attente de preuves",

@@ -128,6 +128,7 @@ def _display_response(display) -> AnalysisResponse:
         locale=display.locale,
         model=display.model,
         created_at=display.created_at,
+        progress=display.progress,
     )
 
 

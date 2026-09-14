@@ -413,10 +413,14 @@
       "running": "Constraint analysis running…",
       "narration": {
         "context": "Reading your company context",
-        "fit": "Checking it against your active objectives and constraints",
-        "reuse": "Reusing what you already learned",
-        "weigh": "Weighing competition, cost, timing, defensibility and reach",
-        "decide": "Deciding, and saying where it disagrees"
+        "contextNamed": "Reading {name}'s company context",
+        "objectives": "Checking {count} active objective | Checking {count} active objectives",
+        "constraints": "Against {count} constraint | Against {count} constraints",
+        "learnings": "Reusing {count} past learning | Reusing {count} past learnings",
+        "sources": "Weighing {count} source | Weighing {count} sources",
+        "areas": "Across the five constraint areas",
+        "deciding": "Deciding, and flagging disagreements",
+        "more": "+{count} more"
       },
       "resolvedTitle": "Realism score",
       "abstainedTitle": "Analysis waiting for evidence",

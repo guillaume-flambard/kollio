@@ -132,7 +132,7 @@ const constraintLabels: Record<string, string> = {
       </form>
 
       <section v-else class="deposit-verdict" aria-live="polite">
-        <KollioAnalysisNarration v-if="analysisState === 'running'" />
+        <KollioAnalysisNarration v-if="analysisState === 'running'" :progress="deposited?.analysis?.progress" />
         <template v-else>
           <h2>{{ analysisState === 'abstained' ? t('ideas.deposit.abstainedTitle') : t('ideas.deposit.resolvedTitle') }}</h2>
           <p v-if="analysisState === 'abstained'" class="deposit-abstained">

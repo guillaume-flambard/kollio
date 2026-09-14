@@ -2,17 +2,19 @@
 
 | Scenario | Evidence |
 | --- | --- |
-| NL-01 five narrated steps while running, one current | `tests/browser/deposit.spec.ts` DEPOSIT-03 asserts the five localized step labels, `.narration-step` count 5 and one `[data-current="true"]`, and no resolved heading |
-| NL-02 verdict replaces it unchanged | DEPOSIT-02 (resolved) and DEPOSIT-04 (abstention) still pass; the narration only renders while `analysisState === 'running'` |
-| NL-03 reduced motion settles all steps | component sets `stage` to the last index under `prefers-reduced-motion: reduce` (no animation dependency for state) |
-| NL-04 FR/EN parity, no jargon | DEPOSIT-03 runs in both locales; `check_locales` parity |
-| NL-05 canonical tokens only | `check_design_tokens` passes (no literal colour, no unknown token) |
+| NL-01 real inputs narrated | `tests/browser/deposit.spec.ts` DEPOSIT-03 asserts the company name, an objective title, a constraint title, a learning text and a source from `analysis.progress` |
+| NL-02 omission and "+N more" | DEPOSIT-03 asserts the 4th objective is absent and the `+1 more` overflow shows |
+| NL-03 progress from snapshot + evidence | `tests/integration/test_analysis_display.py` `test_running_analysis_carries_real_progress` asserts the running read's `progress` (profile, objectives, constraints, learnings, sources, areas) built from the launch snapshot |
+| NL-04 verdict unchanged | DEPOSIT-02 (resolved) and DEPOSIT-04 (abstention) still pass; the narration renders only while `analysis.state === 'running'` |
+| NL-05 reduced motion | the component sets every group done under `prefers-reduced-motion: reduce`; content is the real data either way |
+| NL-06 FR/EN + tokens | DEPOSIT-03 runs in both locales; `check_locales` parity; `check_design_tokens` passes |
 
 ## Gaps
 
-- This is the first item of #78 only. The confirmation moment, the full
-  empty/loading/error and responsive sweep, and the vocabulary pass across the
-  other golden-path screens are not here; #78 stays open.
-- The narration timing is client-side and reflects the stages Kollio runs, not a
-  live per-step signal from the pipeline. The pipeline (#76) completes in one
-  analysis step today, so there is no real sub-progress to show.
+- `progress` is assembled from the frozen snapshot at launch, so it reflects
+  what the run started with, not live per-step completion; the pipeline (#76)
+  still finishes in one analyze step, so there is no incremental sub-progress to
+  surface yet.
+- Reused-learning text comes from the effective evidence (populated at launch);
+  with no embeddings configured the learnings group is simply absent, which is
+  the honest behaviour.

@@ -140,6 +140,56 @@ async def _finish_workflow(session, owner_id, idea_id, iteration_id, result):
     await session.flush()
 
 
+async def _running_workflow(session, owner_id, idea_id, iteration_id):
+    workflow_id = uuid4()
+    session.add(
+        AnalysisWorkflow(
+            id=workflow_id,
+            idea_id=idea_id,
+            source_iteration_id=iteration_id,
+            requested_by_id=owner_id,
+            idempotency_key=f"running-{workflow_id}",
+            locale="en",
+            status="running",
+            current_step="analyze",
+            input_snapshot={
+                "title": "Cargo bikes",
+                "pitch": "Fleet",
+                "company_context": {
+                    "profile": {"name": "Faktus"},
+                    "objectives": [
+                        {
+                            "id": "objective:o1",
+                            "title": "Five pilots",
+                            "priority": True,
+                            "lang": "en",
+                        }
+                    ],
+                    "constraints": [
+                        {"id": "constraint:c1", "title": "No hiring", "detail": None, "lang": "en"}
+                    ],
+                },
+                "reused_learning_ids": ["11111111-1111-1111-1111-111111111111"],
+            },
+            evidence=[
+                {
+                    "id": "learning:11111111-1111-1111-1111-111111111111",
+                    "url": "kollio://learning/1",
+                    "text": "Offline sessions completed 18 of 40.",
+                },
+                {
+                    "id": "ev1",
+                    "url": "https://example.com/note",
+                    "text": "Market note about competitor desks.",
+                },
+            ],
+            draft_result=None,
+            review_decision=None,
+        )
+    )
+    await session.flush()
+
+
 def _client(session, app, url, owner_id):
     app.dependency_overrides[current_identity] = lambda: Identity(str(owner_id))
 
@@ -148,6 +198,31 @@ def _client(session, app, url, owner_id):
 
     app.dependency_overrides[get_session] = override_session
     return httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test")
+
+
+async def test_running_analysis_carries_real_progress(display_database):
+    engine, url = display_database
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            owner_id, idea_id, main_id, _ = await _seed(session)
+            await _running_workflow(session, owner_id, idea_id, main_id)
+            app = create_app(Settings(_env_file=None, database_url=url))
+            async with _client(session, app, url, owner_id) as client:
+                body = (await client.get(f"/ideas/{idea_id}")).json()
+            analysis = body["analysis"]
+            assert analysis["state"] == "running"
+            progress = analysis["progress"]
+            assert progress["profile"] == "Faktus"
+            assert progress["objectives"] == ["Five pilots"]
+            assert progress["constraints"] == ["No hiring"]
+            assert [item["text"] for item in progress["learnings"]] == [
+                "Offline sessions completed 18 of 40."
+            ]
+            assert [item["id"] for item in progress["sources"]] == ["ev1"]
+            assert progress["areas"] == 5
+        await transaction.rollback()
 
 
 async def test_idea_read_shows_head_analysis(display_database):

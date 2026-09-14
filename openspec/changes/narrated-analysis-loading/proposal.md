@@ -11,13 +11,16 @@ the screen should show that building rather than a blank wait.
 
 ## What changes
 
-- The deposit page's running state becomes a **narrated build-up**: five steps
-  (read context, check objectives and constraints, reuse learnings, weigh the
-  five areas, decide and say where it disagrees) appear and settle one by one
-  instead of a single "running" line.
-- It is decorative and decoupled from completion: the real verdict arrives from
-  the existing poll and replaces the narration; the application state never
-  depends on the animation finishing. Reduced motion renders all steps settled.
+- The deposit page's running state narrates the **real inputs** the analysis is
+  weighing, not generic stages: the company name, the active objective titles,
+  the active constraint titles, the reused learning texts and the evidence
+  sources, each under a count-aware localized sentence. A group with no data is
+  omitted and long lists are capped with "+N more".
+- The running `analysis` read gains a `progress` field assembled from the frozen
+  launch snapshot and the effective evidence, so the narration is honest and
+  dynamic rather than decorative.
+- It stays decoupled from completion: the real verdict still arrives from the
+  poll and replaces it; reduced motion settles every group at once.
 
 ## Out of scope
 

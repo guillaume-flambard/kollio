@@ -2506,6 +2506,18 @@
               }
             ],
             "title": "Created At"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Progress"
           }
         },
         "type": "object",
