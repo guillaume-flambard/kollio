@@ -1,0 +1,85 @@
+{
+  "company_context": {
+    "profile": {
+      "name": "Faktus",
+      "description": "A self-serve B2B SaaS that turns scattered marketing signals into prioritised decisions for small teams."
+    },
+    "objectives": [
+      { "id": "objective:pilots", "title": "Sign five paying pilots this quarter", "state": "active" },
+      { "id": "objective:activation", "title": "Cut time-to-first-insight for a new team below one day", "state": "active" },
+      { "id": "objective:cadence", "title": "Run one experiment per team each week", "state": "active" }
+    ],
+    "constraints": [
+      { "id": "constraint:hiring", "title": "Bootstrapped, no field hiring this year", "state": "active" },
+      { "id": "constraint:team", "title": "A two-person product team", "state": "active" },
+      { "id": "constraint:runway", "title": "A six-week pilot window before the investment decision", "state": "active" }
+    ],
+    "learnings": [
+      { "id": "learning:offline", "text": "Field crews tolerate sync conflicts when the app never blocks: 18 of 40 target sessions completed offline." },
+      { "id": "learning:pricing", "text": "A pricing-page rewrite lifted trial starts 12% but did not change paid conversion." },
+      { "id": "learning:webinar", "text": "Partner webinars filled pipeline but the leads skewed below the ideal customer profile." }
+    ]
+  },
+  "initiatives": [
+    {
+      "id": "offline-field-app",
+      "prompt": "Should we build an offline mode for our field crews app?",
+      "title": "Offline-first companion for field crews",
+      "pitch": "A mobile companion that keeps working when signal drops, so field teams never lose an entry."
+    },
+    {
+      "id": "pricing-rewrite",
+      "prompt": "Our trial conversion is flat, should we rewrite the pricing page?",
+      "title": "Pricing page rewrite",
+      "pitch": "Rebuild the pricing page around the three plans customers actually reach, with clearer value per tier."
+    },
+    {
+      "id": "linkedin-cadence",
+      "prompt": "Is a founder-led LinkedIn cadence worth it for us?",
+      "title": "Weekly founder thought-leadership cadence",
+      "pitch": "A founder publishing a practical post a week to build an audience and warm inbound."
+    },
+    {
+      "id": "partner-webinars",
+      "prompt": "Should we run co-marketing webinars with integration partners?",
+      "title": "Partner co-marketing webinar series",
+      "pitch": "Monthly webinars with tool partners to trade audiences and fill the top of the funnel."
+    },
+    {
+      "id": "roi-calculator",
+      "prompt": "Would a free ROI calculator generate qualified leads?",
+      "title": "Free ROI calculator lead magnet",
+      "pitch": "An interactive calculator that lets a prospect estimate the value of consolidating their marketing signals."
+    },
+    {
+      "id": "activation-emails",
+      "prompt": "Should we add an onboarding email sequence to lift activation?",
+      "title": "Activation email sequence",
+      "pitch": "A short timed sequence that walks a new team to their first insight within a day."
+    },
+    {
+      "id": "enterprise-rebrand",
+      "prompt": "Do we need a rebrand to sell to bigger companies?",
+      "title": "Enterprise-facing rebrand",
+      "pitch": "Refresh positioning and visuals so the product reads credible to a head of marketing at a 500-person company."
+    },
+    {
+      "id": "community-program",
+      "prompt": "Is a user community worth starting now?",
+      "title": "Customer community program",
+      "pitch": "A moderated space where marketing teams share playbooks and pull each other forward."
+    },
+    {
+      "id": "abm-pilot",
+      "prompt": "Should we run a small account-based marketing push?",
+      "title": "ABM pilot to twenty named accounts",
+      "pitch": "A targeted push at twenty ideal accounts with tailored content and direct outreach."
+    },
+    {
+      "id": "case-study-library",
+      "prompt": "Will a case-study library help close pilots?",
+      "title": "Customer case-study library",
+      "pitch": "Published write-ups of how real teams turned signals into decisions, used as sales proof."
+    }
+  ]
+}

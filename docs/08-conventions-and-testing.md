@@ -40,6 +40,7 @@ Outils : **uv workspaces** (Python) + **pnpm workspaces** (JS). Pas de Nx/Turbor
   - **fixtures enregistrées** (style VCR) pour les appels LLM déterministes en test ;
   - **structured outputs Pydantic** validés à la frontière → le bord agent devient testable ;
   - **online evals** Langfuse (LLM-as-judge **calibré** vs 30–50 annotations humaines, mesurer FP/FN) sur échantillon de trafic ; boucle traces bas-score → dataset.
+  - **Evals comparatives** (`python -m src.platform.benchmark`, #77) : trois bras sur ~10 initiatives réelles — A modèle nu (prompt seul), B modèle visible sans mémoire d'entreprise, C Kollio complet (mémoire + Known/Assumed/Unknown + contradictions). Feuille de notation **aveugle** (positions mélangées par graine, clé séparée), notation sur 7 dimensions (dont `company_knowledge`, `willingness_to_challenge`, `trust` = les différenciateurs). Les appels live sont **opt-in** et gardés par `LiveEvaluationGuard` ; hors flag on rejoue depuis des **sorties enregistrées**, donc la comparaison est reproductible sans fournisseur. Le score final reste humain ; si C ne bat pas clairement A, c'est traité comme un problème produit, pas un accident de notation.
 - **Idempotence** : clés `(workflow_id, step_id)` sur tout tool-call à effet de bord (testées).
 
 ## Qualité / CI
