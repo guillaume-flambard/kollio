@@ -1,4 +1,5 @@
 import json
+from typing import ClassVar
 
 import httpx
 from opentelemetry import trace
@@ -11,6 +12,7 @@ from src.modules.constraint_analysis.domain.models import (
 )
 from src.platform.config import Settings
 from src.platform.locale import language_name
+from src.platform.task_class import TaskClass, intelligence_tier, resolve_model
 
 SYSTEM_PROMPT = (
     "Pressure-test the supplied idea using only the supplied evidence and the supplied company "
@@ -30,6 +32,10 @@ SYSTEM_PROMPT = (
 
 
 class LiteLLMConstraintAnalysisGateway:
+    # The analysis is the reasoning a member reads, so it is routed to the
+    # visible-intelligence model, never to a call-site guess.
+    task_class: ClassVar[TaskClass] = TaskClass.REASONING
+
     def __init__(self, settings: Settings):
         self.settings = settings
 
@@ -42,9 +48,10 @@ class LiteLLMConstraintAnalysisGateway:
         evidence: list[AnalysisEvidence],
         context: dict[str, object] | None = None,
     ) -> ConstraintAnalysisResult:
+        model = resolve_model(self.settings, self.task_class)
         schema = ConstraintAnalysisResult.model_json_schema()
         payload = {
-            "model": self.settings.llm_model,
+            "model": model,
             "messages": [
                 {
                     "role": "system",
@@ -80,7 +87,10 @@ class LiteLLMConstraintAnalysisGateway:
         headers = {"Authorization": f"Bearer {self.settings.llm_api_key.get_secret_value()}"}
         with trace.get_tracer("kollio.constraint_analysis").start_as_current_span(
             "constraint_analysis.model"
-        ):
+        ) as span:
+            span.set_attribute("kollio.task.class", self.task_class.value)
+            span.set_attribute("kollio.task.tier", intelligence_tier(self.task_class))
+            span.set_attribute("gen_ai.request.model", model)
             async with httpx.AsyncClient(timeout=90) as client:
                 response = await client.post(
                     f"{self.settings.llm_base_url}/chat/completions",

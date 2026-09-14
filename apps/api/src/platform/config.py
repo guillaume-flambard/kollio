@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     llm_base_url: str = "http://localhost:4000/v1"
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = "kollio-default"
+    llm_model_visible: str = ""
     embedding_model: str = "kollio-embedding"
     embedding_source_model: str = "text-embedding-3-large"
     embedding_dimensions: Literal[1536] = 1536

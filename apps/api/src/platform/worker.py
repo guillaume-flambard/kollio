@@ -30,6 +30,7 @@ from src.modules.constraint_analysis.domain.lifecycle import (
 from src.modules.constraint_analysis.domain.models import ConstraintAnalysisResult
 from src.platform.config import get_settings
 from src.platform.locale import UnsupportedLocaleError
+from src.platform.task_class import resolve_model
 from src.platform.telemetry import configure_telemetry
 
 settings = get_settings()
@@ -114,6 +115,11 @@ async def execute_constraint_analysis(
                 return {"workflow_id": workflow_id, "ignored": True}
             span.set_attribute("kollio.idea.id", str(workflow.idea_id))
             span.set_attribute("kollio.locale", workflow.locale)
+            analysis_model = resolve_model(settings, LiteLLMConstraintAnalysisGateway.task_class)
+            span.set_attribute(
+                "kollio.task.class", LiteLLMConstraintAnalysisGateway.task_class.value
+            )
+            span.set_attribute("gen_ai.request.model", analysis_model)
             async with AsyncPostgresSaver.from_conn_string(settings.checkpoint_url) as saver:
                 graph = build_constraint_analysis_graph(
                     LiteLLMConstraintAnalysisGateway(settings), saver
@@ -157,7 +163,7 @@ async def execute_constraint_analysis(
                             idea_id=current.idea_id,
                             source_iteration_id=current.source_iteration_id,
                             result=final.model_dump(mode="json"),
-                            model=settings.llm_model,
+                            model=analysis_model,
                             locale=current.locale,
                         )
                     )

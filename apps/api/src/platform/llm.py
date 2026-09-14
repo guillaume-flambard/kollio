@@ -1,4 +1,5 @@
 import json
+from typing import ClassVar
 
 import httpx
 from opentelemetry import trace
@@ -6,6 +7,7 @@ from opentelemetry import trace
 from src.agents.schemas import Evidence, GateFinding
 from src.platform.config import Settings
 from src.platform.locale import language_name
+from src.platform.task_class import TaskClass, intelligence_tier, resolve_model
 
 SYSTEM = (
     "Assess competition using only the supplied evidence. The presence of a competitor alone "
@@ -31,15 +33,20 @@ def validate_finding(
 
 
 class Gateway:
+    # Competition assessment reasons about the market against the author's
+    # claim, so it is visible-intelligence work, not a cheap extraction.
+    task_class: ClassVar[TaskClass] = TaskClass.CHALLENGE
+
     def __init__(self, settings: Settings):
         self.settings = settings
 
     async def assess(
         self, title: str, pitch: str, locale: str, evidence: list[dict]
     ) -> GateFinding:
+        model = resolve_model(self.settings, self.task_class)
         evidence = [Evidence.model_validate(item).model_dump() for item in evidence]
         payload = {
-            "model": self.settings.llm_model,
+            "model": model,
             "messages": [
                 {
                     "role": "system",
@@ -67,7 +74,10 @@ class Gateway:
             "max_tokens": 1500,
         }
         headers = {"Authorization": "Bearer " + self.settings.llm_api_key.get_secret_value()}
-        with trace.get_tracer("kollio.agents").start_as_current_span("competition.assess"):
+        with trace.get_tracer("kollio.agents").start_as_current_span("competition.assess") as span:
+            span.set_attribute("kollio.task.class", self.task_class.value)
+            span.set_attribute("kollio.task.tier", intelligence_tier(self.task_class))
+            span.set_attribute("gen_ai.request.model", model)
             async with httpx.AsyncClient(timeout=60) as client:
                 response = await client.post(
                     self.settings.llm_base_url + "/chat/completions", json=payload, headers=headers
