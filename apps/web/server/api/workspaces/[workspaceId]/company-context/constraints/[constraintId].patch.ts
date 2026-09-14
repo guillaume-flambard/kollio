@@ -1,4 +1,4 @@
-import type { ConstraintUpdate } from '@kollio/api-client'
+import type { CompanyConstraintUpdate } from '@kollio/api-client'
 import { updateCompanyConstraint } from '@kollio/api-client'
 import { createKollioApiClient, forwardApiError } from '../../../../../utils/kollio-api'
 
@@ -10,9 +10,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = (await readBody(event)) as Record<string, unknown>
-  const patch: ConstraintUpdate = {}
+  const patch: CompanyConstraintUpdate = {}
   if (typeof body?.title === 'string' && body.title.trim() !== '') patch.title = body.title.trim()
-  if (typeof body?.detail === 'string') patch.detail = body.detail.trim()
+  if (typeof body?.detail === 'string') patch.detail = body.detail.trim() === '' ? null : body.detail.trim()
   if (body?.state === 'active' || body?.state === 'archived') patch.state = body.state
 
   const client = await createKollioApiClient(event)

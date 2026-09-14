@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import ClassVar, Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -17,28 +17,36 @@ class CompanyProfileFields(BaseModel):
 
 
 class CompanyProfileWrite(CompanyProfileFields):
-    pass
+    """Write payload for the company profile (all fields optional, replaced wholesale)."""
 
 
 class CompanyProfileResponse(CompanyProfileFields):
     model_config = ConfigDict(from_attributes=True)
+
+    lang: Literal["fr", "en"] | None = None
 
 
 class ObjectiveCreate(BaseModel):
     title: str = Field(min_length=1, max_length=300)
 
 
-class ObjectiveUpdate(BaseModel):
-    title: str | None = Field(default=None, min_length=1, max_length=300)
-    state: ContextState | None = None
-    priority: bool | None = None
+class _RejectsExplicitNulls(BaseModel):
+    non_nullable_fields: ClassVar[tuple[str, ...]] = ()
 
     @model_validator(mode="after")
-    def reject_explicit_nulls(self) -> ObjectiveUpdate:
-        for field in ("title", "state", "priority"):
+    def reject_explicit_nulls(self) -> _RejectsExplicitNulls:
+        for field in self.non_nullable_fields:
             if field in self.model_fields_set and getattr(self, field) is None:
                 raise ValueError(f"{field} cannot be null")
         return self
+
+
+class ObjectiveUpdate(_RejectsExplicitNulls):
+    non_nullable_fields: ClassVar[tuple[str, ...]] = ("title", "state", "priority")
+
+    title: str | None = Field(default=None, min_length=1, max_length=300)
+    state: ContextState | None = None
+    priority: bool | None = None
 
 
 class ObjectiveResponse(BaseModel):
@@ -48,36 +56,33 @@ class ObjectiveResponse(BaseModel):
     title: str
     state: ContextState
     priority: bool
+    lang: Literal["fr", "en"]
 
 
-class ConstraintCreate(BaseModel):
+class CompanyConstraintCreate(BaseModel):
     title: str = Field(min_length=1, max_length=300)
     detail: str | None = None
 
 
-class ConstraintUpdate(BaseModel):
+class CompanyConstraintUpdate(_RejectsExplicitNulls):
+    non_nullable_fields: ClassVar[tuple[str, ...]] = ("title", "state")
+
     title: str | None = Field(default=None, min_length=1, max_length=300)
     detail: str | None = None
     state: ContextState | None = None
 
-    @model_validator(mode="after")
-    def reject_explicit_nulls(self) -> ConstraintUpdate:
-        for field in ("title", "state"):
-            if field in self.model_fields_set and getattr(self, field) is None:
-                raise ValueError(f"{field} cannot be null")
-        return self
 
-
-class ConstraintResponse(BaseModel):
+class CompanyConstraintResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
     title: str
     detail: str | None = None
     state: ContextState
+    lang: Literal["fr", "en"]
 
 
 class CompanyContextResponse(BaseModel):
     profile: CompanyProfileResponse
     objectives: list[ObjectiveResponse]
-    constraints: list[ConstraintResponse]
+    constraints: list[CompanyConstraintResponse]

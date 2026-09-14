@@ -96,13 +96,16 @@ async def test_profile_round_trip_and_upsert(context_database):
                 )
                 assert saved.status_code == 200
                 assert saved.json()["name"] == "Faktus"
+                assert saved.json()["lang"] == "fr"
 
                 updated = await client.put(
                     f"/workspaces/{workspace_id}/company-context/profile",
                     json={"name": "Faktus SAS", "description": "Updated"},
+                    headers={"Accept-Language": "en"},
                 )
                 assert updated.status_code == 200
                 assert updated.json()["name"] == "Faktus SAS"
+                assert updated.json()["lang"] == "en"
 
                 read = await client.get(f"/workspaces/{workspace_id}/company-context")
             assert read.status_code == 200
@@ -128,14 +131,17 @@ async def test_objective_lifecycle(context_database):
                 objective = created.json()
                 assert objective["state"] == "active"
                 assert objective["priority"] is False
+                assert objective["lang"] == "fr"
 
                 updated = await client.patch(
                     f"/workspaces/{workspace_id}/company-context/objectives/{objective['id']}",
                     json={"state": "archived", "priority": True},
+                    headers={"Accept-Language": "en"},
                 )
                 assert updated.status_code == 200
                 assert updated.json()["state"] == "archived"
                 assert updated.json()["priority"] is True
+                assert updated.json()["lang"] == "en"
 
                 invalid = await client.patch(
                     f"/workspaces/{workspace_id}/company-context/objectives/{objective['id']}",
@@ -168,6 +174,7 @@ async def test_constraint_lifecycle(context_database):
                 assert created.status_code == 201
                 constraint = created.json()
                 assert constraint["state"] == "active"
+                assert constraint["lang"] == "fr"
 
                 updated = await client.patch(
                     f"/workspaces/{workspace_id}/company-context/constraints/{constraint['id']}",
@@ -281,6 +288,12 @@ async def test_context_items_stay_inside_their_workspace(context_database):
                 )
                 assert created.status_code == 201
                 objective_id = created.json()["id"]
+                constraint_id = (
+                    await client.post(
+                        f"/workspaces/{workspace_id}/company-context/constraints",
+                        json={"title": "Mine too"},
+                    )
+                ).json()["id"]
 
             # The outsider belongs to the other workspace, so authorization passes there:
             # the refusal below can only come from identifier scoping, not from access control.
@@ -290,9 +303,15 @@ async def test_context_items_stay_inside_their_workspace(context_database):
                     json={"state": "archived"},
                 )
                 assert cross.status_code == 404
+                cross_constraint = await client.patch(
+                    f"/workspaces/{other_workspace_id}/company-context/constraints/{constraint_id}",
+                    json={"state": "archived"},
+                )
+                assert cross_constraint.status_code == 404
 
                 other_view = await client.get(f"/workspaces/{other_workspace_id}/company-context")
             assert other_view.json()["objectives"] == []
+            assert other_view.json()["constraints"] == []
 
             async with _client(session, url, str(member_id)) as client:
                 own = await client.get(f"/workspaces/{workspace_id}/company-context")

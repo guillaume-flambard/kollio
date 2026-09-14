@@ -8,7 +8,9 @@ Kollio analyzes an Initiative from its title and pitch alone, so it cannot reaso
 - Let any workspace member read and edit it; deny everyone outside the workspace as if it did not exist.
 - Give objectives an active/archived state and a priority flag; give constraints an active/archived state.
 - Keep the context workspace-private by default, with FR/EN error localization inherited from the platform.
-- Principles/strategy and key metrics are part of the capability but ship in a later slice (they do not block the analysis engine); the settings UI ships as its own ticket.
+- Record the language of the last write on every context row, as the platform does for ideas and iterations.
+- Ship a French/English workspace settings screen that edits the context, so the pilot can seed it without developer help.
+- Principles/strategy and key metrics are part of the capability but ship in a later slice (they do not block the analysis engine).
 
 ## Capabilities
 
@@ -18,6 +20,6 @@ Kollio analyzes an Initiative from its title and pitch alone, so it cannot reaso
 
 ## Impact
 
-Adds a `company_context` vertical module (domain, adapters, service, api), one PostgreSQL migration with three tables, generated OpenAPI types, and deterministic unit plus PostgreSQL integration tests. No agent call, no frontend change, no contract break.
+Adds a `company_context` vertical module (domain, adapters, service, api), one PostgreSQL migration with three tables, six HTTP operations, regenerated OpenAPI types, a workspace settings screen with its BFF endpoints and FR/EN catalogs, and deterministic unit, PostgreSQL integration and browser evidence. No agent call and no breaking contract change: six operations are added, none removed.
 
 Tickets: GitHub #53 (this slice), #52 (parent spec).

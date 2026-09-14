@@ -22,7 +22,8 @@ Delivered by this change: the backend capability and its workspace settings scre
 | Constraint created | `::test_constraint_lifecycle` | passing |
 | Constraint edited and archived | `::test_constraint_lifecycle` | passing |
 | Non-member cannot write (including PATCH) | `::test_non_member_is_refused_everywhere` (PUT, POST and PATCH refused) | passing |
-| Two workspaces do not leak, including by identifier | `::test_context_items_stay_inside_their_workspace` (a member of the other workspace PATCHing this workspace's objective id gets 404 while authorization passes — the refusal can only come from id scoping) | passing |
+| Two workspaces do not leak, including by identifier | `::test_context_items_stay_inside_their_workspace` (a member of the other workspace PATCHing this workspace's objective **and constraint** ids gets 404 while authorization passes — the refusal can only come from id scoping) | passing |
+| Origin language recorded on write | `::test_profile_round_trip_and_upsert` and `::test_objective_lifecycle` assert `lang` follows the request locale (fr on the first write, en after an English update) | passing |
 | Access rule (unit) | `tests/unit/company_context/test_access.py` (3 cases) | passing |
 
 Command: `TEST_DATABASE_URL=… uv run pytest tests/integration/test_company_context.py tests/unit/company_context -q` → 11 passed.
@@ -49,7 +50,6 @@ Two-axis review before commit; both findings were fixed rather than deferred:
 ## Known gaps
 
 - Principles/strategy and key metrics sub-objects are deliberately out of this slice (decision #45: slice 1 ships profile + objectives + constraints).
-- Origin language (`lang`) is not stored for context items. Rationale recorded: they are short labels and descriptions, and the existing `User.bio`/`display_name` precedent treats profile-like meta text as exempt. If Faktus asks for translated company text, this needs a decision, not a silent column.
 - The workspace-membership query exists in several adapters (ideas, profiles, company_context, constraint_analysis) as a two-line read on purpose, to keep modules autonomous; extracting a shared kernel is not part of this change.
 
 ## Settings UI evidence (ticket #59)
@@ -82,3 +82,17 @@ Known limitations:
 - Shared `requiredTitle` / `optionalText` guards replaced duplicated BFF validation; generated `ObjectiveUpdate` / `ConstraintUpdate` / `CompanyProfileWrite` types replaced `Record<string, unknown>`; redundant `as never` casts removed.
 - Browser mocks now resolve items by id and 404 on unknown ids, so a wrong-id write fails the test.
 - Dead catalog key removed; the "detail" field label is unique per row.
+
+## Review findings applied (PR review)
+
+A second, branch-level two-axis review ran before the pull request; every finding was applied:
+
+- Public schema names collided with the glossary (`Constraint` is reserved for the analysis dimensions): `ConstraintCreate/Response/Update` renamed to `CompanyConstraint*` across API, generated client and web.
+- `lang` was missing on the three tables, contradicting the platform non-negotiable that user content keeps its origin language: added on all three, set from the request locale on every write, exposed in responses and asserted by tests. `docs/05-data-model.md` updated accordingly.
+- The proposal contradicted the diff ("no frontend change", "the settings UI ships as its own ticket"): corrected, and a `design.md` added so the change carries the same artifact set as its siblings.
+- The settings screen silently edited the first workspace: it now honours `?workspace=` like the explorer.
+- `acceptance.md` over-claimed cross-workspace id scoping (objectives only) and no longer: constraints are covered too.
+- Duplicated null-rejection validators collapsed into one base; the empty `CompanyProfileWrite` subclass now carries a docstring; BFF clears a blank constraint detail to `null` instead of storing an empty string.
+- `CONTEXT-MAP.md` and the API glossary header now name the company context.
+
+Kept as-is, with justification: the `Initiative`/`InitiativeType` glossary commit (decision #44 explicitly authorised writing the glossary now, ahead of the code), and the single-page settings screen (docs/08 "keep simple CRUD simple").

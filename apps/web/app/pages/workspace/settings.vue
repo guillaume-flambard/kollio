@@ -2,8 +2,8 @@
 import type {
   CompanyContextResponse,
   CompanyProfileResponse,
-  ConstraintResponse,
-  ConstraintUpdate,
+  CompanyConstraintResponse,
+  CompanyConstraintUpdate,
   ObjectiveResponse,
   ObjectiveUpdate,
   WorkspaceResponse,
@@ -12,12 +12,16 @@ import type {
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
 const { t } = useI18n()
+const route = useRoute()
 const requestFetch = useRequestFetch()
 
 const { data: workspaces } = await useAsyncData('settings-workspaces', () =>
   requestFetch<WorkspaceResponse[]>('/api/workspaces'),
 )
-const activeWorkspace = computed(() => workspaces.value?.[0])
+const activeWorkspace = computed(() => {
+  const requested = typeof route.query.workspace === 'string' ? route.query.workspace : undefined
+  return workspaces.value?.find(workspace => workspace.id === requested) ?? workspaces.value?.[0]
+})
 
 const { data: context, error: loadFailure } = await useAsyncData(
   'settings-company-context',
@@ -88,7 +92,7 @@ function applyObjective(updated: ObjectiveResponse) {
   }
 }
 
-function applyConstraint(updated: ConstraintResponse) {
+function applyConstraint(updated: CompanyConstraintResponse) {
   const current = context.value
   if (!current) return
   context.value = {
@@ -103,7 +107,7 @@ function replaceObjective(created: ObjectiveResponse) {
   context.value = { ...current, objectives: [...current.objectives, created] }
 }
 
-function replaceConstraint(created: ConstraintResponse) {
+function replaceConstraint(created: CompanyConstraintResponse) {
   const current = context.value
   if (!current) return
   context.value = { ...current, constraints: [...current.constraints, created] }
@@ -154,7 +158,7 @@ async function createConstraint() {
   const url = contextUrl('/constraints')
   if (!url || constraintTitle.value.trim() === '') return
   await run(async () => {
-    const created = await requestFetch<ConstraintResponse>(url, {
+    const created = await requestFetch<CompanyConstraintResponse>(url, {
       method: 'POST',
       body: { title: constraintTitle.value.trim(), detail: constraintDetail.value.trim() || undefined },
     })
@@ -164,11 +168,11 @@ async function createConstraint() {
   })
 }
 
-async function patchConstraint(constraint: ConstraintResponse, patch: ConstraintUpdate) {
+async function patchConstraint(constraint: CompanyConstraintResponse, patch: CompanyConstraintUpdate) {
   const workspaceId = activeWorkspace.value?.id
   if (!workspaceId || !context.value) return
   await run(async () => {
-    const updated = await requestFetch<ConstraintResponse>(
+    const updated = await requestFetch<CompanyConstraintResponse>(
       `/api/workspaces/${encodeURIComponent(workspaceId)}/company-context/constraints/${encodeURIComponent(constraint.id)}`,
       { method: 'PATCH', body: patch },
     )

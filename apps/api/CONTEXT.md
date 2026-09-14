@@ -1,6 +1,6 @@
 # API
 
-The FastAPI backend. Owns all Kollio domain state: ideas, their versioned history, constraint analyses, teams, and the private-workspace boundary. The agent graphs (LangGraph) also live here.
+The FastAPI backend. Owns all Kollio domain state: ideas, their versioned history, constraint analyses, the company context, teams, and the private-workspace boundary. The agent graphs (LangGraph) and their Taskiq workers also live here.
 
 ## Language
 

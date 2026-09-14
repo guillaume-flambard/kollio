@@ -5,12 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.company_context.adapters.postgres import PostgresCompanyContext
 from src.modules.company_context.api.schemas import (
+    CompanyConstraintCreate,
+    CompanyConstraintResponse,
+    CompanyConstraintUpdate,
     CompanyContextResponse,
     CompanyProfileResponse,
     CompanyProfileWrite,
-    ConstraintCreate,
-    ConstraintResponse,
-    ConstraintUpdate,
     ObjectiveCreate,
     ObjectiveResponse,
     ObjectiveUpdate,
@@ -64,7 +64,8 @@ async def read_company_context(
             ObjectiveResponse.model_validate(objective) for objective in snapshot.objectives
         ],
         constraints=[
-            ConstraintResponse.model_validate(constraint) for constraint in snapshot.constraints
+            CompanyConstraintResponse.model_validate(constraint)
+            for constraint in snapshot.constraints
         ],
     )
 
@@ -87,6 +88,7 @@ async def save_company_profile(
             workspace_id,
             identity.subject,
             body.model_dump(),
+            request.state.locale,
         )
         await session.commit()
     except ContextNotFoundError as error:
@@ -109,7 +111,11 @@ async def create_company_objective(
 ) -> ObjectiveResponse:
     try:
         objective = await create_objective(
-            PostgresCompanyContext(session), workspace_id, identity.subject, title=body.title
+            PostgresCompanyContext(session),
+            workspace_id,
+            identity.subject,
+            title=body.title,
+            lang=request.state.locale,
         )
         await session.commit()
     except ContextNotFoundError as error:
@@ -137,6 +143,7 @@ async def update_company_objective(
             identity.subject,
             objective_id,
             body.model_dump(exclude_unset=True),
+            request.state.locale,
         )
         await session.commit()
     except (ContextNotFoundError, ObjectiveNotFoundError) as error:
@@ -146,17 +153,17 @@ async def update_company_objective(
 
 @router.post(
     "/{workspace_id}/company-context/constraints",
-    response_model=ConstraintResponse,
+    response_model=CompanyConstraintResponse,
     status_code=status.HTTP_201_CREATED,
     operation_id="create_company_constraint",
 )
 async def create_company_constraint(
     workspace_id: UUID,
-    body: ConstraintCreate,
+    body: CompanyConstraintCreate,
     request: Request,
     identity: Identity = Depends(current_identity),
     session: AsyncSession = Depends(get_session),
-) -> ConstraintResponse:
+) -> CompanyConstraintResponse:
     try:
         constraint = await create_constraint(
             PostgresCompanyContext(session),
@@ -164,26 +171,27 @@ async def create_company_constraint(
             identity.subject,
             title=body.title,
             detail=body.detail,
+            lang=request.state.locale,
         )
         await session.commit()
     except ContextNotFoundError as error:
         raise _not_found(request) from error
-    return ConstraintResponse.model_validate(constraint)
+    return CompanyConstraintResponse.model_validate(constraint)
 
 
 @router.patch(
     "/{workspace_id}/company-context/constraints/{constraint_id}",
-    response_model=ConstraintResponse,
+    response_model=CompanyConstraintResponse,
     operation_id="update_company_constraint",
 )
 async def update_company_constraint(
     workspace_id: UUID,
     constraint_id: UUID,
-    body: ConstraintUpdate,
+    body: CompanyConstraintUpdate,
     request: Request,
     identity: Identity = Depends(current_identity),
     session: AsyncSession = Depends(get_session),
-) -> ConstraintResponse:
+) -> CompanyConstraintResponse:
     try:
         constraint = await update_constraint(
             PostgresCompanyContext(session),
@@ -191,8 +199,9 @@ async def update_company_constraint(
             identity.subject,
             constraint_id,
             body.model_dump(exclude_unset=True),
+            request.state.locale,
         )
         await session.commit()
     except (ContextNotFoundError, ConstraintNotFoundError) as error:
         raise _not_found(request) from error
-    return ConstraintResponse.model_validate(constraint)
+    return CompanyConstraintResponse.model_validate(constraint)

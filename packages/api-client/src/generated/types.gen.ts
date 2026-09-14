@@ -157,6 +157,64 @@ export type CollaboratorResponse = {
 };
 
 /**
+ * CompanyConstraintCreate
+ */
+export type CompanyConstraintCreate = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+};
+
+/**
+ * CompanyConstraintResponse
+ */
+export type CompanyConstraintResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
+     * State
+     */
+    state: 'active' | 'archived';
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+};
+
+/**
+ * CompanyConstraintUpdate
+ */
+export type CompanyConstraintUpdate = {
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
+     * State
+     */
+    state?: 'active' | 'archived' | null;
+};
+
+/**
  * CompanyContextResponse
  */
 export type CompanyContextResponse = {
@@ -168,7 +226,7 @@ export type CompanyContextResponse = {
     /**
      * Constraints
      */
-    constraints: Array<ConstraintResponse>;
+    constraints: Array<CompanyConstraintResponse>;
 };
 
 /**
@@ -203,10 +261,16 @@ export type CompanyProfileResponse = {
      * Structure
      */
     structure?: string | null;
+    /**
+     * Lang
+     */
+    lang?: 'fr' | 'en' | null;
 };
 
 /**
  * CompanyProfileWrite
+ *
+ * Write payload for the company profile (all fields optional, replaced wholesale).
  */
 export type CompanyProfileWrite = {
     /**
@@ -272,20 +336,6 @@ export type ConstraintAnalysisResult = {
 };
 
 /**
- * ConstraintCreate
- */
-export type ConstraintCreate = {
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Detail
-     */
-    detail?: string | null;
-};
-
-/**
  * ConstraintFactor
  */
 export type ConstraintFactor = {
@@ -305,46 +355,6 @@ export type ConstraintFactor = {
      * Source Ids
      */
     source_ids: Array<string>;
-};
-
-/**
- * ConstraintResponse
- */
-export type ConstraintResponse = {
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Detail
-     */
-    detail?: string | null;
-    /**
-     * State
-     */
-    state: 'active' | 'archived';
-};
-
-/**
- * ConstraintUpdate
- */
-export type ConstraintUpdate = {
-    /**
-     * Title
-     */
-    title?: string | null;
-    /**
-     * Detail
-     */
-    detail?: string | null;
-    /**
-     * State
-     */
-    state?: 'active' | 'archived' | null;
 };
 
 /**
@@ -774,6 +784,10 @@ export type ObjectiveResponse = {
      * Priority
      */
     priority: boolean;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
 };
 
 /**
@@ -1741,7 +1755,7 @@ export type UpdateCompanyObjectiveResponses = {
 export type UpdateCompanyObjectiveResponse = UpdateCompanyObjectiveResponses[keyof UpdateCompanyObjectiveResponses];
 
 export type CreateCompanyConstraintData = {
-    body: ConstraintCreate;
+    body: CompanyConstraintCreate;
     path: {
         /**
          * Workspace Id
@@ -1765,13 +1779,13 @@ export type CreateCompanyConstraintResponses = {
     /**
      * Successful Response
      */
-    201: ConstraintResponse;
+    201: CompanyConstraintResponse;
 };
 
 export type CreateCompanyConstraintResponse = CreateCompanyConstraintResponses[keyof CreateCompanyConstraintResponses];
 
 export type UpdateCompanyConstraintData = {
-    body: ConstraintUpdate;
+    body: CompanyConstraintUpdate;
     path: {
         /**
          * Workspace Id
@@ -1799,7 +1813,7 @@ export type UpdateCompanyConstraintResponses = {
     /**
      * Successful Response
      */
-    200: ConstraintResponse;
+    200: CompanyConstraintResponse;
 };
 
 export type UpdateCompanyConstraintResponse = UpdateCompanyConstraintResponses[keyof UpdateCompanyConstraintResponses];

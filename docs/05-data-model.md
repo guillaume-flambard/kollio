@@ -37,7 +37,7 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - `CompanyObjective(id, workspace_id, title, state(active|archived), priority, created_at, updated_at)` — objectifs évolutifs.
 - `CompanyConstraint(id, workspace_id, title, detail?, state(active|archived), created_at, updated_at)` — contraintes réelles de l'entreprise ; à ne pas confondre avec les cinq dimensions d'une `ConstraintAnalysis`.
 - Lus et écrits par tout membre du workspace ; jamais visibles hors du workspace.
-- `lang` n'est pas stocké ici : ce sont des libellés courts, pas du contenu rédactionnel (voir `acceptance.md` du change `add-company-context`).
+- `lang` (fr|en) est stocké sur les trois tables : il enregistre la langue de la dernière écriture, comme pour `Idea` et `Iteration`.
 
 ### Embedding (matching multilingue)
 `id, subject_type(idea|user|contribution), subject_id, vector(pgvector), model, lang, updated_at`

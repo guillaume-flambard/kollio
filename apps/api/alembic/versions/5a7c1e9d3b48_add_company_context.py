@@ -19,6 +19,7 @@ branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
 STATE_CHECK = "state IN ('active', 'archived')"
+LANG_CHECK = "lang IN ('fr', 'en')"
 
 
 def upgrade() -> None:
@@ -32,6 +33,7 @@ def upgrade() -> None:
         sa.Column("customer_segments", sa.Text(), nullable=True),
         sa.Column("markets", sa.Text(), nullable=True),
         sa.Column("structure", sa.Text(), nullable=True),
+        sa.Column("lang", sa.String(length=2), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -44,6 +46,7 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=False,
         ),
+        sa.CheckConstraint(LANG_CHECK),
         sa.ForeignKeyConstraint(["workspace_id"], ["workspaces.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("workspace_id"),
     )
@@ -54,6 +57,7 @@ def upgrade() -> None:
         sa.Column("title", sa.String(length=300), nullable=False),
         sa.Column("state", sa.String(length=16), nullable=False),
         sa.Column("priority", sa.Boolean(), server_default=sa.text("false"), nullable=False),
+        sa.Column("lang", sa.String(length=2), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -67,6 +71,7 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.CheckConstraint(STATE_CHECK),
+        sa.CheckConstraint(LANG_CHECK),
         sa.ForeignKeyConstraint(["workspace_id"], ["workspaces.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -83,6 +88,7 @@ def upgrade() -> None:
         sa.Column("title", sa.String(length=300), nullable=False),
         sa.Column("detail", sa.Text(), nullable=True),
         sa.Column("state", sa.String(length=16), nullable=False),
+        sa.Column("lang", sa.String(length=2), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -96,6 +102,7 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.CheckConstraint(STATE_CHECK),
+        sa.CheckConstraint(LANG_CHECK),
         sa.ForeignKeyConstraint(["workspace_id"], ["workspaces.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )

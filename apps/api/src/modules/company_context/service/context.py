@@ -51,16 +51,22 @@ async def save_profile(
     workspace_id: UUID,
     subject: str,
     values: dict[str, Any],
+    lang: str,
 ) -> CompanyProfile:
     await _authorize(repository, workspace_id, subject)
-    return await repository.upsert_profile(workspace_id, values)
+    return await repository.upsert_profile(workspace_id, values, lang)
 
 
 async def create_objective(
-    repository: PostgresCompanyContext, workspace_id: UUID, subject: str, *, title: str
+    repository: PostgresCompanyContext,
+    workspace_id: UUID,
+    subject: str,
+    *,
+    title: str,
+    lang: str,
 ) -> CompanyObjective:
     await _authorize(repository, workspace_id, subject)
-    return await repository.create_objective(workspace_id, title)
+    return await repository.create_objective(workspace_id, title, lang)
 
 
 async def update_objective(
@@ -69,9 +75,10 @@ async def update_objective(
     subject: str,
     objective_id: UUID,
     changes: dict[str, Any],
+    lang: str,
 ) -> CompanyObjective:
     await _authorize(repository, workspace_id, subject)
-    objective = await repository.update_objective(workspace_id, objective_id, changes)
+    objective = await repository.update_objective(workspace_id, objective_id, changes, lang)
     if objective is None:
         raise ObjectiveNotFoundError
     return objective
@@ -84,9 +91,10 @@ async def create_constraint(
     *,
     title: str,
     detail: str | None,
+    lang: str,
 ) -> CompanyConstraint:
     await _authorize(repository, workspace_id, subject)
-    return await repository.create_constraint(workspace_id, title, detail)
+    return await repository.create_constraint(workspace_id, title, detail, lang)
 
 
 async def update_constraint(
@@ -95,9 +103,10 @@ async def update_constraint(
     subject: str,
     constraint_id: UUID,
     changes: dict[str, Any],
+    lang: str,
 ) -> CompanyConstraint:
     await _authorize(repository, workspace_id, subject)
-    constraint = await repository.update_constraint(workspace_id, constraint_id, changes)
+    constraint = await repository.update_constraint(workspace_id, constraint_id, changes, lang)
     if constraint is None:
         raise ConstraintNotFoundError
     return constraint

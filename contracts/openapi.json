@@ -1447,7 +1447,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ConstraintCreate"
+                "$ref": "#/components/schemas/CompanyConstraintCreate"
               }
             }
           }
@@ -1458,7 +1458,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConstraintResponse"
+                  "$ref": "#/components/schemas/CompanyConstraintResponse"
                 }
               }
             }
@@ -1515,7 +1515,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ConstraintUpdate"
+                "$ref": "#/components/schemas/CompanyConstraintUpdate"
               }
             }
           }
@@ -1526,7 +1526,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConstraintResponse"
+                  "$ref": "#/components/schemas/CompanyConstraintResponse"
                 }
               }
             }
@@ -1868,6 +1868,125 @@
         ],
         "title": "CollaboratorResponse"
       },
+      "CompanyConstraintCreate": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "CompanyConstraintCreate"
+      },
+      "CompanyConstraintResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "active",
+              "archived"
+            ],
+            "title": "State"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "state",
+          "lang"
+        ],
+        "title": "CompanyConstraintResponse"
+      },
+      "CompanyConstraintUpdate": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "active",
+                  "archived"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          }
+        },
+        "type": "object",
+        "title": "CompanyConstraintUpdate"
+      },
       "CompanyContextResponse": {
         "properties": {
           "profile": {
@@ -1882,7 +2001,7 @@
           },
           "constraints": {
             "items": {
-              "$ref": "#/components/schemas/ConstraintResponse"
+              "$ref": "#/components/schemas/CompanyConstraintResponse"
             },
             "type": "array",
             "title": "Constraints"
@@ -1975,6 +2094,21 @@
               }
             ],
             "title": "Structure"
+          },
+          "lang": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fr",
+                  "en"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lang"
           }
         },
         "type": "object",
@@ -2062,7 +2196,8 @@
           }
         },
         "type": "object",
-        "title": "CompanyProfileWrite"
+        "title": "CompanyProfileWrite",
+        "description": "Write payload for the company profile (all fields optional, replaced wholesale)."
       },
       "ConstraintAnalysisResult": {
         "properties": {
@@ -2116,32 +2251,6 @@
         ],
         "title": "ConstraintAnalysisResult"
       },
-      "ConstraintCreate": {
-        "properties": {
-          "title": {
-            "type": "string",
-            "maxLength": 300,
-            "minLength": 1,
-            "title": "Title"
-          },
-          "detail": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Detail"
-          }
-        },
-        "type": "object",
-        "required": [
-          "title"
-        ],
-        "title": "ConstraintCreate"
-      },
       "ConstraintFactor": {
         "properties": {
           "name": {
@@ -2183,90 +2292,6 @@
           "source_ids"
         ],
         "title": "ConstraintFactor"
-      },
-      "ConstraintResponse": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "title": {
-            "type": "string",
-            "title": "Title"
-          },
-          "detail": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Detail"
-          },
-          "state": {
-            "type": "string",
-            "enum": [
-              "active",
-              "archived"
-            ],
-            "title": "State"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "title",
-          "state"
-        ],
-        "title": "ConstraintResponse"
-      },
-      "ConstraintUpdate": {
-        "properties": {
-          "title": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 300,
-                "minLength": 1
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Title"
-          },
-          "detail": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Detail"
-          },
-          "state": {
-            "anyOf": [
-              {
-                "type": "string",
-                "enum": [
-                  "active",
-                  "archived"
-                ]
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "State"
-          }
-        },
-        "type": "object",
-        "title": "ConstraintUpdate"
       },
       "ContributionResponse": {
         "properties": {
@@ -3026,6 +3051,14 @@
           "priority": {
             "type": "boolean",
             "title": "Priority"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
           }
         },
         "type": "object",
@@ -3033,7 +3066,8 @@
           "id",
           "title",
           "state",
-          "priority"
+          "priority",
+          "lang"
         ],
         "title": "ObjectiveResponse"
       },
