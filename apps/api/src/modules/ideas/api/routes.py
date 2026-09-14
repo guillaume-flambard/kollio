@@ -23,8 +23,15 @@ from src.modules.ideas.api.schemas import (
     JoinRequestResponse,
     LegacyIdeaContext,
     RejectJoinBody,
+    UpdateIdeaInitiativeTypeRequest,
 )
-from src.modules.ideas.service.deposit_idea import DepositNotFoundError, deposit_idea
+from src.modules.ideas.service.deposit_idea import (
+    DepositNotFoundError,
+    IdeaNotFoundError,
+    IdeaUpdateForbiddenError,
+    deposit_idea,
+    update_initiative_type,
+)
 from src.modules.ideas.service.get_idea import get_idea
 from src.modules.ideas.service.list_ideas import list_workspace_ideas
 from src.modules.ideas.service.team_service import (
@@ -130,6 +137,31 @@ async def _visible_join_requests(repository: PostgresIdeas, idea: Idea, subject:
     ]
 
 
+@router.patch(
+    "/{idea_id}",
+    response_model=IdeaResponse,
+    operation_id="update_idea_initiative_type",
+)
+async def patch_idea(
+    idea_id: UUID,
+    body: UpdateIdeaInitiativeTypeRequest,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> IdeaResponse:
+    messages = MESSAGES[request.state.locale]
+    try:
+        idea = await update_initiative_type(
+            PostgresIdeas(session), idea_id, identity.subject, body.initiative_type
+        )
+        await session.commit()
+    except IdeaNotFoundError as error:
+        raise HTTPException(404, messages["not_found"]) from error
+    except IdeaUpdateForbiddenError as error:
+        raise HTTPException(403, messages["forbidden"]) from error
+    return IdeaResponse.model_validate(idea)
+
+
 @workspace_ideas_router.post(
     "/{workspace_id}/ideas",
     response_model=IdeaResponse,
@@ -152,6 +184,7 @@ async def deposit_workspace_idea(
             title=body.title,
             pitch=body.pitch,
             lang=body.lang or request.state.locale,
+            initiative_type=body.initiative_type,
         )
         iteration = await create_initial_iteration(
             PostgresIterations(session),

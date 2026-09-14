@@ -426,6 +426,10 @@ export type DepositIdeaRequest = {
      * Lang
      */
     lang?: 'fr' | 'en' | null;
+    /**
+     * Initiative Type
+     */
+    initiative_type?: 'idea' | 'hypothesis' | 'campaign' | 'opportunity' | 'decision' | 'experiment' | 'pricing' | 'market' | 'partnership' | 'internal_improvement';
 };
 
 /**
@@ -503,6 +507,10 @@ export type IdeaResponse = {
      */
     stage: 'seed' | 'iterating' | 'team_formed';
     /**
+     * Initiative Type
+     */
+    initiative_type: 'idea' | 'hypothesis' | 'campaign' | 'opportunity' | 'decision' | 'experiment' | 'pricing' | 'market' | 'partnership' | 'internal_improvement';
+    /**
      * Lang
      */
     lang: 'fr' | 'en';
@@ -572,6 +580,10 @@ export type IdeaSummaryResponse = {
      * Stage
      */
     stage: 'seed' | 'iterating' | 'team_formed';
+    /**
+     * Initiative Type
+     */
+    initiative_type: 'idea' | 'hypothesis' | 'campaign' | 'opportunity' | 'decision' | 'experiment' | 'pricing' | 'market' | 'partnership' | 'internal_improvement';
     /**
      * Lang
      */
@@ -949,6 +961,16 @@ export type RollbackRequest = {
 };
 
 /**
+ * UpdateIdeaInitiativeTypeRequest
+ */
+export type UpdateIdeaInitiativeTypeRequest = {
+    /**
+     * Initiative Type
+     */
+    initiative_type: 'idea' | 'hypothesis' | 'campaign' | 'opportunity' | 'decision' | 'experiment' | 'pricing' | 'market' | 'partnership' | 'internal_improvement';
+};
+
+/**
  * ValidationError
  */
 export type ValidationError = {
@@ -1055,6 +1077,36 @@ export type GetIdeaResponses = {
 };
 
 export type GetIdeaResponse = GetIdeaResponses[keyof GetIdeaResponses];
+
+export type UpdateIdeaInitiativeTypeData = {
+    body: UpdateIdeaInitiativeTypeRequest;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}';
+};
+
+export type UpdateIdeaInitiativeTypeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateIdeaInitiativeTypeError = UpdateIdeaInitiativeTypeErrors[keyof UpdateIdeaInitiativeTypeErrors];
+
+export type UpdateIdeaInitiativeTypeResponses = {
+    /**
+     * Successful Response
+     */
+    200: IdeaResponse;
+};
+
+export type UpdateIdeaInitiativeTypeResponse = UpdateIdeaInitiativeTypeResponses[keyof UpdateIdeaInitiativeTypeResponses];
 
 export type RequestIdeaMembershipData = {
     body: ApplyJoinBody;

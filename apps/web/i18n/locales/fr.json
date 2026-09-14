@@ -2,7 +2,7 @@
   "brand": "Kollio",
   "navigation": {
     "label": "Navigation principale",
-    "ideas": "Idées",
+    "ideas": "Initiatives",
     "workshops": "Ateliers",
     "community": "Communauté",
     "resources": "Ressources",
@@ -10,7 +10,7 @@
     "notifications": "Notifications",
     "upcoming": "Fonctionnalités à venir",
     "workspace": "Espace",
-    "promise": "Des idées à impact, ensemble.",
+    "promise": "Des initiatives à impact, ensemble.",
     "settings": "Contexte entreprise"
   },
   "meta": {
@@ -52,8 +52,8 @@
   },
   "workspace": {
     "metaTitle": "Espace de travail | Kollio",
-    "description": "La mémoire privée des idées que votre équipe peut tester, façonner et faire avancer.",
-    "ideaLabel": "Idées privées",
+    "description": "La mémoire privée des initiatives que votre équipe peut tester, façonner et faire avancer.",
+    "ideaLabel": "Initiatives privées",
     "role": {
       "admin": "Administration de l’espace",
       "member": "Membre de l’espace"
@@ -105,44 +105,44 @@
     }
   },
   "ideas": {
-    "eyebrow": "Bibliothèque d’idées",
-    "title": "Idées à explorer",
-    "collectionTitle": "Le fil des idées",
+    "eyebrow": "Bibliothèque d’initiatives",
+    "title": "Initiatives à explorer",
+    "collectionTitle": "Le fil des initiatives",
     "page": "Page {current} sur {total}",
-    "pagination": "Pages d’idées",
+    "pagination": "Pages d’initiatives",
     "previous": "Précédent",
     "next": "Suivant",
     "retry": "Réessayer",
     "explorer": {
-      "description": "Trouvez une idée qui a besoin de vous.",
-      "search": "Rechercher une idée, un domaine ou un besoin",
-      "create": "Déposer une idée",
-      "library": "Bibliothèque des idées",
+      "description": "Trouvez une initiative qui a besoin de vous.",
+      "search": "Rechercher une initiative, un domaine ou un besoin",
+      "create": "Déposer une initiative",
+      "library": "Bibliothèque des initiatives",
       "explore": "Explorer",
-      "all": "Toutes les idées",
+      "all": "Toutes les initiatives",
       "forYou": "Pour vous",
       "recent": "Récentes",
       "validation": "En validation",
       "results": "{count} résultat | {count} résultats",
-      "found": "{count} idée trouvée | {count} idées trouvées",
+      "found": "{count} initiative trouvée | {count} initiatives trouvées",
       "sortBy": "Trier par :",
       "contributors": "{count} contributeur | {count} contributeurs",
       "contributorTitle": "Contributeurs",
       "expertiseTitle": "Expertises de l’équipe",
-      "noContributors": "Cette idée n’a pas encore de contributeur.",
-      "preview": "Aperçu de l’idée",
-      "open": "Ouvrir l’idée",
+      "noContributors": "Cette initiative n’a pas encore de contributeur.",
+      "preview": "Aperçu de l’initiative",
+      "open": "Ouvrir l’initiative",
       "domain": "Domaine",
       "language": "Langue",
       "updated": "Mise à jour",
       "closePreview": "Fermer l’aperçu",
-      "noResults": "Aucune idée ne correspond à ces critères.",
+      "noResults": "Aucune initiative ne correspond à ces critères.",
       "activity": "Activité récente",
       "prism": "Score {score}",
       "allRoles": "Tous les rôles",
       "realism": {
         "title": "Réalisme",
-        "grounded": "Idées ancrées",
+        "grounded": "Initiatives ancrées",
         "badge": "Score {score}",
         "band": "60+"
       }
@@ -153,37 +153,37 @@
       "team_formed": "Équipe formée"
     },
     "empty": {
-      "title": "Aucune idée pour le moment",
-      "description": "Les idées ajoutées à cet espace apparaîtront ici."
+      "title": "Aucune initiative pour le moment",
+      "description": "Les initiatives ajoutées à cet espace apparaîtront ici."
     },
     "error": {
-      "title": "Impossible de charger les idées",
+      "title": "Impossible de charger les initiatives",
       "description": "Actualisez la page pour réessayer."
     },
     "detail": {
-      "metaTitle": "Idée | Kollio",
-      "back": "Retour aux idées",
-      "eyebrow": "Idée originale",
-      "pitchTitle": "Description de l’idée",
-      "foundationNote": "L’analyse des contraintes, les itérations et l’activité de l’équipe apparaîtront ici à mesure que l’idée avance.",
-      "notFound": "Idée introuvable",
-      "notFoundDescription": "Cette idée n’existe pas ou vous n’avez pas accès à son espace de travail.",
-      "loading": "Chargement de l’idée…",
+      "metaTitle": "Initiative | Kollio",
+      "back": "Retour aux initiatives",
+      "eyebrow": "Initiative originale",
+      "pitchTitle": "Description de l’initiative",
+      "foundationNote": "L’analyse des contraintes, les itérations et l’activité de l’équipe apparaîtront ici à mesure que l’initiative avance.",
+      "notFound": "Initiative introuvable",
+      "notFoundDescription": "Cette initiative n’existe pas ou vous n’avez pas accès à son espace de travail.",
+      "loading": "Chargement de l’initiative…",
       "retry": "Réessayer",
       "loadError": {
-        "title": "Impossible de charger cette idée",
+        "title": "Impossible de charger cette initiative",
         "description": "Une erreur a interrompu le chargement. Réessayez dans un instant.",
-        "reassurance": "L’idée et les contributions de votre équipe restent intactes."
+        "reassurance": "L’initiative et les contributions de votre équipe restent intactes."
       },
-      "explore": "Explorer les idées",
-      "advance": "Faire avancer l’idée",
+      "explore": "Explorer les initiatives",
+      "advance": "Faire avancer l’initiative",
       "moreActions": "Plus d’actions",
       "inspectSource": "Explorer le contexte source",
       "enrich": "Explorer les questions ouvertes",
-      "writeToEnrich": "Écrire pour enrichir cette idée, ou saisir / pour plus d’options…",
+      "writeToEnrich": "Écrire pour enrichir cette initiative, ou saisir / pour plus d’options…",
       "showFull": "Lire la description complète",
       "showLess": "Réduire la description",
-      "comment": "Voir qui contribue à cette idée",
+      "comment": "Voir qui contribue à cette initiative",
       "annotation": {
         "provenance": "Afficher la provenance du passage : {excerpt}"
       },
@@ -211,35 +211,35 @@
         "title": "Dernières itérations",
         "count": "{count} pour le moment",
         "imported": "Dépôt initial importé",
-        "empty": "La première évolution de cette idée apparaîtra ici avec son auteur et sa décision."
+        "empty": "La première évolution de cette initiative apparaîtra ici avec son auteur et sa décision."
       },
       "legacy": {
         "constraint": "Contrainte historique",
         "channel": "Canal envisagé"
       },
       "companion": {
-        "label": "Contexte de l’idée",
+        "label": "Contexte de l’initiative",
         "tabWithCount": "{label} ({count})",
         "seeAll": "Tout voir",
         "team": {
           "tab": "Équipe",
-          "title": "Autour de cette idée",
+          "title": "Autour de cette initiative",
           "contributors": "Contributeurs",
           "source": "Source originale",
           "importedBy": "Dépôt original importé",
-          "empty": "Les personnes qui rejoignent cette idée et leurs contributions apparaîtront ici."
+          "empty": "Les personnes qui rejoignent cette initiative et leurs contributions apparaîtront ici."
         },
         "questions": {
           "tab": "Questions",
           "title": "Questions ouvertes",
-          "empty": "Les questions encore sans réponse apparaîtront ici lorsqu’elles seront liées à l’idée."
+          "empty": "Les questions encore sans réponse apparaîtront ici lorsqu’elles seront liées à l’initiative."
         },
         "evidence": {
           "tab": "Preuves",
           "title": "Preuves liées",
           "sourceTitle": "Provenance du passage",
           "provenanceNote": "Ce passage vient du dépôt Prospecteur d’origine. Cette provenance ne constitue pas encore une preuve vérifiée.",
-          "empty": "Les sources qui soutiennent ou remettent en cause cette idée apparaîtront ici."
+          "empty": "Les sources qui soutiennent ou remettent en cause cette initiative apparaîtront ici."
         }
       },
       "team": {
@@ -259,25 +259,26 @@
         "remove": "Retirer",
         "applied": "Candidature envoyée.",
         "error": "L’action a échoué. Réessayez."
-      }
+      },
+      "typeError": "Le changement de type a échoué."
     },
     "deposit": {
-      "metaTitle": "Déposer une idée | Kollio",
-      "title": "Déposer une idée",
+      "metaTitle": "Déposer une initiative | Kollio",
+      "title": "Déposer une initiative",
       "description": "Un titre, un pitch, et l’analyse des contraintes démarre aussitôt.",
-      "titleLabel": "Titre de l’idée",
+      "titleLabel": "Titre de l’initiative",
       "pitchLabel": "Pitch",
       "langLabel": "Langue d’origine",
       "langAuto": "Langue de l’interface",
       "langFr": "Français",
       "langEn": "English",
-      "submit": "Déposer l’idée",
+      "submit": "Déposer l’initiative",
       "submitting": "Dépôt en cours…",
       "running": "Analyse des contraintes en cours…",
       "resolvedTitle": "Score de réalisme",
       "abstainedTitle": "Analyse en attente de preuves",
-      "abstainedBody": "Il n'y a pas encore de preuve. Enrichissez l'idée puis ajoutez-en : chaque contrainte indique ce qui ferait basculer sa note.",
-      "openIdea": "Ouvrir l’idée",
+      "abstainedBody": "Il n'y a pas encore de preuve. Enrichissez l'initiative puis ajoutez-en : chaque contrainte indique ce qui ferait basculer sa note.",
+      "openIdea": "Ouvrir l’initiative",
       "error": "Le dépôt a échoué. Réessayez."
     },
     "role": {
@@ -293,10 +294,10 @@
       "metaTitle": "Profil | Kollio",
       "back": "Retour",
       "rolesTitle": "Rôles",
-      "ownedTitle": "Idées déposées",
+      "ownedTitle": "Initiatives déposées",
       "teamsTitle": "Équipes",
       "actsTitle": "Actes enregistrés",
-      "ownedEmpty": "Aucune idée dans cet espace.",
+      "ownedEmpty": "Aucune initiative dans cet espace.",
       "teamsEmpty": "Aucune équipe pour le moment.",
       "actsEmpty": "Aucun acte enregistré pour le moment.",
       "roleIn": "dans {idea}",
@@ -324,7 +325,7 @@
       "stageField": "Stade",
       "send": "Envoyer la proposition",
       "sending": "Envoi…",
-      "conflict": "L'idée a changé pendant la rédaction. Rechargez et réessayez.",
+      "conflict": "L'initiative a changé pendant la rédaction. Rechargez et réessayez.",
       "error": "La proposition a échoué. Réessayez.",
       "stages": {
         "seed": "Graine",
@@ -339,6 +340,19 @@
       "rollback": "Revenir à cette itération",
       "rollbackMessage": "Retour arrière vers {hash}",
       "actionsError": "L'action a échoué. Rechargez et réessayez."
-    }
+    },
+    "initiativeType": {
+      "idea": "Intuition",
+      "hypothesis": "Hypothèse",
+      "campaign": "Campagne",
+      "opportunity": "Opportunité",
+      "decision": "Décision",
+      "experiment": "Expérimentation",
+      "pricing": "Tarification",
+      "market": "Marché",
+      "partnership": "Partenariat",
+      "internal_improvement": "Amélioration interne"
+    },
+    "initiativeTypeLabel": "Type d’initiative"
   }
 }

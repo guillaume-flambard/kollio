@@ -87,6 +87,62 @@
             }
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "ideas"
+        ],
+        "summary": "Patch Idea",
+        "operationId": "update_idea_initiative_type",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "idea_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Idea Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIdeaInitiativeTypeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdeaResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/ideas/{idea_id}/join-requests": {
@@ -2411,6 +2467,23 @@
               }
             ],
             "title": "Lang"
+          },
+          "initiative_type": {
+            "type": "string",
+            "enum": [
+              "idea",
+              "hypothesis",
+              "campaign",
+              "opportunity",
+              "decision",
+              "experiment",
+              "pricing",
+              "market",
+              "partnership",
+              "internal_improvement"
+            ],
+            "title": "Initiative Type",
+            "default": "idea"
           }
         },
         "type": "object",
@@ -2522,6 +2595,22 @@
             ],
             "title": "Stage"
           },
+          "initiative_type": {
+            "type": "string",
+            "enum": [
+              "idea",
+              "hypothesis",
+              "campaign",
+              "opportunity",
+              "decision",
+              "experiment",
+              "pricing",
+              "market",
+              "partnership",
+              "internal_improvement"
+            ],
+            "title": "Initiative Type"
+          },
           "lang": {
             "type": "string",
             "enum": [
@@ -2594,6 +2683,7 @@
           "owner_id",
           "workspace_id",
           "stage",
+          "initiative_type",
           "lang",
           "visibility",
           "created_at"
@@ -2660,6 +2750,22 @@
             ],
             "title": "Stage"
           },
+          "initiative_type": {
+            "type": "string",
+            "enum": [
+              "idea",
+              "hypothesis",
+              "campaign",
+              "opportunity",
+              "decision",
+              "experiment",
+              "pricing",
+              "market",
+              "partnership",
+              "internal_improvement"
+            ],
+            "title": "Initiative Type"
+          },
           "lang": {
             "type": "string",
             "enum": [
@@ -2718,6 +2824,7 @@
           "title",
           "pitch",
           "stage",
+          "initiative_type",
           "lang",
           "created_at"
         ],
@@ -3365,6 +3472,31 @@
           "lang"
         ],
         "title": "RollbackRequest"
+      },
+      "UpdateIdeaInitiativeTypeRequest": {
+        "properties": {
+          "initiative_type": {
+            "type": "string",
+            "enum": [
+              "idea",
+              "hypothesis",
+              "campaign",
+              "opportunity",
+              "decision",
+              "experiment",
+              "pricing",
+              "market",
+              "partnership",
+              "internal_improvement"
+            ],
+            "title": "Initiative Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "initiative_type"
+        ],
+        "title": "UpdateIdeaInitiativeTypeRequest"
       },
       "ValidationError": {
         "properties": {

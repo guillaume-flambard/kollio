@@ -102,7 +102,9 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
 
     test('SETTINGS-01 opens the screen with the saved context', async ({ page }) => {
       await mockContext(page, populatedContext())
+      const loaded = page.waitForResponse(response => response.url().includes('/company-context'))
       await page.goto(`${prefix}/workspace/settings`)
+      await loaded
       await expect(page.getByRole('heading', { name: s.title })).toBeVisible()
       await expect(page.getByLabel(s.profile.name, { exact: true })).toHaveValue('Faktus')
       await expect(page.getByLabel('Grow pipeline')).toHaveValue('Grow pipeline')

@@ -64,6 +64,10 @@ class Idea(Base):
             "(visibility = 'public' AND workspace_id IS NULL)"
         ),
         UniqueConstraint("source", "source_id"),
+        CheckConstraint(
+            "initiative_type IN ('idea', 'hypothesis', 'campaign', 'opportunity', 'decision', "
+            "'experiment', 'pricing', 'market', 'partnership', 'internal_improvement')"
+        ),
     )
     id: Mapped[UUID] = mapped_column(primary_key=True)
     slug: Mapped[str] = mapped_column(String(180), unique=True)
@@ -72,6 +76,9 @@ class Idea(Base):
     owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
     workspace_id: Mapped[UUID | None] = mapped_column(ForeignKey("workspaces.id"), index=True)
     stage: Mapped[str] = mapped_column(default="seed")
+    initiative_type: Mapped[str] = mapped_column(
+        String(32), default="idea", server_default=text("'idea'")
+    )
     lang: Mapped[str]
     visibility: Mapped[str] = mapped_column(default="workspace")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

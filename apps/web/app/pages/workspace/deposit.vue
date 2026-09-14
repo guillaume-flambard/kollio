@@ -10,10 +10,13 @@ const localePath = useLocalePath()
 const title = ref('')
 const pitch = ref('')
 const lang = ref('')
+const initiativeType = ref('idea')
 const submitting = ref(false)
 const submitError = ref(false)
 const deposited = ref<IdeaResponse>()
 const analysisPolls = ref(0)
+
+const typeOptions = useInitiativeTypeOptions()
 
 const canSubmit = computed(() => title.value.trim().length > 0 && pitch.value.trim().length > 0)
 
@@ -37,6 +40,7 @@ async function deposit() {
           title: title.value.trim(),
           pitch: pitch.value.trim(),
           lang: lang.value || undefined,
+          initiative_type: initiativeType.value,
         },
       },
     )
@@ -112,6 +116,12 @@ const constraintLabels: Record<string, string> = {
             <option value="">{{ t('ideas.deposit.langAuto') }}</option>
             <option value="fr">{{ t('ideas.deposit.langFr') }}</option>
             <option value="en">{{ t('ideas.deposit.langEn') }}</option>
+          </select>
+        </label>
+        <label class="deposit-field">
+          <span>{{ t('ideas.initiativeTypeLabel') }}</span>
+          <select v-model="initiativeType" name="initiative-type">
+            <option v-for="(label, value) in typeOptions" :key="value" :value="value">{{ label }}</option>
           </select>
         </label>
         <p v-if="submitError" class="deposit-error" role="alert">{{ t('ideas.deposit.error') }}</p>

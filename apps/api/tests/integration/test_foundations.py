@@ -417,6 +417,7 @@ async def test_member_browses_only_their_workspace_ideas(database):
                         "title": "Newer idea",
                         "pitch": "Newer pitch",
                         "stage": "iterating",
+                        "initiative_type": "idea",
                         "lang": "fr",
                         "created_at": "2026-02-01T00:00:00Z",
                         "sought_roles": [],
