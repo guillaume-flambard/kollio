@@ -11,4 +11,4 @@
 ## 3. Delivery
 
 - [x] 3.1 Regenerate the contract, confirm no drift, and build the production images.
-- [ ] 3.2 Ship the API image, then activate the 1536-dimension space in the deployment and confirm the stack starts and serves.
+- [x] 3.2 Ship the API image, then activate the 1536-dimension space in the deployment and confirm the stack starts and serves.

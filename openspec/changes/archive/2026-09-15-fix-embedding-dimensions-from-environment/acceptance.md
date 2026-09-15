@@ -52,6 +52,25 @@ The live half of scenario one, a deployment starting with the five variables set
 is recorded once the image carrying the coercion is published and the space is
 activated.
 
+## Live, in production, after the deploy (2026-09-15)
+
+The fix shipped in PR #97, merged as `1f637c4`; the `publish` job rebuilt and
+pushed the API, worker, web and gateway images to the VPS registry, and the stack
+was redeployed with the five embedding variables.
+
+- The stack came up healthy and the API started with `EMBEDDING_DIMENSIONS=1536`
+  supplied as text, which is the production proof that the coercion runs before
+  the membership rule. The same deploy had previously stopped `kollio-migrate`
+  with the validation error and left the stack down.
+- `docker exec kollio-api printenv` lists exactly five `EMBEDDING_*` variables:
+  `EMBEDDING_MODEL=kollio-embedding`, `EMBEDDING_SOURCE_MODEL=text-embedding-3-large`,
+  `EMBEDDING_DIMENSIONS=1536` and both E5 prefixes empty.
+- `https://kollio.memolabs.dev/` and `/api/health` both answer 200.
+- Through the gateway, `GET /v1/models` lists `kollio-embedding`, and an
+  embedding call on that alias returns five vectors of 1536 dimensions. The
+  reviewed French query ranks its English semantic counterpart at 0.7855 against
+  0.2290 for an unrelated French passage.
+
 ## Known boundaries
 
 - The live half depends on the API image being published and on the deployment

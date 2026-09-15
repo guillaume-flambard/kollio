@@ -8,11 +8,11 @@
 
 ## 2. Multilingual Embeddings
 
-- [ ] 2.1 Provision the OpenAI embedding credential through LiteLLM configuration without committing it, and verify the gateway can resolve the `kollio-embedding` alias.
+- [x] 2.1 Provision the OpenAI embedding credential through LiteLLM configuration without committing it, and verify the gateway can resolve the `kollio-embedding` alias.
 - [x] 2.2 Persist model, 1,536-dimension space, source language, source identifier, and provenance metadata with each embedding, and verify migration and repository integration tests pass on Postgres with pgvector.
 - [x] 2.3 Validate provider response count, index, and vector dimensions before transactional storage, and verify malformed responses leave no partial vectors.
 - [x] 2.4 Exclude incompatible model or dimension spaces during retrieval, and verify an integration test cannot match across incompatible spaces.
-- [ ] 2.5 Run the reviewed real FR-to-EN retrieval case through LiteLLM, and verify the expected semantic counterpart ranks ahead of unrelated candidates.
+- [x] 2.5 Run the reviewed real FR-to-EN retrieval case through LiteLLM, and verify the expected semantic counterpart ranks ahead of unrelated candidates.
 
 ## 3. Agent and Gateway Evidence
 
