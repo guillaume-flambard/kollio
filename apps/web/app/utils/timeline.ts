@@ -40,6 +40,7 @@ export interface TimelineEntryView {
   hash: string
   revision: number
   dateLabel: string
+  dateIso: string
   authorLabel: string
   status?: 'pending' | 'accepted' | 'rejected'
   statusLabel?: string
@@ -72,6 +73,7 @@ export function toTimelineView(model: TimelineModel, f: TimelineFormatters): Tim
     hash: iteration.short_hash,
     revision: iteration.revision,
     dateLabel: f.formatDate(iteration.created_at),
+    dateIso: iteration.created_at,
     authorLabel: f.authorName(iteration.author_id),
     status: iteration.proposal_status ?? undefined,
     rationale: iteration.rationale ?? undefined,

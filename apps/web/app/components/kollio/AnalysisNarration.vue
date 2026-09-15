@@ -152,7 +152,7 @@ onUnmounted(() => {
 .narration-title {
   margin: 0;
   color: var(--kollio-active-ink);
-  font-size: .95rem;
+  font-size: var(--kollio-text-body);
   font-weight: 600;
 }
 
@@ -196,7 +196,7 @@ onUnmounted(() => {
 
 .narration-label {
   margin: 0;
-  font-size: .9rem;
+  font-size: var(--kollio-text-small);
   font-weight: 500;
 }
 
@@ -206,7 +206,7 @@ onUnmounted(() => {
   margin: 4px 0 0;
   padding: 0 0 0 14px;
   color: var(--ui-text-muted);
-  font-size: .82rem;
+  font-size: var(--kollio-text-small);
   line-height: 1.5;
 }
 

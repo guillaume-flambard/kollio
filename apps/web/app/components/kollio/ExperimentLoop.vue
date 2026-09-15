@@ -207,7 +207,7 @@ onMounted(loadExperiments)
 <template>
   <section id="experiments" class="idea-experiments mt-11 rounded-2xl border border-default p-5 sm:p-6" :aria-labelledby="'idea-experiments-title'">
     <div class="experiment-heading">
-      <h2 id="idea-experiments-title" class="text-[1.25rem] font-semibold tracking-[-0.025em]">{{ t('ideas.experiments.title') }}</h2>
+      <h2 id="idea-experiments-title" class="text-[length:var(--kollio-text-title)] font-semibold tracking-[-0.025em]">{{ t('ideas.experiments.title') }}</h2>
       <span v-if="listStatus === 'ready' && experiments.length" class="text-sm text-muted">{{ t('ideas.experiments.count', { count: experiments.length }) }}</span>
     </div>
 
@@ -418,7 +418,7 @@ onMounted(loadExperiments)
 
 .experiment-status {
   color: var(--ui-text-muted);
-  font-size: .8125rem;
+  font-size: var(--kollio-text-small);
   font-weight: 500;
 }
 
@@ -440,7 +440,7 @@ onMounted(loadExperiments)
   background: var(--ui-bg-elevated);
   padding: 0 14px;
   color: var(--ui-text);
-  font-size: .875rem;
+  font-size: var(--kollio-text-small);
   font-weight: 500;
   transition: background 180ms ease, border-color 180ms ease, transform 180ms cubic-bezier(.16, 1, .3, 1);
 }
@@ -467,7 +467,7 @@ onMounted(loadExperiments)
 
 .experiment-action--primary:hover:not(:disabled) {
   border-color: var(--kollio-action);
-  background: color-mix(in srgb, var(--kollio-action) 88%, black);
+  background: color-mix(in srgb, var(--kollio-action) 88%, var(--kollio-heading));
 }
 
 .experiment-detail {
@@ -494,7 +494,7 @@ onMounted(loadExperiments)
   background: color-mix(in srgb, var(--kollio-wash) 60%, transparent);
   padding: 4px 10px;
   color: var(--kollio-active-ink);
-  font-size: .82rem;
+  font-size: var(--kollio-text-small);
   font-weight: 500;
 }
 

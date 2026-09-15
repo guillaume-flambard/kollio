@@ -174,5 +174,18 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(page.getByRole('heading', { name: deposit.abstainedTitle, exact: true })).toBeVisible()
       await expect(page.getByText('62', { exact: true })).toHaveCount(0)
     })
+
+    test('DEPOSIT-06 surfaces a terminal timeout with a retry action', async ({ page }) => {
+      await mockIo(page, running)
+      await page.goto(`${prefix}/workspace/deposit`)
+      await page.getByLabel(deposit.titleLabel).fill('Vélos en libre-service')
+      await page.getByLabel(deposit.pitchLabel).fill('Une flotte coopérative.')
+      await page.getByRole('button', { name: deposit.submit, exact: true }).click()
+      await expect(page.getByRole('heading', { name: deposit.timeoutTitle, exact: true })).toBeVisible({ timeout: 20_000 })
+      await expect(page.getByText(deposit.timeoutBody)).toBeVisible()
+      await page.getByRole('button', { name: deposit.timeoutRetry, exact: true }).click()
+      await expect(page.getByRole('heading', { name: deposit.timeoutTitle, exact: true })).toHaveCount(0)
+      await expect(page.locator('.narration-group')).toHaveCount(7)
+    })
   })
 }

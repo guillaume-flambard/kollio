@@ -79,5 +79,27 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(page.getByRole('button', { name: new RegExp(messages.ideas.explorer.realism.grounded) })).toBeVisible()
       await expect(page.getByText('IA et société')).toHaveCount(0)
     })
+
+    test('EXPLORER-06 keeps a single reset control with no duplicate recent toggle', async ({ page }) => {
+      await page.route('**/api/workspaces/workspace-one/ideas?*', route => route.fulfill({
+        json: { items: [], total: 0, limit: 5, offset: 0 } satisfies IdeaPageResponse,
+      }))
+      await page.goto(`${prefix}/workspace`)
+      const rail = page.locator('.ideas-filter-rail')
+      await expect(rail.getByRole('button', { name: new RegExp(messages.ideas.explorer.forYou) })).toHaveCount(1)
+      await expect(rail.getByRole('button', { name: new RegExp(messages.ideas.explorer.recent) })).toHaveCount(0)
+    })
+
+    test('EXPLORER-05 keeps the realism filter reachable on small screens', async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      await page.route('**/api/workspaces/workspace-one/ideas?*', route => route.fulfill({
+        json: { items: [], total: 0, limit: 5, offset: 0 } satisfies IdeaPageResponse,
+      }))
+      await page.goto(`${prefix}/workspace`)
+      const grounded = page.getByRole('button', { name: new RegExp(messages.ideas.explorer.realism.grounded) })
+      await expect(grounded).toBeVisible()
+      await grounded.click()
+      await expect(grounded).toHaveAttribute('aria-pressed', 'true')
+    })
   })
 }

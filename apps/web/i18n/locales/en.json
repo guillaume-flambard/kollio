@@ -11,7 +11,9 @@
     "upcoming": "Upcoming features",
     "workspace": "Workspace",
     "promise": "Initiatives with impact, together.",
-    "settings": "Company context"
+    "settings": "Company context",
+    "menuOpen": "Open navigation",
+    "menuClose": "Close navigation"
   },
   "meta": {
     "title": "Kollio | From ideas to shared projects",
@@ -183,6 +185,7 @@
       },
       "objectives": {
         "title": "Objectives",
+        "titleLabel": "Objective title",
         "placeholder": "New objective",
         "create": "Add objective",
         "priority": "Priority",
@@ -192,8 +195,10 @@
       },
       "constraints": {
         "title": "Constraints",
+        "titleLabel": "Constraint title",
         "placeholder": "New constraint",
         "detailPlaceholder": "Detail (optional)",
+        "detailLabel": "Constraint detail",
         "create": "Add constraint",
         "archive": "Archive",
         "restore": "Restore",
@@ -249,10 +254,16 @@
           "third": "Indicator 3"
         }
       },
+      "detailed": {
+        "title": "Detailed editing",
+        "hint": "The advanced, secondary surface for fine-grained maintenance of each field."
+      },
       "principles": {
         "title": "Non-negotiables",
+        "titleLabel": "Non-negotiable title",
         "placeholder": "New non-negotiable",
         "detailPlaceholder": "Detail (optional)",
+        "detailLabel": "Non-negotiable detail",
         "create": "Add non-negotiable",
         "archive": "Archive",
         "restore": "Restore",
@@ -260,6 +271,8 @@
       },
       "metrics": {
         "title": "Key indicators",
+        "nameLabel": "Indicator name",
+        "valueLabel": "Indicator value",
         "namePlaceholder": "New indicator",
         "valuePlaceholder": "Value (optional)",
         "unitPlaceholder": "Unit (optional)",
@@ -417,6 +430,7 @@
         "membersTitle": "Members",
         "apply": "Join the loop",
         "applyNote": "What you bring",
+        "applyRole": "Target role",
         "send": "Send",
         "sending": "Sending…",
         "pending": "Application pending",
@@ -526,6 +540,9 @@
       "abstainedTitle": "Analysis waiting for evidence",
       "abstainedBody": "There is no evidence yet. Enrich the initiative and add some: each constraint explains what would unlock its score.",
       "openIdea": "Open the initiative",
+      "timeoutTitle": "The analysis is still running",
+      "timeoutBody": "It is taking longer than expected. You can run the analysis again.",
+      "timeoutRetry": "Run the analysis again",
       "error": "The deposit failed. Try again."
     },
     "role": {
@@ -547,8 +564,8 @@
       "ownedEmpty": "No initiatives in this workspace.",
       "teamsEmpty": "No teams yet.",
       "actsEmpty": "No recorded acts yet.",
-      "roleIn": "in {initiative}",
-      "onIdea": "on {initiative}",
+      "roleIn": "in {idea}",
+      "onIdea": "on {idea}",
       "notFound": "Profile not found",
       "notFoundDescription": "This profile does not exist or shares no workspace with you.",
       "loadError": {

@@ -47,6 +47,8 @@
   --kollio-text-small: .875rem;
   --kollio-text-body: 1rem;
   --kollio-text-lead: 1.125rem;
+  --kollio-text-title: 1.25rem;
+  --kollio-text-headline: clamp(1.875rem, 3vw, 3rem);
   --kollio-display-hero: clamp(2.75rem, 4.2vw, 4rem);
   --kollio-display-section: clamp(2.25rem, 4vw, 4rem);
   --kollio-display-cta: clamp(2.5rem, 4.6vw, 4.75rem);

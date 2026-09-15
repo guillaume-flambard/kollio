@@ -48,7 +48,7 @@ withDefaults(defineProps<{
 
 <style scoped>
 .flow-art { display: inline-grid; width: 28px; height: 28px; flex: none; place-items: center; }
-.flow-art--thumbnail { width: 66px; height: 54px; padding: 3px; border: 1px solid color-mix(in srgb, var(--ui-border) 80%, transparent); border-radius: 9px; background: color-mix(in srgb, var(--kollio-wash) 18%, white); box-shadow: 0 5px 14px color-mix(in srgb, var(--kollio-active-ink) 9%, transparent); transform: rotate(-2deg); }
+.flow-art--thumbnail { width: 66px; height: 54px; padding: 3px; border: 1px solid color-mix(in srgb, var(--ui-border) 80%, transparent); border-radius: var(--kollio-radius-sm); background: color-mix(in srgb, var(--kollio-wash) 18%, white); box-shadow: 0 5px 14px color-mix(in srgb, var(--kollio-active-ink) 9%, transparent); transform: rotate(-2deg); }
 svg { width: 100%; height: 100%; overflow: visible; }
 .paper { fill: color-mix(in srgb, white 92%, var(--kollio-wash)); stroke: color-mix(in srgb, var(--kollio-active-ink) 30%, var(--ui-border)); stroke-linejoin: round; stroke-width: 1.2; }
 .paper-muted { fill: color-mix(in srgb, var(--kollio-wash) 34%, white); stroke: color-mix(in srgb, var(--kollio-active-ink) 12%, var(--ui-border)); stroke-width: 1; transform: rotate(-4deg); transform-origin: center; }

@@ -110,7 +110,7 @@ useSeoMeta({ title: () => t('landing.meta.title'), description: () => t('landing
 .landing-first-frame { position: relative; min-height: 750px; padding-top: 1px; }
 .landing-hero { position: relative; z-index: 1; width: min(1240px, calc(100% - 48px)); margin: 16px auto 8px; text-align: center; }
 .landing-hero__copy { width: min(940px, 100%); margin-inline: auto; }.landing-hero__eyebrow { color: var(--kollio-active-ink); font-size: var(--kollio-text-small); font-weight: 600; }
-.landing-hero h1 { position: relative; z-index: 0; margin-top: 10px; color: var(--kollio-heading); font-family: var(--font-display); font-size: clamp(2.75rem, 3.7vw, 3.5rem); font-weight: 700; letter-spacing: -.04em; line-height: .98; text-wrap: balance; }
+.landing-hero h1 { position: relative; z-index: 0; margin-top: 10px; color: var(--kollio-heading); font-family: var(--font-display); font-size: var(--kollio-display-hero); font-weight: 700; letter-spacing: -.04em; line-height: .98; text-wrap: balance; }
 .landing-hero__description { max-width: 690px; margin: 10px auto 0; color: var(--ui-text-muted); font-size: clamp(1.02rem, 1.5vw, 1.25rem); line-height: 1.45; text-wrap: balance; }
 .landing-hero__actions { display: flex; justify-content: center; gap: 13px; margin-top: 14px; }
 .landing-secondary-action { display: inline-flex; min-height: 48px; align-items: center; border: 1px solid var(--ui-border); border-radius: 12px; background: color-mix(in srgb, white 70%, transparent); padding: 0 20px; color: var(--kollio-heading); font-size: .9rem; font-weight: 600; text-decoration: none; transition: border-color 180ms ease, transform 180ms ease; }
@@ -123,7 +123,7 @@ useSeoMeta({ title: () => t('landing.meta.title'), description: () => t('landing
 .landing-outcomes { display: grid; width: min(1320px, calc(100% - 48px)); grid-template-columns: repeat(3, 1fr); margin: 6px auto 0; }
 .landing-outcomes article { display: flex; min-width: 0; align-items: center; gap: 20px; padding: 10px 28px; }.landing-outcomes article + article { border-left: 1px solid var(--ui-border); }
 .landing-outcome-asset { width: clamp(82px, 7vw, 100px); height: clamp(82px, 7vw, 100px); flex: none; transition: transform 260ms cubic-bezier(.22, 1, .36, 1); }
-.landing-outcomes h2 { color: var(--kollio-heading); font-size: 1.125rem; font-weight: 650; }.landing-outcomes p { max-width: 310px; margin-top: 5px; color: var(--ui-text-muted); font-size: .9375rem; line-height: 1.42; }
+.landing-outcomes h2 { color: var(--kollio-heading); font-size: var(--kollio-text-lead); font-weight: 650; }.landing-outcomes p { max-width: 310px; margin-top: 5px; color: var(--ui-text-muted); font-size: var(--kollio-text-small); line-height: 1.42; }
 .landing-trust { display: flex; justify-content: center; margin: 22px auto 38px; color: var(--ui-text-muted); font-size: .75rem; }
 .landing-method { display: grid; width: min(1240px, calc(100% - 48px)); grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(56px, 8vw, 128px); margin: 128px auto; }
 .landing-method__intro > p:first-of-type { color: var(--kollio-active-ink); font-size: .78rem; font-weight: 650; }

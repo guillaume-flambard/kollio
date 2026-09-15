@@ -74,6 +74,8 @@ const wizard = reactive({
 })
 const wizardSaving = ref(false)
 const wizardSaved = ref(false)
+const editorExpanded = ref(false)
+const editorPanelId = 'company-context-detailed-editor'
 
 function fillThree(target: string[], values: string[]) {
   for (let index = 0; index < 3; index += 1) {
@@ -498,221 +500,236 @@ async function saveWizard() {
         </div>
       </form>
 
-      <form class="settings-section" @submit.prevent="saveProfile">
-        <h2>{{ t('workspace.settings.profile.title') }}</h2>
-        <label class="settings-field">
-          <span>{{ t('workspace.settings.profile.name') }}</span>
-          <input v-model="profileForm.name" type="text" maxlength="200">
-        </label>
-        <label class="settings-field">
-          <span>{{ t('workspace.settings.profile.description') }}</span>
-          <textarea v-model="profileForm.description" rows="3" />
-        </label>
-        <label class="settings-field">
-          <span>{{ t('workspace.settings.profile.businessModel') }}</span>
-          <input v-model="profileForm.business_model" type="text">
-        </label>
-        <label class="settings-field">
-          <span>{{ t('workspace.settings.profile.productsServices') }}</span>
-          <input v-model="profileForm.products_services" type="text">
-        </label>
-        <label class="settings-field">
-          <span>{{ t('workspace.settings.profile.customerSegments') }}</span>
-          <input v-model="profileForm.customer_segments" type="text">
-        </label>
-        <label class="settings-field">
-          <span>{{ t('workspace.settings.profile.markets') }}</span>
-          <input v-model="profileForm.markets" type="text">
-        </label>
-        <label class="settings-field">
-          <span>{{ t('workspace.settings.profile.structure') }}</span>
-          <input v-model="profileForm.structure" type="text">
-        </label>
-        <div class="settings-actions">
-          <button type="submit" class="settings-primary" :disabled="savingProfile">
-            {{ savingProfile ? t('workspace.settings.profile.saving') : t('workspace.settings.profile.save') }}
-          </button>
-          <span v-if="profileSaved" class="settings-note">{{ t('workspace.settings.profile.saved') }}</span>
-        </div>
-      </form>
-
-      <section class="settings-section">
-        <h2>{{ t('workspace.settings.objectives.title') }}</h2>
-        <form class="settings-inline" @submit.prevent="createObjective">
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.objectives.placeholder') }}</span>
-            <input v-model="objectiveTitle" type="text" :placeholder="t('workspace.settings.objectives.placeholder')" maxlength="300">
-          </label>
-          <button type="submit" class="settings-primary">{{ t('workspace.settings.objectives.create') }}</button>
-        </form>
-        <p v-if="!context.objectives.length" class="settings-note">{{ t('workspace.settings.objectives.empty') }}</p>
-        <ul v-else class="settings-list" role="list">
-          <li v-for="objective in context.objectives" :key="objective.id">
-            <label class="settings-toggle">
-              <input
-                type="checkbox"
-                :checked="objective.priority"
-                @change="patchObjective(objective, { priority: !objective.priority })"
-              >
-              {{ t('workspace.settings.objectives.priority') }}
+      <section class="settings-advanced">
+        <button
+          type="button"
+          class="settings-advanced-toggle"
+          :aria-expanded="editorExpanded"
+          :aria-controls="editorPanelId"
+          @click="editorExpanded = !editorExpanded"
+        >
+          <span class="settings-advanced-title">{{ t('workspace.settings.detailed.title') }}</span>
+          <span class="settings-advanced-hint">{{ t('workspace.settings.detailed.hint') }}</span>
+          <KollioIcon :name="editorExpanded ? 'chevron-up' : 'chevron-down'" class="size-4 settings-advanced-chevron" />
+        </button>
+        <div v-show="editorExpanded" :id="editorPanelId" class="settings-advanced-panel">
+          <form class="settings-section" @submit.prevent="saveProfile">
+            <h2>{{ t('workspace.settings.profile.title') }}</h2>
+            <label class="settings-field">
+              <span>{{ t('workspace.settings.profile.name') }}</span>
+              <input v-model="profileForm.name" type="text" maxlength="200">
             </label>
-            <input
-              class="settings-title-input"
-              type="text"
-              maxlength="300"
-              :value="objective.title"
-              :aria-label="objective.title"
-              @change="patchObjective(objective, { title: editedTitle($event) })"
-            >
-            <span class="settings-state">{{ t(`workspace.settings.state.${objective.state}`) }}</span>
-            <button
-              type="button"
-              class="settings-link"
-              @click="patchObjective(objective, { state: nextState(objective.state) })"
-            >
-              {{ objective.state === 'archived' ? t('workspace.settings.objectives.restore') : t('workspace.settings.objectives.archive') }}
-            </button>
-          </li>
-        </ul>
-      </section>
+            <label class="settings-field">
+              <span>{{ t('workspace.settings.profile.description') }}</span>
+              <textarea v-model="profileForm.description" rows="3" />
+            </label>
+            <label class="settings-field">
+              <span>{{ t('workspace.settings.profile.businessModel') }}</span>
+              <input v-model="profileForm.business_model" type="text">
+            </label>
+            <label class="settings-field">
+              <span>{{ t('workspace.settings.profile.productsServices') }}</span>
+              <input v-model="profileForm.products_services" type="text">
+            </label>
+            <label class="settings-field">
+              <span>{{ t('workspace.settings.profile.customerSegments') }}</span>
+              <input v-model="profileForm.customer_segments" type="text">
+            </label>
+            <label class="settings-field">
+              <span>{{ t('workspace.settings.profile.markets') }}</span>
+              <input v-model="profileForm.markets" type="text">
+            </label>
+            <label class="settings-field">
+              <span>{{ t('workspace.settings.profile.structure') }}</span>
+              <input v-model="profileForm.structure" type="text">
+            </label>
+            <div class="settings-actions">
+              <button type="submit" class="settings-primary" :disabled="savingProfile">
+                {{ savingProfile ? t('workspace.settings.profile.saving') : t('workspace.settings.profile.save') }}
+              </button>
+              <span v-if="profileSaved" class="settings-note">{{ t('workspace.settings.profile.saved') }}</span>
+            </div>
+          </form>
 
-      <section class="settings-section">
-        <h2>{{ t('workspace.settings.constraints.title') }}</h2>
-        <form class="settings-inline" @submit.prevent="createConstraint">
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.constraints.placeholder') }}</span>
-            <input v-model="constraintTitle" type="text" :placeholder="t('workspace.settings.constraints.placeholder')" maxlength="300">
-          </label>
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.constraints.detailPlaceholder') }}</span>
-            <input v-model="constraintDetail" type="text" :placeholder="t('workspace.settings.constraints.detailPlaceholder')">
-          </label>
-          <button type="submit" class="settings-primary">{{ t('workspace.settings.constraints.create') }}</button>
-        </form>
-        <p v-if="!context.constraints.length" class="settings-note">{{ t('workspace.settings.constraints.empty') }}</p>
-        <ul v-else class="settings-list" role="list">
-          <li v-for="constraint in context.constraints" :key="constraint.id">
-            <input
-              class="settings-title-input"
-              type="text"
-              maxlength="300"
-              :value="constraint.title"
-              :aria-label="constraint.title"
-              @change="patchConstraint(constraint, { title: editedTitle($event) })"
-            >
-            <input
-              class="settings-title-input"
-              type="text"
-              :value="constraint.detail ?? ''"
-              :aria-label="`${t('workspace.settings.constraints.detailPlaceholder')} — ${constraint.title}`"
-              @change="patchConstraint(constraint, { detail: editedTitle($event) })"
-            >
-            <span class="settings-state">{{ t(`workspace.settings.state.${constraint.state}`) }}</span>
-            <button
-              type="button"
-              class="settings-link"
-              @click="patchConstraint(constraint, { state: nextState(constraint.state) })"
-            >
-              {{ constraint.state === 'archived' ? t('workspace.settings.constraints.restore') : t('workspace.settings.constraints.archive') }}
-            </button>
-          </li>
-        </ul>
-      </section>
+          <section class="settings-section">
+            <h2>{{ t('workspace.settings.objectives.title') }}</h2>
+            <form class="settings-inline" @submit.prevent="createObjective">
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.objectives.placeholder') }}</span>
+                <input v-model="objectiveTitle" type="text" :placeholder="t('workspace.settings.objectives.placeholder')" maxlength="300">
+              </label>
+              <button type="submit" class="settings-primary">{{ t('workspace.settings.objectives.create') }}</button>
+            </form>
+            <p v-if="!context.objectives.length" class="settings-note">{{ t('workspace.settings.objectives.empty') }}</p>
+            <ul v-else class="settings-list" role="list">
+              <li v-for="objective in context.objectives" :key="objective.id">
+                <label class="settings-toggle">
+                  <input
+                    type="checkbox"
+                    :checked="objective.priority"
+                    @change="patchObjective(objective, { priority: !objective.priority })"
+                  >
+                  {{ t('workspace.settings.objectives.priority') }}
+                </label>
+                <input
+                  class="settings-title-input"
+                  type="text"
+                  maxlength="300"
+                  :value="objective.title"
+                  :aria-label="`${t('workspace.settings.objectives.titleLabel')}: ${objective.title}`"
+                  @change="patchObjective(objective, { title: editedTitle($event) })"
+                >
+                <span class="settings-state">{{ t(`workspace.settings.state.${objective.state}`) }}</span>
+                <button
+                  type="button"
+                  class="settings-link"
+                  @click="patchObjective(objective, { state: nextState(objective.state) })"
+                >
+                  {{ objective.state === 'archived' ? t('workspace.settings.objectives.restore') : t('workspace.settings.objectives.archive') }}
+                </button>
+              </li>
+            </ul>
+          </section>
 
-      <section class="settings-section">
-        <h2>{{ t('workspace.settings.principles.title') }}</h2>
-        <form class="settings-inline" @submit.prevent="createPrinciple">
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.principles.placeholder') }}</span>
-            <input v-model="principleTitle" type="text" :placeholder="t('workspace.settings.principles.placeholder')" maxlength="300">
-          </label>
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.principles.detailPlaceholder') }}</span>
-            <input v-model="principleDetail" type="text" :placeholder="t('workspace.settings.principles.detailPlaceholder')">
-          </label>
-          <button type="submit" class="settings-primary">{{ t('workspace.settings.principles.create') }}</button>
-        </form>
-        <p v-if="!context.principles.length" class="settings-note">{{ t('workspace.settings.principles.empty') }}</p>
-        <ul v-else class="settings-list" role="list">
-          <li v-for="principle in context.principles" :key="principle.id">
-            <input
-              class="settings-title-input"
-              type="text"
-              maxlength="300"
-              :value="principle.title"
-              :aria-label="principle.title"
-              @change="patchPrinciple(principle, { title: editedTitle($event) })"
-            >
-            <input
-              class="settings-title-input"
-              type="text"
-              :value="principle.detail ?? ''"
-              :aria-label="`${t('workspace.settings.principles.detailPlaceholder')} ${principle.title}`"
-              @change="patchPrinciple(principle, { detail: editedTitle($event) })"
-            >
-            <span class="settings-state">{{ t(`workspace.settings.state.${principle.state}`) }}</span>
-            <button
-              type="button"
-              class="settings-link"
-              @click="patchPrinciple(principle, { state: nextState(principle.state) })"
-            >
-              {{ principle.state === 'archived' ? t('workspace.settings.principles.restore') : t('workspace.settings.principles.archive') }}
-            </button>
-          </li>
-        </ul>
-      </section>
+          <section class="settings-section">
+            <h2>{{ t('workspace.settings.constraints.title') }}</h2>
+            <form class="settings-inline" @submit.prevent="createConstraint">
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.constraints.placeholder') }}</span>
+                <input v-model="constraintTitle" type="text" :placeholder="t('workspace.settings.constraints.placeholder')" maxlength="300">
+              </label>
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.constraints.detailLabel') }}</span>
+                <input v-model="constraintDetail" type="text" :placeholder="t('workspace.settings.constraints.detailPlaceholder')">
+              </label>
+              <button type="submit" class="settings-primary">{{ t('workspace.settings.constraints.create') }}</button>
+            </form>
+            <p v-if="!context.constraints.length" class="settings-note">{{ t('workspace.settings.constraints.empty') }}</p>
+            <ul v-else class="settings-list" role="list">
+              <li v-for="constraint in context.constraints" :key="constraint.id">
+                <input
+                  class="settings-title-input"
+                  type="text"
+                  maxlength="300"
+                  :value="constraint.title"
+                  :aria-label="`${t('workspace.settings.constraints.titleLabel')}: ${constraint.title}`"
+                  @change="patchConstraint(constraint, { title: editedTitle($event) })"
+                >
+                <input
+                  class="settings-title-input"
+                  type="text"
+                  :value="constraint.detail ?? ''"
+                  :aria-label="`${t('workspace.settings.constraints.detailLabel')}: ${constraint.title}`"
+                  @change="patchConstraint(constraint, { detail: editedTitle($event) })"
+                >
+                <span class="settings-state">{{ t(`workspace.settings.state.${constraint.state}`) }}</span>
+                <button
+                  type="button"
+                  class="settings-link"
+                  @click="patchConstraint(constraint, { state: nextState(constraint.state) })"
+                >
+                  {{ constraint.state === 'archived' ? t('workspace.settings.constraints.restore') : t('workspace.settings.constraints.archive') }}
+                </button>
+              </li>
+            </ul>
+          </section>
 
-      <section class="settings-section">
-        <h2>{{ t('workspace.settings.metrics.title') }}</h2>
-        <form class="settings-metric-form" @submit.prevent="createMetric">
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.metrics.namePlaceholder') }}</span>
-            <input v-model="metricName" type="text" :placeholder="t('workspace.settings.metrics.namePlaceholder')" maxlength="200">
-          </label>
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.metrics.valuePlaceholder') }}</span>
-            <input v-model="metricValue" type="text" :placeholder="t('workspace.settings.metrics.valuePlaceholder')" maxlength="200">
-          </label>
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.metrics.unitPlaceholder') }}</span>
-            <input v-model="metricUnit" type="text" :placeholder="t('workspace.settings.metrics.unitPlaceholder')" maxlength="50">
-          </label>
-          <label class="settings-field">
-            <span class="sr-only">{{ t('workspace.settings.metrics.sourcePlaceholder') }}</span>
-            <input v-model="metricSource" type="text" :placeholder="t('workspace.settings.metrics.sourcePlaceholder')" maxlength="300">
-          </label>
-          <button type="submit" class="settings-primary">{{ t('workspace.settings.metrics.create') }}</button>
-        </form>
-        <p v-if="!context.metrics.length" class="settings-note">{{ t('workspace.settings.metrics.empty') }}</p>
-        <ul v-else class="settings-list" role="list">
-          <li v-for="metric in context.metrics" :key="metric.id">
-            <input
-              class="settings-title-input"
-              type="text"
-              maxlength="200"
-              :value="metric.name"
-              :aria-label="metric.name"
-              @change="patchMetric(metric, { name: editedTitle($event) })"
-            >
-            <input
-              class="settings-metric-value"
-              type="text"
-              maxlength="200"
-              :value="metric.value ?? ''"
-              :aria-label="`${t('workspace.settings.metrics.valuePlaceholder')} ${metric.name}`"
-              @change="patchMetric(metric, { value: editedTitle($event) })"
-            >
-            <span v-if="metric.unit" class="settings-note">{{ metric.unit }}</span>
-            <span class="settings-state">{{ t(`workspace.settings.state.${metric.state}`) }}</span>
-            <button
-              type="button"
-              class="settings-link"
-              @click="patchMetric(metric, { state: nextState(metric.state) })"
-            >
-              {{ metric.state === 'archived' ? t('workspace.settings.metrics.restore') : t('workspace.settings.metrics.archive') }}
-            </button>
-          </li>
-        </ul>
+          <section class="settings-section">
+            <h2>{{ t('workspace.settings.principles.title') }}</h2>
+            <form class="settings-inline" @submit.prevent="createPrinciple">
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.principles.placeholder') }}</span>
+                <input v-model="principleTitle" type="text" :placeholder="t('workspace.settings.principles.placeholder')" maxlength="300">
+              </label>
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.principles.detailLabel') }}</span>
+                <input v-model="principleDetail" type="text" :placeholder="t('workspace.settings.principles.detailPlaceholder')">
+              </label>
+              <button type="submit" class="settings-primary">{{ t('workspace.settings.principles.create') }}</button>
+            </form>
+            <p v-if="!context.principles.length" class="settings-note">{{ t('workspace.settings.principles.empty') }}</p>
+            <ul v-else class="settings-list" role="list">
+              <li v-for="principle in context.principles" :key="principle.id">
+                <input
+                  class="settings-title-input"
+                  type="text"
+                  maxlength="300"
+                  :value="principle.title"
+                  :aria-label="`${t('workspace.settings.principles.titleLabel')}: ${principle.title}`"
+                  @change="patchPrinciple(principle, { title: editedTitle($event) })"
+                >
+                <input
+                  class="settings-title-input"
+                  type="text"
+                  :value="principle.detail ?? ''"
+                  :aria-label="`${t('workspace.settings.principles.detailLabel')}: ${principle.title}`"
+                  @change="patchPrinciple(principle, { detail: editedTitle($event) })"
+                >
+                <span class="settings-state">{{ t(`workspace.settings.state.${principle.state}`) }}</span>
+                <button
+                  type="button"
+                  class="settings-link"
+                  @click="patchPrinciple(principle, { state: nextState(principle.state) })"
+                >
+                  {{ principle.state === 'archived' ? t('workspace.settings.principles.restore') : t('workspace.settings.principles.archive') }}
+                </button>
+              </li>
+            </ul>
+          </section>
+
+          <section class="settings-section">
+            <h2>{{ t('workspace.settings.metrics.title') }}</h2>
+            <form class="settings-metric-form" @submit.prevent="createMetric">
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.metrics.namePlaceholder') }}</span>
+                <input v-model="metricName" type="text" :placeholder="t('workspace.settings.metrics.namePlaceholder')" maxlength="200">
+              </label>
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.metrics.valuePlaceholder') }}</span>
+                <input v-model="metricValue" type="text" :placeholder="t('workspace.settings.metrics.valuePlaceholder')" maxlength="200">
+              </label>
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.metrics.unitPlaceholder') }}</span>
+                <input v-model="metricUnit" type="text" :placeholder="t('workspace.settings.metrics.unitPlaceholder')" maxlength="50">
+              </label>
+              <label class="settings-field">
+                <span class="sr-only">{{ t('workspace.settings.metrics.sourcePlaceholder') }}</span>
+                <input v-model="metricSource" type="text" :placeholder="t('workspace.settings.metrics.sourcePlaceholder')" maxlength="300">
+              </label>
+              <button type="submit" class="settings-primary">{{ t('workspace.settings.metrics.create') }}</button>
+            </form>
+            <p v-if="!context.metrics.length" class="settings-note">{{ t('workspace.settings.metrics.empty') }}</p>
+            <ul v-else class="settings-list" role="list">
+              <li v-for="metric in context.metrics" :key="metric.id">
+                <input
+                  class="settings-title-input"
+                  type="text"
+                  maxlength="200"
+                  :value="metric.name"
+                  :aria-label="`${t('workspace.settings.metrics.nameLabel')}: ${metric.name}`"
+                  @change="patchMetric(metric, { name: editedTitle($event) })"
+                >
+                <input
+                  class="settings-metric-value"
+                  type="text"
+                  maxlength="200"
+                  :value="metric.value ?? ''"
+                  :aria-label="`${t('workspace.settings.metrics.valueLabel')}: ${metric.name}`"
+                  @change="patchMetric(metric, { value: editedTitle($event) })"
+                >
+                <span v-if="metric.unit" class="settings-note">{{ metric.unit }}</span>
+                <span class="settings-state">{{ t(`workspace.settings.state.${metric.state}`) }}</span>
+                <button
+                  type="button"
+                  class="settings-link"
+                  @click="patchMetric(metric, { state: nextState(metric.state) })"
+                >
+                  {{ metric.state === 'archived' ? t('workspace.settings.metrics.restore') : t('workspace.settings.metrics.archive') }}
+                </button>
+              </li>
+            </ul>
+          </section>
+        </div>
       </section>
     </template>
   </div>
@@ -720,36 +737,43 @@ async function saveWizard() {
 
 <style scoped>
 .settings-shell { display: grid; gap: 26px; max-width: 720px; margin: 0 auto; padding: 22px 4px 64px; }
-.settings-header h1 { margin: 0; font-size: 1.5rem; }
-.settings-header p { margin: 6px 0 0; color: var(--ui-text-muted); font-size: .92rem; }
-.settings-section { display: grid; gap: 12px; border: 1px solid var(--ui-border); border-radius: 16px; padding: 18px 20px; }
-.settings-section h2 { margin: 0; font-size: 1.05rem; font-weight: 620; }
-.settings-field { display: grid; gap: 6px; font-size: .82rem; font-weight: 560; color: var(--ui-text-muted); }
-.settings-field input, .settings-field textarea { border: 1px solid var(--ui-border); border-radius: 12px; padding: 8px 12px; background: var(--ui-bg); color: var(--ui-text); font: inherit; min-width: 0; }
+.settings-header h1 { margin: 0; font-size: var(--kollio-text-title); }
+.settings-header p { margin: 6px 0 0; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
+.settings-section { display: grid; gap: 12px; border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-lg); padding: 18px 20px; }
+.settings-section h2 { margin: 0; font-size: var(--kollio-text-body); font-weight: 620; }
+.settings-field { display: grid; gap: 6px; font-size: var(--kollio-text-small); font-weight: 560; color: var(--ui-text-muted); }
+.settings-field input, .settings-field textarea { border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); padding: 8px 12px; background: var(--ui-bg); color: var(--ui-text); font: inherit; min-width: 0; }
 .settings-field textarea { resize: vertical; }
 .settings-inline { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
 .settings-actions { display: flex; align-items: center; gap: 12px; }
-.settings-primary { border: 0; border-radius: 12px; padding: 9px 16px; background: var(--kollio-heading); color: white; font: inherit; font-size: .85rem; font-weight: 570; cursor: pointer; }
+.settings-primary { border: 0; border-radius: var(--kollio-radius-md); padding: 9px 16px; background: var(--kollio-heading); color: var(--ui-bg-elevated); font: inherit; font-size: var(--kollio-text-small); font-weight: 570; cursor: pointer; }
 .settings-primary:disabled { opacity: .6; cursor: progress; }
-.settings-link { border: 0; background: transparent; color: var(--kollio-active-ink); font: inherit; font-size: .82rem; font-weight: 620; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-.settings-note { color: var(--ui-text-muted); font-size: .82rem; }
-.settings-error { border: 1px solid var(--ui-border); border-radius: 12px; padding: 10px 14px; background: var(--ui-bg-elevated); font-size: .85rem; }
+.settings-link { border: 0; background: transparent; color: var(--kollio-active-ink); font: inherit; font-size: var(--kollio-text-small); font-weight: 620; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.settings-note { color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
+.settings-error { border: 1px solid var(--ui-error); border-radius: var(--kollio-radius-md); padding: 10px 14px; background: var(--ui-bg-elevated); color: var(--ui-error); font-size: var(--kollio-text-small); }
 .settings-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .settings-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border-top: 1px solid var(--ui-border); padding-top: 8px; }
 .settings-list li:first-child { border-top: 0; padding-top: 0; }
-.settings-title-input { flex: 1 1 220px; border: 1px solid transparent; border-radius: 10px; padding: 6px 8px; background: transparent; color: var(--ui-text); font: inherit; font-weight: 560; }
+.settings-title-input { flex: 1 1 220px; border: 1px solid transparent; border-radius: var(--kollio-radius-sm); padding: 6px 8px; background: transparent; color: var(--ui-text); font: inherit; font-weight: 560; }
 .settings-title-input:hover, .settings-title-input:focus { border-color: var(--ui-border); background: var(--ui-bg); }
-.settings-state { border-radius: 999px; padding: 2px 10px; background: var(--ui-bg-muted); color: var(--ui-text-muted); font-size: .72rem; font-weight: 600; }
-.settings-toggle { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--ui-text-muted); }
+.settings-state { border-radius: var(--kollio-radius-pill); padding: 2px 10px; background: var(--ui-bg-muted); color: var(--kollio-tab-ink); font-size: var(--kollio-text-caption); font-weight: 600; }
+.settings-toggle { display: flex; align-items: center; gap: 6px; font-size: var(--kollio-text-caption); color: var(--ui-text-muted); }
 .settings-wizard { gap: 16px; }
 .settings-wizard-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.settings-step { display: grid; gap: 10px; margin: 0; min-width: 0; border: 1px solid var(--ui-border); border-radius: 12px; padding: 4px 14px 14px; }
-.settings-step legend { display: flex; align-items: center; gap: 8px; padding-inline: 4px; color: var(--ui-text); font-size: .9rem; font-weight: 620; }
-.settings-pending { border-radius: 999px; padding: 1px 9px; background: color-mix(in srgb, var(--ui-warning) 22%, transparent); color: var(--ui-warning); font-size: .68rem; font-weight: 600; }
+.settings-step { display: grid; gap: 10px; margin: 0; min-width: 0; border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); padding: 4px 14px 14px; }
+.settings-step legend { display: flex; align-items: center; gap: 8px; padding-inline: 4px; color: var(--ui-text); font-size: var(--kollio-text-small); font-weight: 620; }
+.settings-pending { border-radius: var(--kollio-radius-pill); padding: 1px 9px; background: color-mix(in srgb, var(--ui-warning) 22%, transparent); color: var(--ui-text); font-size: var(--kollio-text-micro); font-weight: 600; }
 .settings-metric-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-items: end; }
 .settings-metric-form .settings-primary { grid-column: 1 / -1; justify-self: start; }
-.settings-metric-value { flex: 0 1 140px; border: 1px solid transparent; border-radius: 10px; padding: 6px 8px; background: transparent; color: var(--ui-text); font: inherit; }
+.settings-metric-value { flex: 0 1 140px; border: 1px solid transparent; border-radius: var(--kollio-radius-sm); padding: 6px 8px; background: transparent; color: var(--ui-text); font: inherit; }
 .settings-metric-value:hover, .settings-metric-value:focus { border-color: var(--ui-border); background: var(--ui-bg); }
+.settings-advanced { display: grid; gap: 14px; }
+.settings-advanced-panel { display: grid; gap: 26px; }
+.settings-advanced-toggle { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; width: 100%; border: 0; background: transparent; padding: 0; color: var(--ui-text); font: inherit; text-align: left; cursor: pointer; }
+.settings-advanced-toggle:hover .settings-advanced-title { text-decoration-thickness: 2px; }
+.settings-advanced-title { color: var(--kollio-active-ink); font-size: var(--kollio-text-small); font-weight: 620; text-decoration: underline; text-underline-offset: 3px; }
+.settings-advanced-hint { color: var(--ui-text-muted); font-size: var(--kollio-text-caption); }
+.settings-advanced-chevron { margin-left: auto; color: var(--ui-text-muted); }
 
 @media (max-width: 640px) {
   .settings-inline { grid-template-columns: 1fr; }

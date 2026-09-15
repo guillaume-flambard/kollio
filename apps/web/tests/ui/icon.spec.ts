@@ -4,6 +4,8 @@ import KollioIcon from '../../app/components/kollio/Icon.vue'
 
 const names = [
   'plus',
+  'menu',
+  'close',
   'chevron-up',
   'chevron-down',
   'chevron-right',

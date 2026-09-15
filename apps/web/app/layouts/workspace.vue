@@ -1,23 +1,123 @@
 <script setup lang="ts">
 const { t, locale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
+const route = useRoute()
+
+const menuOpen = ref(false)
+const menuToggle = ref<HTMLButtonElement | null>(null)
+const drawer = ref<HTMLElement | null>(null)
+let desktopQuery: MediaQueryList | undefined
+
+function openMenu() {
+  menuOpen.value = true
+}
+
+function closeMenu(restoreFocus = false) {
+  if (!menuOpen.value) return
+  menuOpen.value = false
+  if (restoreFocus) void nextTick(() => menuToggle.value?.focus())
+}
+
+function onKeydown(event: KeyboardEvent) {
+  if (!menuOpen.value) return
+  if (event.key === 'Escape') {
+    event.preventDefault()
+    closeMenu(true)
+    return
+  }
+  if (event.key !== 'Tab' || !drawer.value) return
+  const focusable = drawer.value.querySelectorAll<HTMLElement>(
+    'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+  )
+  if (focusable.length === 0) return
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault()
+    last?.focus()
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault()
+    first?.focus()
+  }
+}
+
+function onDesktopChange(event: MediaQueryListEvent) {
+  if (event.matches) closeMenu()
+}
+
+watch(menuOpen, async open => {
+  if (!import.meta.client) return
+  document.body.style.overflow = open ? 'hidden' : ''
+  if (open) {
+    await nextTick()
+    drawer.value?.focus()
+  }
+})
+
+watch(() => route.fullPath, () => closeMenu())
+
+onMounted(() => {
+  window.addEventListener('keydown', onKeydown)
+  desktopQuery = window.matchMedia('(min-width: 1024px)')
+  desktopQuery.addEventListener('change', onDesktopChange)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeydown)
+  desktopQuery?.removeEventListener('change', onDesktopChange)
+  if (import.meta.client) document.body.style.overflow = ''
+})
 </script>
 
 <template>
   <div class="workspace-canvas workspace-shell min-h-screen bg-default text-default">
-    <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-default bg-default px-5 lg:hidden">
+    <header class="sticky top-0 z-40 flex h-16 items-center justify-between gap-2 border-b border-default bg-default px-2 lg:hidden">
       <NuxtLink :to="$localePath('/workspace')" :aria-label="t('brand')">
         <KollioBrand />
       </NuxtLink>
-      <div class="flex items-center gap-2">
-        <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="min-h-11 rounded-xl px-3 text-sm font-medium leading-11 text-muted">
+      <div class="flex items-center gap-1">
+        <button
+          ref="menuToggle"
+          type="button"
+          class="grid size-11 place-items-center rounded-xl text-muted transition-colors hover:bg-muted hover:text-default"
+          :aria-expanded="menuOpen"
+          aria-controls="workspace-mobile-nav"
+          :aria-label="menuOpen ? t('navigation.menuClose') : t('navigation.menuOpen')"
+          @click="menuOpen ? closeMenu() : openMenu()"
+        >
+          <KollioIcon :name="menuOpen ? 'close' : 'menu'" class="size-5" />
+        </button>
+        <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="min-h-11 rounded-xl px-2 text-sm font-medium leading-11 text-muted">
           {{ t('language.switch') }}
         </NuxtLink>
-        <a href="/sign-out" class="min-h-11 rounded-xl border border-default bg-elevated px-3 text-sm font-medium leading-11">
+        <a href="/sign-out" class="min-h-11 rounded-xl border border-default bg-elevated px-2 text-sm font-medium leading-11">
           {{ t('auth.signOut') }}
         </a>
       </div>
     </header>
+
+    <Transition name="workspace-drawer">
+      <div v-if="menuOpen" class="workspace-drawer-layer fixed inset-x-0 bottom-0 top-16 z-30 lg:hidden">
+        <button
+          type="button"
+          tabindex="-1"
+          class="workspace-drawer-backdrop absolute inset-0"
+          :aria-label="t('navigation.menuClose')"
+          @click="closeMenu(true)"
+        />
+        <aside
+          id="workspace-mobile-nav"
+          ref="drawer"
+          class="workspace-drawer absolute inset-y-0 left-0 w-80 max-w-[86vw] overflow-y-auto border-r border-default bg-elevated px-2 pt-4"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="t('navigation.label')"
+          tabindex="-1"
+        >
+          <KollioWorkspaceNav @navigate="closeMenu()" />
+        </aside>
+      </div>
+    </Transition>
 
     <aside class="workspace-rail sticky hidden flex-col border border-default bg-elevated/80 lg:flex">
       <NuxtLink :to="$localePath('/workspace')" class="px-2" :aria-label="t('brand')">
@@ -25,46 +125,7 @@ const switchLocalePath = useSwitchLocalePath()
       </NuxtLink>
       <p class="mt-1 px-2 text-sm leading-snug text-muted">{{ t('navigation.promise') }}</p>
 
-      <nav class="mt-12" :aria-label="t('navigation.label')">
-        <NuxtLink
-          :to="$localePath('/workspace')"
-          class="workspace-nav-active group flex min-h-11 w-full items-center rounded-xl text-sm font-medium text-muted transition-colors hover:text-default"
-          active-class="workspace-nav-active text-default"
-        >
-          <KollioSketchAnnotation active kind="loop" class="workspace-nav-sketch">
-            <span class="flex items-center gap-3">
-              <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18h6m-5 3h4m4.5-10.5a6.5 6.5 0 1 0-10.7 5l.7.6c.9.8 1.5 1.9 1.5 3.1h4c0-1.2.6-2.3 1.5-3.1l.7-.6a6.5 6.5 0 0 0 2.3-5Z" /></svg>
-              {{ t('navigation.ideas') }}
-            </span>
-          </KollioSketchAnnotation>
-        </NuxtLink>
-
-        <NuxtLink
-          :to="$localePath('/workspace/settings')"
-          class="group mt-2 flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-medium text-muted transition-colors hover:text-default"
-          active-class="text-default"
-        >
-          <svg aria-hidden="true" viewBox="0 0 24 24" class="size-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" /></svg>
-          {{ t('navigation.settings') }}
-        </NuxtLink>
-
-        <div class="mt-2 space-y-1" :aria-label="t('navigation.upcoming')">
-          <span v-for="item in ['workshops', 'community', 'resources']" :key="item" class="flex min-h-11 cursor-default items-center gap-3 rounded-xl px-3 text-sm text-muted/75" aria-disabled="true">
-            <svg v-if="item === 'workshops'" aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M7 4v6m10-6v6M5 11h14v9H5z" /></svg>
-            <svg v-else-if="item === 'community'" aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 20a4 4 0 0 0-8 0M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 7a3 3 0 0 0-3-3m1-9a3 3 0 0 1 0 6M5 20a3 3 0 0 1 3-3M7 8a3 3 0 0 0 0 6" /></svg>
-            <svg v-else aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z" /></svg>
-            {{ t(`navigation.${item}`) }}
-          </span>
-        </div>
-
-        <div class="mt-7 space-y-1 border-t border-default pt-5">
-          <span v-for="item in ['search', 'notifications']" :key="item" class="flex min-h-11 cursor-default items-center gap-3 rounded-xl px-3 text-sm text-muted/75" aria-disabled="true">
-            <svg v-if="item === 'search'" aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7" /><path d="m16 16 5 5" /></svg>
-            <svg v-else aria-hidden="true" viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4" /></svg>
-            {{ t(`navigation.${item}`) }}
-          </span>
-        </div>
-      </nav>
+      <KollioWorkspaceNav class="mt-12" />
 
       <div class="mt-auto space-y-1 border-t border-default pt-5">
         <NuxtLink
@@ -85,3 +146,46 @@ const switchLocalePath = useSwitchLocalePath()
     </main>
   </div>
 </template>
+
+<style scoped>
+.workspace-drawer {
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--kollio-active-ink) 22%, transparent);
+}
+
+.workspace-drawer-backdrop {
+  background: color-mix(in srgb, var(--kollio-heading) 22%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.workspace-drawer-enter-active,
+.workspace-drawer-leave-active {
+  transition: opacity 180ms ease;
+}
+
+.workspace-drawer-enter-active .workspace-drawer {
+  transition: transform 220ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.workspace-drawer-leave-active .workspace-drawer {
+  transition: transform 160ms cubic-bezier(.3, 0, .7, 1);
+}
+
+.workspace-drawer-enter-from,
+.workspace-drawer-leave-to {
+  opacity: 0;
+}
+
+.workspace-drawer-enter-from .workspace-drawer,
+.workspace-drawer-leave-to .workspace-drawer {
+  transform: translateX(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace-drawer-enter-active,
+  .workspace-drawer-leave-active,
+  .workspace-drawer-enter-active .workspace-drawer,
+  .workspace-drawer-leave-active .workspace-drawer {
+    transition: none;
+  }
+}
+</style>

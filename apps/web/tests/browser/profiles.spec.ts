@@ -11,7 +11,7 @@ const profile: ProfileResponse = {
   bio: 'Ships things.',
   avatar_key: 'lilac',
   owned_ideas: [{ id: 'idea-one', slug: 'une-idee', title: 'Une idée à explorer', stage: 'seed', lang: 'fr', created_at: '2026-09-01T10:00:00Z' }],
-  memberships: [],
+  memberships: [{ idea_id: 'idea-two', idea_title: 'Deuxième idée', role: 'dev' }],
   contributions: [{ idea_id: 'idea-one', idea_title: 'Une idée à explorer', message: 'Initial deposit', lang: 'fr', short_hash: 'abc123', created_at: '2026-09-01T10:00:00Z' }],
 }
 
@@ -46,6 +46,11 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(page.getByRole('heading', { name: p.ownedTitle })).toBeVisible()
       await expect(page.getByText('Ships things.')).toBeVisible()
       await expect(page.getByRole('link', { name: 'Une idée à explorer', exact: true })).toBeVisible()
+      // The role/act placeholders and the date must resolve in the active locale.
+      await expect(page.getByText(p.roleIn.replace('{idea}', 'Deuxième idée'))).toBeVisible()
+      await expect(page.getByRole('link', { name: p.onIdea.replace('{idea}', 'Une idée à explorer'), exact: true })).toBeVisible()
+      const expectedDate = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date('2026-09-01T10:00:00Z'))
+      await expect(page.locator('time').first()).toHaveText(expectedDate)
     })
 
     test('PROFILE-02 opens a profile from an explorer collaborator', async ({ page }) => {

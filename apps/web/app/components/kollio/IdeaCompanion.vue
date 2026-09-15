@@ -44,7 +44,7 @@ onBeforeUnmount(() => emit('targetReady', undefined))
 </script>
 
 <template>
-  <aside class="kollio-surface idea-companion relative z-30 self-start overflow-hidden lg:sticky">
+  <aside class="kollio-surface idea-companion relative z-30 overflow-hidden">
     <KollioContextTabs
       id-prefix="idea-context"
       :items="tabs"

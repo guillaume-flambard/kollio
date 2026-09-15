@@ -9,6 +9,7 @@ interface SettingsMessages {
   title: string
   state: Record<string, string>
   profile: Record<string, string>
+  detailed: Record<string, string>
   objectives: Record<string, string>
   constraints: Record<string, string>
   onboarding: {
@@ -144,6 +145,10 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
   test.describe(locale, () => {
     const prefix = locale === 'fr' ? '' : '/en'
     const s = (messages.workspace as unknown as { settings: SettingsMessages }).settings
+    const rowLabel = (field: string, item: string) => `${field}: ${item}`
+    // The structured editor is the collapsed advanced surface; open it before touching its fields.
+    const openDetailedEditor = (page: import('@playwright/test').Page) =>
+      page.getByRole('button', { name: s.detailed.title }).click()
 
     test('SETTINGS-01 opens the screen with the saved context', async ({ page }) => {
       await mockContext(page, populatedContext())
@@ -151,14 +156,16 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.goto(`${prefix}/workspace/settings`)
       await loaded
       await expect(page.getByRole('heading', { name: s.title, exact: true })).toBeVisible()
+      await openDetailedEditor(page)
       await expect(page.getByLabel(s.profile.name, { exact: true })).toHaveValue('Faktus')
       await expect(page.getByLabel('Grow pipeline')).toHaveValue('Grow pipeline')
-      await expect(page.getByLabel('Two-person team', { exact: true })).toHaveValue('Two-person team')
+      await expect(page.getByLabel(rowLabel(s.constraints.titleLabel, 'Two-person team'))).toHaveValue('Two-person team')
     })
 
     test('SETTINGS-02 shows the empty state when nothing is saved', async ({ page }) => {
       await mockContext(page, emptyContext())
       await page.goto(`${prefix}/workspace/settings`)
+      await openDetailedEditor(page)
       await expect(page.getByLabel(s.profile.name, { exact: true })).toHaveValue('')
       await expect(page.getByText(s.objectives.empty)).toBeVisible()
       await expect(page.getByText(s.constraints.empty)).toBeVisible()
@@ -167,6 +174,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
     test('SETTINGS-03 saves the profile through the API', async ({ page }) => {
       const { calls } = await mockContext(page, emptyContext())
       await page.goto(`${prefix}/workspace/settings`)
+      await openDetailedEditor(page)
       await page.getByLabel(s.profile.name, { exact: true }).fill('Faktus')
       await page.getByLabel(s.profile.markets, { exact: true }).fill('France')
       await page.getByRole('button', { name: s.profile.save }).click()
@@ -178,6 +186,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
     test('SETTINGS-04 creates, edits, prioritises, archives and restores an objective', async ({ page }) => {
       const { calls } = await mockContext(page, emptyContext())
       await page.goto(`${prefix}/workspace/settings`)
+      await openDetailedEditor(page)
       await page.getByLabel(s.objectives.placeholder).fill('Grow pipeline')
       await page.getByRole('button', { name: s.objectives.create }).click()
       await expect(page.getByLabel('Grow pipeline')).toHaveValue('Grow pipeline')
@@ -201,11 +210,12 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
     test('SETTINGS-05 creates, edits and archives-restores a constraint', async ({ page }) => {
       const { calls } = await mockContext(page, emptyContext())
       await page.goto(`${prefix}/workspace/settings`)
+      await openDetailedEditor(page)
       await page.getByLabel(s.constraints.placeholder).fill('Two-person team')
       await page.getByRole('button', { name: s.constraints.create }).click()
-      await expect(page.getByLabel('Two-person team', { exact: true })).toHaveValue('Two-person team')
+      await expect(page.getByLabel(rowLabel(s.constraints.titleLabel, 'Two-person team'))).toHaveValue('Two-person team')
 
-      const detail = page.getByLabel(`${s.constraints.detailPlaceholder} — Two-person team`)
+      const detail = page.getByLabel(rowLabel(s.constraints.detailLabel, 'Two-person team'))
       await detail.fill('No hires this year')
       await detail.press('Tab')
       await expect.poll(() => calls.some(call => call.method === 'PATCH' && call.url.includes('/constraints/') && (call.body as { detail?: string }).detail === 'No hires this year')).toBe(true)
@@ -221,10 +231,32 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.route(/\/api\/workspaces\/workspace-one\/company-context\/profile$/, route =>
         route.fulfill({ status: 500, json: { detail: 'boom' } }))
       await page.goto(`${prefix}/workspace/settings`)
+      await openDetailedEditor(page)
       await page.getByLabel(s.profile.name, { exact: true }).fill('Faktus')
       await page.getByRole('button', { name: s.profile.save }).click()
       await expect(page.getByRole('alert')).toBeVisible()
       await expect(page.getByLabel(s.profile.name, { exact: true })).toHaveValue('Faktus')
+    })
+
+    test('SETTINGS-07 keeps the detailed editor collapsed until the advanced surface is opened', async ({ page }) => {
+      await mockContext(page, populatedContext())
+      await page.goto(`${prefix}/workspace/settings`)
+      const toggle = page.getByRole('button', { name: s.detailed.title })
+      await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+      const panelId = await toggle.getAttribute('aria-controls')
+      expect(panelId).toBeTruthy()
+      const panel = page.locator(`#${panelId}`)
+      await expect(panel).toBeHidden()
+
+      await toggle.focus()
+      await page.keyboard.press('Enter')
+      await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+      await expect(panel).toBeVisible()
+      await expect(page.getByRole('button', { name: s.profile.save })).toBeVisible()
+
+      await toggle.click()
+      await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+      await expect(panel).toBeHidden()
     })
 
     test('ONBOARD-01 shows seven pending steps when nothing is filled', async ({ page }) => {
@@ -237,6 +269,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
     test('ONBOARD-02 persists partial answers across all seven questions', async ({ page }) => {
       const { calls } = await mockContext(page, emptyContext())
       await page.goto(`${prefix}/workspace/settings`)
+      await openDetailedEditor(page)
       await page.getByLabel(s.onboarding.facts.name, { exact: true }).fill('Faktus')
       await page.getByLabel(s.onboarding.objectives.first, { exact: true }).fill('Grow enterprise pipeline')
       await page.getByLabel(s.onboarding.objectives.second, { exact: true }).fill('Reduce churn')
@@ -256,7 +289,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       expect(calls.some(call => call.method === 'POST' && call.url.endsWith('/metrics') && (call.body as { name: string }).name === 'Monthly active accounts')).toBe(true)
       // model and markets were skipped, so they stay pending; the other five are answered.
       await expect(page.locator('.settings-pending')).toHaveCount(2)
-      await expect(page.getByLabel('No discount-led growth', { exact: true })).toHaveValue('No discount-led growth')
+      await expect(page.getByLabel(rowLabel(s.principles.titleLabel, 'No discount-led growth'))).toHaveValue('No discount-led growth')
     })
 
     test('ONBOARD-03 keeps skipped questions visibly pending', async ({ page }) => {
@@ -273,9 +306,10 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
     test('ONBOARD-04 creates and archives a non-negotiable from enrichment', async ({ page }) => {
       const { calls } = await mockContext(page, emptyContext())
       await page.goto(`${prefix}/workspace/settings`)
+      await openDetailedEditor(page)
       await page.getByLabel(s.principles.placeholder).fill('Support local first')
       await page.getByRole('button', { name: s.principles.create }).click()
-      await expect(page.getByLabel('Support local first', { exact: true })).toHaveValue('Support local first')
+      await expect(page.getByLabel(rowLabel(s.principles.titleLabel, 'Support local first'))).toHaveValue('Support local first')
       await page.getByRole('button', { name: s.principles.archive }).click()
       await expect(page.getByText(s.state.archived)).toBeVisible()
       await expect.poll(() => calls.some(call => call.method === 'PATCH' && call.url.includes('/principles/') && (call.body as { state?: string }).state === 'archived')).toBe(true)
@@ -284,11 +318,12 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
     test('ONBOARD-05 records and edits a key indicator from enrichment', async ({ page }) => {
       const { calls } = await mockContext(page, emptyContext())
       await page.goto(`${prefix}/workspace/settings`)
+      await openDetailedEditor(page)
       await page.getByLabel(s.metrics.namePlaceholder).fill('Activation rate')
       await page.getByLabel(s.metrics.valuePlaceholder).fill('32')
       await page.getByRole('button', { name: s.metrics.create }).click()
-      await expect(page.getByLabel('Activation rate', { exact: true })).toHaveValue('Activation rate')
-      const valueField = page.getByLabel(`${s.metrics.valuePlaceholder} Activation rate`)
+      await expect(page.getByLabel(rowLabel(s.metrics.nameLabel, 'Activation rate'))).toHaveValue('Activation rate')
+      const valueField = page.getByLabel(rowLabel(s.metrics.valueLabel, 'Activation rate'))
       await valueField.fill('41')
       await valueField.press('Tab')
       await expect.poll(() => calls.some(call => call.method === 'PATCH' && call.url.includes('/metrics/') && (call.body as { value?: string }).value === '41')).toBe(true)

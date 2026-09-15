@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import type { CompanyContextResponse, ExperimentResponse, IdeaResponse, WorkspaceResponse } from '@kollio/api-client'
+import en from '../../i18n/locales/en.json' with { type: 'json' }
 
 // #78 responsive guard: the golden-path screens must hold at the widths a
 // member actually uses (phone, tablet) with no horizontal overflow and the
@@ -65,7 +66,11 @@ for (const width of [375, 768]) {
 
     test(`RESP-${width} idea detail keeps experiments reachable with no overflow`, async ({ page }) => {
       await mockIdeaDetail(page)
+      // Synchronise on the data response: on a cold dev server the first
+      // navigation pays the whole compile cost before the panel can render.
+      const experimentsLoaded = page.waitForResponse(r => r.url().includes('/api/ideas/idea-one/experiments'))
       await page.goto('/workspace/ideas/idea-one')
+      await experimentsLoaded
       await expect(page.getByRole('heading', { name: 'Expériences', exact: true })).toBeVisible()
       await expect(page.locator('.experiment-row')).toHaveCount(1)
       await expectNoHorizontalOverflow(page)
@@ -87,6 +92,67 @@ for (const width of [375, 768]) {
     })
   })
 }
+
+test.describe('english deposit form', () => {
+  test.use({ viewport: { width: 375, height: 812 } })
+
+  test('RESP-deposit-en form holds without overflow', async ({ page }) => {
+    await page.goto('/en/workspace/deposit')
+    await expect(page.getByRole('heading', { name: en.ideas.deposit.title, exact: true })).toBeVisible()
+    await expectNoHorizontalOverflow(page)
+  })
+})
+
+test.describe('workspace navigation adapts', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route('**/api/session', route => route.fulfill({ json: { signedIn: true, subject: 'member-two' } }))
+    await page.route('**/api/workspaces', route => route.fulfill({ json: workspaces }))
+    await page.route(/\/api\/workspaces\/workspace-one\/ideas(\?.*)?$/, route => route.fulfill({
+      json: { items: [], total: 0, limit: 5, offset: 0 },
+    }))
+  })
+
+  test('NAV-mobile exposes every destination from the top bar at 375px', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
+    await page.goto('/workspace')
+    await listResponse
+    await expect(page.locator('.workspace-rail')).toBeHidden()
+
+    const menu = page.getByRole('button', { name: 'Ouvrir la navigation' })
+    await expect(menu).toBeVisible()
+    await menu.click()
+
+    const dialog = page.getByRole('dialog', { name: 'Navigation principale' })
+    await expect(dialog).toBeVisible()
+    await expect(dialog.getByRole('link', { name: 'Initiatives' })).toBeVisible()
+    await expect(dialog.getByRole('link', { name: 'Contexte entreprise' })).toBeVisible()
+    await expect(dialog.getByText('Ateliers')).toBeVisible()
+    await expect(dialog.locator('[aria-disabled="true"]')).toHaveCount(5)
+    await expectNoHorizontalOverflow(page)
+  })
+
+  test('NAV-mobile filter strip fits without clipping at 375px', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
+    await page.goto('/workspace')
+    await listResponse
+    const rail = page.locator('.ideas-filter-rail')
+    await expect(rail).toBeVisible()
+    const clipped = await rail.evaluate(element => element.scrollWidth - element.clientWidth)
+    expect(clipped).toBeLessThanOrEqual(1)
+    await expect(page.getByRole('button', { name: /Équipe formée/ })).toBeVisible()
+  })
+
+  test('NAV-desktop keeps the persistent rail at 1440px', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 })
+    const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
+    await page.goto('/workspace')
+    await listResponse
+    await expect(page.locator('.workspace-rail')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Ouvrir la navigation' })).toHaveCount(0)
+  })
+})
 
 test.describe('narration on phone', () => {
   test.use({ viewport: { width: 375, height: 812 } })

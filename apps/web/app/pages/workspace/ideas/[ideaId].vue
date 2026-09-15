@@ -508,7 +508,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         </header>
 
         <section id="description" class="idea-description mt-11 rounded-2xl border border-default p-5 sm:p-6" :aria-labelledby="'idea-pitch-title'">
-          <h2 id="idea-pitch-title" class="text-[1.375rem] font-semibold tracking-[-0.025em]">{{ t('ideas.detail.pitchTitle') }}</h2>
+          <h2 id="idea-pitch-title" class="text-[length:var(--kollio-text-title)] font-semibold tracking-[-0.025em]">{{ t('ideas.detail.pitchTitle') }}</h2>
           <KollioDisclosure
             v-model="descriptionExpanded"
             content-id="idea-description-content"
@@ -578,7 +578,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
         />
 
         <section id="team" class="idea-team mt-11 rounded-2xl border border-default p-5 sm:p-6" :aria-labelledby="'idea-team-title'">
-          <h2 id="idea-team-title" class="text-[1.25rem] font-semibold tracking-[-0.025em]">{{ t('ideas.detail.team.title') }}</h2>
+          <h2 id="idea-team-title" class="text-[length:var(--kollio-text-title)] font-semibold tracking-[-0.025em]">{{ t('ideas.detail.team.title') }}</h2>
 
           <div class="mt-4 grid gap-2 sm:grid-cols-[2fr_1fr]">
             <div>
@@ -650,7 +650,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
 
           <form v-if="!isOwner && !joinRequests.length" class="team-apply mt-4 grid gap-2" @submit.prevent="applyJoin">
             <div class="flex flex-wrap items-center gap-2">
-              <label class="text-sm font-medium" for="team-apply-role">{{ t('ideas.detail.team.soughtTitle') }}</label>
+              <label class="text-sm font-medium" for="team-apply-role">{{ t('ideas.detail.team.applyRole') }}</label>
               <select id="team-apply-role" v-model="applyRole" required>
                 <option v-for="role in teamFunctions" :key="role" :value="role">{{ t(`ideas.function.${role}`) }}</option>
               </select>
@@ -679,3 +679,11 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
     </div>
   </article>
 </template>
+
+<style scoped>
+.initiative-type {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--kollio-space-sm);
+}
+</style>

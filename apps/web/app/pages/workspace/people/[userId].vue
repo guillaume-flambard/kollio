@@ -3,12 +3,15 @@ import type { ProfileResponse } from '@kollio/api-client'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
 const userId = String(route.params.userId)
 const glyphs = Object.freeze({ back: '←', forward: '→' })
+const dateFormatter = computed(() =>
+  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
+)
 
 const { data: profile, error } = await useAsyncData(`profile-${userId}`, () =>
   requestFetch<ProfileResponse>(`/api/users/${encodeURIComponent(userId)}`),
@@ -70,7 +73,7 @@ function ideaLink(id: string) {
           <li v-for="act in profile.contributions" :key="`${act.idea_id}-${act.short_hash}`">
             <span class="profile-act-message">{{ act.message }}</span>
             <NuxtLink :to="ideaLink(act.idea_id)">{{ t('ideas.profile.onIdea', { idea: act.idea_title }) }}</NuxtLink>
-            <time :datetime="act.created_at">{{ new Date(act.created_at).toLocaleDateString() }}</time>
+            <time :datetime="act.created_at">{{ dateFormatter.format(new Date(act.created_at)) }}</time>
           </li>
         </ul>
         <p v-else class="profile-empty">{{ t('ideas.profile.actsEmpty') }}</p>
@@ -81,17 +84,17 @@ function ideaLink(id: string) {
 
 <style scoped>
 .profile-shell { display: grid; gap: 26px; max-width: 640px; margin: 0 auto; padding: 22px 4px 48px; }
-.profile-back { font-size: .85rem; color: var(--ui-text-muted); }
+.profile-back { font-size: var(--kollio-text-small); color: var(--ui-text-muted); }
 .profile-header { display: grid; gap: 10px; }
-.profile-bio { margin: 0; color: var(--ui-text-muted); font-size: .92rem; }
+.profile-bio { margin: 0; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
 .profile-roles { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.profile-roles li { border-radius: 999px; padding: 4px 12px; background: var(--ui-bg-accented); font-size: .74rem; font-weight: 600; }
+.profile-roles li { border-radius: var(--kollio-radius-pill); padding: 4px 12px; background: var(--ui-bg-accented); font-size: var(--kollio-text-caption); font-weight: 600; }
 .profile-section { display: grid; gap: 10px; }
-.profile-section h2 { margin: 0; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ui-text-muted); }
+.profile-section h2 { margin: 0; font-size: var(--kollio-text-caption); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ui-text-muted); }
 .profile-section ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.profile-section li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; border-bottom: 1px solid var(--ui-border); padding-bottom: 8px; font-size: .9rem; }
-.profile-section li span { color: var(--ui-text-muted); font-size: .82rem; }
+.profile-section li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; border-bottom: 1px solid var(--ui-border); padding-bottom: 8px; font-size: var(--kollio-text-small); }
+.profile-section li span { color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
 .profile-open { text-decoration: none; }
-.profile-empty { margin: 0; color: var(--ui-text-muted); font-size: .85rem; }
-.profile-error { display: grid; gap: 6px; }
+.profile-empty { margin: 0; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
+.profile-error { display: grid; gap: 6px; color: var(--ui-error); }
 </style>

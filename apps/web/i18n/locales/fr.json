@@ -11,7 +11,9 @@
     "upcoming": "Fonctionnalités à venir",
     "workspace": "Espace",
     "promise": "Des initiatives à impact, ensemble.",
-    "settings": "Contexte entreprise"
+    "settings": "Contexte entreprise",
+    "menuOpen": "Ouvrir la navigation",
+    "menuClose": "Fermer la navigation"
   },
   "meta": {
     "title": "Kollio | Des idées aux projets collectifs",
@@ -183,6 +185,7 @@
       },
       "objectives": {
         "title": "Objectifs",
+        "titleLabel": "Titre de l’objectif",
         "placeholder": "Nouvel objectif",
         "create": "Ajouter l’objectif",
         "priority": "Prioritaire",
@@ -192,8 +195,10 @@
       },
       "constraints": {
         "title": "Contraintes",
+        "titleLabel": "Titre de la contrainte",
         "placeholder": "Nouvelle contrainte",
         "detailPlaceholder": "Précision (optionnel)",
+        "detailLabel": "Précision de la contrainte",
         "create": "Ajouter la contrainte",
         "archive": "Archiver",
         "restore": "Réactiver",
@@ -249,10 +254,16 @@
           "third": "Indicateur 3"
         }
       },
+      "detailed": {
+        "title": "Édition détaillée",
+        "hint": "Surface avancée, secondaire, pour ajuster chaque champ finement."
+      },
       "principles": {
         "title": "Non-négociables",
+        "titleLabel": "Titre du non-négociable",
         "placeholder": "Nouveau non-négociable",
         "detailPlaceholder": "Précision (optionnel)",
+        "detailLabel": "Précision du non-négociable",
         "create": "Ajouter le non-négociable",
         "archive": "Archiver",
         "restore": "Réactiver",
@@ -260,6 +271,8 @@
       },
       "metrics": {
         "title": "Indicateurs clés",
+        "nameLabel": "Nom de l’indicateur",
+        "valueLabel": "Valeur de l’indicateur",
         "namePlaceholder": "Nouvel indicateur",
         "valuePlaceholder": "Valeur (optionnel)",
         "unitPlaceholder": "Unité (optionnel)",
@@ -417,6 +430,7 @@
         "membersTitle": "Membres",
         "apply": "Rejoindre la boucle",
         "applyNote": "Ce que vous apportez",
+        "applyRole": "Rôle visé",
         "send": "Envoyer",
         "sending": "Envoi…",
         "pending": "Candidature en attente",
@@ -526,6 +540,9 @@
       "abstainedTitle": "Analyse en attente de preuves",
       "abstainedBody": "Il n'y a pas encore de preuve. Enrichissez l'initiative puis ajoutez-en : chaque contrainte indique ce qui ferait basculer sa note.",
       "openIdea": "Ouvrir l’initiative",
+      "timeoutTitle": "L’analyse tourne toujours",
+      "timeoutBody": "Elle prend plus de temps que prévu. Vous pouvez relancer l’analyse.",
+      "timeoutRetry": "Relancer l’analyse",
       "error": "Le dépôt a échoué. Réessayez."
     },
     "role": {

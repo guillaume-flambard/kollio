@@ -50,6 +50,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await ideaResponse
       const timeline = page.locator('.iteration-timeline')
       await expect(timeline.locator('[data-line="main"]')).toHaveCount(2)
+      await expect(timeline.locator('time').first()).toHaveAttribute('datetime', '2026-09-01T10:00:00Z')
       await expect(timeline.getByText('Narrow the fleet')).toBeVisible()
       await expect(timeline.getByText('Propriétaire').first()).toBeVisible()
       await expect(timeline.locator('[data-line="branch"]')).toHaveCount(1)

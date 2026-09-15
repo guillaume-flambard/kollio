@@ -15,6 +15,7 @@ const submitting = ref(false)
 const submitError = ref(false)
 const deposited = ref<IdeaResponse>()
 const analysisPolls = ref(0)
+const pollTimedOut = ref(false)
 
 const typeOptions = useInitiativeTypeOptions()
 
@@ -28,6 +29,8 @@ async function deposit() {
   if (canSubmit.value === false || submitting.value) return
   submitting.value = true
   submitError.value = false
+  pollTimedOut.value = false
+  analysisPolls.value = 0
   try {
     const workspaces = await requestFetch<Array<{ id: string }>>('/api/workspaces')
     const workspaceId = workspaces[0]?.id
@@ -63,6 +66,7 @@ function pollAnalysis() {
     analysisPolls.value += 1
     if (analysisPolls.value > 20) {
       stopPolling()
+      pollTimedOut.value = true
       return
     }
     try {
@@ -81,6 +85,13 @@ function stopPolling() {
     clearInterval(pollTimer.value)
     pollTimer.value = undefined
   }
+}
+
+function retryAnalysis() {
+  analysisPolls.value = 0
+  pollTimedOut.value = false
+  stopPolling()
+  pollAnalysis()
 }
 
 onUnmounted(stopPolling)
@@ -132,7 +143,14 @@ const constraintLabels: Record<string, string> = {
       </form>
 
       <section v-else class="deposit-verdict" aria-live="polite">
-        <KollioAnalysisNarration v-if="analysisState === 'running'" :progress="deposited?.analysis?.progress" />
+        <KollioAnalysisNarration v-if="analysisState === 'running' && !pollTimedOut" :progress="deposited?.analysis?.progress" />
+        <template v-else-if="pollTimedOut">
+          <h2>{{ t('ideas.deposit.timeoutTitle') }}</h2>
+          <p class="deposit-abstained">{{ t('ideas.deposit.timeoutBody') }}</p>
+          <button type="button" class="deposit-submit" @click="retryAnalysis">
+            {{ t('ideas.deposit.timeoutRetry') }}
+          </button>
+        </template>
         <template v-else>
           <h2>{{ analysisState === 'abstained' ? t('ideas.deposit.abstainedTitle') : t('ideas.deposit.resolvedTitle') }}</h2>
           <p v-if="analysisState === 'abstained'" class="deposit-abstained">
@@ -173,30 +191,30 @@ const constraintLabels: Record<string, string> = {
 
 <style scoped>
 .deposit-shell { display: grid; gap: 22px; max-width: 560px; margin: 0 auto; padding: 22px 4px; }
-.deposit-header h1 { margin: 0; font-size: 1.5rem; }
-.deposit-header p { margin: 4px 0 0; font-size: .9rem; }
+.deposit-header h1 { margin: 0; font-size: var(--kollio-text-title); }
+.deposit-header p { margin: 4px 0 0; font-size: var(--kollio-text-small); }
 .deposit-form { display: grid; gap: 14px; }
-.deposit-field { display: grid; gap: 8px; font-size: .875rem; font-weight: 500; }
+.deposit-field { display: grid; gap: 8px; font-size: var(--kollio-text-small); font-weight: 500; }
 .deposit-field input, .deposit-field textarea, .deposit-field select {
-  border: 1px solid var(--ui-border); border-radius: 12px; padding: 10px 14px;
+  border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); padding: 10px 14px;
   font: inherit; background: var(--ui-bg-elevated); color: var(--ui-text);
 }
 .deposit-submit {
-  justify-self: start; border: 0; border-radius: 12px; padding: 12px 22px; cursor: pointer;
-  background: var(--kollio-heading); color: white; font-weight: 570;
+  justify-self: start; border: 0; border-radius: var(--kollio-radius-md); padding: 12px 22px; cursor: pointer;
+  background: var(--kollio-heading); color: var(--ui-bg-elevated); font-weight: 570;
 }
 .deposit-submit:disabled { opacity: .55; cursor: not-allowed; }
-.deposit-error { color: var(--ui-error); font-size: .875rem; }
+.deposit-error { color: var(--ui-error); font-size: var(--kollio-text-small); }
 .deposit-verdict { display: grid; gap: 14px; }
-.deposit-score { font-size: 2rem; font-weight: 700; }
+.deposit-score { font-size: var(--kollio-text-headline); font-weight: 700; }
 .deposit-constraints { display: grid; gap: 10px; margin: 0; }
 .deposit-constraint { display: grid; gap: 4px; }
-.deposit-constraint dd { margin: 0; font-size: .875rem; font-weight: 600; }
-.deposit-constraint p { margin: 0; font-size: .8rem; }
-.deposit-basis { font-size: .78rem; color: var(--ui-text-muted); text-transform: uppercase; letter-spacing: .06em; }
-.deposit-gap { font-size: .8rem; color: var(--ui-text-muted); }
+.deposit-constraint dd { margin: 0; font-size: var(--kollio-text-small); font-weight: 600; }
+.deposit-constraint p { margin: 0; font-size: var(--kollio-text-caption); }
+.deposit-basis { font-size: var(--kollio-text-caption); color: var(--ui-text-muted); text-transform: uppercase; letter-spacing: .06em; }
+.deposit-gap { font-size: var(--kollio-text-caption); color: var(--ui-text-muted); }
 .deposit-contradictions { margin-top: 18px; }
 .deposit-contradictions ul { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
-.deposit-contradictions li { display: flex; gap: 8px; font-size: .875rem; }
+.deposit-contradictions li { display: flex; gap: 8px; font-size: var(--kollio-text-small); }
 .deposit-open { color: var(--kollio-heading); font-weight: 570; }
 </style>

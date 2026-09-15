@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const paths = {
   plus: 'M12 5v14M5 12h14',
+  menu: 'M4 7h16M4 12h16M4 17h16',
+  close: 'M6 6l12 12M18 6 6 18',
   'chevron-up': 'm6 15 6-6 6 6',
   'chevron-down': 'm6 9 6 6 6-6',
   'chevron-right': 'm9 18 6-6-6-6',
