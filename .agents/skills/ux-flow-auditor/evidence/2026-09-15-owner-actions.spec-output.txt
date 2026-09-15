@@ -1,0 +1,12 @@
+
+Running 7 tests using 1 worker
+
+  ✓  1 [chromium] › tests/browser/owner-actions.spec.ts:78:5 › fr › OWNER-01 accepts a pending proposal onto main (4.6s)
+  ✓  2 [chromium] › tests/browser/owner-actions.spec.ts:87:5 › fr › OWNER-02 rejects with a visible rationale (1.9s)
+  ✓  3 [chromium] › tests/browser/owner-actions.spec.ts:97:5 › fr › OWNER-03 rolls back to an earlier iteration (2.5s)
+  ✓  4 [chromium] › tests/browser/owner-actions.spec.ts:78:5 › en › OWNER-01 accepts a pending proposal onto main (2.9s)
+  ✓  5 [chromium] › tests/browser/owner-actions.spec.ts:87:5 › en › OWNER-02 rejects with a visible rationale (2.4s)
+  ✓  6 [chromium] › tests/browser/owner-actions.spec.ts:97:5 › en › OWNER-03 rolls back to an earlier iteration (2.0s)
+  ✓  7 [chromium] › tests/browser/owner-actions.spec.ts:106:1 › MEMBER-04 never sees owner actions (352ms)
+
+  7 passed (20.3s)

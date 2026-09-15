@@ -1,0 +1,12 @@
+
+Running 8 tests using 1 worker
+
+[1/8] [chromium] › tests/browser/explorer.spec.ts:28:5 › fr › EXPLORER-01 renders realism badges on rows
+[2/8] [chromium] › tests/browser/explorer.spec.ts:45:5 › fr › EXPLORER-02 filters by sought role through the API
+[3/8] [chromium] › tests/browser/explorer.spec.ts:58:5 › fr › EXPLORER-03 filters by realism band through the API
+[4/8] [chromium] › tests/browser/explorer.spec.ts:71:5 › fr › EXPLORER-04 keeps the domain chips out of the rail
+[5/8] [chromium] › tests/browser/explorer.spec.ts:28:5 › en › EXPLORER-01 renders realism badges on rows
+[6/8] [chromium] › tests/browser/explorer.spec.ts:45:5 › en › EXPLORER-02 filters by sought role through the API
+[7/8] [chromium] › tests/browser/explorer.spec.ts:58:5 › en › EXPLORER-03 filters by realism band through the API
+[8/8] [chromium] › tests/browser/explorer.spec.ts:71:5 › en › EXPLORER-04 keeps the domain chips out of the rail
+  8 passed (51.7s)

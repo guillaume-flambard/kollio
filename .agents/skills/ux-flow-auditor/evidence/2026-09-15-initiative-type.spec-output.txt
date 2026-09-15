@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/browser/initiative-type.spec.ts:55:5 › fr › TYPE-01 deposits with the chosen initiative type (3.0s)
+  ✓  2 [chromium] › tests/browser/initiative-type.spec.ts:75:5 › fr › TYPE-02 the owner changes the type from the detail (1.5s)
+  ✓  3 [chromium] › tests/browser/initiative-type.spec.ts:84:5 › fr › TYPE-03 a non-owner sees the type without the selector (998ms)
+  ✓  4 [chromium] › tests/browser/initiative-type.spec.ts:55:5 › en › TYPE-01 deposits with the chosen initiative type (1.1s)
+  ✓  5 [chromium] › tests/browser/initiative-type.spec.ts:75:5 › en › TYPE-02 the owner changes the type from the detail (1.0s)
+  ✓  6 [chromium] › tests/browser/initiative-type.spec.ts:84:5 › en › TYPE-03 a non-owner sees the type without the selector (992ms)
+
+  6 passed (11.6s)

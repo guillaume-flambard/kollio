@@ -1,0 +1,15 @@
+
+Running 10 tests using 1 worker
+
+  ✓   1 [chromium] › tests/browser/responsive.spec.ts:66:5 › 375px › RESP-375 idea detail keeps experiments reachable with no overflow (2.8s)
+  ✓   2 [chromium] › tests/browser/responsive.spec.ts:74:5 › 375px › RESP-375 onboarding wizard holds without overflow (989ms)
+  ✓   3 [chromium] › tests/browser/responsive.spec.ts:83:5 › 375px › RESP-375 deposit form holds without overflow (1.1s)
+  ✓   4 [chromium] › tests/browser/responsive.spec.ts:66:5 › 768px › RESP-768 idea detail keeps experiments reachable with no overflow (1.0s)
+  ✓   5 [chromium] › tests/browser/responsive.spec.ts:74:5 › 768px › RESP-768 onboarding wizard holds without overflow (962ms)
+  ✓   6 [chromium] › tests/browser/responsive.spec.ts:83:5 › 768px › RESP-768 deposit form holds without overflow (1.0s)
+  ✓   7 [chromium] › tests/browser/responsive.spec.ts:100:3 › workspace navigation adapts › NAV-mobile exposes every destination from the top bar at 375px (998ms)
+  ✓   8 [chromium] › tests/browser/responsive.spec.ts:120:3 › workspace navigation adapts › NAV-mobile filter strip fits without clipping at 375px (881ms)
+  ✓   9 [chromium] › tests/browser/responsive.spec.ts:132:3 › workspace navigation adapts › NAV-desktop keeps the persistent rail at 1440px (940ms)
+  ✓  10 [chromium] › tests/browser/responsive.spec.ts:145:3 › narration on phone › RESP-narration running analysis fits a phone width (1.8s)
+
+  10 passed (15.5s)

@@ -1,0 +1,21 @@
+interface:
+  display_name: "Product Auditor"
+  short_description: "Evidence-bound UX flow audits via the ux-flow-auditor skill"
+policy:
+  allow_implicit_invocation: false
+scope:
+  skill: ux-flow-auditor
+  browser_tooling: playwright-existing-mock-pattern
+  permissions:
+    - read product, spec, and design sources
+    - run the existing Playwright browser suite with mocked API routes
+    - write evidence files (spec output, screenshots, trace stubs)
+    - update COVERAGE.md rows the run substantiates
+  denied:
+    - product UI edits
+    - API contract changes
+    - token or design system changes
+    - marking flows AUDITED without linked non-empty evidence
+locales:
+  - fr
+  - en

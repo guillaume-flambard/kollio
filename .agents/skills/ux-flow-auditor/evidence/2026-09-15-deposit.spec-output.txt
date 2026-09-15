@@ -1,0 +1,15 @@
+
+Running 10 tests using 1 worker
+
+  ✓   1 [chromium] › tests/browser/deposit.spec.ts:104:5 › fr › DEPOSIT-01 goes from the explorer action to the form (3.4s)
+  ✓   2 [chromium] › tests/browser/deposit.spec.ts:112:5 › fr › DEPOSIT-02 submits and shows the resolved verdict with notes (1.8s)
+  ✓   3 [chromium] › tests/browser/deposit.spec.ts:123:5 › fr › DEPOSIT-05 explains the basis, the missing evidence and the contradictions (1.9s)
+  ✓   4 [chromium] › tests/browser/deposit.spec.ts:144:5 › fr › DEPOSIT-03 narrates the real inputs the running analysis is weighing (1.9s)
+  ✓   5 [chromium] › tests/browser/deposit.spec.ts:168:5 › fr › DEPOSIT-04 shows the honest abstention without a fake score (1.8s)
+  ✓   6 [chromium] › tests/browser/deposit.spec.ts:104:5 › en › DEPOSIT-01 goes from the explorer action to the form (1.2s)
+  ✓   7 [chromium] › tests/browser/deposit.spec.ts:112:5 › en › DEPOSIT-02 submits and shows the resolved verdict with notes (1.8s)
+  ✓   8 [chromium] › tests/browser/deposit.spec.ts:123:5 › en › DEPOSIT-05 explains the basis, the missing evidence and the contradictions (1.8s)
+  ✓   9 [chromium] › tests/browser/deposit.spec.ts:144:5 › en › DEPOSIT-03 narrates the real inputs the running analysis is weighing (1.8s)
+  ✓  10 [chromium] › tests/browser/deposit.spec.ts:168:5 › en › DEPOSIT-04 shows the honest abstention without a fake score (1.8s)
+
+  10 passed (22.7s)

@@ -64,6 +64,7 @@ jobs:
           pnpm typecheck
           node scripts/check_locales.mjs
           node scripts/check_design_tokens.mjs
+          node scripts/check_ux_coverage.mjs
       - name: Migrate and test
         working-directory: apps/api
         run: |
