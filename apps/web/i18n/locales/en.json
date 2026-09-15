@@ -46,6 +46,105 @@
       "description": "Every contribution matters. Every step keeps its history."
     }
   },
+  "landing": {
+    "meta": {
+      "title": "Kollio | Test your initiatives against reality",
+      "description": "The private workspace where your team tests its initiatives, keeps a record of every decision and brings the right people together."
+    },
+    "navigation": {
+      "platform": "Product",
+      "teams": "Teams",
+      "method": "Method",
+      "security": "Security",
+      "workspace": "Enter my workspace",
+      "demo": "Try Kollio"
+    },
+    "hero": {
+      "eyebrow": "THINK TOGETHER. BUILD TOGETHER.",
+      "titleLead": "An initiative deserves more than",
+      "titleEmphasis": "a conversation.",
+      "description": "Test your initiatives against reality, keep a record of every decision and bring the right people together in a private space.",
+      "primaryAction": "Enter my workspace",
+      "secondaryAction": "See the method",
+      "leftNote": "Tested against reality",
+      "rightNote": "Every step recorded"
+    },
+    "outcomes": {
+      "label": "What your team gains",
+      "context": {
+        "title": "Shared context",
+        "description": "Constraints, objectives and what the company already knows feed every analysis, in one place."
+      },
+      "decisions": {
+        "title": "Explainable decisions",
+        "description": "Every step keeps its author, its message and the reason behind it. The thread stays readable."
+      },
+      "ai": {
+        "title": "AI under your control",
+        "description": "The AI proposes, argues its case and stays inspectable. The decision always stays with the team."
+      }
+    },
+    "trust": "Your initiatives, decisions and conversations stay inside your private workspace.",
+    "method": {
+      "overline": "How ideas move forward",
+      "title": "Three steps, from instinct to decision.",
+      "description": "Each step leaves a record: what was deposited, what challenged it, and what was decided. Nothing gets lost.",
+      "capture": {
+        "number": "01",
+        "title": "Deposit the initiative.",
+        "description": "A title, a pitch. Constraint analysis starts right away and returns a realism score."
+      },
+      "challenge": {
+        "number": "02",
+        "title": "Put it to the test.",
+        "description": "Explicit constraints, sources, open questions. Every objection can be discussed, never buried."
+      },
+      "decide": {
+        "number": "03",
+        "title": "Decide, and keep the record.",
+        "description": "The team settles it, moves forward or turns back. Every decision stays in the initiative’s thread."
+      }
+    },
+    "finalCta": {
+      "note": "Start alone, continue together.",
+      "title": "From instinct to decision, with your whole team.",
+      "action": "Enter my workspace"
+    },
+    "preview": {
+      "label": "A preview of the initiative workspace",
+      "workspace": "Team workspace",
+      "count": "12 open initiatives",
+      "search": "Search for an initiative",
+      "signal": {
+        "title": "Signals",
+        "description": "What the team deposits shows up in one place.",
+        "primary": "Shorten time to activation",
+        "secondary": "Rework the welcome flow",
+        "tertiary": "Test the offer with 10 teams"
+      },
+      "validation": {
+        "title": "The test",
+        "description": "Constraints, sources and open questions, before any decision.",
+        "evidence": "Linked evidence",
+        "evidenceCopy": "Three teams stalled on the same screen. Support confirms it this week.",
+        "source": "Source: support tickets",
+        "question": "Open question",
+        "questionCopy": "Should we simplify sign-up or move it after the first win?",
+        "owner": "Camille",
+        "role": "Product lead"
+      },
+      "decision": {
+        "title": "The decision",
+        "description": "What gets settled stays written, with its reason.",
+        "documented": "Decision documented",
+        "copy": "Move sign-up after the first deposited initiative.",
+        "open": "See the method",
+        "team": "Team",
+        "morePeople": "+3",
+        "note": "The team’s memory."
+      }
+    }
+  },
   "footer": {
     "promise": "A private space for shared projects.",
     "languages": "Built for French and English."

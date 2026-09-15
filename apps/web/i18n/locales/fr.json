@@ -46,6 +46,105 @@
       "description": "Chaque contribution compte. Chaque avancée garde son histoire."
     }
   },
+  "landing": {
+    "meta": {
+      "title": "Kollio | Confrontez vos initiatives au réel",
+      "description": "L’espace privé où votre équipe éprouve ses initiatives, garde la trace de chaque décision et réunit les bonnes personnes."
+    },
+    "navigation": {
+      "platform": "Produit",
+      "teams": "Équipes",
+      "method": "Méthode",
+      "security": "Sécurité",
+      "workspace": "Entrer dans mon espace",
+      "demo": "Essayer Kollio"
+    },
+    "hero": {
+      "eyebrow": "PENSER ENSEMBLE. CONSTRUIRE ENSEMBLE.",
+      "titleLead": "Une initiative mérite plus",
+      "titleEmphasis": "qu’une conversation.",
+      "description": "Confrontez vos initiatives au réel, gardez la trace de chaque décision et réunissez les bonnes personnes dans un espace privé.",
+      "primaryAction": "Entrer dans mon espace",
+      "secondaryAction": "Voir la méthode",
+      "leftNote": "Confronté au réel",
+      "rightNote": "Chaque pas tracé"
+    },
+    "outcomes": {
+      "label": "Ce que votre équipe y gagne",
+      "context": {
+        "title": "Un contexte partagé",
+        "description": "Les contraintes, les objectifs et ce que l’entreprise sait déjà nourrissent chaque analyse, au même endroit."
+      },
+      "decisions": {
+        "title": "Des décisions explicables",
+        "description": "Chaque avancée garde son auteur, son message et la raison qui l’a motivée. Le fil reste lisible."
+      },
+      "ai": {
+        "title": "L’IA sous votre contrôle",
+        "description": "L’IA propose, argumente et reste inspectable. La décision revient toujours à l’équipe."
+      }
+    },
+    "trust": "Vos initiatives, vos décisions et vos échanges restent dans votre espace privé.",
+    "method": {
+      "overline": "Comment les idées avancent",
+      "title": "Trois étapes, de l’intuition à la décision.",
+      "description": "Chaque étape laisse une trace : ce qui a été déposé, ce qui l’a remis en question, et ce qui a été décidé. Rien ne se perd.",
+      "capture": {
+        "number": "01",
+        "title": "Déposez l’initiative.",
+        "description": "Un titre, un pitch. L’analyse des contraintes démarre aussitôt et rend un score de réalisme."
+      },
+      "challenge": {
+        "number": "02",
+        "title": "Mettez-la à l’épreuve.",
+        "description": "Des contraintes explicites, des sources, des questions ouvertes. Chaque objection peut être discutée, jamais ignorée."
+      },
+      "decide": {
+        "number": "03",
+        "title": "Décidez, et gardez la trace.",
+        "description": "L’équipe tranche, avance ou rebrousse chemin. Chaque décision reste dans le fil de l’initiative."
+      }
+    },
+    "finalCta": {
+      "note": "Commencez seul, continuez ensemble.",
+      "title": "Passez de l’intuition à la décision, avec toute votre équipe.",
+      "action": "Entrer dans mon espace"
+    },
+    "preview": {
+      "label": "Aperçu de l’espace d’initiatives",
+      "workspace": "Espace équipe",
+      "count": "12 initiatives ouvertes",
+      "search": "Rechercher une initiative",
+      "signal": {
+        "title": "Les signaux",
+        "description": "Ce que l’équipe dépose remonte au même endroit.",
+        "primary": "Réduire le temps d’activation",
+        "secondary": "Refaire le parcours de bienvenue",
+        "tertiary": "Tester l’offre auprès de 10 équipes"
+      },
+      "validation": {
+        "title": "L’épreuve",
+        "description": "Contraintes, sources et questions ouvertes, avant de décider.",
+        "evidence": "Preuves liées",
+        "evidenceCopy": "Trois équipes ont bloqué au même écran. Le support le confirme cette semaine.",
+        "source": "Source : tickets support",
+        "question": "Question ouverte",
+        "questionCopy": "Faut-il simplifier l’inscription ou la déplacer après la première valeur ?",
+        "owner": "Camille",
+        "role": "Responsable produit"
+      },
+      "decision": {
+        "title": "La décision",
+        "description": "Ce qui est tranché reste écrit, avec sa raison.",
+        "documented": "Décision documentée",
+        "copy": "On déplace l’inscription après la première initiative déposée.",
+        "open": "Voir la méthode",
+        "team": "Équipe",
+        "morePeople": "+3",
+        "note": "La mémoire de l’équipe."
+      }
+    }
+  },
   "footer": {
     "promise": "Un espace privé pour les projets collectifs.",
     "languages": "Pensé en français et en anglais."
