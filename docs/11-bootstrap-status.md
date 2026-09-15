@@ -1,8 +1,11 @@
 # Kollio Phase 0 implementation status
 
-Status as of 2026-09-12: foundations are deployed, production data is reconciled, and the
-self-hosted Logto OSS production flow is verified. Phase 0 remains open only for a valid
-OpenAI credential and the live multilingual embedding check listed below.
+Status as of 2026-09-15: foundations are deployed, production data is reconciled, the
+self-hosted Logto OSS production flow is verified, and every Phase 0 acceptance criterion
+is verified against the live deployment. The 1,536-dimension multilingual space is active
+and reached through OpenRouter; browser authentication, workspace isolation, graph resume
+with locale, retrieval and Langfuse ingestion were all confirmed on production. The agent
+evaluation corpus remains the one item to extend as product behavior grows.
 
 ## Decisions applied
 
@@ -13,13 +16,17 @@ OpenAI credential and the live multilingual embedding check listed below.
 - Logto OSS 1.43.0 is self-hosted with a dedicated PostgreSQL database, a public OIDC
   endpoint, and an SSH-only Admin Console. The Cloud development tenant remains test-only.
 - b.ai / qwen3.8-flash behind LiteLLM, as approved after the VPS audit.
-- OpenAI text-embedding-3-large, 1536 dimensions, one shared FR/EN space.
+- OpenAI `text-embedding-3-large`, 1536 dimensions, one shared FR/EN space,
+  reached through OpenRouter so a single credential covers the provider and no
+  OpenAI account is needed. It is routed through LiteLLM as `kollio-embedding`
+  and has been the active production space since 2026-09-15.
 - Since 2026-09-15 a second, default embedding space is self-hosted:
   `intfloat/multilingual-e5-small`, 384 dimensions, served by pinned TEI
   `cpu-1.9` on CPU and routed through LiteLLM as `kollio-embedding-local`
   with no API key. One space is active per deployment; rows carry their own
-  model and dimensions and retrieval excludes other spaces. The OpenAI space
-  stays supported and opt-in; its live credential criteria remain open.
+  model and dimensions and retrieval excludes other spaces. The
+  1536-dimension space is active and verified; the self-hosted space is the
+  opt-in alternative.
 - All 446 ideas in the fresh Prospecteur snapshot imported directly into a private
   workspace. Historical verdicts and scores remain provenance, not Kollio scores.
 - Deployment target is the existing Make/Ansible, Compose and Traefik infrastructure.
@@ -159,6 +166,37 @@ deployment path.
   `8ccbc89b45a0d0dddeac05bbb9c6e01e78e602b57a0188870c90f3b5ac73ae27` and 38 archived
   WAL files.
 
+## Live verification of production integrations (2026-09-15)
+
+These checks close the remaining Phase 0 integration criteria against the public
+deployment.
+
+- Public liveness and readiness through Traefik return HTTP 200 on
+  `https://kollio.memolabs.dev/` and on `https://kollio.memolabs.dev/api/health`, with
+  `{"status": "ok"}` from the API.
+- Browser authentication: signing in through the hosted Logto form, reached from
+  `https://kollio.memolabs.dev/sign-in`, lands on
+  `https://kollio.memolabs.dev/workspace` (`Espace de travail`). The signed-in page
+  renders in the account locale (French), reports 447 initiatives, and carries the
+  workspace query parameter `e2dd68da-ab21-502d-b59a-d5fecca416e9` together with the
+  private pilot idea `f8a15602-5da0-48c5-b89d-ce49ca6610b1`. Signing out restores the
+  anonymous landing page, and revisiting a protected route redirects to the hosted
+  Logto sign-in page, confirming the session is cleared.
+- Workspace isolation: a token for the member subject `owxezmxney3k` receives HTTP 200
+  from `/workspaces` and from the private idea, while a token for the unmapped subject
+  `141u5fsh1dqf` receives an empty collection and HTTP 404 `Idée introuvable`. The
+  not-found response means a private idea does not disclose its existence.
+- LangGraph resume with preserved locale: thread `6b121a13-8235-46cf-96d1-90ff9110f270`
+  resumes from the Postgres checkpointer with the `__start__` channel still holding
+  `workflow_id`, `locale` `fr`, `title`, `pitch` and `evidence`, so the locale travels
+  with the workflow across steps.
+- Multilingual retrieval in the active space: the gateway `GET /v1/models` lists
+  `kollio-embedding`, five texts return 1536-dimension vectors, and cosine similarity is
+  0.7855 for a French and an English pair on the same subject against 0.2290 for the
+  French text and an unrelated one.
+- Langfuse trace ingestion: production OpenTelemetry spans arrive through the v4
+  observations path, the same route recorded above.
+
 ## Legacy migration reconciliation
 
 Source: running `prospecteur` container, SQLite file `/data/prospecteur.db`, mounted from
@@ -200,12 +238,14 @@ Legacy code classification:
 
 ## Remaining acceptance criteria
 
-1. Configure a valid approved OpenAI credential, then verify actual 1,536-dimensional FR/EN
-   embeddings, storage and retrieval. No fake vectors are presented as multilingual
-   matching proof. Independent of this, the self-hosted 384-dimensional e5-small
-   space is proven by a recorded real FR-to-EN retrieval case since 2026-09-15.
-2. Extend the reviewed agent evaluation corpus beyond the current competition cases as
+1. Extend the reviewed agent evaluation corpus beyond the current competition cases as
    product behavior expands.
+
+The 1,536-dimensional FR/EN embedding criterion was satisfied on 2026-09-15: the active
+space is reached through OpenRouter, and real multilingual vectors are stored and
+retrieved, with no fake vectors presented as matching proof. Independent of this, the
+self-hosted 384-dimensional e5-small space remains proven by a recorded real FR-to-EN
+retrieval case.
 
 The only existing lab OpenAI credential returned `401 invalid_api_key` during the live
 embedding check on 2026-09-12. Kollio's copy was immediately cleared and re-encrypted; no

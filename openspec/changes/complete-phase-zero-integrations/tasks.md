@@ -44,5 +44,5 @@
 - [x] 6.2 Run `make check` in the isolated worktree and verify every Ansible, Compose, secret-reference, and infrastructure check passes before opening the pull request.
 - [x] 6.3 Review and merge the `lab-infra` pull request, then verify GitHub Actions publishes immutable images and the existing autodeploy timer rolls out Kollio without a manual VPS edit.
 - [x] 6.4 Verify the schema migration runs once before application startup and that a simulated migration failure leaves the previous healthy revision serving traffic.
-- [ ] 6.5 Verify production live and ready probes through Traefik, browser authentication and workspace isolation, LangGraph resume with preserved locale, multilingual retrieval, and Langfuse trace ingestion.
+- [x] 6.5 Verify production live and ready probes through Traefik, browser authentication and workspace isolation, LangGraph resume with preserved locale, multilingual retrieval, and Langfuse trace ingestion.
 - [x] 6.6 Record resolved runtimes, package versions, image digests, backup evidence, import reconciliation, and deployment evidence in the Phase 0 status document, and verify every acceptance criterion links to reproducible evidence.
