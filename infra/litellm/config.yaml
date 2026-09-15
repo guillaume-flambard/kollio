@@ -17,6 +17,15 @@ model_list:
     litellm_params:
       model: openai/text-embedding-3-large
       api_key: os.environ/OPENAI_API_KEY
+  - model_name: kollio-embedding-local
+    litellm_params:
+      model: openai/intfloat-multilingual-e5-small
+      api_base: http://embeddings:80/v1
+      # Not a credential: the local TEI server ignores auth; LiteLLM's OpenAI
+      # handler requires a client-side value, so this static placeholder is
+      # committed. Real provider keys stay in encrypted deployment config.
+      api_key: local-tei-no-auth
+      drop_params: true
 litellm_settings:
   request_timeout: 60
   num_retries: 1

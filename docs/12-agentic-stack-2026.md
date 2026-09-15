@@ -13,7 +13,7 @@ Kollio uses one agent orchestration runtime and keeps infrastructure responsibil
 | Background dispatch | Taskiq with Redis Streams | Async-native worker that fits FastAPI and replaces maintenance-only ARQ |
 | Model gateway | Self-hosted LiteLLM | Provider aliases, budgets, limits and OpenAI-compatible transport |
 | Generation model | `b.ai / qwen3.8-flash` through the `kollio-default` alias | Preserves the audited provider while keeping the application provider-neutral |
-| Embeddings | OpenAI `text-embedding-3-large`, 1,536 dimensions | One explicitly versioned FR/EN vector space |
+| Embeddings | `intfloat/multilingual-e5-small`, 384 dimensions, self-hosted TEI on CPU as the default space; OpenAI `text-embedding-3-large`, 1,536 dimensions, supported opt-in | One explicitly versioned FR/EN vector space active per deployment, no credential for the default |
 | Observability | OpenTelemetry to Langfuse | Standard cross-process trace context and an agent-focused trace and evaluation UI |
 | Evaluation | Deterministic validators, recorded fixtures, DeepEval and Langfuse datasets | Fast contract checks plus reviewed regression data |
 
@@ -30,6 +30,7 @@ Temporal remains outside the current architecture. LangGraph checkpoints plus a 
 - Every queued command contains only a workflow identifier, a review decision when applicable and W3C trace context.
 - Every model output is validated with strict Pydantic models before review or persistence.
 - Every model and tool side effect is idempotent. Product writes retain a database uniqueness constraint.
+- Embedding rows carry their source model and dimensions; retrieval only matches within the active space.
 - Human review resumes the same LangGraph thread and never starts a second model call.
 - Langfuse datasets grow from reviewed production traces. Automated quality gates are calibrated only after enough human labels exist to measure false positives and false negatives.
 

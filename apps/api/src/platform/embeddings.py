@@ -70,6 +70,16 @@ class EmbeddingRecord:
     provenance: dict[str, Any]
 
 
+def format_query(text: str, settings: Settings) -> str:
+    """Query-side text for the active space (E5 `query:` convention by default)."""
+    return f"{settings.embedding_query_prefix}{text}"
+
+
+def format_passage(text: str, settings: Settings) -> str:
+    """Index-side text for the active space (E5 `passage:` convention by default)."""
+    return f"{settings.embedding_passage_prefix}{text}"
+
+
 def validate_vectors(
     vectors: list[list[float]], expected_count: int, expected_dimensions: int
 ) -> None:

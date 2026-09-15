@@ -17,9 +17,11 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = "kollio-default"
     llm_model_visible: str = ""
-    embedding_model: str = "kollio-embedding"
-    embedding_source_model: str = "text-embedding-3-large"
-    embedding_dimensions: Literal[1536] = 1536
+    embedding_model: str = "kollio-embedding-local"
+    embedding_source_model: str = "intfloat/multilingual-e5-small"
+    embedding_dimensions: Literal[1536, 384] = 384
+    embedding_query_prefix: str = "query: "
+    embedding_passage_prefix: str = "passage: "
     otel_exporter_otlp_traces_endpoint: str = ""
     otel_exporter_otlp_headers: SecretStr = SecretStr("")
 

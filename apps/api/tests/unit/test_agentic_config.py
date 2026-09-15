@@ -37,6 +37,23 @@ def test_development_runtime_allows_provider_free_deterministic_tests() -> None:
     settings = Settings(_env_file=None, environment="development", database_url="")
 
     assert settings.llm_model == "kollio-default"
+    assert settings.embedding_model == "kollio-embedding-local"
+    assert settings.embedding_source_model == "intfloat/multilingual-e5-small"
+    assert settings.embedding_dimensions == 384
+
+
+def test_openai_embedding_space_stays_explicitly_configurable() -> None:
+    settings = Settings(
+        _env_file=None,
+        environment="development",
+        database_url="",
+        embedding_model="kollio-embedding",
+        embedding_source_model="text-embedding-3-large",
+        embedding_dimensions=1536,
+        embedding_query_prefix="",
+        embedding_passage_prefix="",
+    )
+
     assert settings.embedding_model == "kollio-embedding"
     assert settings.embedding_dimensions == 1536
 
