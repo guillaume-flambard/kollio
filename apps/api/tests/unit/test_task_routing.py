@@ -57,8 +57,10 @@ class _FakeResponse:
 class _QueueClient:
     payloads: list[dict] = []
     queue: list[str] = []
+    timeouts: list[object] = []
 
     def __init__(self, *args: object, **kwargs: object):
+        self.timeouts.append(kwargs.get("timeout"))
         return None
 
     async def __aenter__(self) -> _QueueClient:
@@ -96,9 +98,7 @@ def test_gateways_declare_a_visible_task_class() -> None:
 
 
 async def test_pipeline_routes_analyst_cheap_and_the_rest_premium(monkeypatch) -> None:
-    monkeypatch.setattr(
-        "src.modules.constraint_analysis.adapters.litellm.httpx.AsyncClient", _QueueClient
-    )
+    monkeypatch.setattr("src.platform.llm_chat.httpx.AsyncClient", _QueueClient)
     _QueueClient.payloads = []
     _QueueClient.queue = [
         jsonlib.dumps({"arguments": ["Pilot demand is real"]}),
@@ -122,3 +122,33 @@ async def test_pipeline_routes_analyst_cheap_and_the_rest_premium(monkeypatch) -
     assert models[0] == "cheap-model"  # analyst: commodity
     assert models[1:] == ["premium-model"] * 4  # challenger, critic, company fit, synthesizer
     assert len(_QueueClient.queue) == 0
+
+
+async def test_analysis_payload_disables_thinking(monkeypatch) -> None:
+    monkeypatch.setattr("src.platform.llm_chat.httpx.AsyncClient", _QueueClient)
+    _QueueClient.payloads = []
+    _QueueClient.timeouts = []
+    _QueueClient.queue = [
+        jsonlib.dumps({"arguments": ["Pilot demand is real"]}),
+        jsonlib.dumps({"risks": ["Cannot staff onboarding"], "missing_evidence": []}),
+        jsonlib.dumps({"facts": [], "speculation": ["Assumes willingness to pay"]}),
+        jsonlib.dumps({"supports": [], "conflicts": []}),
+        jsonlib.dumps(_abstention()),
+    ]
+    settings = _settings(llm_model_visible="premium-model", llm_request_timeout_seconds=512.0)
+    gateway = LiteLLMConstraintAnalysisGateway(settings)
+    run = await run_constraint_pipeline(
+        gateway,
+        title="Offline field app",
+        pitch="Works without signal",
+        locale="fr",
+        evidence=[],
+        context={},
+    )
+
+    assert isinstance(run.result, ConstraintAnalysisResult)
+    assert len(_QueueClient.payloads) == 5
+    for payload in _QueueClient.payloads:
+        assert payload["enable_thinking"] is False
+        assert payload["response_format"]["json_schema"]["strict"] is True
+    assert _QueueClient.timeouts == [512.0] * 5

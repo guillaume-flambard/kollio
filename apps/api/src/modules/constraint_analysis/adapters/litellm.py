@@ -1,7 +1,6 @@
 import json
 from typing import ClassVar, TypeVar
 
-import httpx
 from opentelemetry import trace
 from pydantic import BaseModel
 
@@ -15,6 +14,7 @@ from src.modules.constraint_analysis.domain.models import (
     validate_analysis_result,
 )
 from src.platform.config import Settings
+from src.platform.llm_chat import chat_client, chat_payload
 from src.platform.locale import language_name
 from src.platform.task_class import TaskClass, intelligence_tier, resolve_model
 
@@ -94,30 +94,16 @@ class LiteLLMConstraintAnalysisGateway:
         max_tokens: int,
     ) -> ReportT:
         schema = response_model.model_json_schema()
-        payload = {
-            "model": resolve_model(self.settings, task_class),
-            "messages": [
-                {
-                    "role": "system",
-                    "content": prompt.format(
-                        language=language_name(locale), locale=locale, schema=json.dumps(schema)
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": json.dumps(user, ensure_ascii=False, default=str),
-                },
-            ],
-            "response_format": {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": response_model.__name__,
-                    "strict": True,
-                    "schema": schema,
-                },
-            },
-            "max_tokens": max_tokens,
-        }
+        payload = chat_payload(
+            model=resolve_model(self.settings, task_class),
+            system=prompt.format(
+                language=language_name(locale), locale=locale, schema=json.dumps(schema)
+            ),
+            user=json.dumps(user, ensure_ascii=False, default=str),
+            schema_name=response_model.__name__,
+            schema=schema,
+            max_tokens=max_tokens,
+        )
         headers = {"Authorization": f"Bearer {self.settings.llm_api_key.get_secret_value()}"}
         with trace.get_tracer("kollio.constraint_analysis").start_as_current_span(
             f"constraint_analysis.model.{task_class.value}"
@@ -125,7 +111,7 @@ class LiteLLMConstraintAnalysisGateway:
             span.set_attribute("kollio.task.class", task_class.value)
             span.set_attribute("kollio.task.tier", intelligence_tier(task_class))
             span.set_attribute("gen_ai.request.model", payload["model"])
-            async with httpx.AsyncClient(timeout=90) as client:
+            async with chat_client(self.settings) as client:
                 response = await client.post(
                     f"{self.settings.llm_base_url}/chat/completions",
                     json=payload,

@@ -1,11 +1,11 @@
 import json
 from typing import ClassVar
 
-import httpx
 from opentelemetry import trace
 
 from src.agents.schemas import Evidence, GateFinding
 from src.platform.config import Settings
+from src.platform.llm_chat import chat_client, chat_payload
 from src.platform.locale import language_name
 from src.platform.task_class import TaskClass, intelligence_tier, resolve_model
 
@@ -45,40 +45,26 @@ class Gateway:
     ) -> GateFinding:
         model = resolve_model(self.settings, self.task_class)
         evidence = [Evidence.model_validate(item).model_dump() for item in evidence]
-        payload = {
-            "model": model,
-            "messages": [
-                {
-                    "role": "system",
-                    "content": SYSTEM.format(
-                        language=language_name(locale),
-                        locale=locale,
-                        schema=json.dumps(GateFinding.model_json_schema()),
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": json.dumps(
-                        {"title": title, "pitch": pitch, "evidence": evidence}, ensure_ascii=False
-                    ),
-                },
-            ],
-            "response_format": {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "gate_finding",
-                    "strict": True,
-                    "schema": GateFinding.model_json_schema(),
-                },
-            },
-            "max_tokens": 1500,
-        }
+        payload = chat_payload(
+            model=model,
+            system=SYSTEM.format(
+                language=language_name(locale),
+                locale=locale,
+                schema=json.dumps(GateFinding.model_json_schema()),
+            ),
+            user=json.dumps(
+                {"title": title, "pitch": pitch, "evidence": evidence}, ensure_ascii=False
+            ),
+            schema_name="gate_finding",
+            schema=GateFinding.model_json_schema(),
+            max_tokens=1500,
+        )
         headers = {"Authorization": "Bearer " + self.settings.llm_api_key.get_secret_value()}
         with trace.get_tracer("kollio.agents").start_as_current_span("competition.assess") as span:
             span.set_attribute("kollio.task.class", self.task_class.value)
             span.set_attribute("kollio.task.tier", intelligence_tier(self.task_class))
             span.set_attribute("gen_ai.request.model", model)
-            async with httpx.AsyncClient(timeout=60) as client:
+            async with chat_client(self.settings) as client:
                 response = await client.post(
                     self.settings.llm_base_url + "/chat/completions", json=payload, headers=headers
                 )
