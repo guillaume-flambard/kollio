@@ -23,8 +23,8 @@
 
 ## 4. Live acceptance
 
-- [ ] 4.1 Deploy the API and worker through the lab-infra path.
-- [ ] 4.2 Re-run the pilot loop in production and record the analysis
+- [x] 4.1 Deploy the API and worker through the lab-infra path.
+- [x] 4.2 Re-run the pilot loop in production and record the analysis
   completing with a score and five factors.
-- [ ] 4.3 Write `acceptance.md` mapping each scenario to its evidence and
+- [x] 4.3 Write `acceptance.md` mapping each scenario to its evidence and
   naming the remaining gaps.

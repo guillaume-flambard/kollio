@@ -7,10 +7,25 @@ output and makes the request timeout configurable. Status: in progress.
 | Spec scenario | Evidence | State |
 | --- | --- | --- |
 | Structured call disables model reasoning | `test_analysis_payload_disables_thinking` captures the outbound body and asserts the reasoning directive is false, with model and schema unchanged | Passing |
-| Analysis survives provider latency variance | Live pilot re-run after deploy: the workflow reaches a terminal state with a score and five factors instead of `unavailable` | Pending |
+| Analysis survives provider latency variance | Live pilot re-run after deploy: workflow `6b121a13-8235-46cf-96d1-90ff9110f270` reached `human_review` with a stored result instead of `unavailable`, no error code | Passing |
 | Timeout is configuration | `test_chat_client_uses_the_configured_timeout` and `test_default_timeout_is_generous` | Passing |
 
 ## Verification runs (2026-09-15)
+
+Live, in production, after the deploy:
+
+- The fix shipped in PR #95, merged as `6004414`. The `publish` job rebuilt the
+  API and worker images, and the autodeploy timer restarted the stack on them.
+- A relaunched analysis on the pilot idea produced workflow
+  `6b121a13-8235-46cf-96d1-90ff9110f270`, which finished at the human review gate
+  with `status = awaiting_review`, `current_step = human_review` and no error
+  code. The previous two runs on the same idea ended `failed` with `ReadTimeout`
+  before this change and `ValidationError` after it, so the timeout is gone and
+  the remaining failure was a separate defect addressed by the
+  `fix-synthesis-abstention-rule` change.
+- The full pipeline of five sequential model calls ran in roughly five minutes
+  against live provider latency, which the previous 90 second bound could not
+  survive.
 
 Local, before deploy:
 

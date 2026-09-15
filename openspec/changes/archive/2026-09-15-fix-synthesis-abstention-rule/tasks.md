@@ -17,6 +17,6 @@
 
 ## 4. Deploy and observe
 
-- [ ] 4.1 Deploy the API and worker through the published image path (push to `main`, `verify` then `publish`, autodeploy restarts the stack).
-- [ ] 4.2 Re-run the pilot loop in production and confirm the analysis reaches a stored result instead of `failed` with `error_code` `ValidationError`.
-- [ ] 4.3 Write `acceptance.md` mapping each scenario to its evidence and naming the remaining gaps.
+- [x] 4.1 Deploy the API and worker through the published image path (push to `main`, `verify` then `publish`, autodeploy restarts the stack).
+- [x] 4.2 Re-run the pilot loop in production and confirm the analysis reaches a stored result instead of `failed` with `error_code` `ValidationError`.
+- [x] 4.3 Write `acceptance.md` mapping each scenario to its evidence and naming the remaining gaps.

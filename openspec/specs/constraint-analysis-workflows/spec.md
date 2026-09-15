@@ -92,3 +92,36 @@ OpenTelemetry export configuration is incomplete.
 #### Scenario: Required production setting is missing
 - **WHEN** a production process starts without a required identity, model gateway or trace export setting
 - **THEN** configuration validation fails before the process accepts work
+
+### Requirement: Structured model calls do not think and do not time out early (LT-01)
+Every structured-output chat completion the API issues SHALL carry an explicit directive that disables model reasoning, and SHALL be bounded by a timeout read from configuration rather than a fixed constant.
+
+#### Scenario: Structured call disables model reasoning
+- **WHEN** the constraint analysis gateway issues a structured-output chat completion
+- **THEN** the request body SHALL set the reasoning directive to false
+- **AND** SHALL keep the routed model, the strict JSON schema and the token limit unchanged
+
+#### Scenario: Analysis survives provider latency variance
+- **WHEN** a single model call takes longer than the previous fixed limit but within the configured timeout
+- **THEN** the call SHALL complete and return its validated report
+- **AND** the workflow SHALL not fail with a read timeout
+
+#### Scenario: Timeout is configuration
+- **WHEN** an operator sets the model request timeout for a deployment
+- **THEN** both the constraint analysis gateway and the competition gateway SHALL build their client with that value
+
+### Requirement: An abstention satisfies the domain contract (SA-01)
+The system SHALL state, in the synthesizer prompt, every cross-field rule that the domain validators enforce and that a JSON schema cannot express. The system SHALL keep the domain validators themselves unchanged, so an inconsistent model reply still fails closed rather than being stored.
+
+#### Scenario: Abstention rule is stated where the model can read it
+- **WHEN** the synthesizer prompt is loaded
+- **THEN** it states that an unknown verdict requires every factor to be unknown, that no factor carries a score in that case, that the overall score stays empty, and that the contradictions list is empty
+
+#### Scenario: No evidence yields a result the domain accepts
+- **WHEN** a synthesis call runs with no supplied evidence
+- **THEN** the result carries the unknown verdict, no overall score, five factors whose basis is unknown with no source ids and a named gap each, and an empty contradictions list
+- **AND** the domain validator accepts that result
+
+#### Scenario: The boundary still fails closed
+- **WHEN** a synthesis reply pairs an unknown verdict with a scored or known factor
+- **THEN** validation rejects it and the workflow records the failure
