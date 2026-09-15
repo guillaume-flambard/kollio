@@ -89,7 +89,7 @@ alternatives. Include status, context, decision, alternatives, consequences and
 supersession links. A changed decision gets a new ADR; preserve the old rationale.
 
 - [ADR 0001](decisions/0001-scenario-led-delivery.md)
-- [Pilot acceptance evidence](../openspec/changes/browse-private-ideas/acceptance.md)
+- [Pilot acceptance evidence](../openspec/changes/archive/2026-09-15-browse-private-ideas/acceptance.md)
 - [OpenSpec concepts](https://github.com/Fission-AI/OpenSpec/blob/main/docs/concepts.md)
 - [Playwright practices](https://playwright.dev/docs/best-practices)
 - [Playwright server lifecycle](https://playwright.dev/docs/test-webserver)
