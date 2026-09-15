@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = "kollio-default"
     llm_model_visible: str = ""
+    llm_request_timeout_seconds: float = 600.0
     embedding_model: str = "kollio-embedding-local"
     embedding_source_model: str = "intfloat/multilingual-e5-small"
     embedding_dimensions: Literal[1536, 384] = 384
@@ -30,6 +31,13 @@ class Settings(BaseSettings):
     def postgres_only(cls, value: str) -> str:
         if value and not value.startswith("postgresql+asyncpg://"):
             raise ValueError("DATABASE_URL must use postgresql+asyncpg")
+        return value
+
+    @field_validator("llm_request_timeout_seconds")
+    @classmethod
+    def timeout_must_be_positive(cls, value: float) -> float:
+        if value <= 0:
+            raise ValueError("llm_request_timeout_seconds must be positive")
         return value
 
     @model_validator(mode="after")
