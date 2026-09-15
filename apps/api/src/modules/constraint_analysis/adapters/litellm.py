@@ -57,10 +57,10 @@ SYNTHESIZER_PROMPT = (
     "realism from 0 to 100, where 100 is most favorable; an unknown verdict carries no overall "
     "score. When a factor contradicts a stated objective or constraint, add an entry to "
     "contradictions naming its target and the exact referenced id. Do not invent companies, "
-    "numbers, dates or context ids. Insufficient evidence requires an unknown verdict. "
-    + _UNTRUSTED
-    + _WRITE_IN
-    + _JSON
+    "numbers, dates or context ids. Insufficient evidence requires an unknown verdict, and an "
+    "unknown verdict requires every factor to be unknown: when no supplied evidence supports a "
+    "factor, that factor is unknown, no factor carries a score, the overall score stays empty, "
+    "and the contradictions list is empty. " + _UNTRUSTED + _WRITE_IN + _JSON
 )
 
 
