@@ -55,6 +55,6 @@ Tout ce que renvoie un LLM passe par un schéma Pydantic avant exécution. Local
 
 `make verify` (and Foundations CI) run three checks beyond the test suites:
 
-- `node scripts/check_locales.mjs` — the FR and EN catalogs expose the same keys.
+- `node scripts/check_locales.mjs` — the FR and EN catalogs expose the same keys, and every static key used by `apps/web/app` exists in them. A template or concatenated key only needs one catalog entry starting with its static prefix, which proves the family exists without enumerating runtime values.
 - `node scripts/check_design_tokens.mjs` — `apps/web/app` contains no literal colour and no `--kollio-*` name absent from `packages/ui/src/tokens.css`. A typo there is invisible in review because the hardcoded fallback wins at runtime, so the check is the only reliable guard. Run it with `--self-test` to prove it still fails on a fixture. `--ui-*` names come from Nuxt UI and are exempt; a variable declared in the same file is treated as local.
 - the migration drift check, `uv run alembic check` from `apps/api`.

@@ -61,7 +61,7 @@ useSeoMeta({ title: () => t('landing.meta.title'), description: () => t('landing
         </div>
       </section>
 
-      <section id="method" class="landing-outcomes" :aria-label="t('landing.outcomes.label')">
+      <section id="teams" class="landing-outcomes" :aria-label="t('landing.outcomes.label')">
         <article v-for="item in outcomeItems" :key="item.key">
           <KollioArtwork class="landing-outcome-asset" :name="item.asset" />
           <div><h2>{{ t(`landing.outcomes.${item.key}.title`) }}</h2><p>{{ t(`landing.outcomes.${item.key}.description`) }}</p></div>
@@ -70,7 +70,7 @@ useSeoMeta({ title: () => t('landing.meta.title'), description: () => t('landing
 
       <p id="trust" class="landing-trust">{{ t('landing.trust') }}</p>
 
-      <section id="teams" class="landing-method">
+      <section id="method" class="landing-method">
         <div class="landing-method__intro">
           <KollioArtwork class="landing-method__artwork" name="decision-memory" />
           <p>{{ t('landing.method.overline') }}</p>
