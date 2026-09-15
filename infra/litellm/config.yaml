@@ -15,8 +15,10 @@ model_list:
       cache_read_input_token_cost: 0.000000016
   - model_name: kollio-embedding
     litellm_params:
-      model: openai/text-embedding-3-large
-      api_key: os.environ/OPENAI_API_KEY
+      # OpenAI embeddings are reached through OpenRouter, which keeps one
+      # credential for the provider and does not require an OpenAI account.
+      model: openrouter/openai/text-embedding-3-large
+      api_key: os.environ/OPENROUTER_API_KEY
   - model_name: kollio-embedding-local
     litellm_params:
       model: openai/intfloat-multilingual-e5-small

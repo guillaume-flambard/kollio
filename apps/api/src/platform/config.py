@@ -33,6 +33,20 @@ class Settings(BaseSettings):
             raise ValueError("DATABASE_URL must use postgresql+asyncpg")
         return value
 
+    @field_validator("embedding_dimensions", mode="before")
+    @classmethod
+    def dimensions_arrive_as_text(cls, value: object) -> object:
+        # Environment variables are always text and a Literal of integers matches
+        # types exactly, so EMBEDDING_DIMENSIONS=1536 used to be rejected before
+        # any check could run, which took the whole API down at import. Coerce the
+        # text form and let the Literal rule decide membership.
+        if isinstance(value, str):
+            try:
+                return int(value)
+            except ValueError:
+                return value
+        return value
+
     @field_validator("llm_request_timeout_seconds")
     @classmethod
     def timeout_must_be_positive(cls, value: float) -> float:

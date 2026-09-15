@@ -58,6 +58,23 @@ def test_openai_embedding_space_stays_explicitly_configurable() -> None:
     assert settings.embedding_dimensions == 1536
 
 
+def test_embedding_space_can_be_configured_from_the_environment(monkeypatch) -> None:
+    monkeypatch.setenv("EMBEDDING_MODEL", "kollio-embedding")
+    monkeypatch.setenv("EMBEDDING_DIMENSIONS", "1536")
+
+    settings = Settings(_env_file=None, environment="development", database_url="")
+
+    assert settings.embedding_model == "kollio-embedding"
+    assert settings.embedding_dimensions == 1536
+
+
+def test_unsupported_embedding_dimension_fails_closed(monkeypatch) -> None:
+    monkeypatch.setenv("EMBEDDING_DIMENSIONS", "1024")
+
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, environment="development", database_url="")
+
+
 def test_complete_production_agentic_runtime_configuration_is_accepted() -> None:
     settings = Settings(
         _env_file=None,
