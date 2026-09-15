@@ -20,6 +20,8 @@ from src.platform.config import Settings
 from src.platform.embeddings import (
     LearningEmbeddingRecord,
     embed,
+    format_passage,
+    format_query,
     similar_learning_ids,
     store_learning_embeddings,
 )
@@ -40,7 +42,7 @@ async def embed_confirmed_learning(
 ) -> bool:
     """Embed one confirmed learning; returns whether the vector was stored."""
     try:
-        vectors = await embed([text], settings)
+        vectors = await embed([format_passage(text, settings)], settings)
         await store_learning_embeddings(
             session,
             [
@@ -77,7 +79,7 @@ async def reusable_learning_ids(
     if not workspace_ids or not text.strip():
         return []
     try:
-        vectors = await embed([text], settings)
+        vectors = await embed([format_query(text, settings)], settings)
         return await similar_learning_ids(
             session, vectors[0], settings, workspace_ids=workspace_ids, limit=limit
         )

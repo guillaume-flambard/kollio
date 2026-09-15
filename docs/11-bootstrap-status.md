@@ -14,6 +14,12 @@ OpenAI credential and the live multilingual embedding check listed below.
   endpoint, and an SSH-only Admin Console. The Cloud development tenant remains test-only.
 - b.ai / qwen3.8-flash behind LiteLLM, as approved after the VPS audit.
 - OpenAI text-embedding-3-large, 1536 dimensions, one shared FR/EN space.
+- Since 2026-09-15 a second, default embedding space is self-hosted:
+  `intfloat/multilingual-e5-small`, 384 dimensions, served by pinned TEI
+  `cpu-1.9` on CPU and routed through LiteLLM as `kollio-embedding-local`
+  with no API key. One space is active per deployment; rows carry their own
+  model and dimensions and retrieval excludes other spaces. The OpenAI space
+  stays supported and opt-in; its live credential criteria remain open.
 - All 446 ideas in the fresh Prospecteur snapshot imported directly into a private
   workspace. Historical verdicts and scores remain provenance, not Kollio scores.
 - Deployment target is the existing Make/Ansible, Compose and Traefik infrastructure.
@@ -196,7 +202,8 @@ Legacy code classification:
 
 1. Configure a valid approved OpenAI credential, then verify actual 1,536-dimensional FR/EN
    embeddings, storage and retrieval. No fake vectors are presented as multilingual
-   matching proof.
+   matching proof. Independent of this, the self-hosted 384-dimensional e5-small
+   space is proven by a recorded real FR-to-EN retrieval case since 2026-09-15.
 2. Extend the reviewed agent evaluation corpus beyond the current competition cases as
    product behavior expands.
 

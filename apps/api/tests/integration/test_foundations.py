@@ -146,6 +146,13 @@ async def test_embeddings_store_provenance_and_exclude_incompatible_space(databa
     expected_vector = [1.0] + [0.0] * 1535
     unrelated_vector = [0.0, 1.0] + [0.0] * 1534
     settings = Settings(_env_file=None, database_url="postgresql+asyncpg://unused")
+    settings = settings.model_copy(
+        update={
+            "embedding_model": "kollio-embedding",
+            "embedding_source_model": "text-embedding-3-large",
+            "embedding_dimensions": 1536,
+        }
+    )
     incompatible_settings = settings.model_copy(
         update={"embedding_source_model": "another-embedding-model"}
     )
@@ -220,6 +227,84 @@ async def test_embeddings_store_provenance_and_exclude_incompatible_space(databa
                 await store_embeddings(session, [records[0]], [[1.0]], settings)
             count = await session.scalar(select(func.count()).select_from(IdeaEmbedding))
             assert count == 3
+        await transaction.rollback()
+
+
+async def test_embedding_spaces_exclude_each_other_in_both_directions(database):
+    engine, _, _ = database
+    workspace_id, user_id, local_id, openai_id = (uuid4() for _ in range(4))
+    local_settings = Settings(_env_file=None, database_url="postgresql+asyncpg://unused")
+    assert local_settings.embedding_dimensions == 384
+    openai_settings = local_settings.model_copy(
+        update={
+            "embedding_model": "kollio-embedding",
+            "embedding_source_model": "text-embedding-3-large",
+            "embedding_dimensions": 1536,
+        }
+    )
+    async with engine.connect() as connection:
+        transaction = await connection.begin()
+        local = async_sessionmaker(connection, expire_on_commit=False)
+        async with local() as session:
+            session.add_all(
+                [
+                    Workspace(id=workspace_id, name="Two-space workspace"),
+                    User(id=user_id, auth_subject=None, display_name="Space owner"),
+                ]
+            )
+            await session.flush()
+            session.add_all(
+                [
+                    Idea(
+                        id=local_id,
+                        slug=str(local_id),
+                        title="Local idea",
+                        pitch="Local content",
+                        owner_id=user_id,
+                        workspace_id=workspace_id,
+                        lang="en",
+                        visibility="workspace",
+                    ),
+                    Idea(
+                        id=openai_id,
+                        slug=str(openai_id),
+                        title="OpenAI idea",
+                        pitch="OpenAI content",
+                        owner_id=user_id,
+                        workspace_id=workspace_id,
+                        lang="en",
+                        visibility="workspace",
+                    ),
+                ]
+            )
+            await session.flush()
+            await store_embeddings(
+                session,
+                [EmbeddingRecord(local_id, "Local", "en", "local", {})],
+                [[1.0] + [0.0] * 383],
+                local_settings,
+            )
+            await store_embeddings(
+                session,
+                [EmbeddingRecord(openai_id, "OpenAI", "en", "openai", {})],
+                [[1.0] + [0.0] * 1535],
+                openai_settings,
+            )
+            await session.flush()
+            local_matches = await similar_idea_ids(
+                session,
+                [1.0] + [0.0] * 383,
+                local_settings,
+                workspace_ids=frozenset({workspace_id}),
+            )
+            assert local_matches == [local_id]
+            openai_matches = await similar_idea_ids(
+                session,
+                [1.0] + [0.0] * 1535,
+                openai_settings,
+                workspace_ids=frozenset({workspace_id}),
+            )
+            assert openai_matches == [openai_id]
         await transaction.rollback()
 
 

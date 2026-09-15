@@ -39,6 +39,13 @@ services:
     command: ["--config", "/app/config.yaml", "--skip_server_startup", "--enforce_prisma_migration_check", "--use_v2_migration_resolver"]
     depends_on:
       postgres: {condition: service_healthy}
+  embeddings:
+    image: ghcr.io/huggingface/text-embeddings-inference@sha256:ad950d30878eceb72aaf32024d26fa2b1d04a75304fa0b4776b49aa1941fea07
+    command: ["--model-id", "intfloat/multilingual-e5-small", "--max-client-batch-size", "32"]
+    volumes: ["embeddings-data:/data"]
+    deploy:
+      resources:
+        limits: {cpus: "2.0", memory: 1G}
   litellm:
     image: ghcr.io/berriai/litellm@sha256:a3715fa7ad8387941ab697259bd2881d68931657247a41984f90fae6d11c62bf
     environment:
@@ -49,6 +56,7 @@ services:
     ports: ["127.0.0.1:4000:4000"]
     depends_on:
       postgres: {condition: service_healthy}
+      embeddings: {condition: service_started}
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness', timeout=3)"]
       interval: 10s
@@ -108,3 +116,4 @@ services:
 volumes:
   postgres-data:
   redis-data:
+  embeddings-data:
