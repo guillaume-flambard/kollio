@@ -21,4 +21,4 @@
 
 - [x] 4.1 Run Ruff, formatting, Mypy, all Pytest suites, ESLint, Nuxt typecheck, OpenSpec strict validation and the production build.
 - [x] 4.2 Validate the authenticated local flow in a browser, including list pagination, idea detail and workspace isolation.
-- [ ] 4.3 Land the change through a reviewed pull request with green CI and verify the deployed health checks.
+- [x] 4.3 Land the change through a reviewed pull request with green CI and verify the deployed health checks.
