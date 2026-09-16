@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "files": [
+          "apps/web/logto/sign-in-experience.css"
+        ],
+        "createdAt": "2026-09-16T12:21:58.953Z",
+        "reason": "design-system mandate: docs/06-design-system.md Typography specifies Geist for interface and headings; tokens.css --font-sans"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#242039",
+        "files": [
+          "apps/web/logto/sign-in-experience.css"
+        ],
+        "createdAt": "2026-09-16T12:21:59.259Z",
+        "reason": "canonical token: --kollio-heading #242039 in packages/ui/src/tokens.css"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#25213a",
+        "files": [
+          "apps/web/logto/sign-in-experience.css"
+        ],
+        "createdAt": "2026-09-16T12:21:59.467Z",
+        "reason": "canonical token: --ui-text #25213a in packages/ui/src/tokens.css"
+      }
+    ]
+  }
+}

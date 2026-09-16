@@ -1,0 +1,128 @@
+/**
+ * Kollio Living Canvas — Logto hosted sign-in experience custom CSS.
+ * Decision: ADR 0002 (docs/decisions/0002-branded-logto-sign-in-experience.md).
+ * Verified 2026-09-16 against the LIVE 1.43.0 sign-in + register pages,
+ * light and dark, by injecting this exact text and probing computed styles.
+ *
+ * APPLY (human step, needs the Logto Console behind the SSH tunnel):
+ *   1. `ssh -N -L 3002:127.0.0.1:3002 lab`, open http://localhost:3002.
+ *   2. Console > Sign-in & account > Branding: enable the app-level toggle on
+ *      the Kollio application, set logo/favicon/brand colour (+ dark colour),
+ *      paste this file as custom CSS. (Equivalent: PATCH /api/sign-in-exp
+ *      with {"customCss": "<this file>"} using a Management API token.)
+ *   3. Preview BOTH themes before saving. Dark button text (#252229 on
+ *      #e8e0ed) is the one value no token fully determines — eyeball it.
+ * INFRA (lab-infra, separate change): serve the experience from a
+ * Kollio-owned domain — Traefik route in stacks/kollio-logto plus Logto's
+ * endpoint/custom-domain setting. Keep ENDPOINT consistent (strict OIDC
+ * redirect URIs). Deploy with `make check` then
+ * `make deploy-stack app=kollio-logto`.
+ * FRAGILITY: selectors target Logto's internal markup. Hashed class prefixes
+ * were observed churning mid-session, so everything hashed is matched by
+ * semantic suffix ([class$='viewBox'], [class*='main'], [class*='primary']
+ * ...) or via Logto's own variables on #app, never by exact hash. Colours
+ * ride Logto's variables (--color-brand-*, --color-type-*, --color-line-*)
+ * redefined on #app, which beats their html[data-theme] body definitions by
+ * specificity and proximity. RE-VERIFY this page after every Logto upgrade.
+ * Verification record: submit #2e2938/#f7f4f9 light, #e8e0ed/#252229 dark;
+ * links #493b57/#c5b3d4; headline Bricolage 700 #242039/#f7f4f8; page wash
+ * #f7f5f7/#1c1920; card #ffffff/#252129 + radius 16 + --kollio-shadow;
+ * inputs Geist 14px #25213a/#f7f4f8 (Logto's own 8px ring + 44px height kept).
+ * Logo swaps to https://kollio.memolabs.dev/brand/kollio-mark.svg (repo:
+ * apps/web/public/brand/kollio-mark.svg). "Powered by Logto" kept as-is.
+ */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwSGFWNOITddY4.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvfzl-MQlss4MHt0GOSj5.woff2') format('woff2');
+}
+#app {
+  font-family: 'Geist', system-ui, sans-serif;
+  --color-brand-default: #2e2938;
+  --color-brand-hover: #493b57;
+  --color-brand-pressed: #252229;
+  --color-brand-loading: #684f76;
+  --color-type-primary: #25213a;
+  --color-type-secondary: #696a8f;
+  --color-line-divider: #e8e3ea;
+  --color-line-border: #e8e3ea;
+  --color-danger-default: #d47a70;
+}
+html[data-theme='dark'] #app {
+  --color-brand-default: #e8e0ed;
+  --color-brand-hover: #f7f4f9;
+  --color-brand-pressed: #c5b3d4;
+  --color-brand-loading: #684f76;
+  --color-type-primary: #f7f4f8;
+  --color-type-secondary: #b7aebe;
+  --color-line-divider: #3d3642;
+  --color-line-border: #3d3642;
+  --color-danger-default: #d47a70;
+}
+#app > div[class$='viewBox'] {
+  background: #f7f5f7;
+}
+main[class*='main'] {
+  background: #ffffff;
+  border: 1px solid #e8e3ea;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(73, 59, 87, .055);
+}
+main[class*='main'] img[class*='logo'] {
+  content: url('https://kollio.memolabs.dev/brand/kollio-mark.svg');
+  height: 40px;
+  width: auto;
+}
+main[class*='main'] [class*='headline'] {
+  font-family: 'Bricolage Grotesque', 'Geist', system-ui, sans-serif;
+  font-weight: 700;
+  color: #242039;
+  letter-spacing: -0.02em;
+}
+#app form div[class*='inputField'] input {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 14px;
+  color: #25213a;
+}
+#app form div[class*='inputField'] input::placeholder {
+  color: #696a8f;
+}
+form button[type='submit'][class*='primary'] {
+  border-radius: 12px;
+  min-height: 44px;
+  font-weight: 600;
+}
+main a[class*='link'][class*='primary'] {
+  color: #493b57;
+}
+html[data-theme='dark'] #app > div[class$='viewBox'] {
+  background: #1c1920;
+}
+html[data-theme='dark'] main[class*='main'] {
+  background: #252129;
+  border-color: #3d3642;
+}
+html[data-theme='dark'] main[class*='main'] [class*='headline'] {
+  color: #f7f4f8;
+}
+html[data-theme='dark'] #app form div[class*='inputField'] input {
+  color: #f7f4f8;
+}
+html[data-theme='dark'] #app form div[class*='inputField'] input::placeholder {
+  color: #b7aebe;
+}
+html[data-theme='dark'] form button[type='submit'][class*='primary'] {
+  color: #252229;
+}
+html[data-theme='dark'] main a[class*='link'][class*='primary'] {
+  color: #c5b3d4;
+}
