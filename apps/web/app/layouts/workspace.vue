@@ -1,72 +1,8 @@
 <script setup lang="ts">
 const { t, locale } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
-const route = useRoute()
 
-const menuOpen = ref(false)
-const menuToggle = ref<HTMLButtonElement | null>(null)
-const drawer = ref<HTMLElement | null>(null)
-let desktopQuery: MediaQueryList | undefined
-
-function openMenu() {
-  menuOpen.value = true
-}
-
-function closeMenu(restoreFocus = false) {
-  if (!menuOpen.value) return
-  menuOpen.value = false
-  if (restoreFocus) void nextTick(() => menuToggle.value?.focus())
-}
-
-function onKeydown(event: KeyboardEvent) {
-  if (!menuOpen.value) return
-  if (event.key === 'Escape') {
-    event.preventDefault()
-    closeMenu(true)
-    return
-  }
-  if (event.key !== 'Tab' || !drawer.value) return
-  const focusable = drawer.value.querySelectorAll<HTMLElement>(
-    'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-  )
-  if (focusable.length === 0) return
-  const first = focusable[0]
-  const last = focusable[focusable.length - 1]
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault()
-    last?.focus()
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault()
-    first?.focus()
-  }
-}
-
-function onDesktopChange(event: MediaQueryListEvent) {
-  if (event.matches) closeMenu()
-}
-
-watch(menuOpen, async open => {
-  if (!import.meta.client) return
-  document.body.style.overflow = open ? 'hidden' : ''
-  if (open) {
-    await nextTick()
-    drawer.value?.focus()
-  }
-})
-
-watch(() => route.fullPath, () => closeMenu())
-
-onMounted(() => {
-  window.addEventListener('keydown', onKeydown)
-  desktopQuery = window.matchMedia('(min-width: 1024px)')
-  desktopQuery.addEventListener('change', onDesktopChange)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', onKeydown)
-  desktopQuery?.removeEventListener('change', onDesktopChange)
-  if (import.meta.client) document.body.style.overflow = ''
-})
+const { menuOpen, menuToggle, drawer, openMenu, closeMenu } = useDrawer()
 </script>
 
 <template>
@@ -120,7 +56,7 @@ onBeforeUnmount(() => {
     </Transition>
 
     <aside class="workspace-rail sticky hidden flex-col border border-default bg-elevated/80 lg:flex">
-      <NuxtLink :to="$localePath('/workspace')" class="px-2" :aria-label="t('brand')">
+      <NuxtLink :to="$localePath('/workspace')" class="inline-flex min-h-11 items-center px-2" :aria-label="t('brand')">
         <KollioBrand />
       </NuxtLink>
       <p class="mt-1 px-2 text-sm leading-snug text-muted">{{ t('navigation.promise') }}</p>

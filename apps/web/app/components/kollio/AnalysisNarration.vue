@@ -153,7 +153,7 @@ onUnmounted(() => {
   margin: 0;
   color: var(--kollio-active-ink);
   font-size: var(--kollio-text-body);
-  font-weight: 600;
+  font-weight: var(--kollio-weight-strong);
 }
 
 .narration-groups {
@@ -197,7 +197,7 @@ onUnmounted(() => {
 .narration-label {
   margin: 0;
   font-size: var(--kollio-text-small);
-  font-weight: 500;
+  font-weight: var(--kollio-weight-medium);
 }
 
 .narration-items {

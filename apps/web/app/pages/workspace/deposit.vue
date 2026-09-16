@@ -194,27 +194,23 @@ const constraintLabels: Record<string, string> = {
 .deposit-header h1 { margin: 0; font-size: var(--kollio-text-title); }
 .deposit-header p { margin: 4px 0 0; font-size: var(--kollio-text-small); }
 .deposit-form { display: grid; gap: 14px; }
-.deposit-field { display: grid; gap: 8px; font-size: var(--kollio-text-small); font-weight: 500; }
-.deposit-field input, .deposit-field textarea, .deposit-field select {
-  border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); padding: 10px 14px;
-  font: inherit; background: var(--ui-bg-elevated); color: var(--ui-text);
-}
+.deposit-field { display: grid; gap: 8px; font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-medium); }
 .deposit-submit {
   justify-self: start; border: 0; border-radius: var(--kollio-radius-md); padding: 12px 22px; cursor: pointer;
-  background: var(--kollio-heading); color: var(--ui-bg-elevated); font-weight: 570;
+  background: var(--kollio-heading); color: var(--ui-bg-elevated); font-weight: var(--kollio-weight-strong);
 }
 .deposit-submit:disabled { opacity: .55; cursor: not-allowed; }
 .deposit-error { color: var(--ui-error); font-size: var(--kollio-text-small); }
 .deposit-verdict { display: grid; gap: 14px; }
-.deposit-score { font-size: var(--kollio-text-headline); font-weight: 700; }
+.deposit-score { font-size: var(--kollio-text-headline); font-weight: var(--kollio-weight-display); }
 .deposit-constraints { display: grid; gap: 10px; margin: 0; }
 .deposit-constraint { display: grid; gap: 4px; }
-.deposit-constraint dd { margin: 0; font-size: var(--kollio-text-small); font-weight: 600; }
+.deposit-constraint dd { margin: 0; font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); }
 .deposit-constraint p { margin: 0; font-size: var(--kollio-text-caption); }
 .deposit-basis { font-size: var(--kollio-text-caption); color: var(--ui-text-muted); text-transform: uppercase; letter-spacing: .06em; }
 .deposit-gap { font-size: var(--kollio-text-caption); color: var(--ui-text-muted); }
 .deposit-contradictions { margin-top: 18px; }
 .deposit-contradictions ul { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
 .deposit-contradictions li { display: flex; gap: 8px; font-size: var(--kollio-text-small); }
-.deposit-open { color: var(--kollio-heading); font-weight: 570; }
+.deposit-open { color: var(--kollio-heading); font-weight: var(--kollio-weight-strong); }
 </style>

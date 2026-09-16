@@ -413,13 +413,13 @@ onMounted(loadExperiments)
 
 .experiment-row-title {
   color: var(--ui-text);
-  font-weight: 500;
+  font-weight: var(--kollio-weight-medium);
 }
 
 .experiment-status {
   color: var(--ui-text-muted);
   font-size: var(--kollio-text-small);
-  font-weight: 500;
+  font-weight: var(--kollio-weight-medium);
 }
 
 .experiment-status[data-status='running'] {
@@ -441,7 +441,7 @@ onMounted(loadExperiments)
   padding: 0 14px;
   color: var(--ui-text);
   font-size: var(--kollio-text-small);
-  font-weight: 500;
+  font-weight: var(--kollio-weight-medium);
   transition: background 180ms ease, border-color 180ms ease, transform 180ms cubic-bezier(.16, 1, .3, 1);
 }
 
@@ -495,7 +495,7 @@ onMounted(loadExperiments)
   padding: 4px 10px;
   color: var(--kollio-active-ink);
   font-size: var(--kollio-text-small);
-  font-weight: 500;
+  font-weight: var(--kollio-weight-medium);
 }
 
 @media (prefers-reduced-motion: no-preference) {

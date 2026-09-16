@@ -32,7 +32,7 @@ const { t } = useI18n()
 .brand__wordmark {
   font-family: var(--font-sans);
   font-size: var(--kollio-text-title);
-  font-weight: 700;
+  font-weight: var(--kollio-weight-display);
   letter-spacing: -0.045em;
   line-height: 1;
 }

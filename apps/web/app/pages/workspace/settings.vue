@@ -423,7 +423,7 @@ async function saveWizard() {
     </p>
 
     <template v-if="context">
-      <form class="settings-section settings-wizard" @submit.prevent="saveWizard">
+      <form class="kollio-surface settings-section settings-wizard" @submit.prevent="saveWizard">
         <div class="settings-wizard-head">
           <h2>{{ t('workspace.settings.onboarding.title') }}</h2>
           <span class="settings-note">{{ t('workspace.settings.onboarding.progress', { answered: wizardAnsweredCount, total: 7 }) }}</span>
@@ -513,7 +513,7 @@ async function saveWizard() {
           <KollioIcon :name="editorExpanded ? 'chevron-up' : 'chevron-down'" class="size-4 settings-advanced-chevron" />
         </button>
         <div v-show="editorExpanded" :id="editorPanelId" class="settings-advanced-panel">
-          <form class="settings-section" @submit.prevent="saveProfile">
+          <form class="kollio-surface settings-section" @submit.prevent="saveProfile">
             <h2>{{ t('workspace.settings.profile.title') }}</h2>
             <label class="settings-field">
               <span>{{ t('workspace.settings.profile.name') }}</span>
@@ -551,7 +551,7 @@ async function saveWizard() {
             </div>
           </form>
 
-          <section class="settings-section">
+          <section class="kollio-surface settings-section">
             <h2>{{ t('workspace.settings.objectives.title') }}</h2>
             <form class="settings-inline" @submit.prevent="createObjective">
               <label class="settings-field">
@@ -591,7 +591,7 @@ async function saveWizard() {
             </ul>
           </section>
 
-          <section class="settings-section">
+          <section class="kollio-surface settings-section">
             <h2>{{ t('workspace.settings.constraints.title') }}</h2>
             <form class="settings-inline" @submit.prevent="createConstraint">
               <label class="settings-field">
@@ -634,7 +634,7 @@ async function saveWizard() {
             </ul>
           </section>
 
-          <section class="settings-section">
+          <section class="kollio-surface settings-section">
             <h2>{{ t('workspace.settings.principles.title') }}</h2>
             <form class="settings-inline" @submit.prevent="createPrinciple">
               <label class="settings-field">
@@ -677,7 +677,7 @@ async function saveWizard() {
             </ul>
           </section>
 
-          <section class="settings-section">
+          <section class="kollio-surface settings-section">
             <h2>{{ t('workspace.settings.metrics.title') }}</h2>
             <form class="settings-metric-form" @submit.prevent="createMetric">
               <label class="settings-field">
@@ -736,42 +736,40 @@ async function saveWizard() {
 </template>
 
 <style scoped>
-.settings-shell { display: grid; gap: 26px; max-width: 720px; margin: 0 auto; padding: 22px 4px 64px; }
+.settings-shell { display: grid; gap: var(--kollio-space-lg); max-width: 720px; margin: 0 auto; padding: var(--kollio-space-lg) var(--kollio-space-xs) var(--kollio-space-3xl); }
 .settings-header h1 { margin: 0; font-size: var(--kollio-text-title); }
-.settings-header p { margin: 6px 0 0; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
-.settings-section { display: grid; gap: 12px; border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-lg); padding: 18px 20px; }
-.settings-section h2 { margin: 0; font-size: var(--kollio-text-body); font-weight: 620; }
-.settings-field { display: grid; gap: 6px; font-size: var(--kollio-text-small); font-weight: 560; color: var(--ui-text-muted); }
-.settings-field input, .settings-field textarea { border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); padding: 8px 12px; background: var(--ui-bg); color: var(--ui-text); font: inherit; min-width: 0; }
+.settings-header p { margin: var(--kollio-space-sm) 0 0; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
+.settings-section { display: grid; gap: var(--kollio-space-md); padding: var(--kollio-space-md) var(--kollio-space-lg); }
+.settings-section h2 { margin: 0; font-size: var(--kollio-text-body); font-weight: var(--kollio-weight-strong); }
+.settings-field { display: grid; gap: var(--kollio-space-sm); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); color: var(--ui-text-muted); }
 .settings-field textarea { resize: vertical; }
-.settings-inline { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
-.settings-actions { display: flex; align-items: center; gap: 12px; }
-.settings-primary { border: 0; border-radius: var(--kollio-radius-md); padding: 9px 16px; background: var(--kollio-heading); color: var(--ui-bg-elevated); font: inherit; font-size: var(--kollio-text-small); font-weight: 570; cursor: pointer; }
+.settings-inline { display: grid; grid-template-columns: 1fr 1fr auto; gap: var(--kollio-space-sm); align-items: end; }
+.settings-actions { display: flex; align-items: center; gap: var(--kollio-space-md); }
+.settings-primary { border: 0; border-radius: var(--kollio-radius-md); min-height: 44px; padding: var(--kollio-space-sm) var(--kollio-space-md); background: var(--kollio-heading); color: var(--kollio-on-action); font: inherit; font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); cursor: pointer; }
 .settings-primary:disabled { opacity: .6; cursor: progress; }
-.settings-link { border: 0; background: transparent; color: var(--kollio-active-ink); font: inherit; font-size: var(--kollio-text-small); font-weight: 620; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.settings-link { border: 0; background: transparent; color: var(--kollio-active-ink); font: inherit; font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .settings-note { color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
-.settings-error { border: 1px solid var(--ui-error); border-radius: var(--kollio-radius-md); padding: 10px 14px; background: var(--ui-bg-elevated); color: var(--ui-error); font-size: var(--kollio-text-small); }
-.settings-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.settings-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; border-top: 1px solid var(--ui-border); padding-top: 8px; }
+.settings-error { border: 1px solid var(--ui-error); border-radius: var(--kollio-radius-md); padding: var(--kollio-space-sm) var(--kollio-space-md); background: var(--ui-bg-elevated); color: var(--ui-error); font-size: var(--kollio-text-small); }
+.settings-list { display: grid; gap: var(--kollio-space-sm); margin: 0; padding: 0; list-style: none; }
+.settings-list li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--kollio-space-md); border-top: 1px solid var(--ui-border); padding-top: var(--kollio-space-sm); }
 .settings-list li:first-child { border-top: 0; padding-top: 0; }
-.settings-title-input { flex: 1 1 220px; border: 1px solid transparent; border-radius: var(--kollio-radius-sm); padding: 6px 8px; background: transparent; color: var(--ui-text); font: inherit; font-weight: 560; }
-.settings-title-input:hover, .settings-title-input:focus { border-color: var(--ui-border); background: var(--ui-bg); }
-.settings-state { border-radius: var(--kollio-radius-pill); padding: 2px 10px; background: var(--ui-bg-muted); color: var(--kollio-tab-ink); font-size: var(--kollio-text-caption); font-weight: 600; }
-.settings-toggle { display: flex; align-items: center; gap: 6px; font-size: var(--kollio-text-caption); color: var(--ui-text-muted); }
-.settings-wizard { gap: 16px; }
-.settings-wizard-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.settings-step { display: grid; gap: 10px; margin: 0; min-width: 0; border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); padding: 4px 14px 14px; }
-.settings-step legend { display: flex; align-items: center; gap: 8px; padding-inline: 4px; color: var(--ui-text); font-size: var(--kollio-text-small); font-weight: 620; }
-.settings-pending { border-radius: var(--kollio-radius-pill); padding: 1px 9px; background: color-mix(in srgb, var(--ui-warning) 22%, transparent); color: var(--ui-text); font-size: var(--kollio-text-micro); font-weight: 600; }
-.settings-metric-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-items: end; }
+.settings-title-input { flex: 1 1 220px; font-weight: var(--kollio-weight-strong); }
+.settings-state { border-radius: var(--kollio-radius-pill); padding: 0 var(--kollio-space-sm); background: var(--ui-bg-muted); color: var(--kollio-tab-ink); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
+.settings-toggle { display: flex; align-items: center; gap: var(--kollio-space-sm); font-size: var(--kollio-text-caption); color: var(--ui-text-muted); }
+.settings-wizard { gap: var(--kollio-space-md); }
+.settings-wizard-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--kollio-space-md); }
+.settings-step { display: grid; gap: var(--kollio-space-sm); margin: 0; min-width: 0; border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); padding: var(--kollio-space-xs) var(--kollio-space-md) var(--kollio-space-md); }
+.settings-step legend { display: flex; align-items: center; gap: var(--kollio-space-sm); padding-inline: var(--kollio-space-xs); color: var(--ui-text); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); }
+.settings-pending { border-radius: var(--kollio-radius-pill); padding: 0 var(--kollio-space-sm); background: color-mix(in srgb, var(--ui-warning) 22%, transparent); color: var(--ui-text); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); }
+.settings-metric-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--kollio-space-sm); align-items: end; }
 .settings-metric-form .settings-primary { grid-column: 1 / -1; justify-self: start; }
-.settings-metric-value { flex: 0 1 140px; border: 1px solid transparent; border-radius: var(--kollio-radius-sm); padding: 6px 8px; background: transparent; color: var(--ui-text); font: inherit; }
+.settings-metric-value { flex: 0 1 140px; border: 1px solid transparent; border-radius: var(--kollio-radius-sm); padding: var(--kollio-space-xs) var(--kollio-space-sm); background: transparent; color: var(--ui-text); font: inherit; }
 .settings-metric-value:hover, .settings-metric-value:focus { border-color: var(--ui-border); background: var(--ui-bg); }
-.settings-advanced { display: grid; gap: 14px; }
-.settings-advanced-panel { display: grid; gap: 26px; }
-.settings-advanced-toggle { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; width: 100%; border: 0; background: transparent; padding: 0; color: var(--ui-text); font: inherit; text-align: left; cursor: pointer; }
+.settings-advanced { display: grid; gap: var(--kollio-space-md); }
+.settings-advanced-panel { display: grid; gap: var(--kollio-space-lg); }
+.settings-advanced-toggle { display: flex; flex-wrap: wrap; align-content: center; align-items: baseline; gap: var(--kollio-space-xs) var(--kollio-space-sm); width: 100%; min-height: 44px; border: 0; background: transparent; padding: 0; color: var(--ui-text); font: inherit; text-align: left; cursor: pointer; }
 .settings-advanced-toggle:hover .settings-advanced-title { text-decoration-thickness: 2px; }
-.settings-advanced-title { color: var(--kollio-active-ink); font-size: var(--kollio-text-small); font-weight: 620; text-decoration: underline; text-underline-offset: 3px; }
+.settings-advanced-title { color: var(--kollio-active-ink); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); text-decoration: underline; text-underline-offset: 3px; }
 .settings-advanced-hint { color: var(--ui-text-muted); font-size: var(--kollio-text-caption); }
 .settings-advanced-chevron { margin-left: auto; color: var(--ui-text-muted); }
 

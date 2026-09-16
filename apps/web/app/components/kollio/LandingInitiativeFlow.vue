@@ -91,7 +91,7 @@ const { t } = useI18n()
 .initiative-stage:nth-of-type(3) { padding-left: 35px; }
 .initiative-stage + .initiative-stage { border-left: 1px solid var(--ui-border); }
 .initiative-stage__header { display: flex; min-height: 56px; align-items: flex-start; gap: 11px; }
-.initiative-stage__header h2 { color: var(--kollio-heading); font-size: var(--kollio-text-lead); font-weight: 650; }
+.initiative-stage__header h2 { color: var(--kollio-heading); font-size: var(--kollio-text-lead); font-weight: var(--kollio-weight-display); }
 .initiative-stage__header p { margin-top: 3px; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
 .initiative-stage__dot { width: 17px; height: 17px; flex: none; margin-top: 2px; border-radius: 50%; background: var(--kollio-wash); box-shadow: 0 0 0 5px color-mix(in srgb, var(--kollio-wash) 18%, transparent); }
 .initiative-stage__dot--validation { background: var(--kollio-verified); }
@@ -119,13 +119,13 @@ const { t } = useI18n()
 .validation-card__owner span:last-child { display: grid; color: var(--kollio-heading); font-size: var(--kollio-text-micro); }
 .validation-card__owner small { margin: 1px 0 0; }
 .decision-check { display: grid; width: 25px; height: 25px; place-items: center; color: var(--kollio-question); }.decision-check svg { width: 25px; height: 25px; }
-.decision-card a { display: inline-flex; gap: 7px; margin-top: 10px; color: var(--kollio-active-ink); font-size: var(--kollio-text-micro); font-weight: 600; }
+.decision-card a { display: inline-flex; min-height: 44px; align-items: center; gap: var(--kollio-space-sm); margin-top: var(--kollio-space-sm); color: var(--kollio-active-ink); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); }
 .decision-team { margin-top: 20px; font-size: .72rem; }
 .decision-team__people { display: flex; align-items: center; margin-top: 9px; padding-left: 7px; }
 .demo-avatar { display: inline-block; width: 30px; height: 30px; margin-left: -7px; border: 2px solid white; border-radius: 50%; background-color: var(--kollio-wash); background-image: url('/avatars/collaborator-sprite.webp'); background-size: 300% 200%; }
 .demo-avatar--rose { background-position: 50% 0; }.demo-avatar--sage { background-position: 100% 100%; }.demo-avatar--ochre { background-position: 100% 0; }.demo-avatar--coral { background-position: 50% 100%; }
 .decision-team__more { display: grid; width: 30px; height: 30px; place-items: center; margin-left: -7px; border: 2px solid white; border-radius: 50%; background: var(--ui-bg-muted); color: var(--ui-text-muted); font-size: var(--kollio-text-micro); }
-.decision-note { position: relative; margin: -26px 0 0 132px; color: var(--kollio-active-ink); font-family: var(--font-annotation); font-size: 1rem; font-weight: 600; line-height: 1.1; transform: rotate(-3deg); }
+.decision-note { position: relative; margin: -26px 0 0 132px; color: var(--kollio-active-ink); font-family: var(--font-annotation); font-size: 1rem; font-weight: var(--kollio-weight-strong); line-height: 1.1; transform: rotate(-3deg); }
 @media (max-width: 900px) { .initiative-flow { height: auto; min-height: 0; grid-template-columns: 1fr; padding: 0 16px 16px; }.initiative-flow :deep(.relationship-connector) { display: none; }.initiative-stage, .initiative-stage:first-of-type, .initiative-stage:nth-of-type(2), .initiative-stage:nth-of-type(3) { padding-inline: 8px; }.initiative-stage + .initiative-stage { border-top: 1px solid var(--ui-border); border-left: 0; }.initiative-stack, .initiative-stage:first-of-type .initiative-stack, .initiative-stage:nth-of-type(2) .initiative-stack { max-width: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 0; }.initiative-stage:nth-of-type(3) .decision-card { max-width: none; }.initiative-card--quiet:last-child { display: none; }.decision-note { margin-left: 150px; } }
 @media (max-width: 560px) { .initiative-preview { border-radius: var(--kollio-radius-lg); }.initiative-preview__header { grid-template-columns: 1fr; padding-inline: 16px; }.initiative-preview__search, .initiative-preview__filters { display: none; }.initiative-stack, .initiative-stage .initiative-stack, .initiative-stage:first-of-type .initiative-stack, .initiative-stage:nth-of-type(2) .initiative-stack { grid-template-columns: 1fr; }.initiative-card--quiet { display: none; }.decision-note { margin: 13px 0 0; transform: none; }.validation-card:first-child { height: auto; min-height: 108px; padding-right: 76px; }.validation-card__thumbnail { width: 54px; height: 46px; } }
 </style>

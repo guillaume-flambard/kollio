@@ -210,11 +210,11 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 <style scoped>
 .ideas-explorer { width: 100%; padding: 16px 16px 34px; }
 .ideas-explorer-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 22px; margin-bottom: 20px; }
-.ideas-explorer-header h1 { color: var(--kollio-heading); font-size: var(--kollio-display-section); font-weight: 650; letter-spacing: -.06em; line-height: .96; }
+.ideas-explorer-header h1 { color: var(--kollio-heading); font-size: var(--kollio-display-section); font-weight: var(--kollio-weight-display); letter-spacing: -.06em; line-height: .96; }
 .ideas-explorer-header p { margin-top: 8px; color: var(--ui-text-muted); font-size: var(--kollio-text-body); }
-.ideas-create-action { display: flex; min-height: 48px; align-items: center; gap: 24px; border-radius: var(--kollio-radius-md); background: var(--kollio-heading); padding: 0 20px; color: var(--ui-bg-elevated); font-size: var(--kollio-text-caption); font-weight: 570; box-shadow: 0 8px 22px color-mix(in srgb, var(--kollio-heading) 17%, transparent); transition: transform 180ms ease, box-shadow 180ms ease; }
+.ideas-create-action { display: flex; min-height: 48px; align-items: center; gap: 24px; border-radius: var(--kollio-radius-md); background: var(--kollio-heading); padding: 0 20px; color: var(--ui-bg-elevated); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); box-shadow: 0 8px 22px color-mix(in srgb, var(--kollio-heading) 17%, transparent); transition: transform 180ms ease, box-shadow 180ms ease; }
 .ideas-create-action:hover { transform: translateY(-1px); box-shadow: 0 11px 28px color-mix(in srgb, var(--kollio-heading) 22%, transparent); }
-.ideas-create-action span { font-size: var(--kollio-text-lead); font-weight: 300; }
+.ideas-create-action span { font-size: var(--kollio-text-lead); font-weight: var(--kollio-weight-regular); }
 .ideas-search { display: flex; min-height: 56px; grid-column: 1 / -1; align-items: center; gap: 13px; border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); background: var(--ui-bg-elevated); padding-left: 16px; }
 .ideas-search:focus-within { border-color: color-mix(in srgb, var(--kollio-active-ink) 42%, var(--ui-border)); }
 .ideas-search > svg { width: 21px; flex: none; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-width: 1.7; }
@@ -225,26 +225,26 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
 .ideas-filter-rail { border-right: 1px solid var(--ui-border); padding: 16px 15px 26px; }
 .ideas-filter-rail nav { display: grid; gap: 1px; }
 .ideas-filter-rail button { display: flex; width: 100%; min-height: 52px; align-items: center; gap: 12px; color: var(--ui-text-muted); font-size: var(--kollio-text-small); text-align: left; }
-.ideas-filter-rail button[aria-pressed='true'] { color: var(--kollio-heading); font-weight: 620; }
+.ideas-filter-rail button[aria-pressed='true'] { color: var(--kollio-heading); font-weight: var(--kollio-weight-strong); }
 .ideas-filter-rail button svg { width: 21px; flex: none; fill: none; stroke: var(--kollio-active-ink); stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.55; }
 .ideas-filter-rail nav :deep(.sketch-annotation--loop) { --sketch-opacity: .72; --sketch-secondary-opacity: .16; --sketch-stroke: 1.45px; width: 100%; min-height: 46px; margin-left: -8px; padding: 8px 12px; }
 .filter-annotation-content { display: flex; align-items: center; gap: 12px; }
 .ideas-filter-rail hr { margin: 16px 0 22px; border-color: var(--ui-border); }
-.ideas-filter-rail > p { margin: 0 8px 9px; color: var(--kollio-heading); font-size: var(--kollio-text-caption); font-weight: 650; }
+.ideas-filter-rail > p { margin: 0 8px 9px; color: var(--kollio-heading); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-display); }
 .ideas-filter-rail .domain-filter { min-height: 38px; justify-content: space-between; padding: 0 8px; }
 .ideas-filter-rail .domain-filter small { font-size: var(--kollio-text-micro); }
 .ideas-results { min-width: 0; }
 .ideas-results-header { display: flex; min-height: 62px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ui-border); padding: 0 24px; color: var(--ui-text-muted); font-size: var(--kollio-text-caption); }
-.ideas-results-header strong { color: var(--kollio-heading); font-size: var(--kollio-text-small); font-weight: 650; }
-.ideas-results-header b { margin: 0 7px; color: var(--kollio-active-ink); font-weight: 570; }
+.ideas-results-header strong { color: var(--kollio-heading); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-display); }
+.ideas-results-header b { margin: 0 7px; color: var(--kollio-active-ink); font-weight: var(--kollio-weight-strong); }
 .explorer-row-skeleton { display: grid; min-height: 128px; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 18px; border-bottom: 1px solid var(--ui-border); padding: 20px 22px; }
 .explorer-row-skeleton > span:last-child { display: block; }
 .skeleton-circle { width: 48px; height: 48px; border-radius: 50%; background: var(--ui-bg-muted); }
 .ideas-results-feedback { display: flex; min-height: 420px; align-items: flex-start; flex-direction: column; justify-content: center; padding: 42px; }
-.ideas-results-feedback h2 { color: var(--kollio-heading); font-size: var(--kollio-text-title); font-weight: 620; }
+.ideas-results-feedback h2 { color: var(--kollio-heading); font-size: var(--kollio-text-title); font-weight: var(--kollio-weight-strong); }
 .ideas-results-feedback p { margin: 9px 0 22px; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
 .ideas-results-pagination { display: flex; min-height: 58px; align-items: center; justify-content: space-between; padding: 0 22px; }
-.ideas-results-pagination a { min-height: 40px; border-radius: var(--kollio-radius-sm); padding: 11px 13px; color: var(--kollio-active-ink); font-size: var(--kollio-text-caption); font-weight: 600; }
+.ideas-results-pagination a { min-height: 40px; border-radius: var(--kollio-radius-sm); padding: 11px 13px; color: var(--kollio-active-ink); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
 .preview-backdrop { display: none; }
 @media (max-width: 1180px) {
   .ideas-explorer-shell { grid-template-columns: minmax(184px, 210px) minmax(0, 1fr); }

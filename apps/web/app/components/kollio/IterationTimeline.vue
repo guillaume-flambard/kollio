@@ -121,7 +121,7 @@ function confirmReject(id: string) {
 <style scoped>
 .idea-iterations { display: grid; gap: 14px; }
 .idea-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.idea-section-heading h2 { margin: 0; font-size: var(--kollio-text-lead); font-weight: 600; letter-spacing: -0.025em; }
+.idea-section-heading h2 { margin: 0; font-size: var(--kollio-text-lead); font-weight: var(--kollio-weight-strong); letter-spacing: -0.025em; }
 .idea-section-heading span { color: var(--ui-text-muted); font-size: var(--kollio-text-caption); }
 .iteration-imported { margin: 0; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
 .iteration-timeline { display: grid; gap: 0; margin: 0; padding: 0 0 0 18px; list-style: none; border-left: 1px solid var(--ui-border); }
@@ -129,13 +129,13 @@ function confirmReject(id: string) {
 .iteration-entry::before { position: absolute; top: 20px; left: -23px; width: 8px; height: 8px; border-radius: 50%; background: var(--kollio-active-ink); content: ''; }
 .iteration-entry time { color: var(--ui-text-muted); font-size: var(--kollio-text-caption); }
 .iteration-entry-branch::before { background: var(--kollio-question); }
-.iteration-entry-title { margin: 0; font-size: var(--kollio-text-small); font-weight: 570; display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.iteration-entry-title { margin: 0; font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
 .iteration-entry-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 0; color: var(--ui-text-muted); font-size: var(--kollio-text-caption); }
-.iteration-status { border-radius: var(--kollio-radius-pill); padding: 2px 10px; background: var(--kollio-wash); color: var(--kollio-active-ink); font-size: var(--kollio-text-micro); font-weight: 600; }
-.iteration-analysis { color: var(--kollio-active-ink); font-weight: 600; }
+.iteration-status { border-radius: var(--kollio-radius-pill); padding: 2px 10px; background: var(--kollio-wash); color: var(--kollio-active-ink); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); }
+.iteration-analysis { color: var(--kollio-active-ink); font-weight: var(--kollio-weight-strong); }
 .iteration-empty { margin: 0; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
-.iteration-action { border: 0; background: transparent; color: var(--kollio-active-ink); cursor: pointer; font: inherit; font-size: var(--kollio-text-caption); font-weight: 640; text-decoration: underline; text-underline-offset: 3px; }
+.iteration-action { border: 0; background: transparent; color: var(--kollio-active-ink); cursor: pointer; font: inherit; font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-display); text-decoration: underline; text-underline-offset: 3px; }
 .iteration-reject-form { display: flex; align-items: center; gap: 8px; flex-basis: 100%; }
-.iteration-reject-form input { flex: 1; border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-sm); padding: 4px 10px; font-size: var(--kollio-text-caption); background: var(--ui-bg); color: var(--ui-text); }
+.iteration-reject-form input { flex: 1; }
 .iteration-rationale { margin: 4px 0 0; color: var(--ui-text-muted); font-size: var(--kollio-text-caption); }
 </style>

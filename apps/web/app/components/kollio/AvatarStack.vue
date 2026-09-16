@@ -35,7 +35,7 @@ function initials(name: string) {
 
 <style scoped>
 .avatar-stack { display: flex; align-items: center; padding-left: 8px; }
-.avatar-stack li { display: grid; width: 32px; height: 32px; place-items: center; margin-left: -8px; overflow: hidden; border: 2px solid var(--ui-bg-elevated); border-radius: 50%; background-color: var(--kollio-wash); background-image: url('/avatars/collaborator-sprite.webp'); background-position: 0 0; background-size: 300% 200%; color: var(--kollio-heading); font-size: var(--kollio-text-micro); font-weight: 720; letter-spacing: -.02em; }
+.avatar-stack li { display: grid; width: 32px; height: 32px; place-items: center; margin-left: -8px; overflow: hidden; border: 2px solid var(--ui-bg-elevated); border-radius: 50%; background-color: var(--kollio-wash); background-image: url('/avatars/collaborator-sprite.webp'); background-position: 0 0; background-size: 300% 200%; color: var(--kollio-heading); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-display); letter-spacing: -.02em; }
 .avatar-stack li[data-avatar='rose'] { background-position: 50% 0; }
 .avatar-stack li[data-avatar='ochre'] { background-position: 100% 0; }
 .avatar-stack li[data-avatar='citron'] { background-position: 0 100%; }

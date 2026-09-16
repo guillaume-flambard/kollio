@@ -88,9 +88,9 @@ function ideaLink(id: string) {
 .profile-header { display: grid; gap: 10px; }
 .profile-bio { margin: 0; color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
 .profile-roles { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.profile-roles li { border-radius: var(--kollio-radius-pill); padding: 4px 12px; background: var(--ui-bg-accented); font-size: var(--kollio-text-caption); font-weight: 600; }
+.profile-roles li { border-radius: var(--kollio-radius-pill); padding: 4px 12px; background: var(--ui-bg-accented); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
 .profile-section { display: grid; gap: 10px; }
-.profile-section h2 { margin: 0; font-size: var(--kollio-text-caption); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ui-text-muted); }
+.profile-section h2 { margin: 0; font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-display); letter-spacing: .08em; text-transform: uppercase; color: var(--ui-text-muted); }
 .profile-section ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .profile-section li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; border-bottom: 1px solid var(--ui-border); padding-bottom: 8px; font-size: var(--kollio-text-small); }
 .profile-section li span { color: var(--ui-text-muted); font-size: var(--kollio-text-small); }
