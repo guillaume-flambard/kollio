@@ -13,10 +13,11 @@
     "promise": "Des initiatives à impact, ensemble.",
     "settings": "Contexte entreprise",
     "menuOpen": "Ouvrir la navigation",
-    "menuClose": "Fermer la navigation"
+    "menuClose": "Fermer la navigation",
+    "skipToContent": "Aller au contenu"
   },
   "meta": {
-    "title": "Kollio | Des idées aux projets collectifs",
+    "title": "Kollio {'|'} Des idées aux projets collectifs",
     "description": "Confrontez vos idées au réel, faites-les évoluer et réunissez les bonnes personnes."
   },
   "language": {
@@ -25,6 +26,8 @@
   "auth": {
     "signIn": "Se connecter",
     "signOut": "Se déconnecter",
+    "getStarted": "Commencer",
+    "getStartedNote": "Vous vous connectez, puis vous arrivez dans l’espace privé de votre équipe.",
     "pending": "Les inscriptions ouvriront prochainement."
   },
   "hero": {
@@ -50,7 +53,7 @@
   },
   "landing": {
     "meta": {
-      "title": "Kollio | Confrontez vos initiatives au réel",
+      "title": "Kollio {'|'} Confrontez vos initiatives au réel",
       "description": "L’espace privé où votre équipe éprouve ses initiatives, garde la trace de chaque décision et réunit les bonnes personnes."
     },
     "navigation": {
@@ -58,15 +61,13 @@
       "teams": "Équipes",
       "method": "Méthode",
       "security": "Sécurité",
-      "workspace": "Entrer dans mon espace",
-      "demo": "Essayer Kollio"
+      "workspace": "Entrer dans mon espace"
     },
     "hero": {
       "eyebrow": "PENSER ENSEMBLE. CONSTRUIRE ENSEMBLE.",
       "titleLead": "Une initiative mérite plus",
       "titleEmphasis": "qu’une conversation.",
       "description": "Confrontez vos initiatives au réel, gardez la trace de chaque décision et réunissez les bonnes personnes dans un espace privé.",
-      "primaryAction": "Entrer dans mon espace",
       "secondaryAction": "Voir la méthode",
       "leftNote": "Confronté au réel",
       "rightNote": "Chaque pas tracé"
@@ -109,8 +110,7 @@
     },
     "finalCta": {
       "note": "Commencez seul, continuez ensemble.",
-      "title": "Passez de l’intuition à la décision, avec toute votre équipe.",
-      "action": "Entrer dans mon espace"
+      "title": "Passez de l’intuition à la décision, avec toute votre équipe."
     },
     "preview": {
       "label": "Aperçu de l’espace d’initiatives",
@@ -152,7 +152,7 @@
     "languages": "Pensé en français et en anglais."
   },
   "workspace": {
-    "metaTitle": "Espace de travail | Kollio",
+    "metaTitle": "Espace de travail {'|'} Kollio",
     "description": "La mémoire privée des initiatives que votre équipe peut tester, façonner et faire avancer.",
     "ideaLabel": "Initiatives privées",
     "role": {
@@ -343,7 +343,7 @@
       "description": "Actualisez la page pour réessayer."
     },
     "detail": {
-      "metaTitle": "Initiative | Kollio",
+      "metaTitle": "Initiative {'|'} Kollio",
       "back": "Retour aux initiatives",
       "eyebrow": "Initiative originale",
       "pitchTitle": "Description de l’initiative",
@@ -513,7 +513,7 @@
       }
     },
     "deposit": {
-      "metaTitle": "Déposer une initiative | Kollio",
+      "metaTitle": "Déposer une initiative {'|'} Kollio",
       "title": "Déposer une initiative",
       "description": "Un titre, un pitch, et l’analyse des contraintes démarre aussitôt.",
       "titleLabel": "Titre de l’initiative",
@@ -555,7 +555,7 @@
       "product": "Produit"
     },
     "profile": {
-      "metaTitle": "Profil | Kollio",
+      "metaTitle": "Profil {'|'} Kollio",
       "back": "Retour",
       "rolesTitle": "Rôles",
       "ownedTitle": "Initiatives déposées",

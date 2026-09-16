@@ -13,10 +13,11 @@
     "promise": "Initiatives with impact, together.",
     "settings": "Company context",
     "menuOpen": "Open navigation",
-    "menuClose": "Close navigation"
+    "menuClose": "Close navigation",
+    "skipToContent": "Skip to content"
   },
   "meta": {
-    "title": "Kollio | From ideas to shared projects",
+    "title": "Kollio {'|'} From ideas to shared projects",
     "description": "Test your ideas against reality, develop them and bring the right people together."
   },
   "language": {
@@ -25,6 +26,8 @@
   "auth": {
     "signIn": "Sign in",
     "signOut": "Sign out",
+    "getStarted": "Get started",
+    "getStartedNote": "You sign in, then land in your team’s private workspace.",
     "pending": "Registration will open soon."
   },
   "hero": {
@@ -50,7 +53,7 @@
   },
   "landing": {
     "meta": {
-      "title": "Kollio | Test your initiatives against reality",
+      "title": "Kollio {'|'} Test your initiatives against reality",
       "description": "The private workspace where your team tests its initiatives, keeps a record of every decision and brings the right people together."
     },
     "navigation": {
@@ -58,15 +61,13 @@
       "teams": "Teams",
       "method": "Method",
       "security": "Security",
-      "workspace": "Enter my workspace",
-      "demo": "Try Kollio"
+      "workspace": "Enter my workspace"
     },
     "hero": {
       "eyebrow": "THINK TOGETHER. BUILD TOGETHER.",
       "titleLead": "An initiative deserves more than",
       "titleEmphasis": "a conversation.",
       "description": "Test your initiatives against reality, keep a record of every decision and bring the right people together in a private space.",
-      "primaryAction": "Enter my workspace",
       "secondaryAction": "See the method",
       "leftNote": "Tested against reality",
       "rightNote": "Every step recorded"
@@ -109,8 +110,7 @@
     },
     "finalCta": {
       "note": "Start alone, continue together.",
-      "title": "From instinct to decision, with your whole team.",
-      "action": "Enter my workspace"
+      "title": "From instinct to decision, with your whole team."
     },
     "preview": {
       "label": "A preview of the initiative workspace",
@@ -152,7 +152,7 @@
     "languages": "Built for French and English."
   },
   "workspace": {
-    "metaTitle": "Workspace | Kollio",
+    "metaTitle": "Workspace {'|'} Kollio",
     "description": "A private record of the initiatives your team can test, shape and move forward.",
     "ideaLabel": "Private initiatives",
     "role": {
@@ -343,7 +343,7 @@
       "description": "Refresh the page to try again."
     },
     "detail": {
-      "metaTitle": "Initiative | Kollio",
+      "metaTitle": "Initiative {'|'} Kollio",
       "back": "Back to initiatives",
       "eyebrow": "Original initiative",
       "pitchTitle": "Initiative description",
@@ -513,7 +513,7 @@
       }
     },
     "deposit": {
-      "metaTitle": "Deposit an initiative | Kollio",
+      "metaTitle": "Deposit an initiative {'|'} Kollio",
       "title": "Deposit an initiative",
       "description": "Title plus pitch, and the constraint analysis starts immediately.",
       "titleLabel": "Initiative title",
@@ -555,7 +555,7 @@
       "product": "Product"
     },
     "profile": {
-      "metaTitle": "Profile | Kollio",
+      "metaTitle": "Profile {'|'} Kollio",
       "back": "Back",
       "rolesTitle": "Roles",
       "ownedTitle": "Initiatives deposited",

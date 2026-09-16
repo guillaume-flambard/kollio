@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     public: { authEnabled: false },
   },
   i18n: {
+    baseUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://kollio.memolabs.dev',
     defaultLocale: 'fr', strategy: 'prefix_except_default',
     locales: [{ code: 'fr', language: 'fr-FR', name: 'French', file: 'fr.json' },
               { code: 'en', language: 'en-GB', name: 'English', file: 'en.json' }],
@@ -33,7 +34,7 @@ export default defineNuxtConfig({
   },
   fonts: { families: [
     { name: 'Bricolage Grotesque', provider: 'google', weights: [600, 700, 800] },
-    { name: 'Geist', provider: 'google', weights: [400, 500, 600] },
+    { name: 'Geist', provider: 'google', weights: [400, 500, 600, 700] },
     { name: 'Geist Mono', provider: 'google', weights: [400] },
     { name: 'Caveat', provider: 'google', weights: [500, 600] },
   ] },
