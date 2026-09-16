@@ -8,7 +8,7 @@ Earlier Collective.work-inspired mockups and the blue editorial direction are su
 
 ## Non negotiable
 
-This direction is the reference. Every later screen **extends** it; nothing replaces it, and no page introduces its own palette, card style or spacing scale. All styling goes through the canonical tokens in `packages/ui/src/tokens.css` and the shared theme in `packages/ui/src/theme.ts`. A page never writes a literal colour or a variable name that does not exist in the token file (the fallback would silently win, and the drift would be invisible). Issues #69 and #70 close the current drift and add the automated guard.
+This direction is the reference. Every later screen **extends** it; nothing replaces it, and no page introduces its own palette, card style or spacing scale. All styling goes through the canonical tokens in `packages/ui/src/tokens.css` and the shared theme in `packages/ui/src/theme.ts`. A page never writes a literal colour, a spacing length, a font weight, a line height, or a variable name that does not exist in the token file (the fallback would silently win, and the drift would be invisible). Issues #69 and #70 close the current drift and add the automated guard.
 
 ## Brand mark
 
@@ -23,7 +23,8 @@ The Kollio mark is an open lowercase `k` built from two rounded gestures meeting
 
 ## Typography
 
-- Interface and headings: Geist, weights 400 to 700.
+- Interface and headings: Geist. The weight scale is closed at the four weights the loaded families actually provide, and no other value is valid: `--kollio-weight-regular` 400, `--kollio-weight-medium` 500, `--kollio-weight-strong` 600, `--kollio-weight-display` 700. A screen never writes a bare number for `font-weight`: a weight the typefaces do not provide is silently resolved to a different face, so the drift stays invisible.
+- Line heights come from the named scale: `--kollio-leading-display` 1.04, `--kollio-leading-heading` 1.2, `--kollio-leading-body` 1.6, `--kollio-leading-relaxed` 1.72. A screen never writes a bare number for `line-height`.
 - Data and hashes: Geist Mono.
 - Fallback: `system-ui` and `monospace` respectively.
 
@@ -49,6 +50,12 @@ Dark-mode values remain available as an alternative theme and must preserve the 
 - Fully rounded geometry: avatars and compact status dots only.
 - Borders: thin and neutral.
 - Shadows: soft, offset, and reserved for overlays or raised controls.
+
+## Spacing
+
+- The scale is closed and named: `--kollio-space-xs` 4, `--kollio-space-sm` 8, `--kollio-space-md` 14, `--kollio-space-lg` 22, `--kollio-space-xl` 32, `--kollio-space-2xl` 48, `--kollio-space-3xl` 64 and `--kollio-space-4xl` 96, in px.
+- Vertical rhythm between sections takes the upper steps; spacing inside a block takes the lower ones.
+- A screen never writes a bare pixel value for `margin`, `padding`, `gap`, or an inset. If a needed step is missing, the scale is extended in `tokens.css` rather than improvised at the call site. Responsive spacing may scale over the named steps with `clamp()`.
 
 ## Signature active state
 
