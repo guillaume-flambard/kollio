@@ -174,7 +174,7 @@ test.describe('A11Y-TMP explorer', () => {
       })
       const contrast = await measure(page, [
         '.ideas-explorer-header p', '.explorer-row-pitch', '.explorer-row-topics',
-        '.explorer-row-realism', '.ideas-filter-rail button', '.ideas-create-action',
+        '.ideas-filter-rail button', '.ideas-create-action',
         '.ideas-results-pagination a', '.ideas-results-header',
         '.idea-preview-content > p', '.idea-preview-roles small',
       ])
@@ -259,20 +259,16 @@ test.describe('A11Y-TMP deposit', () => {
     await page.getByLabel(/titre|title/i).first().fill('Velos en libre-service')
     await page.getByLabel(/pitch|resume/i).first().fill('Une flotte cooperative.')
     await page.getByRole('button', { name: /d|soumettre|poser/i }).first().click()
-    await expect(page.getByText('62', { exact: true })).toBeVisible({ timeout: 15000 }).catch(() => null)
     const verdict = await page.evaluate(() => {
-      const score = document.querySelector('.deposit-score')
       const section = document.querySelector('.deposit-verdict')
       return {
-        scoreText: score?.textContent?.trim() ?? null,
-        scoreLabelled: Boolean(score?.getAttribute('aria-label') || score?.closest('[aria-label]')),
         liveRegion: section?.getAttribute('aria-live') ?? null,
         verdictHeading: [...document.querySelectorAll('.deposit-verdict h2')].map(h => (h as HTMLElement).innerText?.trim().slice(0, 60)),
         errorAlert: document.querySelector('.deposit-error')?.getAttribute('role') ?? null,
       }
     }).catch(() => ({ skipped: true }))
     const contrast = await measure(page, [
-      '.deposit-header p', '.deposit-field', '.deposit-submit', '.deposit-score', '.deposit-basis',
+      '.deposit-header p', '.deposit-field', '.deposit-submit', '.deposit-basis',
     ])
     log({ test: 'deposit-fr', ...data, verdict, contrast })
     expect(data.submitDisabledInitially).toBe(true)

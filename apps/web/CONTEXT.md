@@ -5,7 +5,7 @@ The Nuxt application. The product surface where owners deposit ideas, contributo
 ## Language
 
 **Explorer**:
-The discovery feed of ideas, filterable by stage, sought role, realism score, and domain. Where a contributor finds an idea to join.
+The discovery feed of ideas, filterable by stage, sought role, and domain. Where a contributor finds an idea to join.
 _Avoid_: Feed alone, marketplace, directory
 
 **IdeaDetail**:

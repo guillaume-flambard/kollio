@@ -127,8 +127,7 @@ test.describe('workspace navigation adapts', () => {
     await expect(dialog).toBeVisible()
     await expect(dialog.getByRole('link', { name: 'Initiatives' })).toBeVisible()
     await expect(dialog.getByRole('link', { name: 'Contexte entreprise' })).toBeVisible()
-    await expect(dialog.getByText('Ateliers')).toBeVisible()
-    await expect(dialog.locator('[aria-disabled="true"]')).toHaveCount(5)
+    await expect(dialog.locator('[aria-disabled="true"]')).toHaveCount(0)
     await expectNoHorizontalOverflow(page)
   })
 

@@ -55,7 +55,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(timeline.getByText('Propriétaire').first()).toBeVisible()
       await expect(timeline.locator('[data-line="branch"]')).toHaveCount(1)
       await expect(timeline.getByText(messages.ideas.iterations.pending)).toBeVisible()
-      await expect(timeline.getByText(messages.ideas.iterations.analysisResolved.replace('{score}', '62'))).toBeVisible()
+      await expect(timeline.getByText(messages.ideas.iterations.analysisResolved)).toBeVisible()
       await expect(timeline.getByText(messages.ideas.iterations.analysisRunning)).toBeVisible()
     })
   })

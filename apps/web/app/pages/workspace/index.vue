@@ -34,10 +34,6 @@ const activeStage = computed(() => {
   return validStages.includes(stage as typeof validStages[number]) ? stage : undefined
 })
 const activeSoughtRole = computed(() => typeof route.query.role === 'string' ? route.query.role : undefined)
-const activeRealism = computed(() => {
-  const value = Number(route.query.realism_min)
-  return Number.isInteger(value) && value >= 1 && value <= 99 ? value : undefined
-})
 
 const { data: ideaPage, status, error, refresh } = await useAsyncData(
   'workspace-ideas',
@@ -50,11 +46,10 @@ const { data: ideaPage, status, error, refresh } = await useAsyncData(
         ...(queryText.value ? { q: queryText.value } : {}),
         ...(activeStage.value ? { stage: activeStage.value } : {}),
         ...(activeSoughtRole.value ? { sought_role: activeSoughtRole.value } : {}),
-        ...(activeRealism.value ? { realism_min: activeRealism.value } : {}),
       },
     })
   },
-  { watch: [activeWorkspace, currentPage, queryText, activeStage, activeSoughtRole, activeRealism] },
+  { watch: [activeWorkspace, currentPage, queryText, activeStage, activeSoughtRole] },
 )
 
 const selectedIdea = computed(() => ideaPage.value?.items.find(idea => idea.id === selectedIdeaId.value) ?? ideaPage.value?.items[0])
@@ -130,8 +125,8 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
       <section class="ideas-explorer-shell" :aria-label="t('ideas.explorer.library')">
         <aside class="ideas-filter-rail">
           <nav :aria-label="t('ideas.explorer.explore')">
-            <button type="button" :aria-pressed="!activeStage && !activeSoughtRole && !activeRealism" @click="replaceFilters({ stage: undefined, role: undefined, realism_min: undefined })">
-              <KollioSketchAnnotation :active="!activeStage && !activeSoughtRole && !activeRealism" kind="loop">
+            <button type="button" :aria-pressed="!activeStage && !activeSoughtRole" @click="replaceFilters({ stage: undefined, role: undefined })">
+              <KollioSketchAnnotation :active="!activeStage && !activeSoughtRole" kind="loop">
                 <span class="filter-annotation-content"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z" /></svg>{{ t('ideas.explorer.forYou') }}</span>
               </KollioSketchAnnotation>
             </button>
@@ -149,11 +144,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
           <select class="rail-select" :value="activeSoughtRole ?? ''" :aria-label="t('ideas.detail.team.soughtTitle')" @change="replaceFilters({ role: ($event.target as HTMLSelectElement).value || undefined })">
             <option value="">{{ t('ideas.explorer.allRoles') }}</option>
             <option v-for="role in teamRoles" :key="role" :value="role">{{ t(`ideas.function.${role}`) }}</option>
-          </select>
-          <hr><p>{{ t('ideas.explorer.realism.title') }}</p>
-          <button type="button" class="domain-filter" :aria-pressed="activeRealism != null" @click="replaceFilters({ realism_min: activeRealism != null ? undefined : '60' })">
-            <span>{{ t('ideas.explorer.realism.grounded') }}</span><small>{{ t('ideas.explorer.realism.band') }}</small>
-          </button>
+            </select>
         </aside>
 
         <main class="ideas-results">
@@ -176,7 +167,6 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
               :contributor-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
               :avatar-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
               :expertise-label="idea.collaborators?.[0]?.roles[0] ? t(`ideas.role.${idea.collaborators[0].roles[0]}`) : undefined"
-              :realism-label="idea.realism_score != null ? t('ideas.explorer.prism', { score: idea.realism_score }) : undefined"
               :roles-label="idea.sought_roles?.length ? idea.sought_roles.map(role => t(`ideas.function.${role}`)).join(' · ') : undefined"
               @select="selectIdea(idea)"
             />

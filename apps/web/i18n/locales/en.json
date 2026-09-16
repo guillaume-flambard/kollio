@@ -3,12 +3,6 @@
   "navigation": {
     "label": "Main navigation",
     "ideas": "Initiatives",
-    "workshops": "Workshops",
-    "community": "Community",
-    "resources": "Resources",
-    "search": "Search",
-    "notifications": "Notifications",
-    "upcoming": "Upcoming features",
     "workspace": "Workspace",
     "promise": "Initiatives with impact, together.",
     "settings": "Company context",
@@ -95,7 +89,7 @@
       "capture": {
         "number": "01",
         "title": "Deposit the initiative.",
-        "description": "A title, a pitch. Constraint analysis starts right away and returns a realism score."
+        "description": "A title, a pitch. Constraint analysis starts right away."
       },
       "challenge": {
         "number": "02",
@@ -320,14 +314,7 @@
       "closePreview": "Close preview",
       "noResults": "No initiatives match these filters.",
       "activity": "Recent activity",
-      "prism": "Score {score}",
-      "allRoles": "All roles",
-      "realism": {
-        "title": "Realism",
-        "grounded": "Grounded initiatives",
-        "badge": "Score {score}",
-        "band": "60+"
-      }
+      "allRoles": "All roles"
     },
     "stage": {
       "seed": "Seed",
@@ -536,7 +523,7 @@
         "deciding": "Deciding, and flagging disagreements",
         "more": "+{count} more"
       },
-      "resolvedTitle": "Realism score",
+      "resolvedTitle": "Analysis complete",
       "abstainedTitle": "Analysis waiting for evidence",
       "abstainedBody": "There is no evidence yet. Enrich the initiative and add some: each constraint explains what would unlock its score.",
       "openIdea": "Open the initiative",
@@ -579,7 +566,7 @@
       "rejected": "Rejected",
       "branch": "Alternative {name}",
       "analysisRunning": "Analysis in progress",
-      "analysisResolved": "Score {score}",
+      "analysisResolved": "Analysis complete",
       "analysisAbstained": "Awaiting evidence",
       "propose": "Propose a change",
       "proposeHint": "Your proposal opens an alternative line; the owner accepts or rejects it.",

@@ -156,9 +156,6 @@ const constraintLabels: Record<string, string> = {
           <p v-if="analysisState === 'abstained'" class="deposit-abstained">
             {{ t('ideas.deposit.abstainedBody') }}
           </p>
-          <p v-else class="deposit-score">
-            {{ deposited?.analysis?.realism_score }}
-          </p>
           <dl class="deposit-constraints">
             <div v-for="[key, dimension] in constraints" :key="key" class="deposit-constraint">
               <dt>{{ t(constraintLabels[key] ?? key) }}</dt>
@@ -202,7 +199,6 @@ const constraintLabels: Record<string, string> = {
 .deposit-submit:disabled { opacity: .55; cursor: not-allowed; }
 .deposit-error { color: var(--ui-error); font-size: var(--kollio-text-small); }
 .deposit-verdict { display: grid; gap: 14px; }
-.deposit-score { font-size: var(--kollio-text-headline); font-weight: var(--kollio-weight-display); }
 .deposit-constraints { display: grid; gap: 10px; margin: 0; }
 .deposit-constraint { display: grid; gap: 4px; }
 .deposit-constraint dd { margin: 0; font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); }

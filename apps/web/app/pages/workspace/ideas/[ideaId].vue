@@ -223,7 +223,7 @@ function authorLabel(id: string) {
 function analysisLabel(analysis: IterationResponse['analysis']) {
   if (!analysis) return undefined
   if (analysis.state === 'resolved' && analysis.realism_score != null)
-    return t('ideas.iterations.analysisResolved', { score: analysis.realism_score })
+    return t('ideas.iterations.analysisResolved')
   if (analysis.state === 'abstained') return t('ideas.iterations.analysisAbstained')
   if (analysis.state === 'running') return t('ideas.iterations.analysisRunning')
   return undefined

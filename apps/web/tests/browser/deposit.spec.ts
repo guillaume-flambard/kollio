@@ -116,7 +116,6 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.getByLabel(deposit.pitchLabel).fill('Une flotte coopérative.')
       await page.getByRole('button', { name: deposit.submit, exact: true }).click()
       await expect(page.getByRole('heading', { name: deposit.resolvedTitle, exact: true })).toBeVisible()
-      await expect(page.getByText('62', { exact: true })).toBeVisible()
       await expect(page.getByRole('link', { name: deposit.openIdea, exact: true })).toBeVisible()
     })
 

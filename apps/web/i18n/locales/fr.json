@@ -3,12 +3,6 @@
   "navigation": {
     "label": "Navigation principale",
     "ideas": "Initiatives",
-    "workshops": "Ateliers",
-    "community": "Communauté",
-    "resources": "Ressources",
-    "search": "Recherche",
-    "notifications": "Notifications",
-    "upcoming": "Fonctionnalités à venir",
     "workspace": "Espace",
     "promise": "Des initiatives à impact, ensemble.",
     "settings": "Contexte entreprise",
@@ -95,7 +89,7 @@
       "capture": {
         "number": "01",
         "title": "Déposez l’initiative.",
-        "description": "Un titre, un pitch. L’analyse des contraintes démarre aussitôt et rend un score de réalisme."
+        "description": "Un titre, un pitch. L’analyse des contraintes démarre aussitôt."
       },
       "challenge": {
         "number": "02",
@@ -320,14 +314,7 @@
       "closePreview": "Fermer l’aperçu",
       "noResults": "Aucune initiative ne correspond à ces critères.",
       "activity": "Activité récente",
-      "prism": "Score {score}",
-      "allRoles": "Tous les rôles",
-      "realism": {
-        "title": "Réalisme",
-        "grounded": "Initiatives ancrées",
-        "badge": "Score {score}",
-        "band": "60+"
-      }
+      "allRoles": "Tous les rôles"
     },
     "stage": {
       "seed": "Graine",
@@ -536,7 +523,7 @@
         "deciding": "Décision, et signalement des désaccords",
         "more": "+{count} de plus"
       },
-      "resolvedTitle": "Score de réalisme",
+      "resolvedTitle": "Analyse terminée",
       "abstainedTitle": "Analyse en attente de preuves",
       "abstainedBody": "Il n'y a pas encore de preuve. Enrichissez l'initiative puis ajoutez-en : chaque contrainte indique ce qui ferait basculer sa note.",
       "openIdea": "Ouvrir l’initiative",
@@ -579,7 +566,7 @@
       "rejected": "Refusée",
       "branch": "Alternative {name}",
       "analysisRunning": "Analyse en cours",
-      "analysisResolved": "Score {score}",
+      "analysisResolved": "Analyse terminée",
       "analysisAbstained": "En attente de preuves",
       "propose": "Proposer une évolution",
       "proposeHint": "Votre proposition ouvre une ligne alternative ; le porteur l’accepte ou la refuse.",
