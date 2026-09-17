@@ -237,6 +237,161 @@ export type BranchResponse = {
 };
 
 /**
+ * ChallengeCoverageResponse
+ */
+export type ChallengeCoverageResponse = {
+    /**
+     * Covered
+     */
+    covered: Array<'unsupported_assumption' | 'contradictory_evidence' | 'hidden_dependency' | 'failure_mode' | 'causal_claim' | 'missing_success_criteria'>;
+    /**
+     * Uncovered
+     */
+    uncovered: Array<'unsupported_assumption' | 'contradictory_evidence' | 'hidden_dependency' | 'failure_mode' | 'causal_claim' | 'missing_success_criteria'>;
+};
+
+/**
+ * ChallengeFindingCreate
+ */
+export type ChallengeFindingCreate = {
+    /**
+     * Kind
+     */
+    kind: 'unsupported_assumption' | 'contradictory_evidence' | 'hidden_dependency' | 'failure_mode' | 'causal_claim' | 'missing_success_criteria';
+    /**
+     * Severity
+     */
+    severity: 'low' | 'medium' | 'high';
+    /**
+     * Detail
+     */
+    detail: string;
+    /**
+     * Contribution Id
+     */
+    contribution_id?: string | null;
+};
+
+/**
+ * ChallengeFindingResponse
+ */
+export type ChallengeFindingResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Run Id
+     */
+    run_id: string;
+    /**
+     * Kind
+     */
+    kind: 'unsupported_assumption' | 'contradictory_evidence' | 'hidden_dependency' | 'failure_mode' | 'causal_claim' | 'missing_success_criteria';
+    /**
+     * Severity
+     */
+    severity: 'low' | 'medium' | 'high';
+    /**
+     * Detail
+     */
+    detail: string;
+    /**
+     * Origin
+     */
+    origin: 'human' | 'critic';
+    /**
+     * Status
+     */
+    status: 'proposed' | 'confirmed' | 'dismissed';
+    /**
+     * Contribution Id
+     */
+    contribution_id?: string | null;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
+ * ChallengeListResponse
+ */
+export type ChallengeListResponse = {
+    /**
+     * Runs
+     */
+    runs: Array<ChallengeRunResponse>;
+    /**
+     * Findings
+     */
+    findings: Array<ChallengeFindingResponse>;
+    coverage: ChallengeCoverageResponse;
+};
+
+/**
+ * ChallengeRunDetailResponse
+ */
+export type ChallengeRunDetailResponse = {
+    run: ChallengeRunResponse;
+    /**
+     * Findings
+     */
+    findings: Array<ChallengeFindingResponse>;
+    coverage: ChallengeCoverageResponse;
+};
+
+/**
+ * ChallengeRunResponse
+ */
+export type ChallengeRunResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Option Id
+     */
+    option_id: string;
+    /**
+     * Status
+     */
+    status: 'OPEN' | 'RUNNING' | 'COMPLETED' | 'FAILED';
+    /**
+     * Opened By
+     */
+    opened_by: string;
+    /**
+     * Model
+     */
+    model?: string | null;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
  * ClusterCreate
  */
 export type ClusterCreate = {
@@ -946,6 +1101,16 @@ export type ExperimentStatusBody = {
      * Status
      */
     status: string;
+};
+
+/**
+ * FindingResolutionRequest
+ */
+export type FindingResolutionRequest = {
+    /**
+     * Resolution
+     */
+    resolution: 'confirmed' | 'dismissed';
 };
 
 /**
@@ -3736,6 +3901,254 @@ export type ConfirmContributionResponses = {
 };
 
 export type ConfirmContributionResponse = ConfirmContributionResponses[keyof ConfirmContributionResponses];
+
+export type ListChallengesData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges';
+};
+
+export type ListChallengesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListChallengesError = ListChallengesErrors[keyof ListChallengesErrors];
+
+export type ListChallengesResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChallengeListResponse;
+};
+
+export type ListChallengesResponse = ListChallengesResponses[keyof ListChallengesResponses];
+
+export type OpenChallengeData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges';
+};
+
+export type OpenChallengeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type OpenChallengeError = OpenChallengeErrors[keyof OpenChallengeErrors];
+
+export type OpenChallengeResponses = {
+    /**
+     * Successful Response
+     */
+    201: ChallengeRunResponse;
+};
+
+export type OpenChallengeResponse = OpenChallengeResponses[keyof OpenChallengeResponses];
+
+export type GetChallengeData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}';
+};
+
+export type GetChallengeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetChallengeError = GetChallengeErrors[keyof GetChallengeErrors];
+
+export type GetChallengeResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChallengeRunDetailResponse;
+};
+
+export type GetChallengeResponse = GetChallengeResponses[keyof GetChallengeResponses];
+
+export type RecordChallengeFindingData = {
+    body: ChallengeFindingCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings';
+};
+
+export type RecordChallengeFindingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RecordChallengeFindingError = RecordChallengeFindingErrors[keyof RecordChallengeFindingErrors];
+
+export type RecordChallengeFindingResponses = {
+    /**
+     * Successful Response
+     */
+    201: ChallengeFindingResponse;
+};
+
+export type RecordChallengeFindingResponse = RecordChallengeFindingResponses[keyof RecordChallengeFindingResponses];
+
+export type ResolveChallengeFindingData = {
+    body: FindingResolutionRequest;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+        /**
+         * Finding Id
+         */
+        finding_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings/{finding_id}/resolution';
+};
+
+export type ResolveChallengeFindingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ResolveChallengeFindingError = ResolveChallengeFindingErrors[keyof ResolveChallengeFindingErrors];
+
+export type ResolveChallengeFindingResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChallengeFindingResponse;
+};
+
+export type ResolveChallengeFindingResponse = ResolveChallengeFindingResponses[keyof ResolveChallengeFindingResponses];
+
+export type CompleteChallengeData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/completion';
+};
+
+export type CompleteChallengeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CompleteChallengeError = CompleteChallengeErrors[keyof CompleteChallengeErrors];
+
+export type CompleteChallengeResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChallengeRunResponse;
+};
+
+export type CompleteChallengeResponse = CompleteChallengeResponses[keyof CompleteChallengeResponses];
 
 export type ListOptionsData = {
     body?: never;

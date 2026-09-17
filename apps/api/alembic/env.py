@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from alembic import context
 from src.modules.branches.adapters import postgres as branches_postgres  # noqa: F401
+from src.modules.challenge.adapters import postgres as challenge_postgres  # noqa: F401
 from src.modules.company_context.adapters import postgres as company_context_postgres  # noqa: F401
 from src.modules.constraint_analysis.adapters import postgres as analysis_postgres  # noqa: F401
 from src.modules.converge.adapters import postgres as converge_postgres  # noqa: F401

@@ -2739,6 +2739,482 @@
         }
       }
     },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges": {
+      "get": {
+        "tags": [
+          "challenge"
+        ],
+        "summary": "List Option Challenges",
+        "operationId": "list_challenges",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Option Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "challenge"
+        ],
+        "summary": "Open Option Challenge",
+        "operationId": "open_challenge",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Option Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeRunResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}": {
+      "get": {
+        "tags": [
+          "challenge"
+        ],
+        "summary": "Read Option Challenge",
+        "operationId": "get_challenge",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Option Id"
+            }
+          },
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeRunDetailResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings": {
+      "post": {
+        "tags": [
+          "challenge"
+        ],
+        "summary": "Record Challenge Finding",
+        "operationId": "record_challenge_finding",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Option Id"
+            }
+          },
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChallengeFindingCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeFindingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings/{finding_id}/resolution": {
+      "post": {
+        "tags": [
+          "challenge"
+        ],
+        "summary": "Resolve Challenge Finding",
+        "operationId": "resolve_challenge_finding",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Option Id"
+            }
+          },
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "finding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finding Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindingResolutionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeFindingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/completion": {
+      "post": {
+        "tags": [
+          "challenge"
+        ],
+        "summary": "Complete Option Challenge",
+        "operationId": "complete_challenge",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "option_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Option Id"
+            }
+          },
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChallengeRunResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/workspaces/{workspace_id}/decision-spaces/{space_id}/options": {
       "get": {
         "tags": [
@@ -4515,6 +4991,322 @@
         ],
         "title": "BranchResponse"
       },
+      "ChallengeCoverageResponse": {
+        "properties": {
+          "covered": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "unsupported_assumption",
+                "contradictory_evidence",
+                "hidden_dependency",
+                "failure_mode",
+                "causal_claim",
+                "missing_success_criteria"
+              ]
+            },
+            "type": "array",
+            "title": "Covered"
+          },
+          "uncovered": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "unsupported_assumption",
+                "contradictory_evidence",
+                "hidden_dependency",
+                "failure_mode",
+                "causal_claim",
+                "missing_success_criteria"
+              ]
+            },
+            "type": "array",
+            "title": "Uncovered"
+          }
+        },
+        "type": "object",
+        "required": [
+          "covered",
+          "uncovered"
+        ],
+        "title": "ChallengeCoverageResponse"
+      },
+      "ChallengeFindingCreate": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "unsupported_assumption",
+              "contradictory_evidence",
+              "hidden_dependency",
+              "failure_mode",
+              "causal_claim",
+              "missing_success_criteria"
+            ],
+            "title": "Kind"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Severity"
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Detail"
+          },
+          "contribution_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contribution Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "severity",
+          "detail"
+        ],
+        "title": "ChallengeFindingCreate"
+      },
+      "ChallengeFindingResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Run Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "unsupported_assumption",
+              "contradictory_evidence",
+              "hidden_dependency",
+              "failure_mode",
+              "causal_claim",
+              "missing_success_criteria"
+            ],
+            "title": "Kind"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "title": "Severity"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "human",
+              "critic"
+            ],
+            "title": "Origin"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "proposed",
+              "confirmed",
+              "dismissed"
+            ],
+            "title": "Status"
+          },
+          "contribution_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contribution Id"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "run_id",
+          "kind",
+          "severity",
+          "detail",
+          "origin",
+          "status",
+          "lang",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ChallengeFindingResponse"
+      },
+      "ChallengeListResponse": {
+        "properties": {
+          "runs": {
+            "items": {
+              "$ref": "#/components/schemas/ChallengeRunResponse"
+            },
+            "type": "array",
+            "title": "Runs"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/ChallengeFindingResponse"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/ChallengeCoverageResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "runs",
+          "findings",
+          "coverage"
+        ],
+        "title": "ChallengeListResponse"
+      },
+      "ChallengeRunDetailResponse": {
+        "properties": {
+          "run": {
+            "$ref": "#/components/schemas/ChallengeRunResponse"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/ChallengeFindingResponse"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "coverage": {
+            "$ref": "#/components/schemas/ChallengeCoverageResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run",
+          "findings",
+          "coverage"
+        ],
+        "title": "ChallengeRunDetailResponse"
+      },
+      "ChallengeRunResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "space_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Space Id"
+          },
+          "option_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Option Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "RUNNING",
+              "COMPLETED",
+              "FAILED"
+            ],
+            "title": "Status"
+          },
+          "opened_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Opened By"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "space_id",
+          "option_id",
+          "status",
+          "opened_by",
+          "lang",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ChallengeRunResponse"
+      },
       "ClusterCreate": {
         "properties": {
           "title": {
@@ -5954,6 +6746,23 @@
           "status"
         ],
         "title": "ExperimentStatusBody"
+      },
+      "FindingResolutionRequest": {
+        "properties": {
+          "resolution": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "dismissed"
+            ],
+            "title": "Resolution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "resolution"
+        ],
+        "title": "FindingResolutionRequest"
       },
       "HTTPValidationError": {
         "properties": {
