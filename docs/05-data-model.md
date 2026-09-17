@@ -88,6 +88,14 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 `id, idea_id, user_id, iteration_id, kind, impact_note, created_at`
 - **Outcome** (résultat mesurable, quand il existe) : `Outcome(id, idea_id, type, value, measured_at)` — c'est le signal rare et précieux (voir `02`).
 
+### Experiment ⇄ Decision Space (le lien additif — étape 8)
+`Experiment` gagne deux colonnes nullables : `decision_space_id` (FK `decision_spaces`, `ON DELETE SET NULL`, indexée) et `option_id` (FK `options`, `ON DELETE SET NULL`, indexée). Le rattachement à l'`Idea` reste en place : rien n'est migré, rien n'est cassé.
+- Un `option_id` n'est posé qu'avec un `decision_space_id` ; l'option doit appartenir à cet espace, et l'espace au workspace de l'idée. Une idée publique (sans workspace) ne peut donc jamais rejoindre un espace.
+- Supprimer l'espace ou l'option met le lien à `NULL` au lieu de détruire l'historique d'expérience.
+- Deux lectures membres : `GET /workspaces/{w}/decision-spaces/{s}/experiments` et `.../learnings`. Le `Learning` est atteint par son expérience (jointure), jamais rattaché directement à l'espace.
+- Aucun backfill : deviner un espace pour une expérience existante inventerait une décision que personne n'a prise.
+- Voir `openspec/changes/link-experiments-to-spaces/` et l'issue #116.
+
 ### CompanyContext (contexte entreprise, par workspace)
 - `CompanyProfile(workspace_id PK, name, description, business_model, products_services, customer_segments, markets, structure, created_at, updated_at)` — une seule fiche par workspace.
 - `CompanyObjective(id, workspace_id, title, state(active|archived), priority, created_at, updated_at)` — objectifs évolutifs.

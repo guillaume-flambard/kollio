@@ -4,7 +4,7 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 
 ## Vocabulary in transition
 
-`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 6 added the Decision Record (see Decision records below), step 7 added scenario analysis with a deterministic sensitivity read (see Scenario analysis below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
+`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 6 added the Decision Record (see Decision records below), step 7 added scenario analysis with a deterministic sensitivity read (see Scenario analysis below), step 8 linked experiments to spaces so a Space reaches its own Outcomes and Learnings while the initiative path stays intact (see Experiment loop and the space link below), and the matching vocabulary is frozen rather than extended.
 
 ## Language
 
@@ -249,3 +249,21 @@ _Avoid_: Scenario (the level), case, variant, projection
 **Sensitivity**:
 The answer to what would change the preference, computed by scanning the declared points: per variable, the interval where the criterion flips plus the interpolated crossing, or `beyond_declared_range` with the direction the metric travels, or `insufficient_points`. Variables rank by the largest absolute implied slope. Informational: it gates nothing and never returns a predicted value.
 _Avoid_: Forecast, prediction, projection, estimate
+
+### Experiment loop and the space link
+
+**Experiment**:
+A real-world test run after a choice: a title, a hypothesis, a success metric and an optional baseline and target. An experiment belongs to an Idea (its original home) and MAY also carry a `decision_space_id` and an `option_id`, which is what lets a Decision Space reach its own Outcomes and Learnings. The link is additive: an unlinked experiment behaves exactly as before, and a linked one keeps its initiative path too.
+_Avoid_: Test (too vague), trial, simulation (which is `ScenarioRun`)
+
+**ExperimentOutcome**:
+One recorded result of an experiment: a metric, a value, an optional unit and observed date, plus a comment or qualitative note.
+_Avoid_: Result (as a vague noun), measurement, KPI
+
+**Learning**:
+The human-confirmed knowledge an experiment produced: a text a person confirms, and which never returns to draft. Confirmation embeds it for reuse and its provenance carries the workspace, the idea and the experiment. A Learning is reached through its experiment, never directly from a Space.
+_Avoid_: Insight, takeaway, conclusion
+
+**Experiment space link**:
+The optional pair a Decision Space sees its tests through. An `option_id` is only ever set together with a `decision_space_id`, both ends belong to the idea's workspace, and the option must belong to that space. Deleting a Space or an Option nulls the link rather than destroying experiment history. No backfill: inferring a space for an existing experiment would invent a decision nobody made.
+_Avoid_: Parent (the idea is still the parent), re-parent, migration link
