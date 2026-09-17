@@ -106,6 +106,78 @@
     "notFound": {
       "title": "This decision space was not found",
       "description": "It does not exist in this workspace, or it is not reachable with your account."
+    },
+    "explore": {
+      "loadFailed": "The branches could not be loaded. Try again in a moment.",
+      "branches": {
+        "title": "Exploration branches",
+        "create": "Create a branch",
+        "empty": "No branch yet. Create yours to explore this question with your own tools.",
+        "byline": "Created by {name} · on {date}"
+      },
+      "branch": {
+        "form": {
+          "title": "New exploration branch",
+          "name": "Title",
+          "namePlaceholder": "E.g.: what the September test taught us",
+          "nameRequired": "The title is required.",
+          "summary": "Raw material",
+          "summaryHint": "Notes, AI tool output, links, excerpts: none of it enters the shared reasoning before it is proposed and confirmed.",
+          "visibility": "Visibility",
+          "submit": "Create the branch",
+          "submitting": "Creating…",
+          "failed": "The branch could not be created. Try again in a moment."
+        }
+      },
+      "visibility": {
+        "private": "Private",
+        "shared": "Shared"
+      },
+      "contributions": {
+        "title": "Contributions",
+        "intro": "A branch stays private and raw. A contribution enters the shared reasoning of the team.",
+        "pending": "Awaiting confirmation",
+        "pendingEmpty": "Nothing awaiting confirmation.",
+        "confirmed": "Shared reasoning",
+        "confirmedEmpty": "No confirmed contribution yet.",
+        "propose": "Propose a contribution",
+        "forBranch": "From the branch {name}",
+        "kind": "Kind",
+        "kinds": {
+          "idea": "Idea",
+          "claim": "Claim",
+          "evidence": "Evidence",
+          "objection": "Objection",
+          "constraint": "Constraint"
+        },
+        "titleLabel": "Title",
+        "titlePlaceholder": "E.g.: churn does not follow price",
+        "titleRequired": "The title is required.",
+        "body": "Detail",
+        "bodyPlaceholder": "What the contribution claims, and on what.",
+        "source": "Source",
+        "sourcePlaceholder": "Link, document or conversation the material comes from.",
+        "toolModel": "Tool or model",
+        "toolModelPlaceholder": "E.g.: ChatGPT, Claude, web search.",
+        "submit": "Propose",
+        "submitting": "Sending…",
+        "failed": "The contribution could not be proposed. Try again in a moment.",
+        "confirm": "Confirm",
+        "confirming": "Confirming…",
+        "confirmFailed": "The contribution could not be confirmed. Try again in a moment.",
+        "status": {
+          "suggested": "Awaiting",
+          "confirmed": "Confirmed"
+        }
+      },
+      "provenance": {
+        "author": "Author",
+        "branch": "Branch",
+        "source": "Source",
+        "tool": "Tool or model",
+        "added": "Added on",
+        "none": "Not given"
+      }
     }
   },
   "meta": {

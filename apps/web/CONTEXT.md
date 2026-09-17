@@ -43,3 +43,15 @@ _Avoid_: Home, dashboard, feed
 **SpaceShell**:
 The frame of one Decision Space at `/workspace/decision-spaces/[spaceId]`: the question, its facts and its status, the six section routes (Explore, Converge, Options, Decision, Experiment, Learning) and the transitions the lifecycle permits from the current status. A section whose capability has not shipped says what will live there.
 _Avoid_: Tabs (the sections are routes, each addressable), detail page, workspace
+
+**Branch**:
+A container of raw exploration material inside one Decision Space, private to its creator or shared with the Space. Nothing in a Branch counts as the Space's reasoning until a Contribution is proposed from it and a human confirms it.
+_Avoid_: Thread, draft, note, document
+
+**Contribution**:
+An atomic piece of reasoning promoted from Branch material into the Space's shared reasoning: an idea, a claim, evidence, an objection or a constraint. It carries its author, Branch, source, tool/model and timestamp.
+_Avoid_: Post, comment, card, item
+
+**Explore**:
+The section at `/workspace/decision-spaces/[spaceId]/explore` where each participant explores independently, proposes Contributions from their Branch, and sees which Contributions are confirmed and which wait for a human.
+_Avoid_: Brainstorm, ideation, feed

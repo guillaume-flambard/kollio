@@ -106,6 +106,78 @@
     "notFound": {
       "title": "Cet espace de décision est introuvable",
       "description": "Il n’existe pas dans cet espace de travail, ou il n’est pas accessible avec votre compte."
+    },
+    "explore": {
+      "loadFailed": "Les branches n’ont pas pu être chargées. Réessayez dans un instant.",
+      "branches": {
+        "title": "Branches d’exploration",
+        "create": "Créer une branche",
+        "empty": "Aucune branche pour le moment. Créez la vôtre pour explorer cette question avec vos propres outils.",
+        "byline": "Créée par {name} · le {date}"
+      },
+      "branch": {
+        "form": {
+          "title": "Nouvelle branche d’exploration",
+          "name": "Titre",
+          "namePlaceholder": "Ex. : ce qu’on a appris du test de septembre",
+          "nameRequired": "Le titre est obligatoire.",
+          "summary": "Matière brute",
+          "summaryHint": "Notes, sorties d’outil IA, liens, extraits : rien de tout cela n’entre dans le raisonnement partagé avant d’être proposé puis confirmé.",
+          "visibility": "Visibilité",
+          "submit": "Créer la branche",
+          "submitting": "Création…",
+          "failed": "La branche n’a pas pu être créée. Réessayez dans un instant."
+        }
+      },
+      "visibility": {
+        "private": "Privée",
+        "shared": "Partagée"
+      },
+      "contributions": {
+        "title": "Contributions",
+        "intro": "Une branche reste privée et brute. Une contribution, elle, entre dans le raisonnement partagé du collectif.",
+        "pending": "En attente de confirmation",
+        "pendingEmpty": "Aucune proposition en attente.",
+        "confirmed": "Raisonnement partagé",
+        "confirmedEmpty": "Aucune contribution confirmée pour le moment.",
+        "propose": "Proposer une contribution",
+        "forBranch": "Depuis la branche {name}",
+        "kind": "Nature",
+        "kinds": {
+          "idea": "Idée",
+          "claim": "Affirmation",
+          "evidence": "Preuve",
+          "objection": "Objection",
+          "constraint": "Contrainte"
+        },
+        "titleLabel": "Titre",
+        "titlePlaceholder": "Ex. : le churn ne suit pas le prix",
+        "titleRequired": "Le titre est obligatoire.",
+        "body": "Détail",
+        "bodyPlaceholder": "Ce que la contribution affirme, et sur quoi.",
+        "source": "Source",
+        "sourcePlaceholder": "Lien, document ou conversation d’où vient la matière.",
+        "toolModel": "Outil ou modèle",
+        "toolModelPlaceholder": "Ex. : ChatGPT, Claude, recherche web.",
+        "submit": "Proposer",
+        "submitting": "Envoi…",
+        "failed": "La contribution n’a pas pu être proposée. Réessayez dans un instant.",
+        "confirm": "Confirmer",
+        "confirming": "Confirmation…",
+        "confirmFailed": "La contribution n’a pas pu être confirmée. Réessayez dans un instant.",
+        "status": {
+          "suggested": "En attente",
+          "confirmed": "Confirmée"
+        }
+      },
+      "provenance": {
+        "author": "Auteur",
+        "branch": "Branche",
+        "source": "Source",
+        "tool": "Outil ou modèle",
+        "added": "Ajoutée le",
+        "none": "Non précisé"
+      }
     }
   },
   "meta": {
