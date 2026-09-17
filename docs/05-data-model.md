@@ -22,6 +22,12 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - Le statut est écrit par le propriétaire et les participants ; la gestion des participants est réservée au propriétaire.
 - Voir `openspec/changes/add-decision-space/` (étape 2 de la séquence de migration §20) et l'issue #109.
 
+### Branch + Contribution (l'exploration — étape 3 de la migration §20)
+`Branch(id, space_id, title, summary?, source_idea_id?, visibility(private|shared), created_by, lang, created_at, updated_at)` — conteneur d'exploration sous un Decision Space. Le contenu est une matière première non canonique. Une Idea mappée devient une Branch partagée (titre + pitch repris, historique accessible via `source_idea_id` sans duplication) ; le mapping est idempotent et les idées publiques (sans workspace) sont exclues.
+- `Contribution(id, space_id, branch_id, kind(idea|claim|evidence|objection|constraint), title, body?, author_id, source?, tool_model?, transformation_history?, status(suggested|confirmed), lang, created_at, updated_at)` — unité canonique proposée depuis une Branch. Une proposition humaine est `confirmed` d'emblée ; une suggestion IA reste `suggested` jusqu'à confirmation humaine (qui devient alors l'auteur). Seules les `confirmed` alimenteront Converge (étape 4).
+- Lecture : Branch privée = créateur seul ; partagée = lecteurs de l'espace. Écriture (proposer/confirmer) = propriétaire + participants.
+- Voir `openspec/changes/map-ideas-to-branches/` et l'issue #110. Ne pas confondre avec `branch` (ligne d'itérations) ni `Contribution` (acte de participation) du vocabulaire historique.
+
 ### Idea (le "dépôt")
 `id, slug, title, pitch, owner_id, workspace_id?(null=public), stage(seed|iterating|team_formed), lang, visibility(public|workspace), created_at`
 

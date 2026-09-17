@@ -4,7 +4,7 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 
 ## Vocabulary in transition
 
-`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 maps Ideas into Branches and Contributions, step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
+`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
 
 ## Language
 
@@ -153,3 +153,13 @@ _Avoid_: Stage (reserved for an Idea), phase, state
 **Decision space deadline**:
 An optional date carried on a space for information only. It gates no transition and skips no state.
 _Avoid_: Due date (as a trigger), SLA, expiry
+
+### Exploration branches
+
+**Branch** (exploration container):
+A private or shared container of raw material under a Decision Space: notes, AI outputs, URLs, documents, research and artifacts. Private reads only for its creator; shared reads for Space readers; writes follow the Space rule (owner plus participants). A mapped Idea's title, pitch and iteration history become a shared Branch's raw material through an explicit source link, without duplication. Raw material is never canonical.
+_Avoid_: Branch (the iteration line under Versioned history) without qualification, folder, project
+
+**Contribution** (canonical unit):
+An atomic canonical unit proposed from Branch material: `idea`, `claim`, `evidence`, `objection` or `constraint`. `suggested` by AI until a human confirms it; `confirmed` by a human is canonical and will feed Converge. Carries author, Branch, source, tool/model when known, timestamp and transformation history.
+_Avoid_: Contribution (the participation record under Team and moat flow), comment alone
