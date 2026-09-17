@@ -4,7 +4,7 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 
 ## Vocabulary in transition
 
-`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
+`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
 
 ## Language
 
@@ -163,6 +163,32 @@ _Avoid_: Branch (the iteration line under Versioned history) without qualificati
 **Contribution** (canonical unit):
 An atomic canonical unit proposed from Branch material: `idea`, `claim`, `evidence`, `objection` or `constraint`. `suggested` by AI until a human confirms it; `confirmed` by a human is canonical and will feed Converge. Carries author, Branch, source, tool/model when known, timestamp and transformation history.
 _Avoid_: Contribution (the participation record under Team and moat flow), comment alone
+
+### Challenge
+
+**ChallengeRun**:
+One attempt at challenging one Option against the six checks of §7. Carries a closed status - `OPEN`, `RUNNING`, `COMPLETED`, `FAILED` - and the model that produced its findings, null until the Critic runs. Every run belongs to an Option inside a Space, and is never reachable outside it.
+_Avoid_: Review, audit, test run
+
+**ChallengeFinding**:
+One recorded objection on a run: a kind, a severity, the detail statement, an origin and a status.
+_Avoid_: Comment, issue, critique note
+
+**Challenge kind**:
+The six checks of §7, a closed set: `unsupported_assumption`, `contradictory_evidence`, `hidden_dependency`, `failure_mode`, `causal_claim`, `missing_success_criteria`. A seventh check is a change to §7, not a runtime value.
+_Avoid_: Category, type, label
+
+**Finding origin and status**:
+A finding a human records is `confirmed` on arrival (origin `human`); a finding the Critic proposes arrives `proposed` (origin `critic`) and waits for a human to confirm or dismiss it. Dismissal is permanent and keeps the record: "we looked at this and it does not hold" is convergence data, not a deletion.
+_Avoid_: Approved/rejected (reserved for proposals), deleted
+
+**Challenge coverage**:
+Which of the six checks carry at least one non-dismissed finding. Information only: it gates no transition, blocks no Decision and produces no score.
+_Avoid_: Score, completeness rating, gate
+
+**Critic**:
+The component that will propose findings automatically. **Not built.** `service/ports.py` declares the gateway it will implement; the API never lets a client declare a `critic` origin.
+_Avoid_: Reviewer, analyst
 
 ### Converge map
 

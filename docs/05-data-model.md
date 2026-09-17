@@ -40,6 +40,14 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - Écriture (créer, éditer, supprimer, lier, délier) = propriétaire + participants ; lecture = membres de l'espace.
 - Voir `openspec/changes/add-options/` et l'issue #112. Hors périmètre : le Critic, le choix d'une Option et le Decision Record (étape 6), les scénarios (étape 7), tout écran.
 
+### ChallengeRun + ChallengeFinding (le challenge — étape 5, seconde moitié, structure seule)
+`ChallengeRun(id, space_id, option_id, status(OPEN|RUNNING|COMPLETED|FAILED), opened_by, model?, lang, created_at, updated_at)` — une tentative de challenger une Option contre les six contrôles du §7. `model` reste null tant que le Critic n'a pas tourné.
+- `ChallengeFinding(id, run_id, kind, severity(low|medium|high), detail, origin(human|critic), status(proposed|confirmed|dismissed), contribution_id?, lang, created_at, updated_at)` — un constat. `kind` est l'ensemble fermé des six contrôles : `unsupported_assumption`, `contradictory_evidence`, `hidden_dependency`, `failure_mode`, `causal_claim`, `missing_success_criteria`.
+- Un constat humain est `confirmed` d'emblée ; un constat du Critic reste `proposed` jusqu'à confirmation ou rejet humain. Le rejet conserve la ligne : c'est une donnée de convergence, pas une suppression.
+- La couverture (quels contrôles portent au moins un constat non rejeté) est **informative** : elle ne bloque aucune transition, ne bloque aucune décision et ne produit aucun score.
+- **Le Critic n'existe pas** : `service/ports.py` déclare la passerelle sans implémentation, et l'API n'accepte jamais un `origin: critic` venant d'un client.
+- Voir `openspec/changes/add-challenge/` et l'issue #113. Hors périmètre : le Critic, le Decision Record (étape 6), tout écran.
+
 ### Idea (le "dépôt")
 `id, slug, title, pitch, owner_id, workspace_id?(null=public), stage(seed|iterating|team_formed), lang, visibility(public|workspace), created_at`
 
