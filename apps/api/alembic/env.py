@@ -11,6 +11,7 @@ from src.modules.converge.adapters import postgres as converge_postgres  # noqa:
 from src.modules.decision_spaces.adapters import postgres as decision_spaces_postgres  # noqa: F401
 from src.modules.ideas.adapters import postgres  # noqa: F401
 from src.modules.iterations.adapters import postgres as iterations_postgres  # noqa: F401
+from src.modules.options.adapters import postgres as options_postgres  # noqa: F401
 from src.platform import effects, embeddings, import_legacy  # noqa: F401
 from src.platform.config import get_settings
 from src.platform.db import Base

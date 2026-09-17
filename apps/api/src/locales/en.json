@@ -11,5 +11,6 @@
   "not_found_branch": "Branch not found",
   "not_found_contribution": "Contribution not found",
   "not_found_relation": "Relation not found",
-  "not_found_cluster": "Cluster not found"
+  "not_found_cluster": "Cluster not found",
+  "not_found_option": "Option not found"
 }

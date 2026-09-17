@@ -11,5 +11,6 @@
   "not_found_branch": "Branche introuvable",
   "not_found_contribution": "Contribution introuvable",
   "not_found_relation": "Relation introuvable",
-  "not_found_cluster": "Groupe introuvable"
+  "not_found_cluster": "Groupe introuvable",
+  "not_found_option": "Option introuvable"
 }

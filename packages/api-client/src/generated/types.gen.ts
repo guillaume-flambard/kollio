@@ -837,6 +837,20 @@ export type DepositIdeaRequest = {
 };
 
 /**
+ * EvidenceLink
+ */
+export type EvidenceLink = {
+    /**
+     * Contribution Id
+     */
+    contribution_id: string;
+    /**
+     * Side
+     */
+    side: 'for' | 'against';
+};
+
+/**
  * ExperimentCreateBody
  */
 export type ExperimentCreateBody = {
@@ -1522,6 +1536,238 @@ export type ObjectiveUpdate = {
      * Priority
      */
     priority?: boolean | null;
+};
+
+/**
+ * OptionCreate
+ */
+export type OptionCreate = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Proposal
+     */
+    proposal: string;
+    /**
+     * Mechanism
+     */
+    mechanism?: string | null;
+    /**
+     * Upside
+     */
+    upside?: string | null;
+    /**
+     * Cost
+     */
+    cost?: string | null;
+    /**
+     * Risks
+     */
+    risks?: string | null;
+    /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
+    /**
+     * Success Metrics
+     */
+    success_metrics?: string | null;
+};
+
+/**
+ * OptionDetailResponse
+ */
+export type OptionDetailResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Proposal
+     */
+    proposal: string;
+    /**
+     * Mechanism
+     */
+    mechanism?: string | null;
+    /**
+     * Upside
+     */
+    upside?: string | null;
+    /**
+     * Cost
+     */
+    cost?: string | null;
+    /**
+     * Risks
+     */
+    risks?: string | null;
+    /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
+    /**
+     * Success Metrics
+     */
+    success_metrics?: string | null;
+    /**
+     * Created By
+     */
+    created_by: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Evidence
+     */
+    evidence: Array<OptionEvidenceResponse>;
+};
+
+/**
+ * OptionEvidenceResponse
+ */
+export type OptionEvidenceResponse = {
+    /**
+     * Contribution Id
+     */
+    contribution_id: string;
+    /**
+     * Side
+     */
+    side: 'for' | 'against';
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * OptionListResponse
+ */
+export type OptionListResponse = {
+    /**
+     * Items
+     */
+    items: Array<OptionResponse>;
+};
+
+/**
+ * OptionResponse
+ */
+export type OptionResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Proposal
+     */
+    proposal: string;
+    /**
+     * Mechanism
+     */
+    mechanism?: string | null;
+    /**
+     * Upside
+     */
+    upside?: string | null;
+    /**
+     * Cost
+     */
+    cost?: string | null;
+    /**
+     * Risks
+     */
+    risks?: string | null;
+    /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
+    /**
+     * Success Metrics
+     */
+    success_metrics?: string | null;
+    /**
+     * Created By
+     */
+    created_by: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
+ * OptionUpdate
+ */
+export type OptionUpdate = {
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Proposal
+     */
+    proposal?: string | null;
+    /**
+     * Mechanism
+     */
+    mechanism?: string | null;
+    /**
+     * Upside
+     */
+    upside?: string | null;
+    /**
+     * Cost
+     */
+    cost?: string | null;
+    /**
+     * Risks
+     */
+    risks?: string | null;
+    /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
+    /**
+     * Success Metrics
+     */
+    success_metrics?: string | null;
 };
 
 /**
@@ -3490,6 +3736,268 @@ export type ConfirmContributionResponses = {
 };
 
 export type ConfirmContributionResponse = ConfirmContributionResponses[keyof ConfirmContributionResponses];
+
+export type ListOptionsData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options';
+};
+
+export type ListOptionsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListOptionsError = ListOptionsErrors[keyof ListOptionsErrors];
+
+export type ListOptionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: OptionListResponse;
+};
+
+export type ListOptionsResponse = ListOptionsResponses[keyof ListOptionsResponses];
+
+export type CreateOptionData = {
+    body: OptionCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options';
+};
+
+export type CreateOptionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateOptionError = CreateOptionErrors[keyof CreateOptionErrors];
+
+export type CreateOptionResponses = {
+    /**
+     * Successful Response
+     */
+    201: OptionDetailResponse;
+};
+
+export type CreateOptionResponse = CreateOptionResponses[keyof CreateOptionResponses];
+
+export type DeleteOptionData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}';
+};
+
+export type DeleteOptionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteOptionError = DeleteOptionErrors[keyof DeleteOptionErrors];
+
+export type DeleteOptionResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteOptionResponse = DeleteOptionResponses[keyof DeleteOptionResponses];
+
+export type GetOptionData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}';
+};
+
+export type GetOptionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetOptionError = GetOptionErrors[keyof GetOptionErrors];
+
+export type GetOptionResponses = {
+    /**
+     * Successful Response
+     */
+    200: OptionDetailResponse;
+};
+
+export type GetOptionResponse = GetOptionResponses[keyof GetOptionResponses];
+
+export type UpdateOptionData = {
+    body: OptionUpdate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}';
+};
+
+export type UpdateOptionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateOptionError = UpdateOptionErrors[keyof UpdateOptionErrors];
+
+export type UpdateOptionResponses = {
+    /**
+     * Successful Response
+     */
+    200: OptionDetailResponse;
+};
+
+export type UpdateOptionResponse = UpdateOptionResponses[keyof UpdateOptionResponses];
+
+export type LinkOptionEvidenceData = {
+    body: EvidenceLink;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/evidence';
+};
+
+export type LinkOptionEvidenceErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type LinkOptionEvidenceError = LinkOptionEvidenceErrors[keyof LinkOptionEvidenceErrors];
+
+export type LinkOptionEvidenceResponses = {
+    /**
+     * Successful Response
+     */
+    201: OptionDetailResponse;
+};
+
+export type LinkOptionEvidenceResponse = LinkOptionEvidenceResponses[keyof LinkOptionEvidenceResponses];
+
+export type UnlinkOptionEvidenceData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Contribution Id
+         */
+        contribution_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/evidence/{contribution_id}';
+};
+
+export type UnlinkOptionEvidenceErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UnlinkOptionEvidenceError = UnlinkOptionEvidenceErrors[keyof UnlinkOptionEvidenceErrors];
+
+export type UnlinkOptionEvidenceResponses = {
+    /**
+     * Successful Response
+     */
+    200: OptionDetailResponse;
+};
+
+export type UnlinkOptionEvidenceResponse = UnlinkOptionEvidenceResponses[keyof UnlinkOptionEvidenceResponses];
 
 export type GetConvergeMapData = {
     body?: never;
