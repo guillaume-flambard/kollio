@@ -163,3 +163,17 @@ _Avoid_: Branch (the iteration line under Versioned history) without qualificati
 **Contribution** (canonical unit):
 An atomic canonical unit proposed from Branch material: `idea`, `claim`, `evidence`, `objection` or `constraint`. `suggested` by AI until a human confirms it; `confirmed` by a human is canonical and will feed Converge. Carries author, Branch, source, tool/model when known, timestamp and transformation history.
 _Avoid_: Contribution (the participation record under Team and moat flow), comment alone
+
+### Converge map
+
+**ContributionRelation**:
+An explicit directed link between two confirmed Contributions of one Space, typed by the closed set `SUPPORTS`, `CONTRADICTS`, `DUPLICATES`, `ALTERNATIVE_TO`, `DERIVED_FROM`, `SUPERSEDES`, `EVIDENCE_FOR`, `EVIDENCE_AGAINST`. One relation per ordered pair; no self-relation; both ends must belong to the same Space. Asserted and removed by the Space's writers; human corrections are the map until the AI proposer arrives.
+_Avoid_: Implicit similarity, tag, comment thread
+
+**Cluster**:
+A titled grouping of Contributions inside one Space for the map. A Contribution sits in at most one Cluster; assigning moves it; deleting a Cluster ungroups its members without deleting them.
+_Avoid_: Folder, category, label
+
+**Converge map**:
+The read model of a Space's reasoning: its confirmed Contributions (suggested ones stay out), every relation between them, and every Cluster with its member ids. Readable by workspace members; writers build and correct it by hand.
+_Avoid_: Report, summary, AI output

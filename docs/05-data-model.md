@@ -28,6 +28,12 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - Lecture : Branch privée = créateur seul ; partagée = lecteurs de l'espace. Écriture (proposer/confirmer) = propriétaire + participants.
 - Voir `openspec/changes/map-ideas-to-branches/` et l'issue #110. Ne pas confondre avec `branch` (ligne d'itérations) ni `Contribution` (acte de participation) du vocabulaire historique.
 
+### Converge map (la carte du raisonnement — étape 4, premier slice)
+`ContributionRelation(id, space_id, from_contribution_id, to_contribution_id, relation_type(SUPPORTS|CONTRADICTS|DUPLICATES|ALTERNATIVE_TO|DERIVED_FROM|SUPERSEDES|EVIDENCE_FOR|EVIDENCE_AGAINST), created_by, created_at)` — lien explicite dirigé entre deux Contributions confirmées du même espace. Une relation par paire ordonnée, pas d'auto-relation, paires inter-espaces refusées.
+- `Cluster(id, space_id, title, created_by, created_at)` — regroupement titré pour la carte. L'appartenance passe par `contributions.cluster_id` (nullable, `ON DELETE SET NULL`) : une Contribution est dans au plus un Cluster ; assigner déplace ; supprimer un Cluster désassigne sans rien supprimer.
+- Lecture de la carte : Contributions confirmées (les `suggested` restent dehors), relations, Clusters avec leurs membres. Écriture = propriétaire + participants.
+- Voir `openspec/changes/add-converge-map/` et l'issue #111. Le proposeur IA (relations `suggested` à confirmer) est le slice suivant.
+
 ### Idea (le "dépôt")
 `id, slug, title, pitch, owner_id, workspace_id?(null=public), stage(seed|iterating|team_formed), lang, visibility(public|workspace), created_at`
 
