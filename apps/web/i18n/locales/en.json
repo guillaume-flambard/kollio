@@ -320,6 +320,118 @@
         "addFailed": "The evidence could not be linked. Try again in a moment.",
         "noCandidates": "No confirmed Contribution to link. Confirm one in Explore."
       }
+    },
+    "decision": {
+      "loadFailed": "The options or the decision could not be loaded. Try again in a moment.",
+      "empty": {
+        "title": "No option to challenge.",
+        "body": "A challenge is about an option: write one in the Options section first, then come back and look for what could make it fail."
+      },
+      "challenge": {
+        "title": "Challenge",
+        "intro": "The Critic looks for what could make this choice regrettable: unsupported assumptions, contradictory evidence, hidden dependencies, failure modes, causal claims and missing success criteria.",
+        "option": "Challenged option",
+        "open": "Open a challenge",
+        "opening": "Opening…",
+        "openFailed": "The challenge could not be opened.",
+        "retry": "Open a new challenge",
+        "empty": "No challenge for this option.",
+        "findings": "Findings",
+        "findingsEmpty": "No finding.",
+        "model": "Model: {name}",
+        "noModel": "No model recorded",
+        "failure": "Failed: {reason}",
+        "confirm": "Confirm",
+        "confirming": "Confirming…",
+        "confirmFailed": "The finding could not be confirmed.",
+        "dismiss": "Dismiss",
+        "dismissing": "Dismissing…",
+        "dismissFailed": "The finding could not be dismissed.",
+        "criticNote": "The Critic proposes and a person decides: nothing here is a verdict, a score or a ranking, and no finding is settled automatically.",
+        "status": {
+          "OPEN": "Open",
+          "RUNNING": "Running",
+          "COMPLETED": "Completed",
+          "FAILED": "Failed"
+        },
+        "kind": {
+          "unsupported_assumption": "Unsupported assumption",
+          "contradictory_evidence": "Contradictory evidence",
+          "hidden_dependency": "Hidden dependency",
+          "failure_mode": "Failure mode",
+          "causal_claim": "Causal claim",
+          "missing_success_criteria": "Missing success criteria"
+        },
+        "severity": {
+          "low": "Low",
+          "medium": "Medium",
+          "high": "High"
+        },
+        "findingStatus": {
+          "proposed": "To settle",
+          "confirmed": "Confirmed",
+          "dismissed": "Dismissed"
+        },
+        "origin": {
+          "human": "Recorded by a person",
+          "critic": "Proposed by the Critic"
+        },
+        "coverage": {
+          "title": "Coverage of the six checks",
+          "covered": "Covered: {list}",
+          "uncovered": "Not covered: {list}",
+          "none": "None"
+        }
+      },
+      "record": {
+        "title": "Decision",
+        "intro": "What was chosen, what was set aside, the arguments on both sides, the uncertainty that remains, the success criteria and what would bring the team back to this choice.",
+        "empty": "No decision recorded yet.",
+        "notReady": "A decision is recorded from the Ready to decide status. Current status: {status}.",
+        "version": "Version {number}",
+        "committed": "Decided by {name} · on {date}",
+        "rationale": "Rationale",
+        "selected": "Selected option",
+        "rejected": "Rejected options",
+        "arguments": "Arguments",
+        "assumptions": "Critical assumptions",
+        "uncertainty": "Unresolved uncertainty",
+        "criteria": "Success criteria",
+        "triggers": "Revisit triggers",
+        "for": "For",
+        "against": "Against",
+        "absent": "Not stated",
+        "versions": "Versions",
+        "versionsEmpty": "No version.",
+        "versionsFailed": "The versions could not be loaded.",
+        "form": {
+          "title": "Record the decision",
+          "selectedOption": "Selected option",
+          "rationale": "Rationale",
+          "rationaleRequired": "A rationale is required.",
+          "rejectedHint": "The options taken nowhere: tick the ones the decision sets aside.",
+          "argumentsHint": "An argument cites a confirmed contribution of this space, on one side or the other.",
+          "addArgument": "Add an argument",
+          "contribution": "Contribution",
+          "side": "Side",
+          "choose": "Choose",
+          "removeArgument": "Remove",
+          "addTrigger": "Add a trigger",
+          "removeTrigger": "Remove",
+          "triggersHint": "A metric is enough. The direction, the threshold and the note are optional.",
+          "triggerMetric": "Metric",
+          "triggerDirection": "Direction",
+          "directionNone": "None",
+          "above": "Above",
+          "below": "Below",
+          "triggerThreshold": "Threshold",
+          "triggerNote": "Note",
+          "submit": "Record the decision",
+          "submitting": "Recording…",
+          "failed": "The decision could not be recorded.",
+          "forbidden": "Only the owner and the participants of this space can decide."
+        }
+      }
     }
   },
   "meta": {

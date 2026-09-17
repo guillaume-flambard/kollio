@@ -79,3 +79,15 @@ _Avoid_: Idea, proposal, variant, hypothesis
 **Option evidence**:
 A confirmed Contribution of the same Space, linked to an Option on the `for` or `against` side by a member. Linking asserts nothing new about the Contribution: it says which Option that Contribution speaks to, and on which side.
 _Avoid_: RATING, score, weight, confidence
+
+**Decision section**:
+The section at `/workspace/decision-spaces/[spaceId]/decision` carrying the two acts that end the reasoning phase: challenging an Option, and committing the Decision Record. The screen says plainly that the Critic proposes and a person decides, and it shows no verdict, no score, no ranking and no prediction.
+_Avoid_: Sign-off, approval, final vote
+
+**Challenge**:
+The section's reading of one Option's challenge runs: the run status, the model that answered, the stored reason of a run that failed, and the findings the Critic proposed, each with its kind, its severity and its status. A proposed finding waits for a member to confirm or dismiss it; nothing is settled automatically.
+_Avoid_: Review, audit, verdict, score
+
+**Decision record**:
+The committed choice of a Space rendered in the Decision section: the selected Option, the rejected alternatives, the arguments for and against, the critical assumptions, the unresolved uncertainty, the success criteria and the revisit triggers, with every committed version listed and readable. An earlier version is never overwritten.
+_Avoid_: Revision, draft, final answer

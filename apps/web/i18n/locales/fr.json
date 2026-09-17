@@ -320,6 +320,118 @@
         "addFailed": "La preuve n’a pas pu être liée. Réessayez dans un instant.",
         "noCandidates": "Aucune contribution confirmée à lier. Confirmez-en une dans Explorer."
       }
+    },
+    "decision": {
+      "loadFailed": "Les options ou la décision n’ont pas pu être chargées. Réessayez dans un instant.",
+      "empty": {
+        "title": "Aucune option à confronter.",
+        "body": "La confrontation porte sur une option : écrivez-en une d’abord dans la section Options, puis revenez chercher ce qui pourrait la faire échouer."
+      },
+      "challenge": {
+        "title": "Confrontation",
+        "intro": "Le Critic cherche ce qui pourrait faire regretter ce choix : hypothèses non étayées, preuves contradictoires, dépendances cachées, modes d’échec, affirmations causales et critères de succès manquants.",
+        "option": "Option confrontée",
+        "open": "Lancer une confrontation",
+        "opening": "Lancement…",
+        "openFailed": "La confrontation n’a pas pu être lancée.",
+        "retry": "Relancer une confrontation",
+        "empty": "Aucune confrontation pour cette option.",
+        "findings": "Constats",
+        "findingsEmpty": "Aucun constat.",
+        "model": "Modèle : {name}",
+        "noModel": "Aucun modèle enregistré",
+        "failure": "Échec : {reason}",
+        "confirm": "Confirmer",
+        "confirming": "Confirmation…",
+        "confirmFailed": "Le constat n’a pas pu être confirmé.",
+        "dismiss": "Écarter",
+        "dismissing": "Écartement…",
+        "dismissFailed": "Le constat n’a pas pu être écarté.",
+        "criticNote": "Le Critic propose, une personne décide : rien ici n’est un verdict, un score ou un classement, et aucun constat n’est tranché automatiquement.",
+        "status": {
+          "OPEN": "Ouverte",
+          "RUNNING": "En cours",
+          "COMPLETED": "Terminée",
+          "FAILED": "Échouée"
+        },
+        "kind": {
+          "unsupported_assumption": "Hypothèse non étayée",
+          "contradictory_evidence": "Preuve contradictoire",
+          "hidden_dependency": "Dépendance cachée",
+          "failure_mode": "Mode d’échec",
+          "causal_claim": "Affirmation causale",
+          "missing_success_criteria": "Critère de succès manquant"
+        },
+        "severity": {
+          "low": "Faible",
+          "medium": "Moyenne",
+          "high": "Élevée"
+        },
+        "findingStatus": {
+          "proposed": "À trancher",
+          "confirmed": "Confirmé",
+          "dismissed": "Écarté"
+        },
+        "origin": {
+          "human": "Enregistré par une personne",
+          "critic": "Proposé par le Critic"
+        },
+        "coverage": {
+          "title": "Couverture des six contrôles",
+          "covered": "Couverts : {list}",
+          "uncovered": "Non couverts : {list}",
+          "none": "Aucun"
+        }
+      },
+      "record": {
+        "title": "Décision",
+        "intro": "Ce qui a été choisi, ce qui a été écarté, les arguments dans les deux sens, l’incertitude qui reste, les critères de succès et ce qui ramènerait l’équipe sur ce choix.",
+        "empty": "Aucune décision enregistrée pour le moment.",
+        "notReady": "Une décision s’enregistre depuis le statut Prêt à décider. Statut actuel : {status}.",
+        "version": "Version {number}",
+        "committed": "Décidée par {name} · le {date}",
+        "rationale": "Raison",
+        "selected": "Option retenue",
+        "rejected": "Options écartées",
+        "arguments": "Arguments",
+        "assumptions": "Hypothèses critiques",
+        "uncertainty": "Incertitude restante",
+        "criteria": "Critères de succès",
+        "triggers": "Déclencheurs de réexamen",
+        "for": "Pour",
+        "against": "Contre",
+        "absent": "Non précisé",
+        "versions": "Versions",
+        "versionsEmpty": "Aucune version.",
+        "versionsFailed": "Les versions n’ont pas pu être chargées.",
+        "form": {
+          "title": "Enregistrer la décision",
+          "selectedOption": "Option retenue",
+          "rationale": "Raison",
+          "rationaleRequired": "La raison est obligatoire.",
+          "rejectedHint": "Les options retenues nulle part : cochez celles que la décision écarte.",
+          "argumentsHint": "Un argument cite une contribution confirmée de cet espace, dans un sens ou dans l’autre.",
+          "addArgument": "Ajouter un argument",
+          "contribution": "Contribution",
+          "side": "Sens",
+          "choose": "Choisir",
+          "removeArgument": "Retirer",
+          "addTrigger": "Ajouter un déclencheur",
+          "removeTrigger": "Retirer",
+          "triggersHint": "Une métrique suffit. Le sens, le seuil et la note sont facultatifs.",
+          "triggerMetric": "Métrique",
+          "triggerDirection": "Sens",
+          "directionNone": "Aucun",
+          "above": "Au-dessus de",
+          "below": "En dessous de",
+          "triggerThreshold": "Seuil",
+          "triggerNote": "Note",
+          "submit": "Enregistrer la décision",
+          "submitting": "Enregistrement…",
+          "failed": "La décision n’a pas pu être enregistrée.",
+          "forbidden": "Seuls le porteur et les participants de cet espace peuvent décider."
+        }
+      }
     }
   },
   "meta": {
