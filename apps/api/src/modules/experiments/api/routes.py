@@ -21,6 +21,8 @@ from src.modules.experiments.service.operations import (
     create_experiment,
     list_experiments,
     list_learnings,
+    list_space_experiments,
+    list_space_learnings,
     read_experiment,
     record_outcome,
     write_learning,
@@ -29,6 +31,7 @@ from src.platform.auth import Identity, current_identity
 from src.platform.db import get_session
 
 router = APIRouter()
+space_experiments_router = APIRouter()
 
 
 def _not_found(request: Request) -> HTTPException:
@@ -70,9 +73,13 @@ async def create_idea_experiment(
             success_metric=body.success_metric,
             baseline=body.baseline,
             target=body.target,
+            decision_space_id=body.decision_space_id,
+            option_id=body.option_id,
         )
     except ExperimentNotFoundError as error:
         raise _not_found(request) from error
+    except ExperimentRuleError as error:
+        raise _rule_error(request, error) from error
     return ExperimentResponse.model_validate(experiment)
 
 
@@ -221,3 +228,51 @@ async def write_experiment_learning(
     except ExperimentRuleError as error:
         raise _rule_error(request, error) from error
     return LearningResponse.model_validate(learning)
+
+
+@space_experiments_router.get(
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/experiments",
+    response_model=list[ExperimentResponse],
+    operation_id="list_space_experiments",
+)
+async def list_decision_space_experiments(
+    workspace_id: UUID,
+    space_id: UUID,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> list[ExperimentResponse]:
+    try:
+        experiments = await list_space_experiments(
+            PostgresExperiments(session),
+            workspace_id=workspace_id,
+            space_id=space_id,
+            subject=identity.subject,
+        )
+    except ExperimentNotFoundError as error:
+        raise _not_found(request) from error
+    return [ExperimentResponse.model_validate(item) for item in experiments]
+
+
+@space_experiments_router.get(
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/learnings",
+    response_model=list[LearningResponse],
+    operation_id="list_space_learnings",
+)
+async def list_decision_space_learnings(
+    workspace_id: UUID,
+    space_id: UUID,
+    request: Request,
+    identity: Identity = Depends(current_identity),
+    session: AsyncSession = Depends(get_session),
+) -> list[LearningResponse]:
+    try:
+        learnings = await list_space_learnings(
+            PostgresExperiments(session),
+            workspace_id=workspace_id,
+            space_id=space_id,
+            subject=identity.subject,
+        )
+    except ExperimentNotFoundError as error:
+        raise _not_found(request) from error
+    return [LearningResponse.model_validate(item) for item in learnings]

@@ -17,7 +17,12 @@ from src.modules.constraint_analysis.api.routes import router as analysis_router
 from src.modules.converge.api.routes import router as converge_router
 from src.modules.decision_spaces.api.routes import router as decision_spaces_router
 from src.modules.decisions.api.routes import router as decisions_router
-from src.modules.experiments.api.routes import router as experiments_router
+from src.modules.experiments.api.routes import (
+    router as experiments_router,
+)
+from src.modules.experiments.api.routes import (
+    space_experiments_router,
+)
 from src.modules.ideas.api.routes import (
     router as ideas_router,
 )
@@ -114,6 +119,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(scenarios_router)
     app.include_router(converge_router)
     app.include_router(experiments_router)
+    app.include_router(space_experiments_router)
     FastAPIInstrumentor.instrument_app(app, excluded_urls="health/live,health/ready")
     return app
 

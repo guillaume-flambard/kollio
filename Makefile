@@ -30,7 +30,7 @@ up:
 verify:
 	uv run --project apps/api ruff check apps/api scripts
 	uv run --project apps/api ruff format --check apps/api scripts
-	uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain apps/api/src/modules/iterations/domain apps/api/src/modules/constraint_analysis/domain apps/api/src/modules/profiles/domain apps/api/src/modules/company_context/domain apps/api/src/modules/decision_spaces/domain apps/api/src/modules/branches/domain apps/api/src/modules/converge/domain apps/api/src/modules/options/domain apps/api/src/modules/challenge/domain apps/api/src/modules/decisions/domain apps/api/src/modules/scenarios/domain
+	uv run --project apps/api mypy --strict apps/api/src/modules/ideas/domain apps/api/src/modules/iterations/domain apps/api/src/modules/constraint_analysis/domain apps/api/src/modules/profiles/domain apps/api/src/modules/company_context/domain apps/api/src/modules/decision_spaces/domain apps/api/src/modules/branches/domain apps/api/src/modules/converge/domain apps/api/src/modules/options/domain apps/api/src/modules/challenge/domain apps/api/src/modules/decisions/domain apps/api/src/modules/scenarios/domain apps/api/src/modules/experiments/domain
 	cd apps/api && uv run pytest -m 'not live'
 	pnpm lint
 	pnpm typecheck

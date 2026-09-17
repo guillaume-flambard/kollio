@@ -1156,9 +1156,17 @@ export type ExperimentCreateBody = {
      */
     baseline?: string | null;
     /**
+     * Decision Space Id
+     */
+    decision_space_id?: string | null;
+    /**
      * Hypothesis
      */
     hypothesis: string;
+    /**
+     * Option Id
+     */
+    option_id?: string | null;
     /**
      * Success Metric
      */
@@ -1198,6 +1206,10 @@ export type ExperimentResponse = {
      */
     created_at: string;
     /**
+     * Decision Space Id
+     */
+    decision_space_id?: string | null;
+    /**
      * Ended At
      */
     ended_at: string | null;
@@ -1213,6 +1225,10 @@ export type ExperimentResponse = {
      * Idea Id
      */
     idea_id: string;
+    /**
+     * Option Id
+     */
+    option_id?: string | null;
     /**
      * Started At
      */
@@ -4611,6 +4627,78 @@ export type ListDecisionVersionsResponses = {
 };
 
 export type ListDecisionVersionsResponse = ListDecisionVersionsResponses[keyof ListDecisionVersionsResponses];
+
+export type ListSpaceExperimentsData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/experiments';
+};
+
+export type ListSpaceExperimentsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListSpaceExperimentsError = ListSpaceExperimentsErrors[keyof ListSpaceExperimentsErrors];
+
+export type ListSpaceExperimentsResponses = {
+    /**
+     * Response List Space Experiments
+     *
+     * Successful Response
+     */
+    200: Array<ExperimentResponse>;
+};
+
+export type ListSpaceExperimentsResponse = ListSpaceExperimentsResponses[keyof ListSpaceExperimentsResponses];
+
+export type ListSpaceLearningsData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/learnings';
+};
+
+export type ListSpaceLearningsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListSpaceLearningsError = ListSpaceLearningsErrors[keyof ListSpaceLearningsErrors];
+
+export type ListSpaceLearningsResponses = {
+    /**
+     * Response List Space Learnings
+     *
+     * Successful Response
+     */
+    200: Array<LearningResponse>;
+};
+
+export type ListSpaceLearningsResponse = ListSpaceLearningsResponses[keyof ListSpaceLearningsResponses];
 
 export type ListOptionsData = {
     body?: never;

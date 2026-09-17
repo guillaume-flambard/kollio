@@ -22,6 +22,7 @@ from src.modules.experiments.domain.lifecycle import (
     decide_learning_status,
     decide_transition,
 )
+from src.modules.experiments.domain.links import validate_link
 from src.modules.experiments.service.reuse import embed_confirmed_learning
 from src.platform.config import get_settings
 
@@ -32,6 +33,8 @@ __all__ = [
     "create_experiment",
     "list_experiments",
     "list_learnings",
+    "list_space_experiments",
+    "list_space_learnings",
     "read_experiment",
     "record_outcome",
     "write_learning",
@@ -40,6 +43,56 @@ __all__ = [
 
 class ExperimentNotFoundError(LookupError):
     """The initiative or experiment is not visible to this subject."""
+
+
+async def _validate_space_link(
+    repo: PostgresExperiments,
+    *,
+    idea_workspace_id: UUID | None,
+    decision_space_id: UUID | None,
+    option_id: UUID | None,
+) -> None:
+    if decision_space_id is None and option_id is None:
+        return
+    space_workspace_id = None
+    if decision_space_id is not None:
+        space = await repo.space(decision_space_id)
+        space_workspace_id = space.workspace_id if space is not None else None
+    option_space_id = None
+    if option_id is not None and decision_space_id is not None:
+        option = await repo.option_in_space(decision_space_id, option_id)
+        option_space_id = option.space_id if option is not None else None
+    validate_link(
+        idea_workspace_id=idea_workspace_id,
+        space_id=decision_space_id,
+        space_workspace_id=space_workspace_id,
+        option_id=option_id,
+        option_space_id=option_space_id,
+    )
+
+
+async def _authorize_space(
+    repo: PostgresExperiments, *, workspace_id: UUID, space_id: UUID, subject: str
+) -> None:
+    space = await repo.space(space_id)
+    if space is None or space.workspace_id != workspace_id:
+        raise ExperimentNotFoundError("This decision space is not visible to you")
+    if not await repo.is_workspace_member(workspace_id, subject):
+        raise ExperimentNotFoundError("This decision space is not visible to you")
+
+
+async def list_space_experiments(
+    repo: PostgresExperiments, *, workspace_id: UUID, space_id: UUID, subject: str
+) -> list[Experiment]:
+    await _authorize_space(repo, workspace_id=workspace_id, space_id=space_id, subject=subject)
+    return await repo.experiments_for_space(space_id)
+
+
+async def list_space_learnings(
+    repo: PostgresExperiments, *, workspace_id: UUID, space_id: UUID, subject: str
+) -> list[Learning]:
+    await _authorize_space(repo, workspace_id=workspace_id, space_id=space_id, subject=subject)
+    return await repo.learnings_for_space(space_id)
 
 
 async def create_experiment(
@@ -52,11 +105,19 @@ async def create_experiment(
     success_metric: str,
     baseline: str | None,
     target: str | None,
+    decision_space_id: UUID | None = None,
+    option_id: UUID | None = None,
 ) -> Experiment:
     actor = await repo.accessible_idea(idea_id, subject)
     if actor is None:
         raise ExperimentNotFoundError("This initiative is not visible to you")
-    _idea, user = actor
+    idea, user = actor
+    await _validate_space_link(
+        repo,
+        idea_workspace_id=idea.workspace_id,
+        decision_space_id=decision_space_id,
+        option_id=option_id,
+    )
     return await repo.create_experiment(
         idea_id=idea_id,
         created_by_id=user.id,
@@ -65,6 +126,8 @@ async def create_experiment(
         success_metric=success_metric,
         baseline=baseline,
         target=target,
+        decision_space_id=decision_space_id,
+        option_id=option_id,
     )
 
 

@@ -10,6 +10,8 @@ class ExperimentCreateBody(BaseModel):
     success_metric: str = Field(min_length=1, max_length=300)
     baseline: str | None = Field(default=None, max_length=200)
     target: str | None = Field(default=None, max_length=200)
+    decision_space_id: UUID | None = None
+    option_id: UUID | None = None
 
 
 class ExperimentStatusBody(BaseModel):
@@ -35,6 +37,8 @@ class ExperimentResponse(BaseModel):
 
     id: UUID
     idea_id: UUID
+    decision_space_id: UUID | None = None
+    option_id: UUID | None = None
     title: str
     hypothesis: str
     success_metric: str

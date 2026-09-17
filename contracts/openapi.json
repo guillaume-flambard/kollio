@@ -2310,10 +2310,34 @@
             ],
             "title": "Baseline"
           },
+          "decision_space_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision Space Id"
+          },
           "hypothesis": {
             "minLength": 1,
             "title": "Hypothesis",
             "type": "string"
+          },
+          "option_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Option Id"
           },
           "success_metric": {
             "maxLength": 300,
@@ -2397,6 +2421,18 @@
             "title": "Created At",
             "type": "string"
           },
+          "decision_space_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision Space Id"
+          },
           "ended_at": {
             "anyOf": [
               {
@@ -2422,6 +2458,18 @@
             "format": "uuid",
             "title": "Idea Id",
             "type": "string"
+          },
+          "option_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Option Id"
           },
           "started_at": {
             "anyOf": [
@@ -8769,6 +8817,124 @@
         "tags": [
           "decisions"
         ]
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/experiments": {
+      "get": {
+        "operationId": "list_space_experiments",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ExperimentResponse"
+                  },
+                  "title": "Response List Space Experiments",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Decision Space Experiments"
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/learnings": {
+      "get": {
+        "operationId": "list_space_learnings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LearningResponse"
+                  },
+                  "title": "Response List Space Learnings",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Decision Space Learnings"
       }
     },
     "/workspaces/{workspace_id}/decision-spaces/{space_id}/options": {

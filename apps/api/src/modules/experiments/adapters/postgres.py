@@ -20,7 +20,9 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
+from src.modules.decision_spaces.adapters.postgres import DecisionSpace
 from src.modules.ideas.adapters.postgres import Idea, User, WorkspaceMembership
+from src.modules.options.adapters.postgres import Option
 from src.platform.db import Base
 
 STATUS_CHECK = "status IN ('proposed', 'running', 'completed', 'cancelled')"
@@ -33,6 +35,12 @@ class Experiment(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True)
     idea_id: Mapped[UUID] = mapped_column(ForeignKey("ideas.id", ondelete="CASCADE"), index=True)
+    decision_space_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("decision_spaces.id", ondelete="SET NULL"), index=True
+    )
+    option_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("options.id", ondelete="SET NULL"), index=True
+    )
     created_by_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
     title: Mapped[str] = mapped_column(String(300))
     hypothesis: Mapped[str] = mapped_column(Text)
@@ -120,6 +128,42 @@ class PostgresExperiments:
             select(Experiment)
             .where(Experiment.idea_id == idea_id)
             .order_by(Experiment.created_at, Experiment.id)
+        )
+        return list((await self.session.scalars(query)).all())
+
+    async def space(self, space_id: UUID) -> DecisionSpace | None:
+        return await self.session.get(DecisionSpace, space_id)
+
+    async def option_in_space(self, space_id: UUID, option_id: UUID) -> Option | None:
+        return await self.session.scalar(
+            select(Option).where(Option.id == option_id, Option.space_id == space_id)
+        )
+
+    async def is_workspace_member(self, workspace_id: UUID, subject: str) -> bool:
+        query = (
+            select(WorkspaceMembership)
+            .join(User, User.id == WorkspaceMembership.user_id)
+            .where(
+                WorkspaceMembership.workspace_id == workspace_id,
+                User.auth_subject == subject,
+            )
+        )
+        return await self.session.scalar(query) is not None
+
+    async def experiments_for_space(self, space_id: UUID) -> list[Experiment]:
+        query = (
+            select(Experiment)
+            .where(Experiment.decision_space_id == space_id)
+            .order_by(Experiment.created_at, Experiment.id)
+        )
+        return list((await self.session.scalars(query)).all())
+
+    async def learnings_for_space(self, space_id: UUID) -> list[Learning]:
+        query = (
+            select(Learning)
+            .join(Experiment, Experiment.id == Learning.experiment_id)
+            .where(Experiment.decision_space_id == space_id)
+            .order_by(Learning.created_at, Learning.id)
         )
         return list((await self.session.scalars(query)).all())
 
