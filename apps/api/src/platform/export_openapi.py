@@ -7,4 +7,5 @@ from src.platform.config import Settings
 if __name__ == "__main__":
     target = Path(__file__).resolve().parents[4] / "contracts/openapi.json"
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps(create_app(Settings(_env_file=None)).openapi(), indent=2) + "\n")
+    document = create_app(Settings(_env_file=None)).openapi()
+    target.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n")

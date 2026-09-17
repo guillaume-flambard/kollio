@@ -41,7 +41,7 @@ def _not_found(request: Request) -> HTTPException:
 
 def _rule_error(request: Request, error: Exception) -> HTTPException:
     return HTTPException(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
         detail={"code": "experiment_rule", "message": str(error)},
         headers={"x-request-id": getattr(request.state, "request_id", "")},
     )
