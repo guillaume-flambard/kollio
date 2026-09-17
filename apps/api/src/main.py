@@ -9,6 +9,7 @@ from redis.asyncio import Redis
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+from src.modules.branches.api.routes import router as branches_router
 from src.modules.company_context.api.routes import router as company_context_router
 from src.modules.constraint_analysis.adapters.taskiq import TaskiqAnalysisQueue
 from src.modules.constraint_analysis.api.routes import router as analysis_router
@@ -101,6 +102,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(profiles_router)
     app.include_router(company_context_router)
     app.include_router(decision_spaces_router)
+    app.include_router(branches_router)
     app.include_router(experiments_router)
     FastAPIInstrumentor.instrument_app(app, excluded_urls="health/live,health/ready")
     return app

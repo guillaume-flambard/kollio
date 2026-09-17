@@ -7,5 +7,7 @@
   "invalid": "Invalid request",
   "initial_deposit": "Initial deposit",
   "not_found_workspace": "Workspace not found",
-  "not_found_space": "Decision space not found"
+  "not_found_space": "Decision space not found",
+  "not_found_branch": "Branch not found",
+  "not_found_contribution": "Contribution not found"
 }

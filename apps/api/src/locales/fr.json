@@ -7,5 +7,7 @@
   "invalid": "Requête invalide",
   "initial_deposit": "Dépôt initial",
   "not_found_workspace": "Espace de travail introuvable",
-  "not_found_space": "Espace de décision introuvable"
+  "not_found_space": "Espace de décision introuvable",
+  "not_found_branch": "Branche introuvable",
+  "not_found_contribution": "Contribution introuvable"
 }

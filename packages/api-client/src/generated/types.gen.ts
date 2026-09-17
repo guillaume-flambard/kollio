@@ -163,6 +163,80 @@ export type ApplyJoinBody = {
 };
 
 /**
+ * BranchCreate
+ */
+export type BranchCreate = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Summary
+     */
+    summary?: string | null;
+    /**
+     * Visibility
+     */
+    visibility: 'private' | 'shared';
+};
+
+/**
+ * BranchListResponse
+ */
+export type BranchListResponse = {
+    /**
+     * Items
+     */
+    items: Array<BranchResponse>;
+};
+
+/**
+ * BranchResponse
+ */
+export type BranchResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Summary
+     */
+    summary?: string | null;
+    /**
+     * Source Idea Id
+     */
+    source_idea_id?: string | null;
+    /**
+     * Visibility
+     */
+    visibility: 'private' | 'shared';
+    /**
+     * Created By
+     */
+    created_by: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
  * CollaboratorResponse
  */
 export type CollaboratorResponse = {
@@ -440,33 +514,49 @@ export type Contradiction = {
 };
 
 /**
- * ContributionResponse
+ * ContributionListResponse
  */
-export type ContributionResponse = {
+export type ContributionListResponse = {
     /**
-     * Idea Id
+     * Items
      */
-    idea_id: string;
+    items: Array<SrcModulesBranchesApiSchemasContributionResponse>;
+};
+
+/**
+ * ContributionPropose
+ */
+export type ContributionPropose = {
     /**
-     * Idea Title
+     * Branch Id
      */
-    idea_title: string;
+    branch_id: string;
     /**
-     * Message
+     * Kind
      */
-    message: string;
+    kind: 'idea' | 'claim' | 'evidence' | 'objection' | 'constraint';
     /**
-     * Lang
+     * Title
      */
-    lang: 'fr' | 'en';
+    title: string;
     /**
-     * Short Hash
+     * Body
      */
-    short_hash: string;
+    body?: string | null;
     /**
-     * Created At
+     * Source
      */
-    created_at: string;
+    source?: string | null;
+    /**
+     * Tool Model
+     */
+    tool_model?: string | null;
+    /**
+     * Transformation History
+     */
+    transformation_history?: {
+        [key: string]: unknown;
+    } | null;
 };
 
 /**
@@ -1541,7 +1631,7 @@ export type ProfileResponse = {
     /**
      * Contributions
      */
-    contributions: Array<ContributionResponse>;
+    contributions: Array<SrcModulesProfilesApiSchemasContributionResponse>;
 };
 
 /**
@@ -1684,6 +1774,100 @@ export type WorkspaceResponse = {
      * Role
      */
     role: 'admin' | 'member';
+};
+
+/**
+ * ContributionResponse
+ */
+export type SrcModulesBranchesApiSchemasContributionResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Branch Id
+     */
+    branch_id: string;
+    /**
+     * Kind
+     */
+    kind: 'idea' | 'claim' | 'evidence' | 'objection' | 'constraint';
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Body
+     */
+    body?: string | null;
+    /**
+     * Author Id
+     */
+    author_id: string;
+    /**
+     * Source
+     */
+    source?: string | null;
+    /**
+     * Tool Model
+     */
+    tool_model?: string | null;
+    /**
+     * Transformation History
+     */
+    transformation_history?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Status
+     */
+    status: 'suggested' | 'confirmed';
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
+ * ContributionResponse
+ */
+export type SrcModulesProfilesApiSchemasContributionResponse = {
+    /**
+     * Idea Id
+     */
+    idea_id: string;
+    /**
+     * Idea Title
+     */
+    idea_title: string;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Short Hash
+     */
+    short_hash: string;
+    /**
+     * Created At
+     */
+    created_at: string;
 };
 
 export type HealthLiveData = {
@@ -2940,6 +3124,218 @@ export type RemoveDecisionSpaceParticipantResponses = {
 };
 
 export type RemoveDecisionSpaceParticipantResponse = RemoveDecisionSpaceParticipantResponses[keyof RemoveDecisionSpaceParticipantResponses];
+
+export type ListBranchesData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/branches';
+};
+
+export type ListBranchesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListBranchesError = ListBranchesErrors[keyof ListBranchesErrors];
+
+export type ListBranchesResponses = {
+    /**
+     * Successful Response
+     */
+    200: BranchListResponse;
+};
+
+export type ListBranchesResponse = ListBranchesResponses[keyof ListBranchesResponses];
+
+export type CreateBranchData = {
+    body: BranchCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/branches';
+};
+
+export type CreateBranchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateBranchError = CreateBranchErrors[keyof CreateBranchErrors];
+
+export type CreateBranchResponses = {
+    /**
+     * Successful Response
+     */
+    201: BranchResponse;
+};
+
+export type CreateBranchResponse = CreateBranchResponses[keyof CreateBranchResponses];
+
+export type GetBranchData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Branch Id
+         */
+        branch_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/branches/{branch_id}';
+};
+
+export type GetBranchErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetBranchError = GetBranchErrors[keyof GetBranchErrors];
+
+export type GetBranchResponses = {
+    /**
+     * Successful Response
+     */
+    200: BranchResponse;
+};
+
+export type GetBranchResponse = GetBranchResponses[keyof GetBranchResponses];
+
+export type ListContributionsData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/contributions';
+};
+
+export type ListContributionsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListContributionsError = ListContributionsErrors[keyof ListContributionsErrors];
+
+export type ListContributionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: ContributionListResponse;
+};
+
+export type ListContributionsResponse = ListContributionsResponses[keyof ListContributionsResponses];
+
+export type ProposeContributionData = {
+    body: ContributionPropose;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/contributions';
+};
+
+export type ProposeContributionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ProposeContributionError = ProposeContributionErrors[keyof ProposeContributionErrors];
+
+export type ProposeContributionResponses = {
+    /**
+     * Successful Response
+     */
+    201: SrcModulesBranchesApiSchemasContributionResponse;
+};
+
+export type ProposeContributionResponse = ProposeContributionResponses[keyof ProposeContributionResponses];
+
+export type ConfirmContributionData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Contribution Id
+         */
+        contribution_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/contributions/{contribution_id}/confirmation';
+};
+
+export type ConfirmContributionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ConfirmContributionError = ConfirmContributionErrors[keyof ConfirmContributionErrors];
+
+export type ConfirmContributionResponses = {
+    /**
+     * Successful Response
+     */
+    200: SrcModulesBranchesApiSchemasContributionResponse;
+};
+
+export type ConfirmContributionResponse = ConfirmContributionResponses[keyof ConfirmContributionResponses];
 
 export type ListIdeaExperimentsData = {
     body?: never;
