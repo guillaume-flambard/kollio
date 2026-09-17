@@ -58,6 +58,14 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - Écriture (committer) = propriétaire + participants ; lecture = membres de l'espace.
 - Voir `openspec/changes/add-decision-record/` et l'issue #114. Hors périmètre : le Critic, les scénarios (étape 7), Outcome/Learning (étape 8), la Decision Inbox (étape 9), tout écran. Question laissée ouverte par l'étape 2 et tranchée ici : `READY_TO_DECIDE → CONVERGING` reste non modélisé, la réouverture est le chemin de retour déclaré.
 
+### ScenarioVariable + ScenarioRun + ScenarioRunValue (la simulation — étape 7)
+`ScenarioVariable(id, space_id, name, unit?, low, base, high, lang, created_at, updated_at)` — une grandeur **à l'échelle de l'espace**, pas de l'Option : deux Options comparées sur le même métrique doivent partager sa définition. `(space_id, name)` unique, `low <= base <= high` (contrainte `low <= base AND base <= high`), `Numeric(18, 6)`.
+- `ScenarioRun(id, option_id, level(optimistic|base|pessimistic|failure), assumptions, created_by, lang, created_at, updated_at)` — un niveau de simulation d'une Option. `assumptions` non vide (contrainte `btrim`) parce que §9 exige des hypothèses explicites. **Au plus un run `base` par Option**, garanti par un index unique partiel (`level = 'base'`).
+- `ScenarioRunValue(run_id, variable_id, value)` — clé primaire composite, `Numeric(18, 6)`. Les valeurs d'un run sont écrites en bloc (suppression puis réinsertion), et seulement pour les variables de l'espace.
+- **Sensibilité déterministe** (aucun modèle, aucun chiffre prédit) : la lecture prend un critère (`metric_variable_id`, `direction above|below`, `threshold`) et renvoie, par variable, l'intervalle de bascule par interpolation linéaire entre points déclarés, le croisement interpolé et le nombre de croisements (plusieurs croisements → l'intervalle le plus étroit, jamais présenté comme un seuil net) ; sinon `beyond_declared_range` avec le sens de déplacement du métrique, ou `insufficient_points` (moins de deux points déclarant la variable et le métrique). Les variables sont **classées par pente implicite absolue** la plus forte. Les runs omettant le métrique sont signalés `incomplete_run_ids` et **jamais moyennés**. Le nombre de Contributions confirmées pour/contre l'Option est rapporté, mais **l'Evidence n'est pas attribuée à une variable** (rien dans le modèle ne le dit, et §21 interdit d'inventer ce lien). La réponse **n'a aucun champ pouvant porter une valeur prédite**.
+- Écriture (variables + runs) = propriétaire + participants ; lecture = membres de l'espace.
+- Voir `openspec/changes/add-scenario-analysis/` et l'issue #115. Hors périmètre : modèles probabilistes, Monte Carlo, priors d'espace, modèles prédictifs, tout écran.
+
 ### Idea (le "dépôt")
 `id, slug, title, pitch, owner_id, workspace_id?(null=public), stage(seed|iterating|team_formed), lang, visibility(public|workspace), created_at`
 

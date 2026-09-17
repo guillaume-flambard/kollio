@@ -4,7 +4,7 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 
 ## Vocabulary in transition
 
-`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 6 added the Decision Record (see Decision records below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
+`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 6 added the Decision Record (see Decision records below), step 7 added scenario analysis with a deterministic sensitivity read (see Scenario analysis below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
 
 ## Language
 
@@ -235,3 +235,17 @@ _Avoid_: OptionEvidence (which argues about an Option), quote, citation
 **Revisit trigger**:
 A structured reason to come back: a required metric, with an optional direction (`above` or `below`), threshold and note. A metric alone is a legitimate reminder. Informational only: it gates nothing and produces no score.
 _Avoid_: Alert, KPI, expiry
+
+### Scenario analysis
+
+**ScenarioVariable**:
+A space-scoped quantity two Options can be compared on: a name (unique per space), an optional unit and a declared `low`/`base`/`high` range in that order. Space-scoped rather than Option-scoped, because two Options compared on the same metric must share its definition.
+_Avoid_: Parameter, input, driver, assumption
+
+**ScenarioRun**:
+One level of an Option's simulation: `optimistic`, `base`, `pessimistic` or `failure`, carrying its explicit assumptions and one numeric value per variable. At most one `base` run per Option. A run that omits the metric is reported as incomplete and is never averaged in.
+_Avoid_: Scenario (the level), case, variant, projection
+
+**Sensitivity**:
+The answer to what would change the preference, computed by scanning the declared points: per variable, the interval where the criterion flips plus the interpolated crossing, or `beyond_declared_range` with the direction the metric travels, or `insufficient_points`. Variables rank by the largest absolute implied slope. Informational: it gates nothing and never returns a predicted value.
+_Avoid_: Forecast, prediction, projection, estimate
