@@ -788,6 +788,148 @@ export type CreateIterationRequest = {
 };
 
 /**
+ * DecisionArgumentResponse
+ */
+export type DecisionArgumentResponse = {
+    /**
+     * Contribution Id
+     */
+    contribution_id: string;
+    /**
+     * Side
+     */
+    side: 'for' | 'against';
+};
+
+/**
+ * DecisionArgumentWrite
+ */
+export type DecisionArgumentWrite = {
+    /**
+     * Contribution Id
+     */
+    contribution_id: string;
+    /**
+     * Side
+     */
+    side: 'for' | 'against';
+};
+
+/**
+ * DecisionCommit
+ */
+export type DecisionCommit = {
+    /**
+     * Selected Option Id
+     */
+    selected_option_id: string;
+    /**
+     * Rationale
+     */
+    rationale: string;
+    /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
+    /**
+     * Uncertainty
+     */
+    uncertainty?: string | null;
+    /**
+     * Success Criteria
+     */
+    success_criteria?: string | null;
+    /**
+     * Revisit Triggers
+     */
+    revisit_triggers?: Array<RevisitTrigger> | null;
+    /**
+     * Rejected Option Ids
+     */
+    rejected_option_ids?: Array<string>;
+    /**
+     * Arguments
+     */
+    arguments?: Array<DecisionArgumentWrite>;
+};
+
+/**
+ * DecisionListResponse
+ */
+export type DecisionListResponse = {
+    /**
+     * Items
+     */
+    items: Array<DecisionResponse>;
+};
+
+/**
+ * DecisionResponse
+ */
+export type DecisionResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Version
+     */
+    version: number;
+    /**
+     * Selected Option Id
+     */
+    selected_option_id: string;
+    /**
+     * Rationale
+     */
+    rationale: string;
+    /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
+    /**
+     * Uncertainty
+     */
+    uncertainty?: string | null;
+    /**
+     * Success Criteria
+     */
+    success_criteria?: string | null;
+    /**
+     * Revisit Triggers
+     */
+    revisit_triggers?: Array<RevisitTrigger> | null;
+    /**
+     * Reviewer Ids
+     */
+    reviewer_ids: Array<string>;
+    /**
+     * Decided By
+     */
+    decided_by: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Rejected Option Ids
+     */
+    rejected_option_ids: Array<string>;
+    /**
+     * Arguments
+     */
+    arguments: Array<DecisionArgumentResponse>;
+};
+
+/**
  * DecisionSpaceCreate
  */
 export type DecisionSpaceCreate = {
@@ -2247,6 +2389,28 @@ export type ReviewAnalysisRequest = {
      * Approved
      */
     approved: boolean;
+};
+
+/**
+ * RevisitTrigger
+ */
+export type RevisitTrigger = {
+    /**
+     * Metric
+     */
+    metric: string;
+    /**
+     * Direction
+     */
+    direction?: 'above' | 'below' | null;
+    /**
+     * Threshold
+     */
+    threshold?: string | null;
+    /**
+     * Note
+     */
+    note?: string | null;
 };
 
 /**
@@ -3901,6 +4065,108 @@ export type ConfirmContributionResponses = {
 };
 
 export type ConfirmContributionResponse = ConfirmContributionResponses[keyof ConfirmContributionResponses];
+
+export type GetDecisionRecordData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/decision';
+};
+
+export type GetDecisionRecordErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetDecisionRecordError = GetDecisionRecordErrors[keyof GetDecisionRecordErrors];
+
+export type GetDecisionRecordResponses = {
+    /**
+     * Successful Response
+     */
+    200: DecisionResponse;
+};
+
+export type GetDecisionRecordResponse = GetDecisionRecordResponses[keyof GetDecisionRecordResponses];
+
+export type CommitDecisionData = {
+    body: DecisionCommit;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/decision';
+};
+
+export type CommitDecisionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CommitDecisionError = CommitDecisionErrors[keyof CommitDecisionErrors];
+
+export type CommitDecisionResponses = {
+    /**
+     * Successful Response
+     */
+    201: DecisionResponse;
+};
+
+export type CommitDecisionResponse = CommitDecisionResponses[keyof CommitDecisionResponses];
+
+export type ListDecisionVersionsData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/decision/versions';
+};
+
+export type ListDecisionVersionsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListDecisionVersionsError = ListDecisionVersionsErrors[keyof ListDecisionVersionsErrors];
+
+export type ListDecisionVersionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: DecisionListResponse;
+};
+
+export type ListDecisionVersionsResponse = ListDecisionVersionsResponses[keyof ListDecisionVersionsResponses];
 
 export type ListChallengesData = {
     body?: never;

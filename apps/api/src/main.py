@@ -16,6 +16,7 @@ from src.modules.constraint_analysis.adapters.taskiq import TaskiqAnalysisQueue
 from src.modules.constraint_analysis.api.routes import router as analysis_router
 from src.modules.converge.api.routes import router as converge_router
 from src.modules.decision_spaces.api.routes import router as decision_spaces_router
+from src.modules.decisions.api.routes import router as decisions_router
 from src.modules.experiments.api.routes import router as experiments_router
 from src.modules.ideas.api.routes import (
     router as ideas_router,
@@ -106,6 +107,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(company_context_router)
     app.include_router(decision_spaces_router)
     app.include_router(branches_router)
+    app.include_router(decisions_router)
     app.include_router(challenge_router)
     app.include_router(options_router)
     app.include_router(converge_router)

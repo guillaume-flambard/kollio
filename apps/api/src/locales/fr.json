@@ -14,5 +14,6 @@
   "not_found_cluster": "Groupe introuvable",
   "not_found_option": "Option introuvable",
   "not_found_challenge": "Challenge introuvable",
-  "not_found_finding": "Constat introuvable"
+  "not_found_finding": "Constat introuvable",
+  "not_found_decision": "Décision introuvable"
 }

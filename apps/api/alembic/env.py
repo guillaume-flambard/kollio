@@ -10,6 +10,7 @@ from src.modules.company_context.adapters import postgres as company_context_pos
 from src.modules.constraint_analysis.adapters import postgres as analysis_postgres  # noqa: F401
 from src.modules.converge.adapters import postgres as converge_postgres  # noqa: F401
 from src.modules.decision_spaces.adapters import postgres as decision_spaces_postgres  # noqa: F401
+from src.modules.decisions.adapters import postgres as decisions_postgres  # noqa: F401
 from src.modules.ideas.adapters import postgres  # noqa: F401
 from src.modules.iterations.adapters import postgres as iterations_postgres  # noqa: F401
 from src.modules.options.adapters import postgres as options_postgres  # noqa: F401

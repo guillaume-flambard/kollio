@@ -2739,6 +2739,188 @@
         }
       }
     },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/decision": {
+      "get": {
+        "tags": [
+          "decisions"
+        ],
+        "summary": "Read Decision Record",
+        "operationId": "get_decision_record",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "decisions"
+        ],
+        "summary": "Commit Decision Record",
+        "operationId": "commit_decision",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionCommit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/decision/versions": {
+      "get": {
+        "tags": [
+          "decisions"
+        ],
+        "summary": "List Decision Versions",
+        "operationId": "list_decision_versions",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges": {
       "get": {
         "tags": [
@@ -6107,6 +6289,280 @@
         ],
         "title": "CreateIterationRequest"
       },
+      "DecisionArgumentResponse": {
+        "properties": {
+          "contribution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Contribution Id"
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "for",
+              "against"
+            ],
+            "title": "Side"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contribution_id",
+          "side"
+        ],
+        "title": "DecisionArgumentResponse"
+      },
+      "DecisionArgumentWrite": {
+        "properties": {
+          "contribution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Contribution Id"
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "for",
+              "against"
+            ],
+            "title": "Side"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contribution_id",
+          "side"
+        ],
+        "title": "DecisionArgumentWrite"
+      },
+      "DecisionCommit": {
+        "properties": {
+          "selected_option_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Selected Option Id"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Rationale"
+          },
+          "critical_assumptions": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Critical Assumptions"
+          },
+          "uncertainty": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainty"
+          },
+          "success_criteria": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Success Criteria"
+          },
+          "revisit_triggers": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/RevisitTrigger"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revisit Triggers"
+          },
+          "rejected_option_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Rejected Option Ids"
+          },
+          "arguments": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionArgumentWrite"
+            },
+            "type": "array",
+            "title": "Arguments"
+          }
+        },
+        "type": "object",
+        "required": [
+          "selected_option_id",
+          "rationale"
+        ],
+        "title": "DecisionCommit"
+      },
+      "DecisionListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "DecisionListResponse"
+      },
+      "DecisionResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "space_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Space Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "selected_option_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Selected Option Id"
+          },
+          "rationale": {
+            "type": "string",
+            "title": "Rationale"
+          },
+          "critical_assumptions": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Critical Assumptions"
+          },
+          "uncertainty": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainty"
+          },
+          "success_criteria": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Success Criteria"
+          },
+          "revisit_triggers": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/RevisitTrigger"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revisit Triggers"
+          },
+          "reviewer_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Reviewer Ids"
+          },
+          "decided_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Decided By"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "rejected_option_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Rejected Option Ids"
+          },
+          "arguments": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionArgumentResponse"
+            },
+            "type": "array",
+            "title": "Arguments"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "space_id",
+          "version",
+          "selected_option_id",
+          "rationale",
+          "reviewer_ids",
+          "decided_by",
+          "lang",
+          "created_at",
+          "rejected_option_ids",
+          "arguments"
+        ],
+        "title": "DecisionResponse"
+      },
       "DecisionSpaceCreate": {
         "properties": {
           "question": {
@@ -8973,6 +9429,59 @@
           "approved"
         ],
         "title": "ReviewAnalysisRequest"
+      },
+      "RevisitTrigger": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Metric"
+          },
+          "direction": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "above",
+                  "below"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direction"
+          },
+          "threshold": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Threshold"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric"
+        ],
+        "title": "RevisitTrigger"
       },
       "RollbackRequest": {
         "properties": {

@@ -14,5 +14,6 @@
   "not_found_cluster": "Cluster not found",
   "not_found_option": "Option not found",
   "not_found_challenge": "Challenge not found",
-  "not_found_finding": "Finding not found"
+  "not_found_finding": "Finding not found",
+  "not_found_decision": "Decision record not found"
 }
