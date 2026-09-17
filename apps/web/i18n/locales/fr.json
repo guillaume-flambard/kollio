@@ -598,6 +598,48 @@
           "forbidden": "Seul un participant du space peut écrire ici."
         }
       }
+    },
+    "learning": {
+      "loadFailed": "Les leçons n’ont pas pu être chargées. Réessayez dans un instant.",
+      "empty": {
+        "title": "Aucune leçon pour le moment.",
+        "body": "Une leçon se propose quand une expérience est close avec un résultat. Confirmez-en une pour l’ajouter au savoir du space."
+      },
+      "status": {
+        "draft": "Proposée",
+        "confirmed": "Confirmée"
+      },
+      "proposed": {
+        "title": "À confirmer",
+        "intro": "Une leçon proposée attend une personne : le système ne confirme jamais seul.",
+        "empty": "Aucune leçon en attente de confirmation."
+      },
+      "confirmed": {
+        "title": "Leçons confirmées",
+        "intro": "Ce que le space a appris et garde pour ses décisions suivantes.",
+        "empty": "Aucune leçon confirmée pour le moment."
+      },
+      "card": {
+        "text": "Texte de la leçon",
+        "textPlaceholder": "Ce qu’il faut retenir",
+        "outcome": "Résultat d’origine",
+        "experiment": "Expérience",
+        "initiative": "Initiative",
+        "confirmedBy": "Confirmée par {name} · le {date}",
+        "noOutcome": "Aucun résultat enregistré."
+      },
+      "actions": {
+        "confirm": "Confirmer",
+        "confirming": "Confirmation…",
+        "confirmFailed": "La leçon n’a pas pu être confirmée.",
+        "save": "Enregistrer le brouillon",
+        "saving": "Enregistrement…",
+        "saveFailed": "Le brouillon n’a pas pu être enregistré."
+      },
+      "notes": {
+        "neverAuto": "Seule une personne confirme une leçon.",
+        "draftKept": "Une leçon non confirmée reste un brouillon conservé : rien n’est supprimé."
+      }
     }
   },
   "meta": {

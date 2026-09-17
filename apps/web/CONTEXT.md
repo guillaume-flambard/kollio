@@ -107,3 +107,15 @@ _Avoid_: Case, variant, simulation, projection
 **Sensitivity read**:
 The deterministic report of what would change the preference: for one result variable and one criterion, it says within which declared interval the criterion flips, ranks the variables by the impact they imply, and reports the runs that carry no result instead of averaging them. It describes declared points, never a predicted value.
 _Avoid_: Forecast, probability, confidence, prediction
+
+**Learning section**:
+The section at `/workspace/decision-spaces/[spaceId]/learning` where the lesson an experiment produced waits for a person, who confirms it or leaves it as a draft. Confirmed lessons accumulate with their descent, and a lesson nobody confirmed is kept rather than deleted.
+_Avoid_: Insight, takeaway, scoring, verdict
+
+**Learning**:
+The knowledge a person confirms from an experiment: a text that never returns to draft, whose provenance carries the workspace, the idea and the experiment. A learning is reached through its experiment.
+_Avoid_: Insight, conclusion, prediction, score
+
+**Learning provenance**:
+The outcome, the experiment and the initiative a lesson descends from, together with the person who confirmed it and the date.
+_Avoid_: Source, citation, metadata

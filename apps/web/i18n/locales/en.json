@@ -598,6 +598,48 @@
           "forbidden": "Only a participant of the Space can write here."
         }
       }
+    },
+    "learning": {
+      "loadFailed": "The lessons could not be loaded. Try again in a moment.",
+      "empty": {
+        "title": "No lesson yet.",
+        "body": "A lesson is proposed once an experiment is closed with an outcome. Confirm one to add it to the knowledge of the Space."
+      },
+      "status": {
+        "draft": "Proposed",
+        "confirmed": "Confirmed"
+      },
+      "proposed": {
+        "title": "Waiting for a person",
+        "intro": "A proposed lesson waits for a person: the system never confirms on its own.",
+        "empty": "No lesson waiting for confirmation."
+      },
+      "confirmed": {
+        "title": "Confirmed lessons",
+        "intro": "What the Space has learned and keeps for its next decisions.",
+        "empty": "No confirmed lesson yet."
+      },
+      "card": {
+        "text": "Lesson text",
+        "textPlaceholder": "What to keep",
+        "outcome": "Outcome it comes from",
+        "experiment": "Experiment",
+        "initiative": "Initiative",
+        "confirmedBy": "Confirmed by {name} · on {date}",
+        "noOutcome": "No outcome recorded."
+      },
+      "actions": {
+        "confirm": "Confirm",
+        "confirming": "Confirming…",
+        "confirmFailed": "The lesson could not be confirmed.",
+        "save": "Save the draft",
+        "saving": "Saving…",
+        "saveFailed": "The draft could not be saved."
+      },
+      "notes": {
+        "neverAuto": "Only a person confirms a lesson.",
+        "draftKept": "A lesson that is not confirmed stays as a kept draft: nothing is deleted."
+      }
     }
   },
   "meta": {

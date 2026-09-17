@@ -132,16 +132,6 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       }
     })
 
-    test('DECISION-SPACES-06 an unshipped section says what will live there', async ({ page }) => {
-      await page.route('**/api/workspaces/workspace-one/decision-spaces/*', route => route.fulfill({ json: makeDetail() }))
-
-      await page.goto(`${prefix}/workspace/decision-spaces/space-one/learning?workspace=workspace-one`)
-
-      await expect(page.getByRole('heading', { name: messages.decisionSpaces.section.learning.title })).toBeVisible()
-      await expect(page.getByText(messages.decisionSpaces.section.learning.body)).toBeVisible()
-      await expect(page.getByText(messages.decisionSpaces.section.pending)).toBeVisible()
-    })
-
     test('DECISION-SPACES-07 applies a permitted transition and it survives a reload', async ({ page }) => {
       let status = 'EXPLORING'
       await page.route('**/api/workspaces/workspace-one/decision-spaces/*', route => route.fulfill({ json: makeDetail({ status }) }))
