@@ -234,7 +234,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await openDetailedEditor(page)
       await page.getByLabel(s.profile.name, { exact: true }).fill('Faktus')
       await page.getByRole('button', { name: s.profile.save }).click()
-      await expect(page.getByRole('alert')).toBeVisible()
+      await expect(page.getByRole('alert').first()).toBeVisible()
       await expect(page.getByLabel(s.profile.name, { exact: true })).toHaveValue('Faktus')
     })
 

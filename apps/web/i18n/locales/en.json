@@ -5,7 +5,7 @@
     "ideas": "Initiatives",
     "workspace": "Workspace",
     "promise": "Initiatives with impact, together.",
-    "settings": "Company context",
+    "settings": "Settings",
     "menuOpen": "Open navigation",
     "menuClose": "Close navigation",
     "skipToContent": "Skip to content",
@@ -829,6 +829,74 @@
         "archive": "Archive",
         "restore": "Restore",
         "empty": "No constraint yet."
+      },
+      "members": {
+        "title": "Members",
+        "intro": "The people of this workspace, and how initiatives are joined. Membership is decided per initiative.",
+        "roster": {
+          "title": "Workspace members",
+          "intro": "Everyone who can see this workspace.",
+          "empty": "No member yet.",
+          "failed": "The members could not be loaded."
+        },
+        "manage": {
+          "title": "Initiative membership",
+          "intro": "Join requests and teams are handled per initiative: pick the one to work on.",
+          "failed": "The initiative could not be read."
+        },
+        "initiative": {
+          "label": "Initiative",
+          "choose": "Choose",
+          "empty": "No initiative in this workspace."
+        },
+        "requests": {
+          "title": "Waiting requests",
+          "empty": "No request is waiting.",
+          "requester": "Requested by {name}",
+          "note": "Note",
+          "accept": "Accept",
+          "accepting": "Accepting…",
+          "acceptFailed": "The request could not be accepted.",
+          "reject": "Reject",
+          "rejecting": "Rejecting…",
+          "rationale": "Reason for rejecting",
+          "rationaleRequired": "A rejection needs a reason.",
+          "rejectFailed": "The request could not be rejected.",
+          "status": {
+            "pending": "Pending",
+            "accepted": "Accepted",
+            "rejected": "Rejected"
+          }
+        },
+        "team": {
+          "title": "Initiative team",
+          "empty": "No member in this initiative.",
+          "remove": "Remove",
+          "removing": "Removing…",
+          "removeReason": "Reason for removal (optional)",
+          "removeFailed": "The member could not be removed."
+        },
+        "add": {
+          "title": "Add a participant",
+          "user": "Workspace member",
+          "participation": "Participation",
+          "function": "Function",
+          "submit": "Add",
+          "submitting": "Adding…",
+          "failed": "The participant could not be added.",
+          "noCandidates": "Every member of this workspace is already in this initiative.",
+          "userRequired": "Choose the workspace member to add."
+        },
+        "participation": {
+          "owner": "Owner",
+          "decision_maker": "Decision maker",
+          "contributor": "Contributor",
+          "observer": "Observer"
+        },
+        "notes": {
+          "perInitiative": "Membership only exists at the initiative level: nothing adds or removes a workspace member here.",
+          "noMatching": "Participant axes (matching) are not exposed here."
+        }
       },
       "onboarding": {
         "title": "Seed the company context",

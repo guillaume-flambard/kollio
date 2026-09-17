@@ -4,12 +4,16 @@ import type {
   CompanyProfileResponse,
   CompanyConstraintResponse,
   CompanyConstraintUpdate,
+  IdeaPageResponse,
+  IdeaResponse,
+  JoinRequestResponse,
   MetricResponse,
   MetricUpdate,
   ObjectiveResponse,
   ObjectiveUpdate,
   PrincipleResponse,
   PrincipleUpdate,
+  WorkspaceMemberResponse,
   WorkspaceResponse,
 } from '@kollio/api-client'
 
@@ -59,6 +63,158 @@ const metricName = ref('')
 const metricValue = ref('')
 const metricUnit = ref('')
 const metricSource = ref('')
+
+const { data: members, error: membersFailure, refresh: refreshMembers } = await useAsyncData(
+  'settings-members',
+  async () => {
+    if (!activeWorkspace.value) return undefined
+    return requestFetch<WorkspaceMemberResponse[]>(
+      `/api/workspaces/${encodeURIComponent(activeWorkspace.value.id)}/members`,
+    )
+  },
+  { watch: [activeWorkspace] },
+)
+
+const { data: workspaceIdeas } = await useAsyncData(
+  'settings-members-ideas',
+  async () => {
+    if (!activeWorkspace.value) return undefined
+    return requestFetch<IdeaPageResponse>(
+      `/api/workspaces/${encodeURIComponent(activeWorkspace.value.id)}/ideas`,
+      { query: { limit: 100, offset: 0 } },
+    )
+  },
+  { watch: [activeWorkspace] },
+)
+
+const initiatives = computed(() => workspaceIdeas.value?.items ?? [])
+const managedIdeaId = ref('')
+watch(
+  initiatives,
+  list => {
+    if (!list.some(idea => idea.id === managedIdeaId.value)) {
+      managedIdeaId.value = list[0]?.id ?? ''
+    }
+  },
+  { immediate: true },
+)
+
+const {
+  data: managedIdea,
+  error: managedIdeaFailure,
+  refresh: refreshManagedIdea,
+} = await useAsyncData(
+  'settings-members-initiative',
+  async () => {
+    if (!managedIdeaId.value) return undefined
+    return requestFetch<IdeaResponse>(`/api/ideas/${encodeURIComponent(managedIdeaId.value)}`)
+  },
+  { watch: [managedIdeaId] },
+)
+
+const roster = computed(() => members.value ?? [])
+const pendingRequests = computed<JoinRequestResponse[]>(() =>
+  (managedIdea.value?.join_requests ?? []).filter(request => request.status === 'pending'),
+)
+const team = computed(() => managedIdea.value?.collaborators ?? [])
+const participationRoles = ['owner', 'decision_maker', 'contributor', 'observer'] as const
+const businessFunctions = [
+  'marketing',
+  'sales',
+  'finance',
+  'product',
+  'engineering',
+  'customer_success',
+  'operations',
+  'legal',
+  'hr',
+  'data',
+  'direction',
+  'other',
+] as const
+const addUserId = ref('')
+const addParticipation = ref<string>('contributor')
+const addFunction = ref<string>('product')
+const rejectReasons = ref<Record<string, string>>({})
+const memberActionError = ref<string>()
+const memberBusyId = ref('')
+
+function memberName(userId: string) {
+  return roster.value.find(member => member.id === userId)?.display_name ?? userId
+}
+
+function roleLabel(role: string) {
+  return role === 'admin' ? t('workspace.role.admin') : t('workspace.role.member')
+}
+
+const addCandidates = computed(() =>
+  roster.value.filter(member => !team.value.some(collaborator => collaborator.id === member.id)),
+)
+
+async function runMemberAction(id: string, action: () => Promise<unknown>) {
+  memberBusyId.value = id
+  memberActionError.value = undefined
+  try {
+    await action()
+    await refreshManagedIdea()
+    await refreshMembers()
+  } catch {
+    memberActionError.value = t('workspace.settings.error')
+  } finally {
+    memberBusyId.value = ''
+  }
+}
+
+function acceptRequest(requestId: string) {
+  return runMemberAction(requestId, () =>
+    $fetch(
+      `/api/ideas/${encodeURIComponent(managedIdeaId.value)}/join-requests/${encodeURIComponent(requestId)}/accept`,
+      { method: 'POST', body: { participation: null } },
+    ),
+  )
+}
+
+function submitRejection(requestId: string) {
+  const rationale = (rejectReasons.value[requestId] ?? '').trim()
+  if (!rationale) {
+    memberActionError.value = t('workspace.settings.members.requests.rationaleRequired')
+    return Promise.resolve()
+  }
+  return runMemberAction(requestId, () =>
+    $fetch(
+      `/api/ideas/${encodeURIComponent(managedIdeaId.value)}/join-requests/${encodeURIComponent(requestId)}/reject`,
+      { method: 'POST', body: { rationale } },
+    ),
+  )
+}
+
+function removeMember(memberId: string) {
+  return runMemberAction(memberId, () =>
+    $fetch(
+      `/api/ideas/${encodeURIComponent(managedIdeaId.value)}/team/remove/${encodeURIComponent(memberId)}`,
+      { method: 'POST', body: { reason: null } },
+    ),
+  )
+}
+
+function addParticipant() {
+  const userId = addUserId.value
+  if (!userId) {
+    memberActionError.value = t('workspace.settings.members.add.userRequired')
+    return Promise.resolve()
+  }
+  return runMemberAction(userId, async () => {
+    await $fetch(`/api/ideas/${encodeURIComponent(managedIdeaId.value)}/members`, {
+      method: 'POST',
+      body: {
+        user_id: userId,
+        participation: addParticipation.value,
+        function: addFunction.value,
+      },
+    })
+    addUserId.value = ''
+  })
+}
 
 const wizard = reactive({
   name: '',
@@ -422,6 +578,128 @@ async function saveWizard() {
       {{ t('workspace.settings.error') }}
     </p>
 
+    <section v-if="activeWorkspace" class="kollio-surface settings-section settings-members">
+      <h2>{{ t('workspace.settings.members.title') }}</h2>
+      <p class="settings-note">{{ t('workspace.settings.members.intro') }}</p>
+
+      <p v-if="membersFailure || managedIdeaFailure" role="alert" class="settings-error">
+        {{ t('workspace.settings.members.roster.failed') }}
+      </p>
+
+      <h3 class="settings-members-heading">{{ t('workspace.settings.members.roster.title') }}</h3>
+      <p class="settings-note">{{ t('workspace.settings.members.roster.intro') }}</p>
+      <ul v-if="roster.length" class="settings-list" role="list">
+        <li v-for="member in roster" :key="member.id">
+          <span class="settings-members-name">{{ member.display_name }}</span>
+          <span class="settings-state">{{ roleLabel(member.role) }}</span>
+        </li>
+      </ul>
+      <p v-else class="settings-note">{{ t('workspace.settings.members.roster.empty') }}</p>
+
+      <h3 class="settings-members-heading">{{ t('workspace.settings.members.manage.title') }}</h3>
+      <p class="settings-note">{{ t('workspace.settings.members.manage.intro') }}</p>
+
+      <p v-if="!initiatives.length" class="settings-note">
+        {{ t('workspace.settings.members.initiative.empty') }}
+      </p>
+      <template v-else>
+        <label class="settings-field">
+          <span>{{ t('workspace.settings.members.initiative.label') }}</span>
+          <select v-model="managedIdeaId">
+            <option v-for="idea in initiatives" :key="idea.id" :value="idea.id">{{ idea.title }}</option>
+          </select>
+        </label>
+
+        <p v-if="memberActionError" role="alert" class="settings-error">{{ memberActionError }}</p>
+
+        <h4 class="settings-members-heading">{{ t('workspace.settings.members.requests.title') }}</h4>
+        <ul v-if="pendingRequests.length" class="settings-list" role="list">
+          <li v-for="request in pendingRequests" :key="request.id">
+            <span class="settings-members-name">
+              {{ t('workspace.settings.members.requests.requester', { name: memberName(request.requester_id) }) }}
+            </span>
+            <span class="settings-note">{{ request.note }}</span>
+            <label class="settings-field settings-members-reason">
+              <span>{{ t('workspace.settings.members.requests.rationale') }}</span>
+              <input v-model="rejectReasons[request.id]">
+            </label>
+            <button
+              type="button"
+              class="settings-primary"
+              :disabled="memberBusyId === request.id"
+              @click="acceptRequest(request.id)"
+            >
+              {{ memberBusyId === request.id ? t('workspace.settings.members.requests.accepting') : t('workspace.settings.members.requests.accept') }}
+            </button>
+            <button
+              type="button"
+              class="settings-link"
+              :disabled="memberBusyId === request.id"
+              @click="submitRejection(request.id)"
+            >
+              {{ memberBusyId === request.id ? t('workspace.settings.members.requests.rejecting') : t('workspace.settings.members.requests.reject') }}
+            </button>
+          </li>
+        </ul>
+        <p v-else class="settings-note">{{ t('workspace.settings.members.requests.empty') }}</p>
+
+        <h4 class="settings-members-heading">{{ t('workspace.settings.members.team.title') }}</h4>
+        <ul v-if="team.length" class="settings-list" role="list">
+          <li v-for="collaborator in team" :key="collaborator.id">
+            <span class="settings-members-name">{{ collaborator.display_name }}</span>
+            <span class="settings-state">
+              {{ t('workspace.settings.members.participation.' + collaborator.participation) }}
+            </span>
+            <button
+              type="button"
+              class="settings-link"
+              :disabled="memberBusyId === collaborator.id"
+              @click="removeMember(collaborator.id)"
+            >
+              {{ memberBusyId === collaborator.id ? t('workspace.settings.members.team.removing') : t('workspace.settings.members.team.remove') }}
+            </button>
+          </li>
+        </ul>
+        <p v-else class="settings-note">{{ t('workspace.settings.members.team.empty') }}</p>
+
+        <h4 class="settings-members-heading">{{ t('workspace.settings.members.add.title') }}</h4>
+        <form v-if="addCandidates.length" class="settings-members-add" @submit.prevent="addParticipant">
+          <label class="settings-field">
+            <span>{{ t('workspace.settings.members.add.user') }}</span>
+            <select v-model="addUserId">
+              <option value="">{{ t('workspace.settings.members.initiative.choose') }}</option>
+              <option v-for="member in addCandidates" :key="member.id" :value="member.id">
+                {{ member.display_name }}
+              </option>
+            </select>
+          </label>
+          <label class="settings-field">
+            <span>{{ t('workspace.settings.members.add.participation') }}</span>
+            <select v-model="addParticipation">
+              <option v-for="role in participationRoles" :key="role" :value="role">
+                {{ t('workspace.settings.members.participation.' + role) }}
+              </option>
+            </select>
+          </label>
+          <label class="settings-field">
+            <span>{{ t('workspace.settings.members.add.function') }}</span>
+            <select v-model="addFunction">
+              <option v-for="name in businessFunctions" :key="name" :value="name">
+                {{ t('ideas.function.' + name) }}
+              </option>
+            </select>
+          </label>
+          <button type="submit" class="settings-primary" :disabled="Boolean(memberBusyId)">
+            {{ memberBusyId ? t('workspace.settings.members.add.submitting') : t('workspace.settings.members.add.submit') }}
+          </button>
+        </form>
+        <p v-else class="settings-note">{{ t('workspace.settings.members.add.noCandidates') }}</p>
+
+        <p class="settings-note">{{ t('workspace.settings.members.notes.perInitiative') }}</p>
+        <p class="settings-note">{{ t('workspace.settings.members.notes.noMatching') }}</p>
+      </template>
+    </section>
+
     <template v-if="context">
       <form class="kollio-surface settings-section settings-wizard" @submit.prevent="saveWizard">
         <div class="settings-wizard-head">
@@ -772,9 +1050,26 @@ async function saveWizard() {
 .settings-advanced-title { color: var(--kollio-active-ink); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); text-decoration: underline; text-underline-offset: 3px; }
 .settings-advanced-hint { color: var(--ui-text-muted); font-size: var(--kollio-text-caption); }
 .settings-advanced-chevron { margin-left: auto; color: var(--ui-text-muted); }
+.settings-members { gap: var(--kollio-space-md); }
+.settings-members-heading { color: var(--ui-text-muted); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); text-transform: uppercase; letter-spacing: .08em; }
+.settings-members-name { color: var(--kollio-heading); font-weight: var(--kollio-weight-strong); }
+.settings-members-reason { flex: 1 1 200px; }
+.settings-members-add { display: grid; grid-template-columns: 1fr 1fr 1fr auto; align-items: end; gap: var(--kollio-space-md); }
+
+.settings-members select,
+.settings-members input {
+  min-height: 44px;
+}
+
+.settings-members .settings-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 
 @media (max-width: 640px) {
   .settings-inline { grid-template-columns: 1fr; }
   .settings-metric-form { grid-template-columns: 1fr; }
+  .settings-members-add { grid-template-columns: 1fr; }
 }
 </style>

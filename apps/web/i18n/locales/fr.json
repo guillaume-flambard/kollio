@@ -5,7 +5,7 @@
     "ideas": "Initiatives",
     "workspace": "Espace",
     "promise": "Des initiatives à impact, ensemble.",
-    "settings": "Contexte entreprise",
+    "settings": "Réglages",
     "menuOpen": "Ouvrir la navigation",
     "menuClose": "Fermer la navigation",
     "skipToContent": "Aller au contenu",
@@ -829,6 +829,74 @@
         "archive": "Archiver",
         "restore": "Réactiver",
         "empty": "Aucune contrainte pour le moment."
+      },
+      "members": {
+        "title": "Membres",
+        "intro": "Les membres de l'espace de travail, et l'adhésion aux initiatives. L'adhésion se décide initiative par initiative.",
+        "roster": {
+          "title": "Membres de l'espace",
+          "intro": "Toutes les personnes qui voient cet espace de travail.",
+          "empty": "Aucun membre pour le moment.",
+          "failed": "Les membres n’ont pas pu être chargés."
+        },
+        "manage": {
+          "title": "Adhésion d'une initiative",
+          "intro": "Les demandes d'adhésion et les équipes se gèrent initiative par initiative : choisissez celle à traiter.",
+          "failed": "L’initiative n’a pas pu être lue."
+        },
+        "initiative": {
+          "label": "Initiative",
+          "choose": "Choisir",
+          "empty": "Aucune initiative dans cet espace de travail."
+        },
+        "requests": {
+          "title": "Demandes en attente",
+          "empty": "Aucune demande en attente.",
+          "requester": "Demande de {name}",
+          "note": "Note",
+          "accept": "Accepter",
+          "accepting": "Acceptation…",
+          "acceptFailed": "La demande n'a pas pu être acceptée.",
+          "reject": "Refuser",
+          "rejecting": "Refus…",
+          "rationale": "Motif du refus",
+          "rationaleRequired": "Un refus demande un motif.",
+          "rejectFailed": "La demande n'a pas pu être refusée.",
+          "status": {
+            "pending": "En attente",
+            "accepted": "Acceptée",
+            "rejected": "Refusée"
+          }
+        },
+        "team": {
+          "title": "Équipe de l'initiative",
+          "empty": "Aucun membre dans cette initiative.",
+          "remove": "Retirer",
+          "removing": "Retrait…",
+          "removeReason": "Motif du retrait (facultatif)",
+          "removeFailed": "Le membre n'a pas pu être retiré."
+        },
+        "add": {
+          "title": "Ajouter un participant",
+          "user": "Membre de l'espace",
+          "participation": "Participation",
+          "function": "Fonction",
+          "submit": "Ajouter",
+          "submitting": "Ajout…",
+          "failed": "Le participant n'a pas pu être ajouté.",
+          "noCandidates": "Tous les membres de cet espace sont déjà dans cette initiative.",
+          "userRequired": "Choisissez le membre de l’espace à ajouter."
+        },
+        "participation": {
+          "owner": "Porteur",
+          "decision_maker": "Décideur",
+          "contributor": "Contributeur",
+          "observer": "Observateur"
+        },
+        "notes": {
+          "perInitiative": "L'adhésion n'existe qu'au niveau d'une initiative : il n'y a pas d'ajout ni de retrait au niveau de l'espace.",
+          "noMatching": "Les axes de participation (matching) ne sont pas exposés ici."
+        }
       },
       "onboarding": {
         "title": "Amorcer le contexte de l’entreprise",
