@@ -34,6 +34,12 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - Lecture de la carte : Contributions confirmées (les `suggested` restent dehors), relations, Clusters avec leurs membres. Écriture = propriétaire + participants.
 - Voir `openspec/changes/add-converge-map/` et l'issue #111. Le proposeur IA (relations `suggested` à confirmer) est le slice suivant.
 
+### Option + OptionEvidence (les alternatives — étape 5, slice humain)
+`Option(id, space_id, title, proposal, mechanism?, upside?, cost?, risks?, critical_assumptions?, success_metrics?, created_by, lang, created_at, updated_at)` — une alternative qu'un Decision Space peut choisir, portant les champs du §7. Titre et proposition non vides (contraintes `btrim`), `lang` fermé. Aucun score, aucun rang, aucun verdict calculé : c'est le Critic (slice suivant, premier à nécessiter un modèle) qui portera le challenge machine.
+- `OptionEvidence(option_id, contribution_id, side(for|against), created_at)` — clé primaire composite, ce qui interdit le même lien deux fois. Seules les Contributions **confirmées** du **même espace** sont liables (`suggested` et contributions étrangères refusées) : l'évidence est *liée*, jamais *affirmée*, donc une Option ne peut pas revendiquer un support qu'aucune Contribution ne porte. Une même Contribution peut soutenir une Option et en contredire une autre.
+- Écriture (créer, éditer, supprimer, lier, délier) = propriétaire + participants ; lecture = membres de l'espace.
+- Voir `openspec/changes/add-options/` et l'issue #112. Hors périmètre : le Critic, le choix d'une Option et le Decision Record (étape 6), les scénarios (étape 7), tout écran.
+
 ### Idea (le "dépôt")
 `id, slug, title, pitch, owner_id, workspace_id?(null=public), stage(seed|iterating|team_formed), lang, visibility(public|workspace), created_at`
 

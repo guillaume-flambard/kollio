@@ -4,7 +4,7 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 
 ## Vocabulary in transition
 
-`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
+`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
 
 ## Language
 
@@ -177,3 +177,17 @@ _Avoid_: Folder, category, label
 **Converge map**:
 The read model of a Space's reasoning: its confirmed Contributions (suggested ones stay out), every relation between them, and every Cluster with its member ids. Readable by workspace members; writers build and correct it by hand.
 _Avoid_: Report, summary, AI output
+
+### Options
+
+**Option**:
+One alternative a Decision Space may choose between, built from the §7 fields: a title, the proposal, and mechanism, upside, cost, risks, critical assumptions and success metrics. Workspace-scoped, reachable only through its Decision Space. It carries no score, no rank and no computed verdict, by design.
+_Avoid_: Alternative (the relation type), scenario (a simulated variant), plan, draft
+
+**OptionEvidence**:
+A link from an Option to a *confirmed* Contribution, on the `for` or `against` side. Evidence is linked rather than asserted, so an Option cannot claim support no Contribution backs. The same Contribution may support one Option and contradict another.
+_Avoid_: Evidence (the Contribution kind), citation, note
+
+**Critic**:
+The machine challenge §7 settles before commitment: unsupported assumptions, contradictory evidence, hidden dependencies, failure modes, causal claims, missing success criteria. Not built yet; it is the next slice of step 7 and the first one that needs a model. Until it exists, nothing ranks or scores an Option.
+_Avoid_: Score, verdict, rating
