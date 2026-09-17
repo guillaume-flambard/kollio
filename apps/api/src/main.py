@@ -27,6 +27,7 @@ from src.modules.ideas.api.routes import (
 from src.modules.iterations.api.routes import router as iterations_router
 from src.modules.options.api.routes import router as options_router
 from src.modules.profiles.api.routes import router as profiles_router
+from src.modules.scenarios.api.routes import router as scenarios_router
 from src.modules.workspaces.api.routes import router as workspaces_router
 from src.platform.config import Settings, get_settings
 from src.platform.locale import MESSAGES, resolve_locale
@@ -110,6 +111,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(decisions_router)
     app.include_router(challenge_router)
     app.include_router(options_router)
+    app.include_router(scenarios_router)
     app.include_router(converge_router)
     app.include_router(experiments_router)
     FastAPIInstrumentor.instrument_app(app, excluded_urls="health/live,health/ready")

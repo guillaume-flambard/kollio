@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, AcceptIdeaMembershipRequestData, AcceptIdeaMembershipRequestErrors, AcceptIdeaMembershipRequestResponses, AddClusterMemberData, AddClusterMemberErrors, AddClusterMemberResponses, AddDecisionSpaceParticipantData, AddDecisionSpaceParticipantErrors, AddDecisionSpaceParticipantResponses, AddIdeaParticipantData, AddIdeaParticipantErrors, AddIdeaParticipantResponses, ChangeExperimentStatusData, ChangeExperimentStatusErrors, ChangeExperimentStatusResponses, CommitDecisionData, CommitDecisionErrors, CommitDecisionResponses, CompleteChallengeData, CompleteChallengeErrors, CompleteChallengeResponses, ConfirmContributionData, ConfirmContributionErrors, ConfirmContributionResponses, CreateBranchData, CreateBranchErrors, CreateBranchResponses, CreateClusterData, CreateClusterErrors, CreateClusterResponses, CreateCompanyConstraintData, CreateCompanyConstraintErrors, CreateCompanyConstraintResponses, CreateCompanyMetricData, CreateCompanyMetricErrors, CreateCompanyMetricResponses, CreateCompanyObjectiveData, CreateCompanyObjectiveErrors, CreateCompanyObjectiveResponses, CreateCompanyPrincipleData, CreateCompanyPrincipleErrors, CreateCompanyPrincipleResponses, CreateExperimentData, CreateExperimentErrors, CreateExperimentResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, CreateOptionData, CreateOptionErrors, CreateOptionResponses, CreateRelationData, CreateRelationErrors, CreateRelationResponses, DeleteClusterData, DeleteClusterErrors, DeleteClusterResponses, DeleteOptionData, DeleteOptionErrors, DeleteOptionResponses, DeleteRelationData, DeleteRelationErrors, DeleteRelationResponses, DepositWorkspaceIdeaData, DepositWorkspaceIdeaErrors, DepositWorkspaceIdeaResponses, GetBranchData, GetBranchErrors, GetBranchResponses, GetChallengeData, GetChallengeErrors, GetChallengeResponses, GetCompanyContextData, GetCompanyContextErrors, GetCompanyContextResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetConvergeMapData, GetConvergeMapErrors, GetConvergeMapResponses, GetDecisionRecordData, GetDecisionRecordErrors, GetDecisionRecordResponses, GetDecisionSpaceData, GetDecisionSpaceErrors, GetDecisionSpaceResponses, GetExperimentData, GetExperimentErrors, GetExperimentResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, GetOptionData, GetOptionErrors, GetOptionResponses, GetProfileData, GetProfileErrors, GetProfileResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, LeaveIdeaTeamData, LeaveIdeaTeamErrors, LeaveIdeaTeamResponses, LinkOptionEvidenceData, LinkOptionEvidenceErrors, LinkOptionEvidenceResponses, ListBranchesData, ListBranchesErrors, ListBranchesResponses, ListChallengesData, ListChallengesErrors, ListChallengesResponses, ListContributionsData, ListContributionsErrors, ListContributionsResponses, ListDecisionSpacesData, ListDecisionSpacesErrors, ListDecisionSpacesResponses, ListDecisionVersionsData, ListDecisionVersionsErrors, ListDecisionVersionsResponses, ListIdeaExperimentsData, ListIdeaExperimentsErrors, ListIdeaExperimentsResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListIdeaLearningsData, ListIdeaLearningsErrors, ListIdeaLearningsResponses, ListOptionsData, ListOptionsErrors, ListOptionsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspaceMembersData, ListWorkspaceMembersErrors, ListWorkspaceMembersResponses, ListWorkspacesData, ListWorkspacesResponses, OpenChallengeData, OpenChallengeErrors, OpenChallengeResponses, OpenDecisionSpaceData, OpenDecisionSpaceErrors, OpenDecisionSpaceResponses, ProposeContributionData, ProposeContributionErrors, ProposeContributionResponses, RecordChallengeFindingData, RecordChallengeFindingErrors, RecordChallengeFindingResponses, RecordExperimentOutcomeData, RecordExperimentOutcomeErrors, RecordExperimentOutcomeResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RejectIdeaMembershipRequestData, RejectIdeaMembershipRequestErrors, RejectIdeaMembershipRequestResponses, RemoveClusterMemberData, RemoveClusterMemberErrors, RemoveClusterMemberResponses, RemoveDecisionSpaceParticipantData, RemoveDecisionSpaceParticipantErrors, RemoveDecisionSpaceParticipantResponses, RemoveIdeaMemberData, RemoveIdeaMemberErrors, RemoveIdeaMemberResponses, RequestIdeaMembershipData, RequestIdeaMembershipErrors, RequestIdeaMembershipResponses, ResolveChallengeFindingData, ResolveChallengeFindingErrors, ResolveChallengeFindingResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses, SaveCompanyProfileData, SaveCompanyProfileErrors, SaveCompanyProfileResponses, TransitionDecisionSpaceData, TransitionDecisionSpaceErrors, TransitionDecisionSpaceResponses, UnlinkOptionEvidenceData, UnlinkOptionEvidenceErrors, UnlinkOptionEvidenceResponses, UpdateCompanyConstraintData, UpdateCompanyConstraintErrors, UpdateCompanyConstraintResponses, UpdateCompanyMetricData, UpdateCompanyMetricErrors, UpdateCompanyMetricResponses, UpdateCompanyObjectiveData, UpdateCompanyObjectiveErrors, UpdateCompanyObjectiveResponses, UpdateCompanyPrincipleData, UpdateCompanyPrincipleErrors, UpdateCompanyPrincipleResponses, UpdateIdeaInitiativeTypeData, UpdateIdeaInitiativeTypeErrors, UpdateIdeaInitiativeTypeResponses, UpdateOptionData, UpdateOptionErrors, UpdateOptionResponses, WriteExperimentLearningData, WriteExperimentLearningErrors, WriteExperimentLearningResponses } from './types.gen';
+import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, AcceptIdeaMembershipRequestData, AcceptIdeaMembershipRequestErrors, AcceptIdeaMembershipRequestResponses, AddClusterMemberData, AddClusterMemberErrors, AddClusterMemberResponses, AddDecisionSpaceParticipantData, AddDecisionSpaceParticipantErrors, AddDecisionSpaceParticipantResponses, AddIdeaParticipantData, AddIdeaParticipantErrors, AddIdeaParticipantResponses, ChangeExperimentStatusData, ChangeExperimentStatusErrors, ChangeExperimentStatusResponses, CommitDecisionData, CommitDecisionErrors, CommitDecisionResponses, CompleteChallengeData, CompleteChallengeErrors, CompleteChallengeResponses, ConfirmContributionData, ConfirmContributionErrors, ConfirmContributionResponses, CreateBranchData, CreateBranchErrors, CreateBranchResponses, CreateClusterData, CreateClusterErrors, CreateClusterResponses, CreateCompanyConstraintData, CreateCompanyConstraintErrors, CreateCompanyConstraintResponses, CreateCompanyMetricData, CreateCompanyMetricErrors, CreateCompanyMetricResponses, CreateCompanyObjectiveData, CreateCompanyObjectiveErrors, CreateCompanyObjectiveResponses, CreateCompanyPrincipleData, CreateCompanyPrincipleErrors, CreateCompanyPrincipleResponses, CreateExperimentData, CreateExperimentErrors, CreateExperimentResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, CreateOptionData, CreateOptionErrors, CreateOptionResponses, CreateRelationData, CreateRelationErrors, CreateRelationResponses, CreateScenarioRunData, CreateScenarioRunErrors, CreateScenarioRunResponses, CreateScenarioVariableData, CreateScenarioVariableErrors, CreateScenarioVariableResponses, DeleteClusterData, DeleteClusterErrors, DeleteClusterResponses, DeleteOptionData, DeleteOptionErrors, DeleteOptionResponses, DeleteRelationData, DeleteRelationErrors, DeleteRelationResponses, DeleteScenarioRunData, DeleteScenarioRunErrors, DeleteScenarioRunResponses, DeleteScenarioVariableData, DeleteScenarioVariableErrors, DeleteScenarioVariableResponses, DepositWorkspaceIdeaData, DepositWorkspaceIdeaErrors, DepositWorkspaceIdeaResponses, GetBranchData, GetBranchErrors, GetBranchResponses, GetChallengeData, GetChallengeErrors, GetChallengeResponses, GetCompanyContextData, GetCompanyContextErrors, GetCompanyContextResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetConvergeMapData, GetConvergeMapErrors, GetConvergeMapResponses, GetDecisionRecordData, GetDecisionRecordErrors, GetDecisionRecordResponses, GetDecisionSpaceData, GetDecisionSpaceErrors, GetDecisionSpaceResponses, GetExperimentData, GetExperimentErrors, GetExperimentResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, GetOptionData, GetOptionErrors, GetOptionResponses, GetProfileData, GetProfileErrors, GetProfileResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, LeaveIdeaTeamData, LeaveIdeaTeamErrors, LeaveIdeaTeamResponses, LinkOptionEvidenceData, LinkOptionEvidenceErrors, LinkOptionEvidenceResponses, ListBranchesData, ListBranchesErrors, ListBranchesResponses, ListChallengesData, ListChallengesErrors, ListChallengesResponses, ListContributionsData, ListContributionsErrors, ListContributionsResponses, ListDecisionSpacesData, ListDecisionSpacesErrors, ListDecisionSpacesResponses, ListDecisionVersionsData, ListDecisionVersionsErrors, ListDecisionVersionsResponses, ListIdeaExperimentsData, ListIdeaExperimentsErrors, ListIdeaExperimentsResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListIdeaLearningsData, ListIdeaLearningsErrors, ListIdeaLearningsResponses, ListOptionsData, ListOptionsErrors, ListOptionsResponses, ListScenarioRunsData, ListScenarioRunsErrors, ListScenarioRunsResponses, ListScenarioVariablesData, ListScenarioVariablesErrors, ListScenarioVariablesResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspaceMembersData, ListWorkspaceMembersErrors, ListWorkspaceMembersResponses, ListWorkspacesData, ListWorkspacesResponses, OpenChallengeData, OpenChallengeErrors, OpenChallengeResponses, OpenDecisionSpaceData, OpenDecisionSpaceErrors, OpenDecisionSpaceResponses, ProposeContributionData, ProposeContributionErrors, ProposeContributionResponses, ReadSensitivityData, ReadSensitivityErrors, ReadSensitivityResponses, RecordChallengeFindingData, RecordChallengeFindingErrors, RecordChallengeFindingResponses, RecordExperimentOutcomeData, RecordExperimentOutcomeErrors, RecordExperimentOutcomeResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RejectIdeaMembershipRequestData, RejectIdeaMembershipRequestErrors, RejectIdeaMembershipRequestResponses, RemoveClusterMemberData, RemoveClusterMemberErrors, RemoveClusterMemberResponses, RemoveDecisionSpaceParticipantData, RemoveDecisionSpaceParticipantErrors, RemoveDecisionSpaceParticipantResponses, RemoveIdeaMemberData, RemoveIdeaMemberErrors, RemoveIdeaMemberResponses, RequestIdeaMembershipData, RequestIdeaMembershipErrors, RequestIdeaMembershipResponses, ResolveChallengeFindingData, ResolveChallengeFindingErrors, ResolveChallengeFindingResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses, SaveCompanyProfileData, SaveCompanyProfileErrors, SaveCompanyProfileResponses, TransitionDecisionSpaceData, TransitionDecisionSpaceErrors, TransitionDecisionSpaceResponses, UnlinkOptionEvidenceData, UnlinkOptionEvidenceErrors, UnlinkOptionEvidenceResponses, UpdateCompanyConstraintData, UpdateCompanyConstraintErrors, UpdateCompanyConstraintResponses, UpdateCompanyMetricData, UpdateCompanyMetricErrors, UpdateCompanyMetricResponses, UpdateCompanyObjectiveData, UpdateCompanyObjectiveErrors, UpdateCompanyObjectiveResponses, UpdateCompanyPrincipleData, UpdateCompanyPrincipleErrors, UpdateCompanyPrincipleResponses, UpdateIdeaInitiativeTypeData, UpdateIdeaInitiativeTypeErrors, UpdateIdeaInitiativeTypeResponses, UpdateOptionData, UpdateOptionErrors, UpdateOptionResponses, UpdateScenarioRunData, UpdateScenarioRunErrors, UpdateScenarioRunResponses, UpdateScenarioVariableData, UpdateScenarioVariableErrors, UpdateScenarioVariableResponses, WriteExperimentLearningData, WriteExperimentLearningErrors, WriteExperimentLearningResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -758,6 +758,59 @@ export const unlinkOptionEvidence = <ThrowOnError extends boolean = false>(optio
 });
 
 /**
+ * List Scenario Runs
+ */
+export const listScenarioRuns = <ThrowOnError extends boolean = false>(options: Options<ListScenarioRunsData, ThrowOnError>): RequestResult<ListScenarioRunsResponses, ListScenarioRunsErrors, ThrowOnError> => (options.client ?? client).get<ListScenarioRunsResponses, ListScenarioRunsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs',
+    ...options
+});
+
+/**
+ * Create Scenario Run
+ */
+export const createScenarioRun = <ThrowOnError extends boolean = false>(options: Options<CreateScenarioRunData, ThrowOnError>): RequestResult<CreateScenarioRunResponses, CreateScenarioRunErrors, ThrowOnError> => (options.client ?? client).post<CreateScenarioRunResponses, CreateScenarioRunErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete Scenario Run
+ */
+export const deleteScenarioRun = <ThrowOnError extends boolean = false>(options: Options<DeleteScenarioRunData, ThrowOnError>): RequestResult<DeleteScenarioRunResponses, DeleteScenarioRunErrors, ThrowOnError> => (options.client ?? client).delete<DeleteScenarioRunResponses, DeleteScenarioRunErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs/{run_id}',
+    ...options
+});
+
+/**
+ * Update Scenario Run
+ */
+export const updateScenarioRun = <ThrowOnError extends boolean = false>(options: Options<UpdateScenarioRunData, ThrowOnError>): RequestResult<UpdateScenarioRunResponses, UpdateScenarioRunErrors, ThrowOnError> => (options.client ?? client).patch<UpdateScenarioRunResponses, UpdateScenarioRunErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs/{run_id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Read Option Sensitivity
+ */
+export const readSensitivity = <ThrowOnError extends boolean = false>(options: Options<ReadSensitivityData, ThrowOnError>): RequestResult<ReadSensitivityResponses, ReadSensitivityErrors, ThrowOnError> => (options.client ?? client).get<ReadSensitivityResponses, ReadSensitivityErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/sensitivity',
+    ...options
+});
+
+/**
  * Add Decision Space Participant
  */
 export const addDecisionSpaceParticipant = <ThrowOnError extends boolean = false>(options: Options<AddDecisionSpaceParticipantData, ThrowOnError>): RequestResult<AddDecisionSpaceParticipantResponses, AddDecisionSpaceParticipantErrors, ThrowOnError> => (options.client ?? client).post<AddDecisionSpaceParticipantResponses, AddDecisionSpaceParticipantErrors, ThrowOnError>({
@@ -799,6 +852,50 @@ export const deleteRelation = <ThrowOnError extends boolean = false>(options: Op
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/relations/{relation_id}',
     ...options
+});
+
+/**
+ * List Scenario Variables
+ */
+export const listScenarioVariables = <ThrowOnError extends boolean = false>(options: Options<ListScenarioVariablesData, ThrowOnError>): RequestResult<ListScenarioVariablesResponses, ListScenarioVariablesErrors, ThrowOnError> => (options.client ?? client).get<ListScenarioVariablesResponses, ListScenarioVariablesErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables',
+    ...options
+});
+
+/**
+ * Create Scenario Variable
+ */
+export const createScenarioVariable = <ThrowOnError extends boolean = false>(options: Options<CreateScenarioVariableData, ThrowOnError>): RequestResult<CreateScenarioVariableResponses, CreateScenarioVariableErrors, ThrowOnError> => (options.client ?? client).post<CreateScenarioVariableResponses, CreateScenarioVariableErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete Scenario Variable
+ */
+export const deleteScenarioVariable = <ThrowOnError extends boolean = false>(options: Options<DeleteScenarioVariableData, ThrowOnError>): RequestResult<DeleteScenarioVariableResponses, DeleteScenarioVariableErrors, ThrowOnError> => (options.client ?? client).delete<DeleteScenarioVariableResponses, DeleteScenarioVariableErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables/{variable_id}',
+    ...options
+});
+
+/**
+ * Update Scenario Variable
+ */
+export const updateScenarioVariable = <ThrowOnError extends boolean = false>(options: Options<UpdateScenarioVariableData, ThrowOnError>): RequestResult<UpdateScenarioVariableResponses, UpdateScenarioVariableErrors, ThrowOnError> => (options.client ?? client).patch<UpdateScenarioVariableResponses, UpdateScenarioVariableErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables/{variable_id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 /**

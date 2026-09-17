@@ -4804,6 +4804,514 @@
         "title": "RollbackRequest",
         "type": "object"
       },
+      "RunValueResponse": {
+        "properties": {
+          "value": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Value",
+            "type": "string"
+          },
+          "variable_id": {
+            "format": "uuid",
+            "title": "Variable Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "variable_id",
+          "value"
+        ],
+        "title": "RunValueResponse",
+        "type": "object"
+      },
+      "RunValueWrite": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Value"
+          },
+          "variable_id": {
+            "format": "uuid",
+            "title": "Variable Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "variable_id",
+          "value"
+        ],
+        "title": "RunValueWrite",
+        "type": "object"
+      },
+      "ScenarioRunListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioRunResponse"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "ScenarioRunListResponse",
+        "type": "object"
+      },
+      "ScenarioRunResponse": {
+        "properties": {
+          "assumptions": {
+            "title": "Assumptions",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "format": "uuid",
+            "title": "Created By",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "lang": {
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang",
+            "type": "string"
+          },
+          "level": {
+            "enum": [
+              "optimistic",
+              "base",
+              "pessimistic",
+              "failure"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "option_id": {
+            "format": "uuid",
+            "title": "Option Id",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "$ref": "#/components/schemas/RunValueResponse"
+            },
+            "title": "Values",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "option_id",
+          "level",
+          "assumptions",
+          "created_by",
+          "lang",
+          "created_at",
+          "updated_at",
+          "values"
+        ],
+        "title": "ScenarioRunResponse",
+        "type": "object"
+      },
+      "ScenarioRunWrite": {
+        "properties": {
+          "assumptions": {
+            "minLength": 1,
+            "title": "Assumptions",
+            "type": "string"
+          },
+          "level": {
+            "enum": [
+              "optimistic",
+              "base",
+              "pessimistic",
+              "failure"
+            ],
+            "title": "Level",
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "$ref": "#/components/schemas/RunValueWrite"
+            },
+            "title": "Values",
+            "type": "array"
+          }
+        },
+        "required": [
+          "level",
+          "assumptions"
+        ],
+        "title": "ScenarioRunWrite",
+        "type": "object"
+      },
+      "ScenarioVariableListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioVariableResponse"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "ScenarioVariableListResponse",
+        "type": "object"
+      },
+      "ScenarioVariableResponse": {
+        "properties": {
+          "base": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Base",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "high": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "High",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "lang": {
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang",
+            "type": "string"
+          },
+          "low": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Low",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "space_id": {
+            "format": "uuid",
+            "title": "Space Id",
+            "type": "string"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "space_id",
+          "name",
+          "low",
+          "base",
+          "high",
+          "lang",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ScenarioVariableResponse",
+        "type": "object"
+      },
+      "ScenarioVariableWrite": {
+        "properties": {
+          "base": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Base"
+          },
+          "high": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "High"
+          },
+          "low": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              }
+            ],
+            "title": "Low"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          }
+        },
+        "required": [
+          "name",
+          "low",
+          "base",
+          "high"
+        ],
+        "title": "ScenarioVariableWrite",
+        "type": "object"
+      },
+      "SensitivityCriterionResponse": {
+        "properties": {
+          "direction": {
+            "enum": [
+              "above",
+              "below"
+            ],
+            "title": "Direction",
+            "type": "string"
+          },
+          "metric_variable_id": {
+            "format": "uuid",
+            "title": "Metric Variable Id",
+            "type": "string"
+          },
+          "threshold": {
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Threshold",
+            "type": "string"
+          }
+        },
+        "required": [
+          "metric_variable_id",
+          "direction",
+          "threshold"
+        ],
+        "title": "SensitivityCriterionResponse",
+        "type": "object"
+      },
+      "SensitivityEvidenceResponse": {
+        "properties": {
+          "against_count": {
+            "title": "Against Count",
+            "type": "integer"
+          },
+          "for_count": {
+            "title": "For Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "for_count",
+          "against_count"
+        ],
+        "title": "SensitivityEvidenceResponse",
+        "type": "object"
+      },
+      "SensitivityResponse": {
+        "description": "What would change the preference. Never a predicted value.",
+        "properties": {
+          "criterion": {
+            "$ref": "#/components/schemas/SensitivityCriterionResponse"
+          },
+          "evidence": {
+            "$ref": "#/components/schemas/SensitivityEvidenceResponse"
+          },
+          "incomplete_run_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Incomplete Run Ids",
+            "type": "array"
+          },
+          "ranked": {
+            "items": {
+              "$ref": "#/components/schemas/SensitivityVariableResponse"
+            },
+            "title": "Ranked",
+            "type": "array"
+          }
+        },
+        "required": [
+          "criterion",
+          "ranked",
+          "incomplete_run_ids",
+          "evidence"
+        ],
+        "title": "SensitivityResponse",
+        "type": "object"
+      },
+      "SensitivityVariableResponse": {
+        "properties": {
+          "crossing": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crossing"
+          },
+          "crossings": {
+            "title": "Crossings",
+            "type": "integer"
+          },
+          "interval": {
+            "anyOf": [
+              {
+                "maxItems": 2,
+                "minItems": 2,
+                "prefixItems": [
+                  {
+                    "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                    "type": "string"
+                  },
+                  {
+                    "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                    "type": "string"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval"
+          },
+          "slope_max": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slope Max"
+          },
+          "slope_min": {
+            "anyOf": [
+              {
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slope Min"
+          },
+          "status": {
+            "enum": [
+              "found",
+              "beyond_declared_range",
+              "insufficient_points"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "travel": {
+            "anyOf": [
+              {
+                "enum": [
+                  "up",
+                  "down",
+                  "flat"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Travel"
+          },
+          "variable_id": {
+            "format": "uuid",
+            "title": "Variable Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "variable_id",
+          "status",
+          "crossings"
+        ],
+        "title": "SensitivityVariableResponse",
+        "type": "object"
+      },
       "UpdateIdeaInitiativeTypeRequest": {
         "properties": {
           "initiative_type": {
@@ -9222,6 +9730,415 @@
         ]
       }
     },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs": {
+      "get": {
+        "operationId": "list_scenario_runs",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "option_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Option Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioRunListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Scenario Runs",
+        "tags": [
+          "scenarios"
+        ]
+      },
+      "post": {
+        "operationId": "create_scenario_run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "option_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Option Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioRunWrite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioRunResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create Scenario Run",
+        "tags": [
+          "scenarios"
+        ]
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs/{run_id}": {
+      "delete": {
+        "operationId": "delete_scenario_run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "option_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Option Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Delete Scenario Run",
+        "tags": [
+          "scenarios"
+        ]
+      },
+      "patch": {
+        "operationId": "update_scenario_run",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "option_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Option Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioRunWrite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioRunResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Update Scenario Run",
+        "tags": [
+          "scenarios"
+        ]
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/sensitivity": {
+      "get": {
+        "operationId": "read_sensitivity",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "option_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Option Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "metric_variable_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Metric Variable Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "direction",
+            "required": true,
+            "schema": {
+              "enum": [
+                "above",
+                "below"
+              ],
+              "title": "Direction",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "threshold",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+                  "type": "string"
+                }
+              ],
+              "title": "Threshold"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SensitivityResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Read Option Sensitivity",
+        "tags": [
+          "scenarios"
+        ]
+      }
+    },
     "/workspaces/{workspace_id}/decision-spaces/{space_id}/participants": {
       "post": {
         "operationId": "add_decision_space_participant",
@@ -9492,6 +10409,267 @@
         "summary": "Delete Space Relation",
         "tags": [
           "converge-map"
+        ]
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables": {
+      "get": {
+        "operationId": "list_scenario_variables",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioVariableListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "List Scenario Variables",
+        "tags": [
+          "scenarios"
+        ]
+      },
+      "post": {
+        "operationId": "create_scenario_variable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioVariableWrite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioVariableResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Create Scenario Variable",
+        "tags": [
+          "scenarios"
+        ]
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables/{variable_id}": {
+      "delete": {
+        "operationId": "delete_scenario_variable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "variable_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Variable Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Delete Scenario Variable",
+        "tags": [
+          "scenarios"
+        ]
+      },
+      "patch": {
+        "operationId": "update_scenario_variable",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "workspace_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Workspace Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "space_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Space Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "variable_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Variable Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioVariableWrite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioVariableResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Update Scenario Variable",
+        "tags": [
+          "scenarios"
         ]
       }
     },

@@ -2432,6 +2432,277 @@ export type RollbackRequest = {
 };
 
 /**
+ * RunValueResponse
+ */
+export type RunValueResponse = {
+    /**
+     * Value
+     */
+    value: string;
+    /**
+     * Variable Id
+     */
+    variable_id: string;
+};
+
+/**
+ * RunValueWrite
+ */
+export type RunValueWrite = {
+    /**
+     * Value
+     */
+    value: number | string;
+    /**
+     * Variable Id
+     */
+    variable_id: string;
+};
+
+/**
+ * ScenarioRunListResponse
+ */
+export type ScenarioRunListResponse = {
+    /**
+     * Items
+     */
+    items: Array<ScenarioRunResponse>;
+};
+
+/**
+ * ScenarioRunResponse
+ */
+export type ScenarioRunResponse = {
+    /**
+     * Assumptions
+     */
+    assumptions: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Created By
+     */
+    created_by: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Level
+     */
+    level: 'optimistic' | 'base' | 'pessimistic' | 'failure';
+    /**
+     * Option Id
+     */
+    option_id: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Values
+     */
+    values: Array<RunValueResponse>;
+};
+
+/**
+ * ScenarioRunWrite
+ */
+export type ScenarioRunWrite = {
+    /**
+     * Assumptions
+     */
+    assumptions: string;
+    /**
+     * Level
+     */
+    level: 'optimistic' | 'base' | 'pessimistic' | 'failure';
+    /**
+     * Values
+     */
+    values?: Array<RunValueWrite>;
+};
+
+/**
+ * ScenarioVariableListResponse
+ */
+export type ScenarioVariableListResponse = {
+    /**
+     * Items
+     */
+    items: Array<ScenarioVariableResponse>;
+};
+
+/**
+ * ScenarioVariableResponse
+ */
+export type ScenarioVariableResponse = {
+    /**
+     * Base
+     */
+    base: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * High
+     */
+    high: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Low
+     */
+    low: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
+ * ScenarioVariableWrite
+ */
+export type ScenarioVariableWrite = {
+    /**
+     * Base
+     */
+    base: number | string;
+    /**
+     * High
+     */
+    high: number | string;
+    /**
+     * Low
+     */
+    low: number | string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+};
+
+/**
+ * SensitivityCriterionResponse
+ */
+export type SensitivityCriterionResponse = {
+    /**
+     * Direction
+     */
+    direction: 'above' | 'below';
+    /**
+     * Metric Variable Id
+     */
+    metric_variable_id: string;
+    /**
+     * Threshold
+     */
+    threshold: string;
+};
+
+/**
+ * SensitivityEvidenceResponse
+ */
+export type SensitivityEvidenceResponse = {
+    /**
+     * Against Count
+     */
+    against_count: number;
+    /**
+     * For Count
+     */
+    for_count: number;
+};
+
+/**
+ * SensitivityResponse
+ *
+ * What would change the preference. Never a predicted value.
+ */
+export type SensitivityResponse = {
+    criterion: SensitivityCriterionResponse;
+    evidence: SensitivityEvidenceResponse;
+    /**
+     * Incomplete Run Ids
+     */
+    incomplete_run_ids: Array<string>;
+    /**
+     * Ranked
+     */
+    ranked: Array<SensitivityVariableResponse>;
+};
+
+/**
+ * SensitivityVariableResponse
+ */
+export type SensitivityVariableResponse = {
+    /**
+     * Crossing
+     */
+    crossing?: string | null;
+    /**
+     * Crossings
+     */
+    crossings: number;
+    /**
+     * Interval
+     */
+    interval?: [
+        string,
+        string
+    ] | null;
+    /**
+     * Slope Max
+     */
+    slope_max?: string | null;
+    /**
+     * Slope Min
+     */
+    slope_min?: string | null;
+    /**
+     * Status
+     */
+    status: 'found' | 'beyond_declared_range' | 'insufficient_points';
+    /**
+     * Travel
+     */
+    travel?: 'up' | 'down' | 'flat' | null;
+    /**
+     * Variable Id
+     */
+    variable_id: string;
+};
+
+/**
  * UpdateIdeaInitiativeTypeRequest
  */
 export type UpdateIdeaInitiativeTypeRequest = {
@@ -4851,6 +5122,217 @@ export type UnlinkOptionEvidenceResponses = {
 
 export type UnlinkOptionEvidenceResponse = UnlinkOptionEvidenceResponses[keyof UnlinkOptionEvidenceResponses];
 
+export type ListScenarioRunsData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs';
+};
+
+export type ListScenarioRunsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListScenarioRunsError = ListScenarioRunsErrors[keyof ListScenarioRunsErrors];
+
+export type ListScenarioRunsResponses = {
+    /**
+     * Successful Response
+     */
+    200: ScenarioRunListResponse;
+};
+
+export type ListScenarioRunsResponse = ListScenarioRunsResponses[keyof ListScenarioRunsResponses];
+
+export type CreateScenarioRunData = {
+    body: ScenarioRunWrite;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs';
+};
+
+export type CreateScenarioRunErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateScenarioRunError = CreateScenarioRunErrors[keyof CreateScenarioRunErrors];
+
+export type CreateScenarioRunResponses = {
+    /**
+     * Successful Response
+     */
+    201: ScenarioRunResponse;
+};
+
+export type CreateScenarioRunResponse = CreateScenarioRunResponses[keyof CreateScenarioRunResponses];
+
+export type DeleteScenarioRunData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs/{run_id}';
+};
+
+export type DeleteScenarioRunErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteScenarioRunError = DeleteScenarioRunErrors[keyof DeleteScenarioRunErrors];
+
+export type DeleteScenarioRunResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteScenarioRunResponse = DeleteScenarioRunResponses[keyof DeleteScenarioRunResponses];
+
+export type UpdateScenarioRunData = {
+    body: ScenarioRunWrite;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/scenario-runs/{run_id}';
+};
+
+export type UpdateScenarioRunErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateScenarioRunError = UpdateScenarioRunErrors[keyof UpdateScenarioRunErrors];
+
+export type UpdateScenarioRunResponses = {
+    /**
+     * Successful Response
+     */
+    200: ScenarioRunResponse;
+};
+
+export type UpdateScenarioRunResponse = UpdateScenarioRunResponses[keyof UpdateScenarioRunResponses];
+
+export type ReadSensitivityData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query: {
+        /**
+         * Metric Variable Id
+         */
+        metric_variable_id: string;
+        /**
+         * Direction
+         */
+        direction: 'above' | 'below';
+        /**
+         * Threshold
+         */
+        threshold: number | string;
+    };
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/sensitivity';
+};
+
+export type ReadSensitivityErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReadSensitivityError = ReadSensitivityErrors[keyof ReadSensitivityErrors];
+
+export type ReadSensitivityResponses = {
+    /**
+     * Successful Response
+     */
+    200: SensitivityResponse;
+};
+
+export type ReadSensitivityResponse = ReadSensitivityResponses[keyof ReadSensitivityResponses];
+
 export type AddDecisionSpaceParticipantData = {
     body: ParticipantAdd;
     path: {
@@ -4998,6 +5480,150 @@ export type DeleteRelationResponses = {
 };
 
 export type DeleteRelationResponse = DeleteRelationResponses[keyof DeleteRelationResponses];
+
+export type ListScenarioVariablesData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables';
+};
+
+export type ListScenarioVariablesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListScenarioVariablesError = ListScenarioVariablesErrors[keyof ListScenarioVariablesErrors];
+
+export type ListScenarioVariablesResponses = {
+    /**
+     * Successful Response
+     */
+    200: ScenarioVariableListResponse;
+};
+
+export type ListScenarioVariablesResponse = ListScenarioVariablesResponses[keyof ListScenarioVariablesResponses];
+
+export type CreateScenarioVariableData = {
+    body: ScenarioVariableWrite;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables';
+};
+
+export type CreateScenarioVariableErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateScenarioVariableError = CreateScenarioVariableErrors[keyof CreateScenarioVariableErrors];
+
+export type CreateScenarioVariableResponses = {
+    /**
+     * Successful Response
+     */
+    201: ScenarioVariableResponse;
+};
+
+export type CreateScenarioVariableResponse = CreateScenarioVariableResponses[keyof CreateScenarioVariableResponses];
+
+export type DeleteScenarioVariableData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Variable Id
+         */
+        variable_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables/{variable_id}';
+};
+
+export type DeleteScenarioVariableErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteScenarioVariableError = DeleteScenarioVariableErrors[keyof DeleteScenarioVariableErrors];
+
+export type DeleteScenarioVariableResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteScenarioVariableResponse = DeleteScenarioVariableResponses[keyof DeleteScenarioVariableResponses];
+
+export type UpdateScenarioVariableData = {
+    body: ScenarioVariableWrite;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Variable Id
+         */
+        variable_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/scenario-variables/{variable_id}';
+};
+
+export type UpdateScenarioVariableErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateScenarioVariableError = UpdateScenarioVariableErrors[keyof UpdateScenarioVariableErrors];
+
+export type UpdateScenarioVariableResponses = {
+    /**
+     * Successful Response
+     */
+    200: ScenarioVariableResponse;
+};
+
+export type UpdateScenarioVariableResponse = UpdateScenarioVariableResponses[keyof UpdateScenarioVariableResponses];
 
 export type TransitionDecisionSpaceData = {
     body: DecisionSpaceTransition;
