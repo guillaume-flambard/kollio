@@ -358,6 +358,10 @@ export type ChallengeRunResponse = {
      */
     created_at: string;
     /**
+     * Failure Reason
+     */
+    failure_reason?: string | null;
+    /**
      * Id
      */
     id: string;
