@@ -19,17 +19,17 @@ export type AcceptJoinBody = {
  */
 export type AddParticipantBody = {
     /**
-     * User Id
+     * Function
      */
-    user_id: string;
+    function: string;
     /**
      * Participation
      */
     participation: string;
     /**
-     * Function
+     * User Id
      */
-    function: string;
+    user_id: string;
 };
 
 /**
@@ -41,31 +41,19 @@ export type AnalysisEvidence = {
      */
     id: string;
     /**
-     * Url
-     */
-    url: string;
-    /**
      * Text
      */
     text: string;
+    /**
+     * Url
+     */
+    url: string;
 };
 
 /**
  * AnalysisResponse
  */
 export type AnalysisResponse = {
-    /**
-     * State
-     */
-    state: 'resolved' | 'abstained' | 'running' | 'unavailable';
-    /**
-     * Iteration Id
-     */
-    iteration_id?: string | null;
-    /**
-     * Realism Score
-     */
-    realism_score?: number | null;
     /**
      * Constraints
      */
@@ -81,6 +69,14 @@ export type AnalysisResponse = {
         [key: string]: unknown;
     }>;
     /**
+     * Created At
+     */
+    created_at?: string | null;
+    /**
+     * Iteration Id
+     */
+    iteration_id?: string | null;
+    /**
      * Locale
      */
     locale?: 'fr' | 'en' | null;
@@ -89,21 +85,42 @@ export type AnalysisResponse = {
      */
     model?: string | null;
     /**
-     * Created At
-     */
-    created_at?: string | null;
-    /**
      * Progress
      */
     progress?: {
         [key: string]: unknown;
     } | null;
+    /**
+     * Realism Score
+     */
+    realism_score?: number | null;
+    /**
+     * State
+     */
+    state: 'resolved' | 'abstained' | 'running' | 'unavailable';
 };
 
 /**
  * AnalysisWorkflowResponse
  */
 export type AnalysisWorkflowResponse = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Current Step
+     */
+    current_step: string;
+    draft_result: ConstraintAnalysisResult | null;
+    /**
+     * Error Code
+     */
+    error_code: string | null;
+    /**
+     * Finished At
+     */
+    finished_at: string | null;
     /**
      * Id
      */
@@ -113,39 +130,22 @@ export type AnalysisWorkflowResponse = {
      */
     idea_id: string;
     /**
-     * Source Iteration Id
-     */
-    source_iteration_id: string | null;
-    /**
      * Locale
      */
     locale: 'fr' | 'en';
+    result?: ConstraintAnalysisResult | null;
+    /**
+     * Source Iteration Id
+     */
+    source_iteration_id: string | null;
     /**
      * Status
      */
     status: 'queued' | 'running' | 'awaiting_review' | 'review_queued' | 'completed' | 'rejected' | 'failed';
     /**
-     * Current Step
-     */
-    current_step: string;
-    draft_result: ConstraintAnalysisResult | null;
-    result?: ConstraintAnalysisResult | null;
-    /**
-     * Error Code
-     */
-    error_code: string | null;
-    /**
-     * Created At
-     */
-    created_at: string;
-    /**
      * Updated At
      */
     updated_at: string;
-    /**
-     * Finished At
-     */
-    finished_at: string | null;
 };
 
 /**
@@ -167,13 +167,13 @@ export type ApplyJoinBody = {
  */
 export type BranchCreate = {
     /**
-     * Title
-     */
-    title: string;
-    /**
      * Summary
      */
     summary?: string | null;
+    /**
+     * Title
+     */
+    title: string;
     /**
      * Visibility
      */
@@ -195,45 +195,45 @@ export type BranchListResponse = {
  */
 export type BranchResponse = {
     /**
-     * Id
+     * Created At
      */
-    id: string;
-    /**
-     * Space Id
-     */
-    space_id: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Summary
-     */
-    summary?: string | null;
-    /**
-     * Source Idea Id
-     */
-    source_idea_id?: string | null;
-    /**
-     * Visibility
-     */
-    visibility: 'private' | 'shared';
+    created_at: string;
     /**
      * Created By
      */
     created_by: string;
     /**
+     * Id
+     */
+    id: string;
+    /**
      * Lang
      */
     lang: 'fr' | 'en';
     /**
-     * Created At
+     * Source Idea Id
      */
-    created_at: string;
+    source_idea_id?: string | null;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Summary
+     */
+    summary?: string | null;
+    /**
+     * Title
+     */
+    title: string;
     /**
      * Updated At
      */
     updated_at: string;
+    /**
+     * Visibility
+     */
+    visibility: 'private' | 'shared';
 };
 
 /**
@@ -255,6 +255,14 @@ export type ChallengeCoverageResponse = {
  */
 export type ChallengeFindingCreate = {
     /**
+     * Contribution Id
+     */
+    contribution_id?: string | null;
+    /**
+     * Detail
+     */
+    detail: string;
+    /**
      * Kind
      */
     kind: 'unsupported_assumption' | 'contradictory_evidence' | 'hidden_dependency' | 'failure_mode' | 'causal_claim' | 'missing_success_criteria';
@@ -262,14 +270,6 @@ export type ChallengeFindingCreate = {
      * Severity
      */
     severity: 'low' | 'medium' | 'high';
-    /**
-     * Detail
-     */
-    detail: string;
-    /**
-     * Contribution Id
-     */
-    contribution_id?: string | null;
 };
 
 /**
@@ -277,45 +277,45 @@ export type ChallengeFindingCreate = {
  */
 export type ChallengeFindingResponse = {
     /**
-     * Id
+     * Contribution Id
      */
-    id: string;
+    contribution_id?: string | null;
     /**
-     * Run Id
+     * Created At
      */
-    run_id: string;
-    /**
-     * Kind
-     */
-    kind: 'unsupported_assumption' | 'contradictory_evidence' | 'hidden_dependency' | 'failure_mode' | 'causal_claim' | 'missing_success_criteria';
-    /**
-     * Severity
-     */
-    severity: 'low' | 'medium' | 'high';
+    created_at: string;
     /**
      * Detail
      */
     detail: string;
     /**
-     * Origin
+     * Id
      */
-    origin: 'human' | 'critic';
+    id: string;
     /**
-     * Status
+     * Kind
      */
-    status: 'proposed' | 'confirmed' | 'dismissed';
-    /**
-     * Contribution Id
-     */
-    contribution_id?: string | null;
+    kind: 'unsupported_assumption' | 'contradictory_evidence' | 'hidden_dependency' | 'failure_mode' | 'causal_claim' | 'missing_success_criteria';
     /**
      * Lang
      */
     lang: 'fr' | 'en';
     /**
-     * Created At
+     * Origin
      */
-    created_at: string;
+    origin: 'human' | 'critic';
+    /**
+     * Run Id
+     */
+    run_id: string;
+    /**
+     * Severity
+     */
+    severity: 'low' | 'medium' | 'high';
+    /**
+     * Status
+     */
+    status: 'proposed' | 'confirmed' | 'dismissed';
     /**
      * Updated At
      */
@@ -326,27 +326,27 @@ export type ChallengeFindingResponse = {
  * ChallengeListResponse
  */
 export type ChallengeListResponse = {
-    /**
-     * Runs
-     */
-    runs: Array<ChallengeRunResponse>;
+    coverage: ChallengeCoverageResponse;
     /**
      * Findings
      */
     findings: Array<ChallengeFindingResponse>;
-    coverage: ChallengeCoverageResponse;
+    /**
+     * Runs
+     */
+    runs: Array<ChallengeRunResponse>;
 };
 
 /**
  * ChallengeRunDetailResponse
  */
 export type ChallengeRunDetailResponse = {
-    run: ChallengeRunResponse;
+    coverage: ChallengeCoverageResponse;
     /**
      * Findings
      */
     findings: Array<ChallengeFindingResponse>;
-    coverage: ChallengeCoverageResponse;
+    run: ChallengeRunResponse;
 };
 
 /**
@@ -354,37 +354,37 @@ export type ChallengeRunDetailResponse = {
  */
 export type ChallengeRunResponse = {
     /**
+     * Created At
+     */
+    created_at: string;
+    /**
      * Id
      */
     id: string;
-    /**
-     * Space Id
-     */
-    space_id: string;
-    /**
-     * Option Id
-     */
-    option_id: string;
-    /**
-     * Status
-     */
-    status: 'OPEN' | 'RUNNING' | 'COMPLETED' | 'FAILED';
-    /**
-     * Opened By
-     */
-    opened_by: string;
-    /**
-     * Model
-     */
-    model?: string | null;
     /**
      * Lang
      */
     lang: 'fr' | 'en';
     /**
-     * Created At
+     * Model
      */
-    created_at: string;
+    model?: string | null;
+    /**
+     * Opened By
+     */
+    opened_by: string;
+    /**
+     * Option Id
+     */
+    option_id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Status
+     */
+    status: 'OPEN' | 'RUNNING' | 'COMPLETED' | 'FAILED';
     /**
      * Updated At
      */
@@ -416,9 +416,21 @@ export type ClusterMemberAdd = {
  */
 export type ClusterResponse = {
     /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Created By
+     */
+    created_by: string;
+    /**
      * Id
      */
     id: string;
+    /**
+     * Member Ids
+     */
+    member_ids?: Array<string>;
     /**
      * Space Id
      */
@@ -427,18 +439,6 @@ export type ClusterResponse = {
      * Title
      */
     title: string;
-    /**
-     * Created By
-     */
-    created_by: string;
-    /**
-     * Created At
-     */
-    created_at: string;
-    /**
-     * Member Ids
-     */
-    member_ids?: Array<string>;
 };
 
 /**
@@ -446,37 +446,37 @@ export type ClusterResponse = {
  */
 export type CollaboratorResponse = {
     /**
-     * Id
+     * Avatar Key
      */
-    id: string;
-    /**
-     * Handle
-     */
-    handle?: string | null;
-    /**
-     * Display Name
-     */
-    display_name: string;
-    /**
-     * Participation
-     */
-    participation: string;
-    /**
-     * Business Function
-     */
-    business_function: string;
-    /**
-     * Roles
-     */
-    roles: Array<string>;
+    avatar_key?: string | null;
     /**
      * Bio
      */
     bio?: string | null;
     /**
-     * Avatar Key
+     * Business Function
      */
-    avatar_key?: string | null;
+    business_function: string;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Handle
+     */
+    handle?: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Participation
+     */
+    participation: string;
+    /**
+     * Roles
+     */
+    roles: Array<string>;
 };
 
 /**
@@ -484,13 +484,13 @@ export type CollaboratorResponse = {
  */
 export type CompanyConstraintCreate = {
     /**
-     * Title
-     */
-    title: string;
-    /**
      * Detail
      */
     detail?: string | null;
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
@@ -498,35 +498,31 @@ export type CompanyConstraintCreate = {
  */
 export type CompanyConstraintResponse = {
     /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
      * Id
      */
     id: string;
     /**
-     * Title
+     * Lang
      */
-    title: string;
-    /**
-     * Detail
-     */
-    detail?: string | null;
+    lang: 'fr' | 'en';
     /**
      * State
      */
     state: 'active' | 'archived';
     /**
-     * Lang
+     * Title
      */
-    lang: 'fr' | 'en';
+    title: string;
 };
 
 /**
  * CompanyConstraintUpdate
  */
 export type CompanyConstraintUpdate = {
-    /**
-     * Title
-     */
-    title?: string | null;
     /**
      * Detail
      */
@@ -535,29 +531,33 @@ export type CompanyConstraintUpdate = {
      * State
      */
     state?: 'active' | 'archived' | null;
+    /**
+     * Title
+     */
+    title?: string | null;
 };
 
 /**
  * CompanyContextResponse
  */
 export type CompanyContextResponse = {
-    profile: CompanyProfileResponse;
-    /**
-     * Objectives
-     */
-    objectives: Array<ObjectiveResponse>;
     /**
      * Constraints
      */
     constraints: Array<CompanyConstraintResponse>;
     /**
-     * Principles
-     */
-    principles: Array<PrincipleResponse>;
-    /**
      * Metrics
      */
     metrics: Array<MetricResponse>;
+    /**
+     * Objectives
+     */
+    objectives: Array<ObjectiveResponse>;
+    /**
+     * Principles
+     */
+    principles: Array<PrincipleResponse>;
+    profile: CompanyProfileResponse;
 };
 
 /**
@@ -565,37 +565,37 @@ export type CompanyContextResponse = {
  */
 export type CompanyProfileResponse = {
     /**
-     * Name
-     */
-    name?: string | null;
-    /**
-     * Description
-     */
-    description?: string | null;
-    /**
      * Business Model
      */
     business_model?: string | null;
-    /**
-     * Products Services
-     */
-    products_services?: string | null;
     /**
      * Customer Segments
      */
     customer_segments?: string | null;
     /**
-     * Markets
+     * Description
      */
-    markets?: string | null;
-    /**
-     * Structure
-     */
-    structure?: string | null;
+    description?: string | null;
     /**
      * Lang
      */
     lang?: 'fr' | 'en' | null;
+    /**
+     * Markets
+     */
+    markets?: string | null;
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Products Services
+     */
+    products_services?: string | null;
+    /**
+     * Structure
+     */
+    structure?: string | null;
 };
 
 /**
@@ -605,29 +605,29 @@ export type CompanyProfileResponse = {
  */
 export type CompanyProfileWrite = {
     /**
-     * Name
-     */
-    name?: string | null;
-    /**
-     * Description
-     */
-    description?: string | null;
-    /**
      * Business Model
      */
     business_model?: string | null;
-    /**
-     * Products Services
-     */
-    products_services?: string | null;
     /**
      * Customer Segments
      */
     customer_segments?: string | null;
     /**
+     * Description
+     */
+    description?: string | null;
+    /**
      * Markets
      */
     markets?: string | null;
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Products Services
+     */
+    products_services?: string | null;
     /**
      * Structure
      */
@@ -639,17 +639,9 @@ export type CompanyProfileWrite = {
  */
 export type ConstraintAnalysisResult = {
     /**
-     * Overall Score
+     * Contradictions
      */
-    overall_score: number | null;
-    /**
-     * Verdict
-     */
-    verdict: 'viable' | 'conditional' | 'not_viable' | 'unknown';
-    /**
-     * Summary
-     */
-    summary: string;
+    contradictions: Array<Contradiction>;
     /**
      * Factors
      */
@@ -661,13 +653,21 @@ export type ConstraintAnalysisResult = {
         ConstraintFactor
     ];
     /**
-     * Contradictions
-     */
-    contradictions: Array<Contradiction>;
-    /**
      * Locale
      */
     locale: 'fr' | 'en';
+    /**
+     * Overall Score
+     */
+    overall_score: number | null;
+    /**
+     * Summary
+     */
+    summary: string;
+    /**
+     * Verdict
+     */
+    verdict: 'viable' | 'conditional' | 'not_viable' | 'unknown';
 };
 
 /**
@@ -675,29 +675,29 @@ export type ConstraintAnalysisResult = {
  */
 export type ConstraintFactor = {
     /**
-     * Name
-     */
-    name: 'competition' | 'build_cost' | 'time_to_market' | 'defensibility' | 'acquisition';
-    /**
      * Basis
      */
     basis: 'known' | 'assumed' | 'unknown';
-    /**
-     * Score
-     */
-    score: number | null;
     /**
      * Gap
      */
     gap: string | null;
     /**
-     * Summary
+     * Name
      */
-    summary: string;
+    name: 'competition' | 'build_cost' | 'time_to_market' | 'defensibility' | 'acquisition';
+    /**
+     * Score
+     */
+    score: number | null;
     /**
      * Source Ids
      */
     source_ids: Array<string>;
+    /**
+     * Summary
+     */
+    summary: string;
 };
 
 /**
@@ -705,17 +705,17 @@ export type ConstraintFactor = {
  */
 export type Contradiction = {
     /**
-     * Target
+     * Detail
      */
-    target: 'objective' | 'constraint';
+    detail: string;
     /**
      * Ref Id
      */
     ref_id: string;
     /**
-     * Detail
+     * Target
      */
-    detail: string;
+    target: 'objective' | 'constraint';
 };
 
 /**
@@ -733,6 +733,10 @@ export type ContributionListResponse = {
  */
 export type ContributionPropose = {
     /**
+     * Body
+     */
+    body?: string | null;
+    /**
      * Branch Id
      */
     branch_id: string;
@@ -741,17 +745,13 @@ export type ContributionPropose = {
      */
     kind: 'idea' | 'claim' | 'evidence' | 'objection' | 'constraint';
     /**
-     * Title
-     */
-    title: string;
-    /**
-     * Body
-     */
-    body?: string | null;
-    /**
      * Source
      */
     source?: string | null;
+    /**
+     * Title
+     */
+    title: string;
     /**
      * Tool Model
      */
@@ -769,15 +769,6 @@ export type ContributionPropose = {
  */
 export type CreateIterationRequest = {
     /**
-     * Message
-     */
-    message: string;
-    /**
-     * Lang
-     */
-    lang: 'fr' | 'en';
-    snapshot: IdeaSnapshot;
-    /**
      * Branch
      */
     branch?: string;
@@ -785,6 +776,15 @@ export type CreateIterationRequest = {
      * Expected Parent Id
      */
     expected_parent_id?: string | null;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Message
+     */
+    message: string;
+    snapshot: IdeaSnapshot;
 };
 
 /**
@@ -820,37 +820,37 @@ export type DecisionArgumentWrite = {
  */
 export type DecisionCommit = {
     /**
-     * Selected Option Id
+     * Arguments
      */
-    selected_option_id: string;
-    /**
-     * Rationale
-     */
-    rationale: string;
+    arguments?: Array<DecisionArgumentWrite>;
     /**
      * Critical Assumptions
      */
     critical_assumptions?: string | null;
     /**
-     * Uncertainty
+     * Rationale
      */
-    uncertainty?: string | null;
-    /**
-     * Success Criteria
-     */
-    success_criteria?: string | null;
-    /**
-     * Revisit Triggers
-     */
-    revisit_triggers?: Array<RevisitTrigger> | null;
+    rationale: string;
     /**
      * Rejected Option Ids
      */
     rejected_option_ids?: Array<string>;
     /**
-     * Arguments
+     * Revisit Triggers
      */
-    arguments?: Array<DecisionArgumentWrite>;
+    revisit_triggers?: Array<RevisitTrigger> | null;
+    /**
+     * Selected Option Id
+     */
+    selected_option_id: string;
+    /**
+     * Success Criteria
+     */
+    success_criteria?: string | null;
+    /**
+     * Uncertainty
+     */
+    uncertainty?: string | null;
 };
 
 /**
@@ -868,65 +868,65 @@ export type DecisionListResponse = {
  */
 export type DecisionResponse = {
     /**
-     * Id
+     * Arguments
      */
-    id: string;
-    /**
-     * Space Id
-     */
-    space_id: string;
-    /**
-     * Version
-     */
-    version: number;
-    /**
-     * Selected Option Id
-     */
-    selected_option_id: string;
-    /**
-     * Rationale
-     */
-    rationale: string;
-    /**
-     * Critical Assumptions
-     */
-    critical_assumptions?: string | null;
-    /**
-     * Uncertainty
-     */
-    uncertainty?: string | null;
-    /**
-     * Success Criteria
-     */
-    success_criteria?: string | null;
-    /**
-     * Revisit Triggers
-     */
-    revisit_triggers?: Array<RevisitTrigger> | null;
-    /**
-     * Reviewer Ids
-     */
-    reviewer_ids: Array<string>;
-    /**
-     * Decided By
-     */
-    decided_by: string;
-    /**
-     * Lang
-     */
-    lang: 'fr' | 'en';
+    arguments: Array<DecisionArgumentResponse>;
     /**
      * Created At
      */
     created_at: string;
     /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
+    /**
+     * Decided By
+     */
+    decided_by: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Rationale
+     */
+    rationale: string;
+    /**
      * Rejected Option Ids
      */
     rejected_option_ids: Array<string>;
     /**
-     * Arguments
+     * Reviewer Ids
      */
-    arguments: Array<DecisionArgumentResponse>;
+    reviewer_ids: Array<string>;
+    /**
+     * Revisit Triggers
+     */
+    revisit_triggers?: Array<RevisitTrigger> | null;
+    /**
+     * Selected Option Id
+     */
+    selected_option_id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Success Criteria
+     */
+    success_criteria?: string | null;
+    /**
+     * Uncertainty
+     */
+    uncertainty?: string | null;
+    /**
+     * Version
+     */
+    version: number;
 };
 
 /**
@@ -934,17 +934,17 @@ export type DecisionResponse = {
  */
 export type DecisionSpaceCreate = {
     /**
-     * Question
+     * Deadline
      */
-    question: string;
+    deadline?: string | null;
     /**
      * Description
      */
     description?: string | null;
     /**
-     * Deadline
+     * Question
      */
-    deadline?: string | null;
+    question: string;
 };
 
 /**
@@ -952,53 +952,53 @@ export type DecisionSpaceCreate = {
  */
 export type DecisionSpaceDetailResponse = {
     /**
-     * Id
+     * Created At
      */
-    id: string;
-    /**
-     * Workspace Id
-     */
-    workspace_id: string;
-    /**
-     * Question
-     */
-    question: string;
-    /**
-     * Description
-     */
-    description?: string | null;
-    /**
-     * Owner Id
-     */
-    owner_id: string;
-    /**
-     * Status
-     */
-    status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
+    created_at: string;
     /**
      * Deadline
      */
     deadline?: string | null;
     /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * History
+     */
+    history: Array<DecisionSpaceStatusEventResponse>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
      * Lang
      */
     lang: 'fr' | 'en';
     /**
-     * Created At
+     * Owner Id
      */
-    created_at: string;
-    /**
-     * Updated At
-     */
-    updated_at: string;
+    owner_id: string;
     /**
      * Participants
      */
     participants: Array<DecisionSpaceParticipantResponse>;
     /**
-     * History
+     * Question
      */
-    history: Array<DecisionSpaceStatusEventResponse>;
+    question: string;
+    /**
+     * Status
+     */
+    status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Workspace Id
+     */
+    workspace_id: string;
 };
 
 /**
@@ -1016,13 +1016,13 @@ export type DecisionSpaceListResponse = {
  */
 export type DecisionSpaceParticipantResponse = {
     /**
-     * User Id
-     */
-    user_id: string;
-    /**
      * Created At
      */
     created_at: string;
+    /**
+     * User Id
+     */
+    user_id: string;
 };
 
 /**
@@ -1030,45 +1030,45 @@ export type DecisionSpaceParticipantResponse = {
  */
 export type DecisionSpaceResponse = {
     /**
-     * Id
+     * Created At
      */
-    id: string;
-    /**
-     * Workspace Id
-     */
-    workspace_id: string;
-    /**
-     * Question
-     */
-    question: string;
-    /**
-     * Description
-     */
-    description?: string | null;
-    /**
-     * Owner Id
-     */
-    owner_id: string;
-    /**
-     * Status
-     */
-    status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
+    created_at: string;
     /**
      * Deadline
      */
     deadline?: string | null;
     /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
      * Lang
      */
     lang: 'fr' | 'en';
     /**
-     * Created At
+     * Owner Id
      */
-    created_at: string;
+    owner_id: string;
+    /**
+     * Question
+     */
+    question: string;
+    /**
+     * Status
+     */
+    status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
     /**
      * Updated At
      */
     updated_at: string;
+    /**
+     * Workspace Id
+     */
+    workspace_id: string;
 };
 
 /**
@@ -1076,25 +1076,25 @@ export type DecisionSpaceResponse = {
  */
 export type DecisionSpaceStatusEventResponse = {
     /**
-     * From Status
-     */
-    from_status?: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED' | null;
-    /**
-     * To Status
-     */
-    to_status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
-    /**
      * Actor Id
      */
     actor_id: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * From Status
+     */
+    from_status?: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED' | null;
     /**
      * Reason
      */
     reason?: string | null;
     /**
-     * Created At
+     * To Status
      */
-    created_at: string;
+    to_status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
 };
 
 /**
@@ -1102,13 +1102,13 @@ export type DecisionSpaceStatusEventResponse = {
  */
 export type DecisionSpaceTransition = {
     /**
-     * To Status
-     */
-    to_status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
-    /**
      * Reason
      */
     reason?: string | null;
+    /**
+     * To Status
+     */
+    to_status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
 };
 
 /**
@@ -1116,21 +1116,21 @@ export type DecisionSpaceTransition = {
  */
 export type DepositIdeaRequest = {
     /**
-     * Title
+     * Initiative Type
      */
-    title: string;
-    /**
-     * Pitch
-     */
-    pitch: string;
+    initiative_type?: 'idea' | 'hypothesis' | 'campaign' | 'opportunity' | 'decision' | 'experiment' | 'pricing' | 'market' | 'partnership' | 'internal_improvement';
     /**
      * Lang
      */
     lang?: 'fr' | 'en' | null;
     /**
-     * Initiative Type
+     * Pitch
      */
-    initiative_type?: 'idea' | 'hypothesis' | 'campaign' | 'opportunity' | 'decision' | 'experiment' | 'pricing' | 'market' | 'partnership' | 'internal_improvement';
+    pitch: string;
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
@@ -1152,9 +1152,9 @@ export type EvidenceLink = {
  */
 export type ExperimentCreateBody = {
     /**
-     * Title
+     * Baseline
      */
-    title: string;
+    baseline?: string | null;
     /**
      * Hypothesis
      */
@@ -1164,13 +1164,13 @@ export type ExperimentCreateBody = {
      */
     success_metric: string;
     /**
-     * Baseline
-     */
-    baseline?: string | null;
-    /**
      * Target
      */
     target?: string | null;
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
@@ -1178,17 +1178,33 @@ export type ExperimentCreateBody = {
  */
 export type ExperimentDetailResponse = {
     experiment: ExperimentResponse;
+    learning: LearningResponse | null;
     /**
      * Outcomes
      */
     outcomes: Array<OutcomeResponse>;
-    learning: LearningResponse | null;
 };
 
 /**
  * ExperimentResponse
  */
 export type ExperimentResponse = {
+    /**
+     * Baseline
+     */
+    baseline: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Ended At
+     */
+    ended_at: string | null;
+    /**
+     * Hypothesis
+     */
+    hypothesis: string;
     /**
      * Id
      */
@@ -1198,41 +1214,25 @@ export type ExperimentResponse = {
      */
     idea_id: string;
     /**
-     * Title
+     * Started At
      */
-    title: string;
-    /**
-     * Hypothesis
-     */
-    hypothesis: string;
-    /**
-     * Success Metric
-     */
-    success_metric: string;
-    /**
-     * Baseline
-     */
-    baseline: string | null;
-    /**
-     * Target
-     */
-    target: string | null;
+    started_at: string | null;
     /**
      * Status
      */
     status: string;
     /**
-     * Started At
+     * Success Metric
      */
-    started_at: string | null;
+    success_metric: string;
     /**
-     * Ended At
+     * Target
      */
-    ended_at: string | null;
+    target: string | null;
     /**
-     * Created At
+     * Title
      */
-    created_at: string;
+    title: string;
 };
 
 /**
@@ -1284,10 +1284,6 @@ export type IdeaPageResponse = {
      */
     items: Array<IdeaSummaryResponse>;
     /**
-     * Total
-     */
-    total: number;
-    /**
      * Limit
      */
     limit: number;
@@ -1295,70 +1291,74 @@ export type IdeaPageResponse = {
      * Offset
      */
     offset: number;
+    /**
+     * Total
+     */
+    total: number;
 };
 
 /**
  * IdeaResponse
  */
 export type IdeaResponse = {
+    analysis?: AnalysisResponse | null;
+    /**
+     * Collaborators
+     */
+    collaborators?: Array<CollaboratorResponse>;
+    /**
+     * Created At
+     */
+    created_at: string;
     /**
      * Id
      */
     id: string;
     /**
-     * Slug
+     * Initiative Type
      */
-    slug: string;
+    initiative_type: 'idea' | 'hypothesis' | 'campaign' | 'opportunity' | 'decision' | 'experiment' | 'pricing' | 'market' | 'partnership' | 'internal_improvement';
     /**
-     * Title
+     * Join Requests
      */
-    title: string;
+    join_requests?: Array<JoinRequestResponse>;
     /**
-     * Pitch
+     * Lang
      */
-    pitch: string;
+    lang: 'fr' | 'en';
+    legacy_context?: LegacyIdeaContext | null;
     /**
      * Owner Id
      */
     owner_id: string;
     /**
-     * Workspace Id
+     * Pitch
      */
-    workspace_id: string | null;
+    pitch: string;
     /**
-     * Stage
+     * Slug
      */
-    stage: 'seed' | 'iterating' | 'team_formed';
-    /**
-     * Initiative Type
-     */
-    initiative_type: 'idea' | 'hypothesis' | 'campaign' | 'opportunity' | 'decision' | 'experiment' | 'pricing' | 'market' | 'partnership' | 'internal_improvement';
-    /**
-     * Lang
-     */
-    lang: 'fr' | 'en';
-    /**
-     * Visibility
-     */
-    visibility: 'public' | 'workspace';
-    /**
-     * Created At
-     */
-    created_at: string;
-    analysis?: AnalysisResponse | null;
+    slug: string;
     /**
      * Sought Roles
      */
     sought_roles?: Array<string>;
     /**
-     * Join Requests
+     * Stage
      */
-    join_requests?: Array<JoinRequestResponse>;
-    legacy_context?: LegacyIdeaContext | null;
+    stage: 'seed' | 'iterating' | 'team_formed';
     /**
-     * Collaborators
+     * Title
      */
-    collaborators?: Array<CollaboratorResponse>;
+    title: string;
+    /**
+     * Visibility
+     */
+    visibility: 'public' | 'workspace';
+    /**
+     * Workspace Id
+     */
+    workspace_id: string | null;
 };
 
 /**
@@ -1366,10 +1366,6 @@ export type IdeaResponse = {
  */
 export type IdeaSnapshot = {
     /**
-     * Title
-     */
-    title: string;
-    /**
      * Pitch
      */
     pitch: string;
@@ -1377,6 +1373,10 @@ export type IdeaSnapshot = {
      * Stage
      */
     stage: 'seed' | 'iterating' | 'team_formed';
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
@@ -1384,25 +1384,17 @@ export type IdeaSnapshot = {
  */
 export type IdeaSummaryResponse = {
     /**
+     * Collaborators
+     */
+    collaborators?: Array<CollaboratorResponse>;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
      * Id
      */
     id: string;
-    /**
-     * Slug
-     */
-    slug: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Pitch
-     */
-    pitch: string;
-    /**
-     * Stage
-     */
-    stage: 'seed' | 'iterating' | 'team_formed';
     /**
      * Initiative Type
      */
@@ -1412,31 +1404,52 @@ export type IdeaSummaryResponse = {
      */
     lang: 'fr' | 'en';
     /**
-     * Created At
+     * Last Activity At
      */
-    created_at: string;
+    last_activity_at?: string | null;
     /**
-     * Sought Roles
+     * Pitch
      */
-    sought_roles?: Array<string>;
+    pitch: string;
     /**
      * Realism Score
      */
     realism_score?: number | null;
     /**
-     * Last Activity At
+     * Slug
      */
-    last_activity_at?: string | null;
+    slug: string;
     /**
-     * Collaborators
+     * Sought Roles
      */
-    collaborators?: Array<CollaboratorResponse>;
+    sought_roles?: Array<string>;
+    /**
+     * Stage
+     */
+    stage: 'seed' | 'iterating' | 'team_formed';
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
  * IterationResponse
  */
 export type IterationResponse = {
+    analysis?: AnalysisResponse | null;
+    /**
+     * Author Id
+     */
+    author_id: string;
+    /**
+     * Branch
+     */
+    branch: string;
+    /**
+     * Created At
+     */
+    created_at: string;
     /**
      * Id
      */
@@ -1446,26 +1459,18 @@ export type IterationResponse = {
      */
     idea_id: string;
     /**
-     * Parent Id
+     * Lang
      */
-    parent_id: string | null;
-    /**
-     * Author Id
-     */
-    author_id: string;
+    lang: 'fr' | 'en';
     /**
      * Message
      */
     message: string;
     /**
-     * Lang
+     * Parent Id
      */
-    lang: 'fr' | 'en';
+    parent_id: string | null;
     payload: IdeaSnapshot;
-    /**
-     * Branch
-     */
-    branch: string;
     /**
      * Proposal Status
      */
@@ -1475,24 +1480,27 @@ export type IterationResponse = {
      */
     rationale?: string | null;
     /**
-     * Short Hash
-     */
-    short_hash: string;
-    /**
      * Revision
      */
     revision: number;
     /**
-     * Created At
+     * Short Hash
      */
-    created_at: string;
-    analysis?: AnalysisResponse | null;
+    short_hash: string;
 };
 
 /**
  * JoinRequestResponse
  */
 export type JoinRequestResponse = {
+    /**
+     * Business Function
+     */
+    business_function: string;
+    /**
+     * Created At
+     */
+    created_at: string;
     /**
      * Id
      */
@@ -1502,29 +1510,21 @@ export type JoinRequestResponse = {
      */
     idea_id: string;
     /**
-     * Requester Id
-     */
-    requester_id: string;
-    /**
-     * Business Function
-     */
-    business_function: string;
-    /**
      * Note
      */
     note: string;
-    /**
-     * Status
-     */
-    status: 'pending' | 'accepted' | 'rejected';
     /**
      * Rationale
      */
     rationale?: string | null;
     /**
-     * Created At
+     * Requester Id
      */
-    created_at: string;
+    requester_id: string;
+    /**
+     * Status
+     */
+    status: 'pending' | 'accepted' | 'rejected';
 };
 
 /**
@@ -1542,17 +1542,29 @@ export type LaunchAnalysisRequest = {
  */
 export type LearningResponse = {
     /**
-     * Id
+     * Confirmed By Id
      */
-    id: string;
+    confirmed_by_id: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
     /**
      * Experiment Id
      */
     experiment_id: string;
     /**
+     * Id
+     */
+    id: string;
+    /**
      * Idea Id
      */
     idea_id: string;
+    /**
+     * Outcome Ids
+     */
+    outcome_ids: Array<string>;
     /**
      * Status
      */
@@ -1561,18 +1573,6 @@ export type LearningResponse = {
      * Text
      */
     text: string;
-    /**
-     * Outcome Ids
-     */
-    outcome_ids: Array<string>;
-    /**
-     * Confirmed By Id
-     */
-    confirmed_by_id: string | null;
-    /**
-     * Created At
-     */
-    created_at: string;
     /**
      * Updated At
      */
@@ -1584,19 +1584,31 @@ export type LearningResponse = {
  */
 export type LearningWriteBody = {
     /**
-     * Text
-     */
-    text?: string | null;
-    /**
      * Confirm
      */
     confirm?: boolean;
+    /**
+     * Text
+     */
+    text?: string | null;
 };
 
 /**
  * LegacyIdeaContext
  */
 export type LegacyIdeaContext = {
+    /**
+     * Channel
+     */
+    channel?: string | null;
+    /**
+     * Domain
+     */
+    domain?: string | null;
+    /**
+     * Fatal Constraint
+     */
+    fatal_constraint?: string | null;
     /**
      * Source
      */
@@ -1606,21 +1618,9 @@ export type LegacyIdeaContext = {
      */
     source_id: string;
     /**
-     * Domain
-     */
-    domain?: string | null;
-    /**
      * Verdict
      */
     verdict?: string | null;
-    /**
-     * Fatal Constraint
-     */
-    fatal_constraint?: string | null;
-    /**
-     * Channel
-     */
-    channel?: string | null;
     /**
      * Why Now
      */
@@ -1632,39 +1632,43 @@ export type LegacyIdeaContext = {
  */
 export type MapContributionResponse = {
     /**
-     * Id
+     * Author Id
      */
-    id: string;
+    author_id: string;
     /**
      * Branch Id
      */
     branch_id: string;
     /**
+     * Cluster Id
+     */
+    cluster_id?: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
      * Kind
      */
     kind: string;
-    /**
-     * Title
-     */
-    title: string;
     /**
      * Status
      */
     status: string;
     /**
-     * Author Id
+     * Title
      */
-    author_id: string;
-    /**
-     * Cluster Id
-     */
-    cluster_id?: string | null;
+    title: string;
 };
 
 /**
  * MapResponse
  */
 export type MapResponse = {
+    /**
+     * Clusters
+     */
+    clusters: Array<ClusterResponse>;
     /**
      * Contributions
      */
@@ -1673,10 +1677,6 @@ export type MapResponse = {
      * Relations
      */
     relations: Array<RelationResponse>;
-    /**
-     * Clusters
-     */
-    clusters: Array<ClusterResponse>;
 };
 
 /**
@@ -1706,14 +1706,6 @@ export type MetricCreate = {
      */
     name: string;
     /**
-     * Value
-     */
-    value?: string | null;
-    /**
-     * Unit
-     */
-    unit?: string | null;
-    /**
      * Observed At
      */
     observed_at?: string | null;
@@ -1721,6 +1713,14 @@ export type MetricCreate = {
      * Source
      */
     source?: string | null;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+    /**
+     * Value
+     */
+    value?: string | null;
 };
 
 /**
@@ -1732,17 +1732,13 @@ export type MetricResponse = {
      */
     id: string;
     /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
      * Name
      */
     name: string;
-    /**
-     * Value
-     */
-    value?: string | null;
-    /**
-     * Unit
-     */
-    unit?: string | null;
     /**
      * Observed At
      */
@@ -1756,9 +1752,13 @@ export type MetricResponse = {
      */
     state: 'active' | 'archived';
     /**
-     * Lang
+     * Unit
      */
-    lang: 'fr' | 'en';
+    unit?: string | null;
+    /**
+     * Value
+     */
+    value?: string | null;
 };
 
 /**
@@ -1769,14 +1769,6 @@ export type MetricUpdate = {
      * Name
      */
     name?: string | null;
-    /**
-     * Value
-     */
-    value?: string | null;
-    /**
-     * Unit
-     */
-    unit?: string | null;
     /**
      * Observed At
      */
@@ -1789,6 +1781,14 @@ export type MetricUpdate = {
      * State
      */
     state?: 'active' | 'archived' | null;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+    /**
+     * Value
+     */
+    value?: string | null;
 };
 
 /**
@@ -1810,21 +1810,21 @@ export type ObjectiveResponse = {
      */
     id: string;
     /**
-     * Title
+     * Lang
      */
-    title: string;
-    /**
-     * State
-     */
-    state: 'active' | 'archived';
+    lang: 'fr' | 'en';
     /**
      * Priority
      */
     priority: boolean;
     /**
-     * Lang
+     * State
      */
-    lang: 'fr' | 'en';
+    state: 'active' | 'archived';
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
@@ -1832,17 +1832,17 @@ export type ObjectiveResponse = {
  */
 export type ObjectiveUpdate = {
     /**
-     * Title
+     * Priority
      */
-    title?: string | null;
+    priority?: boolean | null;
     /**
      * State
      */
     state?: 'active' | 'archived' | null;
     /**
-     * Priority
+     * Title
      */
-    priority?: boolean | null;
+    title?: string | null;
 };
 
 /**
@@ -1850,37 +1850,37 @@ export type ObjectiveUpdate = {
  */
 export type OptionCreate = {
     /**
-     * Title
-     */
-    title: string;
-    /**
-     * Proposal
-     */
-    proposal: string;
-    /**
-     * Mechanism
-     */
-    mechanism?: string | null;
-    /**
-     * Upside
-     */
-    upside?: string | null;
-    /**
      * Cost
      */
     cost?: string | null;
-    /**
-     * Risks
-     */
-    risks?: string | null;
     /**
      * Critical Assumptions
      */
     critical_assumptions?: string | null;
     /**
+     * Mechanism
+     */
+    mechanism?: string | null;
+    /**
+     * Proposal
+     */
+    proposal: string;
+    /**
+     * Risks
+     */
+    risks?: string | null;
+    /**
      * Success Metrics
      */
     success_metrics?: string | null;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Upside
+     */
+    upside?: string | null;
 };
 
 /**
@@ -1888,65 +1888,65 @@ export type OptionCreate = {
  */
 export type OptionDetailResponse = {
     /**
-     * Id
-     */
-    id: string;
-    /**
-     * Space Id
-     */
-    space_id: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Proposal
-     */
-    proposal: string;
-    /**
-     * Mechanism
-     */
-    mechanism?: string | null;
-    /**
-     * Upside
-     */
-    upside?: string | null;
-    /**
      * Cost
      */
     cost?: string | null;
-    /**
-     * Risks
-     */
-    risks?: string | null;
-    /**
-     * Critical Assumptions
-     */
-    critical_assumptions?: string | null;
-    /**
-     * Success Metrics
-     */
-    success_metrics?: string | null;
-    /**
-     * Created By
-     */
-    created_by: string;
-    /**
-     * Lang
-     */
-    lang: 'fr' | 'en';
     /**
      * Created At
      */
     created_at: string;
     /**
-     * Updated At
+     * Created By
      */
-    updated_at: string;
+    created_by: string;
+    /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
     /**
      * Evidence
      */
     evidence: Array<OptionEvidenceResponse>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Mechanism
+     */
+    mechanism?: string | null;
+    /**
+     * Proposal
+     */
+    proposal: string;
+    /**
+     * Risks
+     */
+    risks?: string | null;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Success Metrics
+     */
+    success_metrics?: string | null;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Upside
+     */
+    upside?: string | null;
 };
 
 /**
@@ -1958,13 +1958,13 @@ export type OptionEvidenceResponse = {
      */
     contribution_id: string;
     /**
-     * Side
-     */
-    side: 'for' | 'against';
-    /**
      * Created At
      */
     created_at: string;
+    /**
+     * Side
+     */
+    side: 'for' | 'against';
 };
 
 /**
@@ -1982,61 +1982,61 @@ export type OptionListResponse = {
  */
 export type OptionResponse = {
     /**
-     * Id
-     */
-    id: string;
-    /**
-     * Space Id
-     */
-    space_id: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Proposal
-     */
-    proposal: string;
-    /**
-     * Mechanism
-     */
-    mechanism?: string | null;
-    /**
-     * Upside
-     */
-    upside?: string | null;
-    /**
      * Cost
      */
     cost?: string | null;
-    /**
-     * Risks
-     */
-    risks?: string | null;
-    /**
-     * Critical Assumptions
-     */
-    critical_assumptions?: string | null;
-    /**
-     * Success Metrics
-     */
-    success_metrics?: string | null;
-    /**
-     * Created By
-     */
-    created_by: string;
-    /**
-     * Lang
-     */
-    lang: 'fr' | 'en';
     /**
      * Created At
      */
     created_at: string;
     /**
+     * Created By
+     */
+    created_by: string;
+    /**
+     * Critical Assumptions
+     */
+    critical_assumptions?: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Mechanism
+     */
+    mechanism?: string | null;
+    /**
+     * Proposal
+     */
+    proposal: string;
+    /**
+     * Risks
+     */
+    risks?: string | null;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Success Metrics
+     */
+    success_metrics?: string | null;
+    /**
+     * Title
+     */
+    title: string;
+    /**
      * Updated At
      */
     updated_at: string;
+    /**
+     * Upside
+     */
+    upside?: string | null;
 };
 
 /**
@@ -2044,37 +2044,37 @@ export type OptionResponse = {
  */
 export type OptionUpdate = {
     /**
-     * Title
-     */
-    title?: string | null;
-    /**
-     * Proposal
-     */
-    proposal?: string | null;
-    /**
-     * Mechanism
-     */
-    mechanism?: string | null;
-    /**
-     * Upside
-     */
-    upside?: string | null;
-    /**
      * Cost
      */
     cost?: string | null;
-    /**
-     * Risks
-     */
-    risks?: string | null;
     /**
      * Critical Assumptions
      */
     critical_assumptions?: string | null;
     /**
+     * Mechanism
+     */
+    mechanism?: string | null;
+    /**
+     * Proposal
+     */
+    proposal?: string | null;
+    /**
+     * Risks
+     */
+    risks?: string | null;
+    /**
      * Success Metrics
      */
     success_metrics?: string | null;
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Upside
+     */
+    upside?: string | null;
 };
 
 /**
@@ -2082,29 +2082,29 @@ export type OptionUpdate = {
  */
 export type OutcomeCreateBody = {
     /**
+     * Comment
+     */
+    comment?: string | null;
+    /**
      * Metric
      */
     metric: string;
-    /**
-     * Value
-     */
-    value: string;
-    /**
-     * Unit
-     */
-    unit?: string | null;
     /**
      * Observed At
      */
     observed_at?: string | null;
     /**
-     * Comment
-     */
-    comment?: string | null;
-    /**
      * Qualitative
      */
     qualitative?: string | null;
+    /**
+     * Unit
+     */
+    unit?: string | null;
+    /**
+     * Value
+     */
+    value: string;
 };
 
 /**
@@ -2112,41 +2112,41 @@ export type OutcomeCreateBody = {
  */
 export type OutcomeResponse = {
     /**
-     * Id
+     * Comment
      */
-    id: string;
+    comment: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
     /**
      * Experiment Id
      */
     experiment_id: string;
     /**
+     * Id
+     */
+    id: string;
+    /**
      * Metric
      */
     metric: string;
-    /**
-     * Value
-     */
-    value: string;
-    /**
-     * Unit
-     */
-    unit: string | null;
     /**
      * Observed At
      */
     observed_at: string | null;
     /**
-     * Comment
-     */
-    comment: string | null;
-    /**
      * Qualitative
      */
     qualitative: string | null;
     /**
-     * Created At
+     * Unit
      */
-    created_at: string;
+    unit: string | null;
+    /**
+     * Value
+     */
+    value: string;
 };
 
 /**
@@ -2154,29 +2154,29 @@ export type OutcomeResponse = {
  */
 export type OwnedIdeaResponse = {
     /**
+     * Created At
+     */
+    created_at: string;
+    /**
      * Id
      */
     id: string;
-    /**
-     * Slug
-     */
-    slug: string;
-    /**
-     * Title
-     */
-    title: string;
-    /**
-     * Stage
-     */
-    stage: 'seed' | 'iterating' | 'team_formed';
     /**
      * Lang
      */
     lang: 'fr' | 'en';
     /**
-     * Created At
+     * Slug
      */
-    created_at: string;
+    slug: string;
+    /**
+     * Stage
+     */
+    stage: 'seed' | 'iterating' | 'team_formed';
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
@@ -2194,13 +2194,13 @@ export type ParticipantAdd = {
  */
 export type PrincipleCreate = {
     /**
-     * Title
-     */
-    title: string;
-    /**
      * Detail
      */
     detail?: string | null;
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
@@ -2208,35 +2208,31 @@ export type PrincipleCreate = {
  */
 export type PrincipleResponse = {
     /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
      * Id
      */
     id: string;
     /**
-     * Title
+     * Lang
      */
-    title: string;
-    /**
-     * Detail
-     */
-    detail?: string | null;
+    lang: 'fr' | 'en';
     /**
      * State
      */
     state: 'active' | 'archived';
     /**
-     * Lang
+     * Title
      */
-    lang: 'fr' | 'en';
+    title: string;
 };
 
 /**
  * PrincipleUpdate
  */
 export type PrincipleUpdate = {
-    /**
-     * Title
-     */
-    title?: string | null;
     /**
      * Detail
      */
@@ -2245,6 +2241,10 @@ export type PrincipleUpdate = {
      * State
      */
     state?: 'active' | 'archived' | null;
+    /**
+     * Title
+     */
+    title?: string | null;
 };
 
 /**
@@ -2252,9 +2252,17 @@ export type PrincipleUpdate = {
  */
 export type ProfileResponse = {
     /**
-     * Id
+     * Avatar Key
      */
-    id: string;
+    avatar_key?: string | null;
+    /**
+     * Bio
+     */
+    bio?: string | null;
+    /**
+     * Contributions
+     */
+    contributions: Array<SrcModulesProfilesApiSchemasContributionResponse>;
     /**
      * Display Name
      */
@@ -2264,29 +2272,21 @@ export type ProfileResponse = {
      */
     handle?: string | null;
     /**
-     * Roles
+     * Id
      */
-    roles: Array<string>;
-    /**
-     * Bio
-     */
-    bio?: string | null;
-    /**
-     * Avatar Key
-     */
-    avatar_key?: string | null;
-    /**
-     * Owned Ideas
-     */
-    owned_ideas: Array<OwnedIdeaResponse>;
+    id: string;
     /**
      * Memberships
      */
     memberships: Array<MembershipResponse>;
     /**
-     * Contributions
+     * Owned Ideas
      */
-    contributions: Array<SrcModulesProfilesApiSchemasContributionResponse>;
+    owned_ideas: Array<OwnedIdeaResponse>;
+    /**
+     * Roles
+     */
+    roles: Array<string>;
 };
 
 /**
@@ -2318,13 +2318,13 @@ export type RelationCreate = {
      */
     from_contribution_id: string;
     /**
-     * To Contribution Id
-     */
-    to_contribution_id: string;
-    /**
      * Relation Type
      */
     relation_type: 'SUPPORTS' | 'CONTRADICTS' | 'DUPLICATES' | 'ALTERNATIVE_TO' | 'DERIVED_FROM' | 'SUPERSEDES' | 'EVIDENCE_FOR' | 'EVIDENCE_AGAINST';
+    /**
+     * To Contribution Id
+     */
+    to_contribution_id: string;
 };
 
 /**
@@ -2332,33 +2332,33 @@ export type RelationCreate = {
  */
 export type RelationResponse = {
     /**
-     * Id
+     * Created At
      */
-    id: string;
-    /**
-     * Space Id
-     */
-    space_id: string;
-    /**
-     * From Contribution Id
-     */
-    from_contribution_id: string;
-    /**
-     * To Contribution Id
-     */
-    to_contribution_id: string;
-    /**
-     * Relation Type
-     */
-    relation_type: 'SUPPORTS' | 'CONTRADICTS' | 'DUPLICATES' | 'ALTERNATIVE_TO' | 'DERIVED_FROM' | 'SUPERSEDES' | 'EVIDENCE_FOR' | 'EVIDENCE_AGAINST';
+    created_at: string;
     /**
      * Created By
      */
     created_by: string;
     /**
-     * Created At
+     * From Contribution Id
      */
-    created_at: string;
+    from_contribution_id: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Relation Type
+     */
+    relation_type: 'SUPPORTS' | 'CONTRADICTS' | 'DUPLICATES' | 'ALTERNATIVE_TO' | 'DERIVED_FROM' | 'SUPERSEDES' | 'EVIDENCE_FOR' | 'EVIDENCE_AGAINST';
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * To Contribution Id
+     */
+    to_contribution_id: string;
 };
 
 /**
@@ -2396,21 +2396,21 @@ export type ReviewAnalysisRequest = {
  */
 export type RevisitTrigger = {
     /**
-     * Metric
-     */
-    metric: string;
-    /**
      * Direction
      */
     direction?: 'above' | 'below' | null;
     /**
-     * Threshold
+     * Metric
      */
-    threshold?: string | null;
+    metric: string;
     /**
      * Note
      */
     note?: string | null;
+    /**
+     * Threshold
+     */
+    threshold?: string | null;
 };
 
 /**
@@ -2422,13 +2422,13 @@ export type RollbackRequest = {
      */
     expected_main_parent_id?: string | null;
     /**
-     * Message
-     */
-    message: string;
-    /**
      * Lang
      */
     lang: 'fr' | 'en';
+    /**
+     * Message
+     */
+    message: string;
 };
 
 /**
@@ -2446,6 +2446,16 @@ export type UpdateIdeaInitiativeTypeRequest = {
  */
 export type ValidationError = {
     /**
+     * Context
+     */
+    ctx?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Input
+     */
+    input?: unknown;
+    /**
      * Location
      */
     loc: Array<string | number>;
@@ -2457,16 +2467,6 @@ export type ValidationError = {
      * Error Type
      */
     type: string;
-    /**
-     * Input
-     */
-    input?: unknown;
-    /**
-     * Context
-     */
-    ctx?: {
-        [key: string]: unknown;
-    };
 };
 
 /**
@@ -2474,13 +2474,13 @@ export type ValidationError = {
  */
 export type WorkspaceMemberResponse = {
     /**
-     * Id
-     */
-    id: string;
-    /**
      * Display Name
      */
     display_name: string;
+    /**
+     * Id
+     */
+    id: string;
     /**
      * Role
      */
@@ -2510,37 +2510,49 @@ export type WorkspaceResponse = {
  */
 export type SrcModulesBranchesApiSchemasContributionResponse = {
     /**
-     * Id
+     * Author Id
      */
-    id: string;
-    /**
-     * Space Id
-     */
-    space_id: string;
-    /**
-     * Branch Id
-     */
-    branch_id: string;
-    /**
-     * Kind
-     */
-    kind: 'idea' | 'claim' | 'evidence' | 'objection' | 'constraint';
-    /**
-     * Title
-     */
-    title: string;
+    author_id: string;
     /**
      * Body
      */
     body?: string | null;
     /**
-     * Author Id
+     * Branch Id
      */
-    author_id: string;
+    branch_id: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'idea' | 'claim' | 'evidence' | 'objection' | 'constraint';
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
     /**
      * Source
      */
     source?: string | null;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Status
+     */
+    status: 'suggested' | 'confirmed';
+    /**
+     * Title
+     */
+    title: string;
     /**
      * Tool Model
      */
@@ -2552,18 +2564,6 @@ export type SrcModulesBranchesApiSchemasContributionResponse = {
         [key: string]: unknown;
     } | null;
     /**
-     * Status
-     */
-    status: 'suggested' | 'confirmed';
-    /**
-     * Lang
-     */
-    lang: 'fr' | 'en';
-    /**
-     * Created At
-     */
-    created_at: string;
-    /**
      * Updated At
      */
     updated_at: string;
@@ -2574,6 +2574,10 @@ export type SrcModulesBranchesApiSchemasContributionResponse = {
  */
 export type SrcModulesProfilesApiSchemasContributionResponse = {
     /**
+     * Created At
+     */
+    created_at: string;
+    /**
      * Idea Id
      */
     idea_id: string;
@@ -2582,22 +2586,138 @@ export type SrcModulesProfilesApiSchemasContributionResponse = {
      */
     idea_title: string;
     /**
-     * Message
-     */
-    message: string;
-    /**
      * Lang
      */
     lang: 'fr' | 'en';
     /**
+     * Message
+     */
+    message: string;
+    /**
      * Short Hash
      */
     short_hash: string;
-    /**
-     * Created At
-     */
-    created_at: string;
 };
+
+export type GetExperimentData = {
+    body?: never;
+    path: {
+        /**
+         * Experiment Id
+         */
+        experiment_id: string;
+    };
+    query?: never;
+    url: '/experiments/{experiment_id}';
+};
+
+export type GetExperimentErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetExperimentError = GetExperimentErrors[keyof GetExperimentErrors];
+
+export type GetExperimentResponses = {
+    /**
+     * Successful Response
+     */
+    200: ExperimentDetailResponse;
+};
+
+export type GetExperimentResponse = GetExperimentResponses[keyof GetExperimentResponses];
+
+export type WriteExperimentLearningData = {
+    body: LearningWriteBody;
+    path: {
+        /**
+         * Experiment Id
+         */
+        experiment_id: string;
+    };
+    query?: never;
+    url: '/experiments/{experiment_id}/learnings';
+};
+
+export type WriteExperimentLearningErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type WriteExperimentLearningError = WriteExperimentLearningErrors[keyof WriteExperimentLearningErrors];
+
+export type WriteExperimentLearningResponses = {
+    /**
+     * Successful Response
+     */
+    200: LearningResponse;
+};
+
+export type WriteExperimentLearningResponse = WriteExperimentLearningResponses[keyof WriteExperimentLearningResponses];
+
+export type RecordExperimentOutcomeData = {
+    body: OutcomeCreateBody;
+    path: {
+        /**
+         * Experiment Id
+         */
+        experiment_id: string;
+    };
+    query?: never;
+    url: '/experiments/{experiment_id}/outcomes';
+};
+
+export type RecordExperimentOutcomeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RecordExperimentOutcomeError = RecordExperimentOutcomeErrors[keyof RecordExperimentOutcomeErrors];
+
+export type RecordExperimentOutcomeResponses = {
+    /**
+     * Successful Response
+     */
+    201: OutcomeResponse;
+};
+
+export type RecordExperimentOutcomeResponse = RecordExperimentOutcomeResponses[keyof RecordExperimentOutcomeResponses];
+
+export type ChangeExperimentStatusData = {
+    body: ExperimentStatusBody;
+    path: {
+        /**
+         * Experiment Id
+         */
+        experiment_id: string;
+    };
+    query?: never;
+    url: '/experiments/{experiment_id}/status';
+};
+
+export type ChangeExperimentStatusErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ChangeExperimentStatusError = ChangeExperimentStatusErrors[keyof ChangeExperimentStatusErrors];
+
+export type ChangeExperimentStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: ExperimentResponse;
+};
+
+export type ChangeExperimentStatusResponse = ChangeExperimentStatusResponses[keyof ChangeExperimentStatusResponses];
 
 export type HealthLiveData = {
     body?: never;
@@ -2690,216 +2810,6 @@ export type UpdateIdeaInitiativeTypeResponses = {
 };
 
 export type UpdateIdeaInitiativeTypeResponse = UpdateIdeaInitiativeTypeResponses[keyof UpdateIdeaInitiativeTypeResponses];
-
-export type RequestIdeaMembershipData = {
-    body: ApplyJoinBody;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/join-requests';
-};
-
-export type RequestIdeaMembershipErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type RequestIdeaMembershipError = RequestIdeaMembershipErrors[keyof RequestIdeaMembershipErrors];
-
-export type RequestIdeaMembershipResponses = {
-    /**
-     * Successful Response
-     */
-    201: JoinRequestResponse;
-};
-
-export type RequestIdeaMembershipResponse = RequestIdeaMembershipResponses[keyof RequestIdeaMembershipResponses];
-
-export type AcceptIdeaMembershipRequestData = {
-    /**
-     * Body
-     */
-    body?: AcceptJoinBody | null;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-        /**
-         * Request Id
-         */
-        request_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/join-requests/{request_id}/accept';
-};
-
-export type AcceptIdeaMembershipRequestErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type AcceptIdeaMembershipRequestError = AcceptIdeaMembershipRequestErrors[keyof AcceptIdeaMembershipRequestErrors];
-
-export type AcceptIdeaMembershipRequestResponses = {
-    /**
-     * Successful Response
-     */
-    200: JoinRequestResponse;
-};
-
-export type AcceptIdeaMembershipRequestResponse = AcceptIdeaMembershipRequestResponses[keyof AcceptIdeaMembershipRequestResponses];
-
-export type RejectIdeaMembershipRequestData = {
-    body: RejectJoinBody;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-        /**
-         * Request Id
-         */
-        request_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/join-requests/{request_id}/reject';
-};
-
-export type RejectIdeaMembershipRequestErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type RejectIdeaMembershipRequestError = RejectIdeaMembershipRequestErrors[keyof RejectIdeaMembershipRequestErrors];
-
-export type RejectIdeaMembershipRequestResponses = {
-    /**
-     * Successful Response
-     */
-    200: JoinRequestResponse;
-};
-
-export type RejectIdeaMembershipRequestResponse = RejectIdeaMembershipRequestResponses[keyof RejectIdeaMembershipRequestResponses];
-
-export type AddIdeaParticipantData = {
-    body: AddParticipantBody;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/members';
-};
-
-export type AddIdeaParticipantErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type AddIdeaParticipantError = AddIdeaParticipantErrors[keyof AddIdeaParticipantErrors];
-
-export type AddIdeaParticipantResponses = {
-    /**
-     * Response Add Idea Participant
-     *
-     * Successful Response
-     */
-    200: {
-        [key: string]: unknown;
-    };
-};
-
-export type AddIdeaParticipantResponse = AddIdeaParticipantResponses[keyof AddIdeaParticipantResponses];
-
-export type LeaveIdeaTeamData = {
-    body?: never;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/leave';
-};
-
-export type LeaveIdeaTeamErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type LeaveIdeaTeamError = LeaveIdeaTeamErrors[keyof LeaveIdeaTeamErrors];
-
-export type LeaveIdeaTeamResponses = {
-    /**
-     * Response Leave Idea Team
-     *
-     * Successful Response
-     */
-    200: {
-        [key: string]: unknown;
-    };
-};
-
-export type LeaveIdeaTeamResponse = LeaveIdeaTeamResponses[keyof LeaveIdeaTeamResponses];
-
-export type RemoveIdeaMemberData = {
-    /**
-     * Body
-     */
-    body: RemoveMemberBody | null;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-        /**
-         * Member Id
-         */
-        member_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/members/{member_id}/remove';
-};
-
-export type RemoveIdeaMemberErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type RemoveIdeaMemberError = RemoveIdeaMemberErrors[keyof RemoveIdeaMemberErrors];
-
-export type RemoveIdeaMemberResponses = {
-    /**
-     * Response Remove Idea Member
-     *
-     * Successful Response
-     */
-    200: {
-        [key: string]: unknown;
-    };
-};
-
-export type RemoveIdeaMemberResponse = RemoveIdeaMemberResponses[keyof RemoveIdeaMemberResponses];
 
 export type LaunchConstraintAnalysisData = {
     body: LaunchAnalysisRequest;
@@ -3004,6 +2914,68 @@ export type ReviewConstraintAnalysisResponses = {
 };
 
 export type ReviewConstraintAnalysisResponse = ReviewConstraintAnalysisResponses[keyof ReviewConstraintAnalysisResponses];
+
+export type ListIdeaExperimentsData = {
+    body?: never;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/experiments';
+};
+
+export type ListIdeaExperimentsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListIdeaExperimentsError = ListIdeaExperimentsErrors[keyof ListIdeaExperimentsErrors];
+
+export type ListIdeaExperimentsResponses = {
+    /**
+     * Response List Idea Experiments
+     *
+     * Successful Response
+     */
+    200: Array<ExperimentResponse>;
+};
+
+export type ListIdeaExperimentsResponse = ListIdeaExperimentsResponses[keyof ListIdeaExperimentsResponses];
+
+export type CreateExperimentData = {
+    body: ExperimentCreateBody;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/experiments';
+};
+
+export type CreateExperimentErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateExperimentError = CreateExperimentErrors[keyof CreateExperimentErrors];
+
+export type CreateExperimentResponses = {
+    /**
+     * Successful Response
+     */
+    201: ExperimentResponse;
+};
+
+export type CreateExperimentResponse = CreateExperimentResponses[keyof CreateExperimentResponses];
 
 export type ListIdeaIterationsData = {
     body?: never;
@@ -3169,140 +3141,247 @@ export type RollbackIdeaIterationResponses = {
 
 export type RollbackIdeaIterationResponse = RollbackIdeaIterationResponses[keyof RollbackIdeaIterationResponses];
 
-export type ListWorkspaceIdeasData = {
-    body?: never;
+export type RequestIdeaMembershipData = {
+    body: ApplyJoinBody;
     path: {
         /**
-         * Workspace Id
+         * Idea Id
          */
-        workspace_id: string;
+        idea_id: string;
     };
-    query?: {
-        /**
-         * Limit
-         */
-        limit?: number;
-        /**
-         * Offset
-         */
-        offset?: number;
-        /**
-         * Q
-         */
-        q?: string | null;
-        /**
-         * Stage
-         */
-        stage?: 'seed' | 'iterating' | 'team_formed' | null;
-        /**
-         * Sought Role
-         */
-        sought_role?: string | null;
-        /**
-         * Realism Min
-         */
-        realism_min?: number | null;
-    };
-    url: '/workspaces/{workspace_id}/ideas';
+    query?: never;
+    url: '/ideas/{idea_id}/join-requests';
 };
 
-export type ListWorkspaceIdeasErrors = {
+export type RequestIdeaMembershipErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type ListWorkspaceIdeasError = ListWorkspaceIdeasErrors[keyof ListWorkspaceIdeasErrors];
+export type RequestIdeaMembershipError = RequestIdeaMembershipErrors[keyof RequestIdeaMembershipErrors];
 
-export type ListWorkspaceIdeasResponses = {
+export type RequestIdeaMembershipResponses = {
     /**
      * Successful Response
      */
-    200: IdeaPageResponse;
+    201: JoinRequestResponse;
 };
 
-export type ListWorkspaceIdeasResponse = ListWorkspaceIdeasResponses[keyof ListWorkspaceIdeasResponses];
+export type RequestIdeaMembershipResponse = RequestIdeaMembershipResponses[keyof RequestIdeaMembershipResponses];
 
-export type DepositWorkspaceIdeaData = {
-    body: DepositIdeaRequest;
+export type AcceptIdeaMembershipRequestData = {
+    /**
+     * Body
+     */
+    body?: AcceptJoinBody | null;
     path: {
         /**
-         * Workspace Id
+         * Idea Id
          */
-        workspace_id: string;
+        idea_id: string;
+        /**
+         * Request Id
+         */
+        request_id: string;
     };
     query?: never;
-    url: '/workspaces/{workspace_id}/ideas';
+    url: '/ideas/{idea_id}/join-requests/{request_id}/accept';
 };
 
-export type DepositWorkspaceIdeaErrors = {
+export type AcceptIdeaMembershipRequestErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type DepositWorkspaceIdeaError = DepositWorkspaceIdeaErrors[keyof DepositWorkspaceIdeaErrors];
+export type AcceptIdeaMembershipRequestError = AcceptIdeaMembershipRequestErrors[keyof AcceptIdeaMembershipRequestErrors];
 
-export type DepositWorkspaceIdeaResponses = {
+export type AcceptIdeaMembershipRequestResponses = {
     /**
      * Successful Response
      */
-    201: IdeaResponse;
+    200: JoinRequestResponse;
 };
 
-export type DepositWorkspaceIdeaResponse = DepositWorkspaceIdeaResponses[keyof DepositWorkspaceIdeaResponses];
+export type AcceptIdeaMembershipRequestResponse = AcceptIdeaMembershipRequestResponses[keyof AcceptIdeaMembershipRequestResponses];
 
-export type ListWorkspacesData = {
-    body?: never;
-    path?: never;
+export type RejectIdeaMembershipRequestData = {
+    body: RejectJoinBody;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+        /**
+         * Request Id
+         */
+        request_id: string;
+    };
     query?: never;
-    url: '/workspaces';
+    url: '/ideas/{idea_id}/join-requests/{request_id}/reject';
 };
 
-export type ListWorkspacesResponses = {
+export type RejectIdeaMembershipRequestErrors = {
     /**
-     * Response List Workspaces
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RejectIdeaMembershipRequestError = RejectIdeaMembershipRequestErrors[keyof RejectIdeaMembershipRequestErrors];
+
+export type RejectIdeaMembershipRequestResponses = {
+    /**
+     * Successful Response
+     */
+    200: JoinRequestResponse;
+};
+
+export type RejectIdeaMembershipRequestResponse = RejectIdeaMembershipRequestResponses[keyof RejectIdeaMembershipRequestResponses];
+
+export type ListIdeaLearningsData = {
+    body?: never;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/learnings';
+};
+
+export type ListIdeaLearningsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListIdeaLearningsError = ListIdeaLearningsErrors[keyof ListIdeaLearningsErrors];
+
+export type ListIdeaLearningsResponses = {
+    /**
+     * Response List Idea Learnings
      *
      * Successful Response
      */
-    200: Array<WorkspaceResponse>;
+    200: Array<LearningResponse>;
 };
 
-export type ListWorkspacesResponse = ListWorkspacesResponses[keyof ListWorkspacesResponses];
+export type ListIdeaLearningsResponse = ListIdeaLearningsResponses[keyof ListIdeaLearningsResponses];
 
-export type ListWorkspaceMembersData = {
+export type LeaveIdeaTeamData = {
     body?: never;
     path: {
         /**
-         * Workspace Id
+         * Idea Id
          */
-        workspace_id: string;
+        idea_id: string;
     };
     query?: never;
-    url: '/workspaces/{workspace_id}/members';
+    url: '/ideas/{idea_id}/leave';
 };
 
-export type ListWorkspaceMembersErrors = {
+export type LeaveIdeaTeamErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type ListWorkspaceMembersError = ListWorkspaceMembersErrors[keyof ListWorkspaceMembersErrors];
+export type LeaveIdeaTeamError = LeaveIdeaTeamErrors[keyof LeaveIdeaTeamErrors];
 
-export type ListWorkspaceMembersResponses = {
+export type LeaveIdeaTeamResponses = {
     /**
-     * Response List Workspace Members
+     * Response Leave Idea Team
      *
      * Successful Response
      */
-    200: Array<WorkspaceMemberResponse>;
+    200: {
+        [key: string]: unknown;
+    };
 };
 
-export type ListWorkspaceMembersResponse = ListWorkspaceMembersResponses[keyof ListWorkspaceMembersResponses];
+export type LeaveIdeaTeamResponse = LeaveIdeaTeamResponses[keyof LeaveIdeaTeamResponses];
+
+export type AddIdeaParticipantData = {
+    body: AddParticipantBody;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/members';
+};
+
+export type AddIdeaParticipantErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AddIdeaParticipantError = AddIdeaParticipantErrors[keyof AddIdeaParticipantErrors];
+
+export type AddIdeaParticipantResponses = {
+    /**
+     * Response Add Idea Participant
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type AddIdeaParticipantResponse = AddIdeaParticipantResponses[keyof AddIdeaParticipantResponses];
+
+export type RemoveIdeaMemberData = {
+    /**
+     * Body
+     */
+    body: RemoveMemberBody | null;
+    path: {
+        /**
+         * Idea Id
+         */
+        idea_id: string;
+        /**
+         * Member Id
+         */
+        member_id: string;
+    };
+    query?: never;
+    url: '/ideas/{idea_id}/members/{member_id}/remove';
+};
+
+export type RemoveIdeaMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RemoveIdeaMemberError = RemoveIdeaMemberErrors[keyof RemoveIdeaMemberErrors];
+
+export type RemoveIdeaMemberResponses = {
+    /**
+     * Response Remove Idea Member
+     *
+     * Successful Response
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type RemoveIdeaMemberResponse = RemoveIdeaMemberResponses[keyof RemoveIdeaMemberResponses];
 
 export type GetProfileData = {
     body?: never;
@@ -3334,6 +3413,24 @@ export type GetProfileResponses = {
 
 export type GetProfileResponse = GetProfileResponses[keyof GetProfileResponses];
 
+export type ListWorkspacesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/workspaces';
+};
+
+export type ListWorkspacesResponses = {
+    /**
+     * Response List Workspaces
+     *
+     * Successful Response
+     */
+    200: Array<WorkspaceResponse>;
+};
+
+export type ListWorkspacesResponse = ListWorkspacesResponses[keyof ListWorkspacesResponses];
+
 export type GetCompanyContextData = {
     body?: never;
     path: {
@@ -3363,100 +3460,6 @@ export type GetCompanyContextResponses = {
 };
 
 export type GetCompanyContextResponse = GetCompanyContextResponses[keyof GetCompanyContextResponses];
-
-export type SaveCompanyProfileData = {
-    body: CompanyProfileWrite;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/company-context/profile';
-};
-
-export type SaveCompanyProfileErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type SaveCompanyProfileError = SaveCompanyProfileErrors[keyof SaveCompanyProfileErrors];
-
-export type SaveCompanyProfileResponses = {
-    /**
-     * Successful Response
-     */
-    200: CompanyProfileResponse;
-};
-
-export type SaveCompanyProfileResponse = SaveCompanyProfileResponses[keyof SaveCompanyProfileResponses];
-
-export type CreateCompanyObjectiveData = {
-    body: ObjectiveCreate;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/company-context/objectives';
-};
-
-export type CreateCompanyObjectiveErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CreateCompanyObjectiveError = CreateCompanyObjectiveErrors[keyof CreateCompanyObjectiveErrors];
-
-export type CreateCompanyObjectiveResponses = {
-    /**
-     * Successful Response
-     */
-    201: ObjectiveResponse;
-};
-
-export type CreateCompanyObjectiveResponse = CreateCompanyObjectiveResponses[keyof CreateCompanyObjectiveResponses];
-
-export type UpdateCompanyObjectiveData = {
-    body: ObjectiveUpdate;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Objective Id
-         */
-        objective_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/company-context/objectives/{objective_id}';
-};
-
-export type UpdateCompanyObjectiveErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type UpdateCompanyObjectiveError = UpdateCompanyObjectiveErrors[keyof UpdateCompanyObjectiveErrors];
-
-export type UpdateCompanyObjectiveResponses = {
-    /**
-     * Successful Response
-     */
-    200: ObjectiveResponse;
-};
-
-export type UpdateCompanyObjectiveResponse = UpdateCompanyObjectiveResponses[keyof UpdateCompanyObjectiveResponses];
 
 export type CreateCompanyConstraintData = {
     body: CompanyConstraintCreate;
@@ -3522,6 +3525,134 @@ export type UpdateCompanyConstraintResponses = {
 
 export type UpdateCompanyConstraintResponse = UpdateCompanyConstraintResponses[keyof UpdateCompanyConstraintResponses];
 
+export type CreateCompanyMetricData = {
+    body: MetricCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/metrics';
+};
+
+export type CreateCompanyMetricErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateCompanyMetricError = CreateCompanyMetricErrors[keyof CreateCompanyMetricErrors];
+
+export type CreateCompanyMetricResponses = {
+    /**
+     * Successful Response
+     */
+    201: MetricResponse;
+};
+
+export type CreateCompanyMetricResponse = CreateCompanyMetricResponses[keyof CreateCompanyMetricResponses];
+
+export type UpdateCompanyMetricData = {
+    body: MetricUpdate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Metric Id
+         */
+        metric_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/metrics/{metric_id}';
+};
+
+export type UpdateCompanyMetricErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateCompanyMetricError = UpdateCompanyMetricErrors[keyof UpdateCompanyMetricErrors];
+
+export type UpdateCompanyMetricResponses = {
+    /**
+     * Successful Response
+     */
+    200: MetricResponse;
+};
+
+export type UpdateCompanyMetricResponse = UpdateCompanyMetricResponses[keyof UpdateCompanyMetricResponses];
+
+export type CreateCompanyObjectiveData = {
+    body: ObjectiveCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/objectives';
+};
+
+export type CreateCompanyObjectiveErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateCompanyObjectiveError = CreateCompanyObjectiveErrors[keyof CreateCompanyObjectiveErrors];
+
+export type CreateCompanyObjectiveResponses = {
+    /**
+     * Successful Response
+     */
+    201: ObjectiveResponse;
+};
+
+export type CreateCompanyObjectiveResponse = CreateCompanyObjectiveResponses[keyof CreateCompanyObjectiveResponses];
+
+export type UpdateCompanyObjectiveData = {
+    body: ObjectiveUpdate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Objective Id
+         */
+        objective_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/company-context/objectives/{objective_id}';
+};
+
+export type UpdateCompanyObjectiveErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type UpdateCompanyObjectiveError = UpdateCompanyObjectiveErrors[keyof UpdateCompanyObjectiveErrors];
+
+export type UpdateCompanyObjectiveResponses = {
+    /**
+     * Successful Response
+     */
+    200: ObjectiveResponse;
+};
+
+export type UpdateCompanyObjectiveResponse = UpdateCompanyObjectiveResponses[keyof UpdateCompanyObjectiveResponses];
+
 export type CreateCompanyPrincipleData = {
     body: PrincipleCreate;
     path: {
@@ -3586,8 +3717,8 @@ export type UpdateCompanyPrincipleResponses = {
 
 export type UpdateCompanyPrincipleResponse = UpdateCompanyPrincipleResponses[keyof UpdateCompanyPrincipleResponses];
 
-export type CreateCompanyMetricData = {
-    body: MetricCreate;
+export type SaveCompanyProfileData = {
+    body: CompanyProfileWrite;
     path: {
         /**
          * Workspace Id
@@ -3595,60 +3726,26 @@ export type CreateCompanyMetricData = {
         workspace_id: string;
     };
     query?: never;
-    url: '/workspaces/{workspace_id}/company-context/metrics';
+    url: '/workspaces/{workspace_id}/company-context/profile';
 };
 
-export type CreateCompanyMetricErrors = {
+export type SaveCompanyProfileErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type CreateCompanyMetricError = CreateCompanyMetricErrors[keyof CreateCompanyMetricErrors];
+export type SaveCompanyProfileError = SaveCompanyProfileErrors[keyof SaveCompanyProfileErrors];
 
-export type CreateCompanyMetricResponses = {
+export type SaveCompanyProfileResponses = {
     /**
      * Successful Response
      */
-    201: MetricResponse;
+    200: CompanyProfileResponse;
 };
 
-export type CreateCompanyMetricResponse = CreateCompanyMetricResponses[keyof CreateCompanyMetricResponses];
-
-export type UpdateCompanyMetricData = {
-    body: MetricUpdate;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Metric Id
-         */
-        metric_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/company-context/metrics/{metric_id}';
-};
-
-export type UpdateCompanyMetricErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type UpdateCompanyMetricError = UpdateCompanyMetricErrors[keyof UpdateCompanyMetricErrors];
-
-export type UpdateCompanyMetricResponses = {
-    /**
-     * Successful Response
-     */
-    200: MetricResponse;
-};
-
-export type UpdateCompanyMetricResponse = UpdateCompanyMetricResponses[keyof UpdateCompanyMetricResponses];
+export type SaveCompanyProfileResponse = SaveCompanyProfileResponses[keyof SaveCompanyProfileResponses];
 
 export type ListDecisionSpacesData = {
     body?: never;
@@ -3743,116 +3840,6 @@ export type GetDecisionSpaceResponses = {
 };
 
 export type GetDecisionSpaceResponse = GetDecisionSpaceResponses[keyof GetDecisionSpaceResponses];
-
-export type TransitionDecisionSpaceData = {
-    body: DecisionSpaceTransition;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/transitions';
-};
-
-export type TransitionDecisionSpaceErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type TransitionDecisionSpaceError = TransitionDecisionSpaceErrors[keyof TransitionDecisionSpaceErrors];
-
-export type TransitionDecisionSpaceResponses = {
-    /**
-     * Successful Response
-     */
-    200: DecisionSpaceResponse;
-};
-
-export type TransitionDecisionSpaceResponse = TransitionDecisionSpaceResponses[keyof TransitionDecisionSpaceResponses];
-
-export type AddDecisionSpaceParticipantData = {
-    body: ParticipantAdd;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants';
-};
-
-export type AddDecisionSpaceParticipantErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type AddDecisionSpaceParticipantError = AddDecisionSpaceParticipantErrors[keyof AddDecisionSpaceParticipantErrors];
-
-export type AddDecisionSpaceParticipantResponses = {
-    /**
-     * Response Add Decision Space Participant
-     *
-     * Successful Response
-     */
-    201: Array<DecisionSpaceParticipantResponse>;
-};
-
-export type AddDecisionSpaceParticipantResponse = AddDecisionSpaceParticipantResponses[keyof AddDecisionSpaceParticipantResponses];
-
-export type RemoveDecisionSpaceParticipantData = {
-    body?: never;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * User Id
-         */
-        user_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants/{user_id}';
-};
-
-export type RemoveDecisionSpaceParticipantErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type RemoveDecisionSpaceParticipantError = RemoveDecisionSpaceParticipantErrors[keyof RemoveDecisionSpaceParticipantErrors];
-
-export type RemoveDecisionSpaceParticipantResponses = {
-    /**
-     * Response Remove Decision Space Participant
-     *
-     * Successful Response
-     */
-    200: Array<DecisionSpaceParticipantResponse>;
-};
-
-export type RemoveDecisionSpaceParticipantResponse = RemoveDecisionSpaceParticipantResponses[keyof RemoveDecisionSpaceParticipantResponses];
 
 export type ListBranchesData = {
     body?: never;
@@ -3960,6 +3947,158 @@ export type GetBranchResponses = {
 
 export type GetBranchResponse = GetBranchResponses[keyof GetBranchResponses];
 
+export type CreateClusterData = {
+    body: ClusterCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters';
+};
+
+export type CreateClusterErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateClusterError = CreateClusterErrors[keyof CreateClusterErrors];
+
+export type CreateClusterResponses = {
+    /**
+     * Successful Response
+     */
+    201: ClusterResponse;
+};
+
+export type CreateClusterResponse = CreateClusterResponses[keyof CreateClusterResponses];
+
+export type DeleteClusterData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Cluster Id
+         */
+        cluster_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}';
+};
+
+export type DeleteClusterErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteClusterError = DeleteClusterErrors[keyof DeleteClusterErrors];
+
+export type DeleteClusterResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteClusterResponse = DeleteClusterResponses[keyof DeleteClusterResponses];
+
+export type AddClusterMemberData = {
+    body: ClusterMemberAdd;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Cluster Id
+         */
+        cluster_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members';
+};
+
+export type AddClusterMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AddClusterMemberError = AddClusterMemberErrors[keyof AddClusterMemberErrors];
+
+export type AddClusterMemberResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClusterResponse;
+};
+
+export type AddClusterMemberResponse = AddClusterMemberResponses[keyof AddClusterMemberResponses];
+
+export type RemoveClusterMemberData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Cluster Id
+         */
+        cluster_id: string;
+        /**
+         * Contribution Id
+         */
+        contribution_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members/{contribution_id}';
+};
+
+export type RemoveClusterMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RemoveClusterMemberError = RemoveClusterMemberErrors[keyof RemoveClusterMemberErrors];
+
+export type RemoveClusterMemberResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClusterResponse;
+};
+
+export type RemoveClusterMemberResponse = RemoveClusterMemberResponses[keyof RemoveClusterMemberResponses];
+
 export type ListContributionsData = {
     body?: never;
     path: {
@@ -4066,6 +4205,40 @@ export type ConfirmContributionResponses = {
 
 export type ConfirmContributionResponse = ConfirmContributionResponses[keyof ConfirmContributionResponses];
 
+export type GetConvergeMapData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/converge/map';
+};
+
+export type GetConvergeMapErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetConvergeMapError = GetConvergeMapErrors[keyof GetConvergeMapErrors];
+
+export type GetConvergeMapResponses = {
+    /**
+     * Successful Response
+     */
+    200: MapResponse;
+};
+
+export type GetConvergeMapResponse = GetConvergeMapResponses[keyof GetConvergeMapResponses];
+
 export type GetDecisionRecordData = {
     body?: never;
     path: {
@@ -4167,254 +4340,6 @@ export type ListDecisionVersionsResponses = {
 };
 
 export type ListDecisionVersionsResponse = ListDecisionVersionsResponses[keyof ListDecisionVersionsResponses];
-
-export type ListChallengesData = {
-    body?: never;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Option Id
-         */
-        option_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges';
-};
-
-export type ListChallengesErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ListChallengesError = ListChallengesErrors[keyof ListChallengesErrors];
-
-export type ListChallengesResponses = {
-    /**
-     * Successful Response
-     */
-    200: ChallengeListResponse;
-};
-
-export type ListChallengesResponse = ListChallengesResponses[keyof ListChallengesResponses];
-
-export type OpenChallengeData = {
-    body?: never;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Option Id
-         */
-        option_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges';
-};
-
-export type OpenChallengeErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type OpenChallengeError = OpenChallengeErrors[keyof OpenChallengeErrors];
-
-export type OpenChallengeResponses = {
-    /**
-     * Successful Response
-     */
-    201: ChallengeRunResponse;
-};
-
-export type OpenChallengeResponse = OpenChallengeResponses[keyof OpenChallengeResponses];
-
-export type GetChallengeData = {
-    body?: never;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Option Id
-         */
-        option_id: string;
-        /**
-         * Run Id
-         */
-        run_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}';
-};
-
-export type GetChallengeErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetChallengeError = GetChallengeErrors[keyof GetChallengeErrors];
-
-export type GetChallengeResponses = {
-    /**
-     * Successful Response
-     */
-    200: ChallengeRunDetailResponse;
-};
-
-export type GetChallengeResponse = GetChallengeResponses[keyof GetChallengeResponses];
-
-export type RecordChallengeFindingData = {
-    body: ChallengeFindingCreate;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Option Id
-         */
-        option_id: string;
-        /**
-         * Run Id
-         */
-        run_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings';
-};
-
-export type RecordChallengeFindingErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type RecordChallengeFindingError = RecordChallengeFindingErrors[keyof RecordChallengeFindingErrors];
-
-export type RecordChallengeFindingResponses = {
-    /**
-     * Successful Response
-     */
-    201: ChallengeFindingResponse;
-};
-
-export type RecordChallengeFindingResponse = RecordChallengeFindingResponses[keyof RecordChallengeFindingResponses];
-
-export type ResolveChallengeFindingData = {
-    body: FindingResolutionRequest;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Option Id
-         */
-        option_id: string;
-        /**
-         * Run Id
-         */
-        run_id: string;
-        /**
-         * Finding Id
-         */
-        finding_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings/{finding_id}/resolution';
-};
-
-export type ResolveChallengeFindingErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ResolveChallengeFindingError = ResolveChallengeFindingErrors[keyof ResolveChallengeFindingErrors];
-
-export type ResolveChallengeFindingResponses = {
-    /**
-     * Successful Response
-     */
-    200: ChallengeFindingResponse;
-};
-
-export type ResolveChallengeFindingResponse = ResolveChallengeFindingResponses[keyof ResolveChallengeFindingResponses];
-
-export type CompleteChallengeData = {
-    body?: never;
-    path: {
-        /**
-         * Workspace Id
-         */
-        workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Option Id
-         */
-        option_id: string;
-        /**
-         * Run Id
-         */
-        run_id: string;
-    };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/completion';
-};
-
-export type CompleteChallengeErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CompleteChallengeError = CompleteChallengeErrors[keyof CompleteChallengeErrors];
-
-export type CompleteChallengeResponses = {
-    /**
-     * Successful Response
-     */
-    200: ChallengeRunResponse;
-};
-
-export type CompleteChallengeResponse = CompleteChallengeResponses[keyof CompleteChallengeResponses];
 
 export type ListOptionsData = {
     body?: never;
@@ -4598,6 +4523,254 @@ export type UpdateOptionResponses = {
 
 export type UpdateOptionResponse = UpdateOptionResponses[keyof UpdateOptionResponses];
 
+export type ListChallengesData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges';
+};
+
+export type ListChallengesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListChallengesError = ListChallengesErrors[keyof ListChallengesErrors];
+
+export type ListChallengesResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChallengeListResponse;
+};
+
+export type ListChallengesResponse = ListChallengesResponses[keyof ListChallengesResponses];
+
+export type OpenChallengeData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges';
+};
+
+export type OpenChallengeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type OpenChallengeError = OpenChallengeErrors[keyof OpenChallengeErrors];
+
+export type OpenChallengeResponses = {
+    /**
+     * Successful Response
+     */
+    201: ChallengeRunResponse;
+};
+
+export type OpenChallengeResponse = OpenChallengeResponses[keyof OpenChallengeResponses];
+
+export type GetChallengeData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}';
+};
+
+export type GetChallengeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetChallengeError = GetChallengeErrors[keyof GetChallengeErrors];
+
+export type GetChallengeResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChallengeRunDetailResponse;
+};
+
+export type GetChallengeResponse = GetChallengeResponses[keyof GetChallengeResponses];
+
+export type CompleteChallengeData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/completion';
+};
+
+export type CompleteChallengeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CompleteChallengeError = CompleteChallengeErrors[keyof CompleteChallengeErrors];
+
+export type CompleteChallengeResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChallengeRunResponse;
+};
+
+export type CompleteChallengeResponse = CompleteChallengeResponses[keyof CompleteChallengeResponses];
+
+export type RecordChallengeFindingData = {
+    body: ChallengeFindingCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings';
+};
+
+export type RecordChallengeFindingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RecordChallengeFindingError = RecordChallengeFindingErrors[keyof RecordChallengeFindingErrors];
+
+export type RecordChallengeFindingResponses = {
+    /**
+     * Successful Response
+     */
+    201: ChallengeFindingResponse;
+};
+
+export type RecordChallengeFindingResponse = RecordChallengeFindingResponses[keyof RecordChallengeFindingResponses];
+
+export type ResolveChallengeFindingData = {
+    body: FindingResolutionRequest;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Option Id
+         */
+        option_id: string;
+        /**
+         * Run Id
+         */
+        run_id: string;
+        /**
+         * Finding Id
+         */
+        finding_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings/{finding_id}/resolution';
+};
+
+export type ResolveChallengeFindingErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ResolveChallengeFindingError = ResolveChallengeFindingErrors[keyof ResolveChallengeFindingErrors];
+
+export type ResolveChallengeFindingResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChallengeFindingResponse;
+};
+
+export type ResolveChallengeFindingResponse = ResolveChallengeFindingResponses[keyof ResolveChallengeFindingResponses];
+
 export type LinkOptionEvidenceData = {
     body: EvidenceLink;
     path: {
@@ -4678,8 +4851,8 @@ export type UnlinkOptionEvidenceResponses = {
 
 export type UnlinkOptionEvidenceResponse = UnlinkOptionEvidenceResponses[keyof UnlinkOptionEvidenceResponses];
 
-export type GetConvergeMapData = {
-    body?: never;
+export type AddDecisionSpaceParticipantData = {
+    body: ParticipantAdd;
     path: {
         /**
          * Workspace Id
@@ -4691,26 +4864,68 @@ export type GetConvergeMapData = {
         space_id: string;
     };
     query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/converge/map';
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants';
 };
 
-export type GetConvergeMapErrors = {
+export type AddDecisionSpaceParticipantErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type GetConvergeMapError = GetConvergeMapErrors[keyof GetConvergeMapErrors];
+export type AddDecisionSpaceParticipantError = AddDecisionSpaceParticipantErrors[keyof AddDecisionSpaceParticipantErrors];
 
-export type GetConvergeMapResponses = {
+export type AddDecisionSpaceParticipantResponses = {
     /**
+     * Response Add Decision Space Participant
+     *
      * Successful Response
      */
-    200: MapResponse;
+    201: Array<DecisionSpaceParticipantResponse>;
 };
 
-export type GetConvergeMapResponse = GetConvergeMapResponses[keyof GetConvergeMapResponses];
+export type AddDecisionSpaceParticipantResponse = AddDecisionSpaceParticipantResponses[keyof AddDecisionSpaceParticipantResponses];
+
+export type RemoveDecisionSpaceParticipantData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants/{user_id}';
+};
+
+export type RemoveDecisionSpaceParticipantErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RemoveDecisionSpaceParticipantError = RemoveDecisionSpaceParticipantErrors[keyof RemoveDecisionSpaceParticipantErrors];
+
+export type RemoveDecisionSpaceParticipantResponses = {
+    /**
+     * Response Remove Decision Space Participant
+     *
+     * Successful Response
+     */
+    200: Array<DecisionSpaceParticipantResponse>;
+};
+
+export type RemoveDecisionSpaceParticipantResponse = RemoveDecisionSpaceParticipantResponses[keyof RemoveDecisionSpaceParticipantResponses];
 
 export type CreateRelationData = {
     body: RelationCreate;
@@ -4784,8 +4999,8 @@ export type DeleteRelationResponses = {
 
 export type DeleteRelationResponse = DeleteRelationResponses[keyof DeleteRelationResponses];
 
-export type CreateClusterData = {
-    body: ClusterCreate;
+export type TransitionDecisionSpaceData = {
+    body: DecisionSpaceTransition;
     path: {
         /**
          * Workspace Id
@@ -4797,355 +5012,140 @@ export type CreateClusterData = {
         space_id: string;
     };
     query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters';
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/transitions';
 };
 
-export type CreateClusterErrors = {
+export type TransitionDecisionSpaceErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type CreateClusterError = CreateClusterErrors[keyof CreateClusterErrors];
+export type TransitionDecisionSpaceError = TransitionDecisionSpaceErrors[keyof TransitionDecisionSpaceErrors];
 
-export type CreateClusterResponses = {
+export type TransitionDecisionSpaceResponses = {
     /**
      * Successful Response
      */
-    201: ClusterResponse;
+    200: DecisionSpaceResponse;
 };
 
-export type CreateClusterResponse = CreateClusterResponses[keyof CreateClusterResponses];
+export type TransitionDecisionSpaceResponse = TransitionDecisionSpaceResponses[keyof TransitionDecisionSpaceResponses];
 
-export type DeleteClusterData = {
+export type ListWorkspaceIdeasData = {
     body?: never;
     path: {
         /**
          * Workspace Id
          */
         workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Cluster Id
-         */
-        cluster_id: string;
     };
-    query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}';
+    query?: {
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Q
+         */
+        q?: string | null;
+        /**
+         * Stage
+         */
+        stage?: 'seed' | 'iterating' | 'team_formed' | null;
+        /**
+         * Sought Role
+         */
+        sought_role?: string | null;
+        /**
+         * Realism Min
+         */
+        realism_min?: number | null;
+    };
+    url: '/workspaces/{workspace_id}/ideas';
 };
 
-export type DeleteClusterErrors = {
+export type ListWorkspaceIdeasErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type DeleteClusterError = DeleteClusterErrors[keyof DeleteClusterErrors];
+export type ListWorkspaceIdeasError = ListWorkspaceIdeasErrors[keyof ListWorkspaceIdeasErrors];
 
-export type DeleteClusterResponses = {
+export type ListWorkspaceIdeasResponses = {
     /**
      * Successful Response
      */
-    204: void;
+    200: IdeaPageResponse;
 };
 
-export type DeleteClusterResponse = DeleteClusterResponses[keyof DeleteClusterResponses];
+export type ListWorkspaceIdeasResponse = ListWorkspaceIdeasResponses[keyof ListWorkspaceIdeasResponses];
 
-export type AddClusterMemberData = {
-    body: ClusterMemberAdd;
+export type DepositWorkspaceIdeaData = {
+    body: DepositIdeaRequest;
     path: {
         /**
          * Workspace Id
          */
         workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Cluster Id
-         */
-        cluster_id: string;
     };
     query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members';
+    url: '/workspaces/{workspace_id}/ideas';
 };
 
-export type AddClusterMemberErrors = {
+export type DepositWorkspaceIdeaErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type AddClusterMemberError = AddClusterMemberErrors[keyof AddClusterMemberErrors];
+export type DepositWorkspaceIdeaError = DepositWorkspaceIdeaErrors[keyof DepositWorkspaceIdeaErrors];
 
-export type AddClusterMemberResponses = {
+export type DepositWorkspaceIdeaResponses = {
     /**
      * Successful Response
      */
-    200: ClusterResponse;
+    201: IdeaResponse;
 };
 
-export type AddClusterMemberResponse = AddClusterMemberResponses[keyof AddClusterMemberResponses];
+export type DepositWorkspaceIdeaResponse = DepositWorkspaceIdeaResponses[keyof DepositWorkspaceIdeaResponses];
 
-export type RemoveClusterMemberData = {
+export type ListWorkspaceMembersData = {
     body?: never;
     path: {
         /**
          * Workspace Id
          */
         workspace_id: string;
-        /**
-         * Space Id
-         */
-        space_id: string;
-        /**
-         * Cluster Id
-         */
-        cluster_id: string;
-        /**
-         * Contribution Id
-         */
-        contribution_id: string;
     };
     query?: never;
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members/{contribution_id}';
+    url: '/workspaces/{workspace_id}/members';
 };
 
-export type RemoveClusterMemberErrors = {
+export type ListWorkspaceMembersErrors = {
     /**
      * Validation Error
      */
     422: HttpValidationError;
 };
 
-export type RemoveClusterMemberError = RemoveClusterMemberErrors[keyof RemoveClusterMemberErrors];
+export type ListWorkspaceMembersError = ListWorkspaceMembersErrors[keyof ListWorkspaceMembersErrors];
 
-export type RemoveClusterMemberResponses = {
+export type ListWorkspaceMembersResponses = {
     /**
-     * Successful Response
-     */
-    200: ClusterResponse;
-};
-
-export type RemoveClusterMemberResponse = RemoveClusterMemberResponses[keyof RemoveClusterMemberResponses];
-
-export type ListIdeaExperimentsData = {
-    body?: never;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/experiments';
-};
-
-export type ListIdeaExperimentsErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ListIdeaExperimentsError = ListIdeaExperimentsErrors[keyof ListIdeaExperimentsErrors];
-
-export type ListIdeaExperimentsResponses = {
-    /**
-     * Response List Idea Experiments
+     * Response List Workspace Members
      *
      * Successful Response
      */
-    200: Array<ExperimentResponse>;
+    200: Array<WorkspaceMemberResponse>;
 };
 
-export type ListIdeaExperimentsResponse = ListIdeaExperimentsResponses[keyof ListIdeaExperimentsResponses];
-
-export type CreateExperimentData = {
-    body: ExperimentCreateBody;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/experiments';
-};
-
-export type CreateExperimentErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type CreateExperimentError = CreateExperimentErrors[keyof CreateExperimentErrors];
-
-export type CreateExperimentResponses = {
-    /**
-     * Successful Response
-     */
-    201: ExperimentResponse;
-};
-
-export type CreateExperimentResponse = CreateExperimentResponses[keyof CreateExperimentResponses];
-
-export type ListIdeaLearningsData = {
-    body?: never;
-    path: {
-        /**
-         * Idea Id
-         */
-        idea_id: string;
-    };
-    query?: never;
-    url: '/ideas/{idea_id}/learnings';
-};
-
-export type ListIdeaLearningsErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ListIdeaLearningsError = ListIdeaLearningsErrors[keyof ListIdeaLearningsErrors];
-
-export type ListIdeaLearningsResponses = {
-    /**
-     * Response List Idea Learnings
-     *
-     * Successful Response
-     */
-    200: Array<LearningResponse>;
-};
-
-export type ListIdeaLearningsResponse = ListIdeaLearningsResponses[keyof ListIdeaLearningsResponses];
-
-export type GetExperimentData = {
-    body?: never;
-    path: {
-        /**
-         * Experiment Id
-         */
-        experiment_id: string;
-    };
-    query?: never;
-    url: '/experiments/{experiment_id}';
-};
-
-export type GetExperimentErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type GetExperimentError = GetExperimentErrors[keyof GetExperimentErrors];
-
-export type GetExperimentResponses = {
-    /**
-     * Successful Response
-     */
-    200: ExperimentDetailResponse;
-};
-
-export type GetExperimentResponse = GetExperimentResponses[keyof GetExperimentResponses];
-
-export type ChangeExperimentStatusData = {
-    body: ExperimentStatusBody;
-    path: {
-        /**
-         * Experiment Id
-         */
-        experiment_id: string;
-    };
-    query?: never;
-    url: '/experiments/{experiment_id}/status';
-};
-
-export type ChangeExperimentStatusErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type ChangeExperimentStatusError = ChangeExperimentStatusErrors[keyof ChangeExperimentStatusErrors];
-
-export type ChangeExperimentStatusResponses = {
-    /**
-     * Successful Response
-     */
-    200: ExperimentResponse;
-};
-
-export type ChangeExperimentStatusResponse = ChangeExperimentStatusResponses[keyof ChangeExperimentStatusResponses];
-
-export type RecordExperimentOutcomeData = {
-    body: OutcomeCreateBody;
-    path: {
-        /**
-         * Experiment Id
-         */
-        experiment_id: string;
-    };
-    query?: never;
-    url: '/experiments/{experiment_id}/outcomes';
-};
-
-export type RecordExperimentOutcomeErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type RecordExperimentOutcomeError = RecordExperimentOutcomeErrors[keyof RecordExperimentOutcomeErrors];
-
-export type RecordExperimentOutcomeResponses = {
-    /**
-     * Successful Response
-     */
-    201: OutcomeResponse;
-};
-
-export type RecordExperimentOutcomeResponse = RecordExperimentOutcomeResponses[keyof RecordExperimentOutcomeResponses];
-
-export type WriteExperimentLearningData = {
-    body: LearningWriteBody;
-    path: {
-        /**
-         * Experiment Id
-         */
-        experiment_id: string;
-    };
-    query?: never;
-    url: '/experiments/{experiment_id}/learnings';
-};
-
-export type WriteExperimentLearningErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type WriteExperimentLearningError = WriteExperimentLearningErrors[keyof WriteExperimentLearningErrors];
-
-export type WriteExperimentLearningResponses = {
-    /**
-     * Successful Response
-     */
-    200: LearningResponse;
-};
-
-export type WriteExperimentLearningResponse = WriteExperimentLearningResponses[keyof WriteExperimentLearningResponses];
+export type ListWorkspaceMembersResponse = ListWorkspaceMembersResponses[keyof ListWorkspaceMembersResponses];

@@ -19,6 +19,54 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 /**
+ * Get Experiment
+ */
+export const getExperiment = <ThrowOnError extends boolean = false>(options: Options<GetExperimentData, ThrowOnError>): RequestResult<GetExperimentResponses, GetExperimentErrors, ThrowOnError> => (options.client ?? client).get<GetExperimentResponses, GetExperimentErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/experiments/{experiment_id}',
+    ...options
+});
+
+/**
+ * Write Experiment Learning
+ */
+export const writeExperimentLearning = <ThrowOnError extends boolean = false>(options: Options<WriteExperimentLearningData, ThrowOnError>): RequestResult<WriteExperimentLearningResponses, WriteExperimentLearningErrors, ThrowOnError> => (options.client ?? client).post<WriteExperimentLearningResponses, WriteExperimentLearningErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/experiments/{experiment_id}/learnings',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Record Experiment Outcome
+ */
+export const recordExperimentOutcome = <ThrowOnError extends boolean = false>(options: Options<RecordExperimentOutcomeData, ThrowOnError>): RequestResult<RecordExperimentOutcomeResponses, RecordExperimentOutcomeErrors, ThrowOnError> => (options.client ?? client).post<RecordExperimentOutcomeResponses, RecordExperimentOutcomeErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/experiments/{experiment_id}/outcomes',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Change Experiment Status
+ */
+export const changeExperimentStatus = <ThrowOnError extends boolean = false>(options: Options<ChangeExperimentStatusData, ThrowOnError>): RequestResult<ChangeExperimentStatusResponses, ChangeExperimentStatusErrors, ThrowOnError> => (options.client ?? client).post<ChangeExperimentStatusResponses, ChangeExperimentStatusErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/experiments/{experiment_id}/status',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * Live
  */
 export const healthLive = <ThrowOnError extends boolean = false>(options?: Options<HealthLiveData, ThrowOnError>): RequestResult<HealthLiveResponses, unknown, ThrowOnError> => (options?.client ?? client).get<HealthLiveResponses, unknown, ThrowOnError>({ url: '/health/live', ...options });
@@ -43,80 +91,6 @@ export const getIdea = <ThrowOnError extends boolean = false>(options: Options<G
 export const updateIdeaInitiativeType = <ThrowOnError extends boolean = false>(options: Options<UpdateIdeaInitiativeTypeData, ThrowOnError>): RequestResult<UpdateIdeaInitiativeTypeResponses, UpdateIdeaInitiativeTypeErrors, ThrowOnError> => (options.client ?? client).patch<UpdateIdeaInitiativeTypeResponses, UpdateIdeaInitiativeTypeErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/ideas/{idea_id}',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Request Idea Membership
- */
-export const requestIdeaMembership = <ThrowOnError extends boolean = false>(options: Options<RequestIdeaMembershipData, ThrowOnError>): RequestResult<RequestIdeaMembershipResponses, RequestIdeaMembershipErrors, ThrowOnError> => (options.client ?? client).post<RequestIdeaMembershipResponses, RequestIdeaMembershipErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/join-requests',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Accept Idea Membership Request
- */
-export const acceptIdeaMembershipRequest = <ThrowOnError extends boolean = false>(options: Options<AcceptIdeaMembershipRequestData, ThrowOnError>): RequestResult<AcceptIdeaMembershipRequestResponses, AcceptIdeaMembershipRequestErrors, ThrowOnError> => (options.client ?? client).post<AcceptIdeaMembershipRequestResponses, AcceptIdeaMembershipRequestErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/join-requests/{request_id}/accept',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Reject Idea Membership Request
- */
-export const rejectIdeaMembershipRequest = <ThrowOnError extends boolean = false>(options: Options<RejectIdeaMembershipRequestData, ThrowOnError>): RequestResult<RejectIdeaMembershipRequestResponses, RejectIdeaMembershipRequestErrors, ThrowOnError> => (options.client ?? client).post<RejectIdeaMembershipRequestResponses, RejectIdeaMembershipRequestErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/join-requests/{request_id}/reject',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Add Idea Participant
- */
-export const addIdeaParticipant = <ThrowOnError extends boolean = false>(options: Options<AddIdeaParticipantData, ThrowOnError>): RequestResult<AddIdeaParticipantResponses, AddIdeaParticipantErrors, ThrowOnError> => (options.client ?? client).post<AddIdeaParticipantResponses, AddIdeaParticipantErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/members',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Leave Idea Team
- */
-export const leaveIdeaTeam = <ThrowOnError extends boolean = false>(options: Options<LeaveIdeaTeamData, ThrowOnError>): RequestResult<LeaveIdeaTeamResponses, LeaveIdeaTeamErrors, ThrowOnError> => (options.client ?? client).post<LeaveIdeaTeamResponses, LeaveIdeaTeamErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/leave',
-    ...options
-});
-
-/**
- * Remove Idea Member
- */
-export const removeIdeaMember = <ThrowOnError extends boolean = false>(options: Options<RemoveIdeaMemberData, ThrowOnError>): RequestResult<RemoveIdeaMemberResponses, RemoveIdeaMemberErrors, ThrowOnError> => (options.client ?? client).post<RemoveIdeaMemberResponses, RemoveIdeaMemberErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/members/{member_id}/remove',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -152,6 +126,28 @@ export const getConstraintAnalysis = <ThrowOnError extends boolean = false>(opti
 export const reviewConstraintAnalysis = <ThrowOnError extends boolean = false>(options: Options<ReviewConstraintAnalysisData, ThrowOnError>): RequestResult<ReviewConstraintAnalysisResponses, ReviewConstraintAnalysisErrors, ThrowOnError> => (options.client ?? client).post<ReviewConstraintAnalysisResponses, ReviewConstraintAnalysisErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/ideas/{idea_id}/analyses/{workflow_id}/review',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * List Idea Experiments
+ */
+export const listIdeaExperiments = <ThrowOnError extends boolean = false>(options: Options<ListIdeaExperimentsData, ThrowOnError>): RequestResult<ListIdeaExperimentsResponses, ListIdeaExperimentsErrors, ThrowOnError> => (options.client ?? client).get<ListIdeaExperimentsResponses, ListIdeaExperimentsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/experiments',
+    ...options
+});
+
+/**
+ * Create Idea Experiment
+ */
+export const createExperiment = <ThrowOnError extends boolean = false>(options: Options<CreateExperimentData, ThrowOnError>): RequestResult<CreateExperimentResponses, CreateExperimentErrors, ThrowOnError> => (options.client ?? client).post<CreateExperimentResponses, CreateExperimentErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/experiments',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -221,20 +217,11 @@ export const rollbackIdeaIteration = <ThrowOnError extends boolean = false>(opti
 });
 
 /**
- * Read Workspace Ideas
+ * Request Idea Membership
  */
-export const listWorkspaceIdeas = <ThrowOnError extends boolean = false>(options: Options<ListWorkspaceIdeasData, ThrowOnError>): RequestResult<ListWorkspaceIdeasResponses, ListWorkspaceIdeasErrors, ThrowOnError> => (options.client ?? client).get<ListWorkspaceIdeasResponses, ListWorkspaceIdeasErrors, ThrowOnError>({
+export const requestIdeaMembership = <ThrowOnError extends boolean = false>(options: Options<RequestIdeaMembershipData, ThrowOnError>): RequestResult<RequestIdeaMembershipResponses, RequestIdeaMembershipErrors, ThrowOnError> => (options.client ?? client).post<RequestIdeaMembershipResponses, RequestIdeaMembershipErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/ideas',
-    ...options
-});
-
-/**
- * Deposit Workspace Idea
- */
-export const depositWorkspaceIdea = <ThrowOnError extends boolean = false>(options: Options<DepositWorkspaceIdeaData, ThrowOnError>): RequestResult<DepositWorkspaceIdeaResponses, DepositWorkspaceIdeaErrors, ThrowOnError> => (options.client ?? client).post<DepositWorkspaceIdeaResponses, DepositWorkspaceIdeaErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/ideas',
+    url: '/ideas/{idea_id}/join-requests',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -243,21 +230,73 @@ export const depositWorkspaceIdea = <ThrowOnError extends boolean = false>(optio
 });
 
 /**
- * List Workspaces
+ * Accept Idea Membership Request
  */
-export const listWorkspaces = <ThrowOnError extends boolean = false>(options?: Options<ListWorkspacesData, ThrowOnError>): RequestResult<ListWorkspacesResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListWorkspacesResponses, unknown, ThrowOnError>({
+export const acceptIdeaMembershipRequest = <ThrowOnError extends boolean = false>(options: Options<AcceptIdeaMembershipRequestData, ThrowOnError>): RequestResult<AcceptIdeaMembershipRequestResponses, AcceptIdeaMembershipRequestErrors, ThrowOnError> => (options.client ?? client).post<AcceptIdeaMembershipRequestResponses, AcceptIdeaMembershipRequestErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces',
+    url: '/ideas/{idea_id}/join-requests/{request_id}/accept',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Reject Idea Membership Request
+ */
+export const rejectIdeaMembershipRequest = <ThrowOnError extends boolean = false>(options: Options<RejectIdeaMembershipRequestData, ThrowOnError>): RequestResult<RejectIdeaMembershipRequestResponses, RejectIdeaMembershipRequestErrors, ThrowOnError> => (options.client ?? client).post<RejectIdeaMembershipRequestResponses, RejectIdeaMembershipRequestErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/join-requests/{request_id}/reject',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * List Idea Learnings
+ */
+export const listIdeaLearnings = <ThrowOnError extends boolean = false>(options: Options<ListIdeaLearningsData, ThrowOnError>): RequestResult<ListIdeaLearningsResponses, ListIdeaLearningsErrors, ThrowOnError> => (options.client ?? client).get<ListIdeaLearningsResponses, ListIdeaLearningsErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/learnings',
     ...options
 });
 
 /**
- * List Workspace Members
+ * Leave Idea Team
  */
-export const listWorkspaceMembers = <ThrowOnError extends boolean = false>(options: Options<ListWorkspaceMembersData, ThrowOnError>): RequestResult<ListWorkspaceMembersResponses, ListWorkspaceMembersErrors, ThrowOnError> => (options.client ?? client).get<ListWorkspaceMembersResponses, ListWorkspaceMembersErrors, ThrowOnError>({
+export const leaveIdeaTeam = <ThrowOnError extends boolean = false>(options: Options<LeaveIdeaTeamData, ThrowOnError>): RequestResult<LeaveIdeaTeamResponses, LeaveIdeaTeamErrors, ThrowOnError> => (options.client ?? client).post<LeaveIdeaTeamResponses, LeaveIdeaTeamErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/members',
+    url: '/ideas/{idea_id}/leave',
     ...options
+});
+
+/**
+ * Add Idea Participant
+ */
+export const addIdeaParticipant = <ThrowOnError extends boolean = false>(options: Options<AddIdeaParticipantData, ThrowOnError>): RequestResult<AddIdeaParticipantResponses, AddIdeaParticipantErrors, ThrowOnError> => (options.client ?? client).post<AddIdeaParticipantResponses, AddIdeaParticipantErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/members',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Remove Idea Member
+ */
+export const removeIdeaMember = <ThrowOnError extends boolean = false>(options: Options<RemoveIdeaMemberData, ThrowOnError>): RequestResult<RemoveIdeaMemberResponses, RemoveIdeaMemberErrors, ThrowOnError> => (options.client ?? client).post<RemoveIdeaMemberResponses, RemoveIdeaMemberErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/ideas/{idea_id}/members/{member_id}/remove',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 /**
@@ -266,6 +305,15 @@ export const listWorkspaceMembers = <ThrowOnError extends boolean = false>(optio
 export const getProfile = <ThrowOnError extends boolean = false>(options: Options<GetProfileData, ThrowOnError>): RequestResult<GetProfileResponses, GetProfileErrors, ThrowOnError> => (options.client ?? client).get<GetProfileResponses, GetProfileErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/users/{user_id}',
+    ...options
+});
+
+/**
+ * List Workspaces
+ */
+export const listWorkspaces = <ThrowOnError extends boolean = false>(options?: Options<ListWorkspacesData, ThrowOnError>): RequestResult<ListWorkspacesResponses, unknown, ThrowOnError> => (options?.client ?? client).get<ListWorkspacesResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces',
     ...options
 });
 
@@ -279,11 +327,50 @@ export const getCompanyContext = <ThrowOnError extends boolean = false>(options:
 });
 
 /**
- * Save Company Profile
+ * Create Company Constraint
  */
-export const saveCompanyProfile = <ThrowOnError extends boolean = false>(options: Options<SaveCompanyProfileData, ThrowOnError>): RequestResult<SaveCompanyProfileResponses, SaveCompanyProfileErrors, ThrowOnError> => (options.client ?? client).put<SaveCompanyProfileResponses, SaveCompanyProfileErrors, ThrowOnError>({
+export const createCompanyConstraint = <ThrowOnError extends boolean = false>(options: Options<CreateCompanyConstraintData, ThrowOnError>): RequestResult<CreateCompanyConstraintResponses, CreateCompanyConstraintErrors, ThrowOnError> => (options.client ?? client).post<CreateCompanyConstraintResponses, CreateCompanyConstraintErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/company-context/profile',
+    url: '/workspaces/{workspace_id}/company-context/constraints',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Update Company Constraint
+ */
+export const updateCompanyConstraint = <ThrowOnError extends boolean = false>(options: Options<UpdateCompanyConstraintData, ThrowOnError>): RequestResult<UpdateCompanyConstraintResponses, UpdateCompanyConstraintErrors, ThrowOnError> => (options.client ?? client).patch<UpdateCompanyConstraintResponses, UpdateCompanyConstraintErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/company-context/constraints/{constraint_id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Create Company Metric
+ */
+export const createCompanyMetric = <ThrowOnError extends boolean = false>(options: Options<CreateCompanyMetricData, ThrowOnError>): RequestResult<CreateCompanyMetricResponses, CreateCompanyMetricErrors, ThrowOnError> => (options.client ?? client).post<CreateCompanyMetricResponses, CreateCompanyMetricErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/company-context/metrics',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Update Company Metric
+ */
+export const updateCompanyMetric = <ThrowOnError extends boolean = false>(options: Options<UpdateCompanyMetricData, ThrowOnError>): RequestResult<UpdateCompanyMetricResponses, UpdateCompanyMetricErrors, ThrowOnError> => (options.client ?? client).patch<UpdateCompanyMetricResponses, UpdateCompanyMetricErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/company-context/metrics/{metric_id}',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -318,32 +405,6 @@ export const updateCompanyObjective = <ThrowOnError extends boolean = false>(opt
 });
 
 /**
- * Create Company Constraint
- */
-export const createCompanyConstraint = <ThrowOnError extends boolean = false>(options: Options<CreateCompanyConstraintData, ThrowOnError>): RequestResult<CreateCompanyConstraintResponses, CreateCompanyConstraintErrors, ThrowOnError> => (options.client ?? client).post<CreateCompanyConstraintResponses, CreateCompanyConstraintErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/company-context/constraints',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Update Company Constraint
- */
-export const updateCompanyConstraint = <ThrowOnError extends boolean = false>(options: Options<UpdateCompanyConstraintData, ThrowOnError>): RequestResult<UpdateCompanyConstraintResponses, UpdateCompanyConstraintErrors, ThrowOnError> => (options.client ?? client).patch<UpdateCompanyConstraintResponses, UpdateCompanyConstraintErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/company-context/constraints/{constraint_id}',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
  * Create Company Principle
  */
 export const createCompanyPrinciple = <ThrowOnError extends boolean = false>(options: Options<CreateCompanyPrincipleData, ThrowOnError>): RequestResult<CreateCompanyPrincipleResponses, CreateCompanyPrincipleErrors, ThrowOnError> => (options.client ?? client).post<CreateCompanyPrincipleResponses, CreateCompanyPrincipleErrors, ThrowOnError>({
@@ -370,24 +431,11 @@ export const updateCompanyPrinciple = <ThrowOnError extends boolean = false>(opt
 });
 
 /**
- * Create Company Metric
+ * Save Company Profile
  */
-export const createCompanyMetric = <ThrowOnError extends boolean = false>(options: Options<CreateCompanyMetricData, ThrowOnError>): RequestResult<CreateCompanyMetricResponses, CreateCompanyMetricErrors, ThrowOnError> => (options.client ?? client).post<CreateCompanyMetricResponses, CreateCompanyMetricErrors, ThrowOnError>({
+export const saveCompanyProfile = <ThrowOnError extends boolean = false>(options: Options<SaveCompanyProfileData, ThrowOnError>): RequestResult<SaveCompanyProfileResponses, SaveCompanyProfileErrors, ThrowOnError> => (options.client ?? client).put<SaveCompanyProfileResponses, SaveCompanyProfileErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/company-context/metrics',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Update Company Metric
- */
-export const updateCompanyMetric = <ThrowOnError extends boolean = false>(options: Options<UpdateCompanyMetricData, ThrowOnError>): RequestResult<UpdateCompanyMetricResponses, UpdateCompanyMetricErrors, ThrowOnError> => (options.client ?? client).patch<UpdateCompanyMetricResponses, UpdateCompanyMetricErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/company-context/metrics/{metric_id}',
+    url: '/workspaces/{workspace_id}/company-context/profile',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -427,41 +475,6 @@ export const getDecisionSpace = <ThrowOnError extends boolean = false>(options: 
 });
 
 /**
- * Transition Decision Space
- */
-export const transitionDecisionSpace = <ThrowOnError extends boolean = false>(options: Options<TransitionDecisionSpaceData, ThrowOnError>): RequestResult<TransitionDecisionSpaceResponses, TransitionDecisionSpaceErrors, ThrowOnError> => (options.client ?? client).post<TransitionDecisionSpaceResponses, TransitionDecisionSpaceErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/transitions',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Add Decision Space Participant
- */
-export const addDecisionSpaceParticipant = <ThrowOnError extends boolean = false>(options: Options<AddDecisionSpaceParticipantData, ThrowOnError>): RequestResult<AddDecisionSpaceParticipantResponses, AddDecisionSpaceParticipantErrors, ThrowOnError> => (options.client ?? client).post<AddDecisionSpaceParticipantResponses, AddDecisionSpaceParticipantErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Remove Decision Space Participant
- */
-export const removeDecisionSpaceParticipant = <ThrowOnError extends boolean = false>(options: Options<RemoveDecisionSpaceParticipantData, ThrowOnError>): RequestResult<RemoveDecisionSpaceParticipantResponses, RemoveDecisionSpaceParticipantErrors, ThrowOnError> => (options.client ?? client).delete<RemoveDecisionSpaceParticipantResponses, RemoveDecisionSpaceParticipantErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants/{user_id}',
-    ...options
-});
-
-/**
  * List Branches In Space
  */
 export const listBranches = <ThrowOnError extends boolean = false>(options: Options<ListBranchesData, ThrowOnError>): RequestResult<ListBranchesResponses, ListBranchesErrors, ThrowOnError> => (options.client ?? client).get<ListBranchesResponses, ListBranchesErrors, ThrowOnError>({
@@ -489,6 +502,50 @@ export const createBranch = <ThrowOnError extends boolean = false>(options: Opti
 export const getBranch = <ThrowOnError extends boolean = false>(options: Options<GetBranchData, ThrowOnError>): RequestResult<GetBranchResponses, GetBranchErrors, ThrowOnError> => (options.client ?? client).get<GetBranchResponses, GetBranchErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/branches/{branch_id}',
+    ...options
+});
+
+/**
+ * Create Space Cluster
+ */
+export const createCluster = <ThrowOnError extends boolean = false>(options: Options<CreateClusterData, ThrowOnError>): RequestResult<CreateClusterResponses, CreateClusterErrors, ThrowOnError> => (options.client ?? client).post<CreateClusterResponses, CreateClusterErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete Space Cluster
+ */
+export const deleteCluster = <ThrowOnError extends boolean = false>(options: Options<DeleteClusterData, ThrowOnError>): RequestResult<DeleteClusterResponses, DeleteClusterErrors, ThrowOnError> => (options.client ?? client).delete<DeleteClusterResponses, DeleteClusterErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}',
+    ...options
+});
+
+/**
+ * Add Member To Cluster
+ */
+export const addClusterMember = <ThrowOnError extends boolean = false>(options: Options<AddClusterMemberData, ThrowOnError>): RequestResult<AddClusterMemberResponses, AddClusterMemberErrors, ThrowOnError> => (options.client ?? client).post<AddClusterMemberResponses, AddClusterMemberErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Remove Member From Cluster
+ */
+export const removeClusterMember = <ThrowOnError extends boolean = false>(options: Options<RemoveClusterMemberData, ThrowOnError>): RequestResult<RemoveClusterMemberResponses, RemoveClusterMemberErrors, ThrowOnError> => (options.client ?? client).delete<RemoveClusterMemberResponses, RemoveClusterMemberErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members/{contribution_id}',
     ...options
 });
 
@@ -524,6 +581,15 @@ export const confirmContribution = <ThrowOnError extends boolean = false>(option
 });
 
 /**
+ * Read Converge Map
+ */
+export const getConvergeMap = <ThrowOnError extends boolean = false>(options: Options<GetConvergeMapData, ThrowOnError>): RequestResult<GetConvergeMapResponses, GetConvergeMapErrors, ThrowOnError> => (options.client ?? client).get<GetConvergeMapResponses, GetConvergeMapErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/converge/map',
+    ...options
+});
+
+/**
  * Read Decision Record
  */
 export const getDecisionRecord = <ThrowOnError extends boolean = false>(options: Options<GetDecisionRecordData, ThrowOnError>): RequestResult<GetDecisionRecordResponses, GetDecisionRecordErrors, ThrowOnError> => (options.client ?? client).get<GetDecisionRecordResponses, GetDecisionRecordErrors, ThrowOnError>({
@@ -551,68 +617,6 @@ export const commitDecision = <ThrowOnError extends boolean = false>(options: Op
 export const listDecisionVersions = <ThrowOnError extends boolean = false>(options: Options<ListDecisionVersionsData, ThrowOnError>): RequestResult<ListDecisionVersionsResponses, ListDecisionVersionsErrors, ThrowOnError> => (options.client ?? client).get<ListDecisionVersionsResponses, ListDecisionVersionsErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/decision/versions',
-    ...options
-});
-
-/**
- * List Option Challenges
- */
-export const listChallenges = <ThrowOnError extends boolean = false>(options: Options<ListChallengesData, ThrowOnError>): RequestResult<ListChallengesResponses, ListChallengesErrors, ThrowOnError> => (options.client ?? client).get<ListChallengesResponses, ListChallengesErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges',
-    ...options
-});
-
-/**
- * Open Option Challenge
- */
-export const openChallenge = <ThrowOnError extends boolean = false>(options: Options<OpenChallengeData, ThrowOnError>): RequestResult<OpenChallengeResponses, OpenChallengeErrors, ThrowOnError> => (options.client ?? client).post<OpenChallengeResponses, OpenChallengeErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges',
-    ...options
-});
-
-/**
- * Read Option Challenge
- */
-export const getChallenge = <ThrowOnError extends boolean = false>(options: Options<GetChallengeData, ThrowOnError>): RequestResult<GetChallengeResponses, GetChallengeErrors, ThrowOnError> => (options.client ?? client).get<GetChallengeResponses, GetChallengeErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}',
-    ...options
-});
-
-/**
- * Record Challenge Finding
- */
-export const recordChallengeFinding = <ThrowOnError extends boolean = false>(options: Options<RecordChallengeFindingData, ThrowOnError>): RequestResult<RecordChallengeFindingResponses, RecordChallengeFindingErrors, ThrowOnError> => (options.client ?? client).post<RecordChallengeFindingResponses, RecordChallengeFindingErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Resolve Challenge Finding
- */
-export const resolveChallengeFinding = <ThrowOnError extends boolean = false>(options: Options<ResolveChallengeFindingData, ThrowOnError>): RequestResult<ResolveChallengeFindingResponses, ResolveChallengeFindingErrors, ThrowOnError> => (options.client ?? client).post<ResolveChallengeFindingResponses, ResolveChallengeFindingErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings/{finding_id}/resolution',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Complete Option Challenge
- */
-export const completeChallenge = <ThrowOnError extends boolean = false>(options: Options<CompleteChallengeData, ThrowOnError>): RequestResult<CompleteChallengeResponses, CompleteChallengeErrors, ThrowOnError> => (options.client ?? client).post<CompleteChallengeResponses, CompleteChallengeErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/completion',
     ...options
 });
 
@@ -670,6 +674,68 @@ export const updateOption = <ThrowOnError extends boolean = false>(options: Opti
 });
 
 /**
+ * List Option Challenges
+ */
+export const listChallenges = <ThrowOnError extends boolean = false>(options: Options<ListChallengesData, ThrowOnError>): RequestResult<ListChallengesResponses, ListChallengesErrors, ThrowOnError> => (options.client ?? client).get<ListChallengesResponses, ListChallengesErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges',
+    ...options
+});
+
+/**
+ * Open Option Challenge
+ */
+export const openChallenge = <ThrowOnError extends boolean = false>(options: Options<OpenChallengeData, ThrowOnError>): RequestResult<OpenChallengeResponses, OpenChallengeErrors, ThrowOnError> => (options.client ?? client).post<OpenChallengeResponses, OpenChallengeErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges',
+    ...options
+});
+
+/**
+ * Read Option Challenge
+ */
+export const getChallenge = <ThrowOnError extends boolean = false>(options: Options<GetChallengeData, ThrowOnError>): RequestResult<GetChallengeResponses, GetChallengeErrors, ThrowOnError> => (options.client ?? client).get<GetChallengeResponses, GetChallengeErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}',
+    ...options
+});
+
+/**
+ * Complete Option Challenge
+ */
+export const completeChallenge = <ThrowOnError extends boolean = false>(options: Options<CompleteChallengeData, ThrowOnError>): RequestResult<CompleteChallengeResponses, CompleteChallengeErrors, ThrowOnError> => (options.client ?? client).post<CompleteChallengeResponses, CompleteChallengeErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/completion',
+    ...options
+});
+
+/**
+ * Record Challenge Finding
+ */
+export const recordChallengeFinding = <ThrowOnError extends boolean = false>(options: Options<RecordChallengeFindingData, ThrowOnError>): RequestResult<RecordChallengeFindingResponses, RecordChallengeFindingErrors, ThrowOnError> => (options.client ?? client).post<RecordChallengeFindingResponses, RecordChallengeFindingErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Resolve Challenge Finding
+ */
+export const resolveChallengeFinding = <ThrowOnError extends boolean = false>(options: Options<ResolveChallengeFindingData, ThrowOnError>): RequestResult<ResolveChallengeFindingResponses, ResolveChallengeFindingErrors, ThrowOnError> => (options.client ?? client).post<ResolveChallengeFindingResponses, ResolveChallengeFindingErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/options/{option_id}/challenges/{run_id}/findings/{finding_id}/resolution',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
  * Link Option Evidence
  */
 export const linkOptionEvidence = <ThrowOnError extends boolean = false>(options: Options<LinkOptionEvidenceData, ThrowOnError>): RequestResult<LinkOptionEvidenceResponses, LinkOptionEvidenceErrors, ThrowOnError> => (options.client ?? client).post<LinkOptionEvidenceResponses, LinkOptionEvidenceErrors, ThrowOnError>({
@@ -692,11 +758,24 @@ export const unlinkOptionEvidence = <ThrowOnError extends boolean = false>(optio
 });
 
 /**
- * Read Converge Map
+ * Add Decision Space Participant
  */
-export const getConvergeMap = <ThrowOnError extends boolean = false>(options: Options<GetConvergeMapData, ThrowOnError>): RequestResult<GetConvergeMapResponses, GetConvergeMapErrors, ThrowOnError> => (options.client ?? client).get<GetConvergeMapResponses, GetConvergeMapErrors, ThrowOnError>({
+export const addDecisionSpaceParticipant = <ThrowOnError extends boolean = false>(options: Options<AddDecisionSpaceParticipantData, ThrowOnError>): RequestResult<AddDecisionSpaceParticipantResponses, AddDecisionSpaceParticipantErrors, ThrowOnError> => (options.client ?? client).post<AddDecisionSpaceParticipantResponses, AddDecisionSpaceParticipantErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/converge/map',
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Remove Decision Space Participant
+ */
+export const removeDecisionSpaceParticipant = <ThrowOnError extends boolean = false>(options: Options<RemoveDecisionSpaceParticipantData, ThrowOnError>): RequestResult<RemoveDecisionSpaceParticipantResponses, RemoveDecisionSpaceParticipantErrors, ThrowOnError> => (options.client ?? client).delete<RemoveDecisionSpaceParticipantResponses, RemoveDecisionSpaceParticipantErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants/{user_id}',
     ...options
 });
 
@@ -723,11 +802,11 @@ export const deleteRelation = <ThrowOnError extends boolean = false>(options: Op
 });
 
 /**
- * Create Space Cluster
+ * Transition Decision Space
  */
-export const createCluster = <ThrowOnError extends boolean = false>(options: Options<CreateClusterData, ThrowOnError>): RequestResult<CreateClusterResponses, CreateClusterErrors, ThrowOnError> => (options.client ?? client).post<CreateClusterResponses, CreateClusterErrors, ThrowOnError>({
+export const transitionDecisionSpace = <ThrowOnError extends boolean = false>(options: Options<TransitionDecisionSpaceData, ThrowOnError>): RequestResult<TransitionDecisionSpaceResponses, TransitionDecisionSpaceErrors, ThrowOnError> => (options.client ?? client).post<TransitionDecisionSpaceResponses, TransitionDecisionSpaceErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters',
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/transitions',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -736,20 +815,20 @@ export const createCluster = <ThrowOnError extends boolean = false>(options: Opt
 });
 
 /**
- * Delete Space Cluster
+ * Read Workspace Ideas
  */
-export const deleteCluster = <ThrowOnError extends boolean = false>(options: Options<DeleteClusterData, ThrowOnError>): RequestResult<DeleteClusterResponses, DeleteClusterErrors, ThrowOnError> => (options.client ?? client).delete<DeleteClusterResponses, DeleteClusterErrors, ThrowOnError>({
+export const listWorkspaceIdeas = <ThrowOnError extends boolean = false>(options: Options<ListWorkspaceIdeasData, ThrowOnError>): RequestResult<ListWorkspaceIdeasResponses, ListWorkspaceIdeasErrors, ThrowOnError> => (options.client ?? client).get<ListWorkspaceIdeasResponses, ListWorkspaceIdeasErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}',
+    url: '/workspaces/{workspace_id}/ideas',
     ...options
 });
 
 /**
- * Add Member To Cluster
+ * Deposit Workspace Idea
  */
-export const addClusterMember = <ThrowOnError extends boolean = false>(options: Options<AddClusterMemberData, ThrowOnError>): RequestResult<AddClusterMemberResponses, AddClusterMemberErrors, ThrowOnError> => (options.client ?? client).post<AddClusterMemberResponses, AddClusterMemberErrors, ThrowOnError>({
+export const depositWorkspaceIdea = <ThrowOnError extends boolean = false>(options: Options<DepositWorkspaceIdeaData, ThrowOnError>): RequestResult<DepositWorkspaceIdeaResponses, DepositWorkspaceIdeaErrors, ThrowOnError> => (options.client ?? client).post<DepositWorkspaceIdeaResponses, DepositWorkspaceIdeaErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members',
+    url: '/workspaces/{workspace_id}/ideas',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -758,89 +837,10 @@ export const addClusterMember = <ThrowOnError extends boolean = false>(options: 
 });
 
 /**
- * Remove Member From Cluster
+ * List Workspace Members
  */
-export const removeClusterMember = <ThrowOnError extends boolean = false>(options: Options<RemoveClusterMemberData, ThrowOnError>): RequestResult<RemoveClusterMemberResponses, RemoveClusterMemberErrors, ThrowOnError> => (options.client ?? client).delete<RemoveClusterMemberResponses, RemoveClusterMemberErrors, ThrowOnError>({
+export const listWorkspaceMembers = <ThrowOnError extends boolean = false>(options: Options<ListWorkspaceMembersData, ThrowOnError>): RequestResult<ListWorkspaceMembersResponses, ListWorkspaceMembersErrors, ThrowOnError> => (options.client ?? client).get<ListWorkspaceMembersResponses, ListWorkspaceMembersErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members/{contribution_id}',
+    url: '/workspaces/{workspace_id}/members',
     ...options
-});
-
-/**
- * List Idea Experiments
- */
-export const listIdeaExperiments = <ThrowOnError extends boolean = false>(options: Options<ListIdeaExperimentsData, ThrowOnError>): RequestResult<ListIdeaExperimentsResponses, ListIdeaExperimentsErrors, ThrowOnError> => (options.client ?? client).get<ListIdeaExperimentsResponses, ListIdeaExperimentsErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/experiments',
-    ...options
-});
-
-/**
- * Create Idea Experiment
- */
-export const createExperiment = <ThrowOnError extends boolean = false>(options: Options<CreateExperimentData, ThrowOnError>): RequestResult<CreateExperimentResponses, CreateExperimentErrors, ThrowOnError> => (options.client ?? client).post<CreateExperimentResponses, CreateExperimentErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/experiments',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * List Idea Learnings
- */
-export const listIdeaLearnings = <ThrowOnError extends boolean = false>(options: Options<ListIdeaLearningsData, ThrowOnError>): RequestResult<ListIdeaLearningsResponses, ListIdeaLearningsErrors, ThrowOnError> => (options.client ?? client).get<ListIdeaLearningsResponses, ListIdeaLearningsErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/ideas/{idea_id}/learnings',
-    ...options
-});
-
-/**
- * Get Experiment
- */
-export const getExperiment = <ThrowOnError extends boolean = false>(options: Options<GetExperimentData, ThrowOnError>): RequestResult<GetExperimentResponses, GetExperimentErrors, ThrowOnError> => (options.client ?? client).get<GetExperimentResponses, GetExperimentErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/experiments/{experiment_id}',
-    ...options
-});
-
-/**
- * Change Experiment Status
- */
-export const changeExperimentStatus = <ThrowOnError extends boolean = false>(options: Options<ChangeExperimentStatusData, ThrowOnError>): RequestResult<ChangeExperimentStatusResponses, ChangeExperimentStatusErrors, ThrowOnError> => (options.client ?? client).post<ChangeExperimentStatusResponses, ChangeExperimentStatusErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/experiments/{experiment_id}/status',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Record Experiment Outcome
- */
-export const recordExperimentOutcome = <ThrowOnError extends boolean = false>(options: Options<RecordExperimentOutcomeData, ThrowOnError>): RequestResult<RecordExperimentOutcomeResponses, RecordExperimentOutcomeErrors, ThrowOnError> => (options.client ?? client).post<RecordExperimentOutcomeResponses, RecordExperimentOutcomeErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/experiments/{experiment_id}/outcomes',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Write Experiment Learning
- */
-export const writeExperimentLearning = <ThrowOnError extends boolean = false>(options: Options<WriteExperimentLearningData, ThrowOnError>): RequestResult<WriteExperimentLearningResponses, WriteExperimentLearningErrors, ThrowOnError> => (options.client ?? client).post<WriteExperimentLearningResponses, WriteExperimentLearningErrors, ThrowOnError>({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/experiments/{experiment_id}/learnings',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
 });
