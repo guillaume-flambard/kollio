@@ -256,6 +256,70 @@
           "failed": "Le groupe n’a pas pu être créé."
         }
       }
+    },
+    "options": {
+      "loadFailed": "Les options n’ont pas pu être chargées. Réessayez dans un instant.",
+      "empty": {
+        "title": "Aucune option pour le moment.",
+        "body": "Les options n’apparaissent ici qu’une fois écrites : un chemin, sa proposition, et ce qu’il coûte. Créez la première."
+      },
+      "list": {
+        "title": "Options",
+        "intro": "Les chemins viables que l’équipe examine. Rien ici ne classe ni ne note : la comparaison se fait en lisant, pas en regardant un score.",
+        "noEvidence": "Aucune preuve liée",
+        "evidence": "Pour {for} · Contre {against}",
+        "createdBy": "Écrite par {name}"
+      },
+      "fields": {
+        "mechanism": "Mécanisme",
+        "upside": "Ce que ça apporte",
+        "cost": "Coût",
+        "risks": "Risques",
+        "criticalAssumptions": "Hypothèses critiques",
+        "successMetrics": "Métriques de succès"
+      },
+      "form": {
+        "create": "Créer une option",
+        "newTitle": "Nouvelle option",
+        "editTitle": "Modifier l’option",
+        "name": "Titre",
+        "namePlaceholder": "Relever le prix d’entrée",
+        "nameRequired": "Le titre est obligatoire.",
+        "proposal": "Proposition",
+        "proposalPlaceholder": "Ce que nous ferions, en une ou deux phrases.",
+        "proposalRequired": "La proposition est obligatoire.",
+        "optional": "Champs facultatifs",
+        "optionalHint": "Un champ laissé vide reste absent : il ne devient pas une réponse vide.",
+        "submit": "Créer l’option",
+        "save": "Enregistrer",
+        "saving": "Enregistrement…",
+        "failed": "L’option n’a pas pu être enregistrée. Réessayez dans un instant."
+      },
+      "actions": {
+        "edit": "Modifier",
+        "done": "Terminer",
+        "link": "Lier une preuve",
+        "delete": "Supprimer l’option",
+        "deleting": "Suppression…",
+        "deleteFailed": "L’option n’a pas pu être supprimée. Réessayez dans un instant."
+      },
+      "evidence": {
+        "title": "Preuves",
+        "intro": "Seules les contributions confirmées de cet espace peuvent servir de preuve, d’un côté ou de l’autre.",
+        "for": "Pour",
+        "against": "Contre",
+        "empty": "Aucune preuve liée pour le moment.",
+        "unlink": "Délier",
+        "unlinking": "Déliaison…",
+        "unlinkFailed": "La preuve n’a pas pu être déliée. Réessayez dans un instant.",
+        "label": "Contribution confirmée",
+        "choose": "Choisir une contribution",
+        "side": "Côté",
+        "add": "Lier",
+        "adding": "Liaison…",
+        "addFailed": "La preuve n’a pas pu être liée. Réessayez dans un instant.",
+        "noCandidates": "Aucune contribution confirmée à lier. Confirmez-en une dans Explorer."
+      }
     }
   },
   "meta": {

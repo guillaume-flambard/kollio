@@ -67,3 +67,15 @@ _Avoid_: Edge, link (alone), similarity
 **Cluster**:
 A group of confirmed Contributions whose grouping a human decided. A Contribution belongs to one Cluster at a time: assigning it moves it. Deleting a Cluster keeps its members.
 _Avoid_: Category, theme, folder, bucket
+
+**Options**:
+The section at `/workspace/decision-spaces/[spaceId]/options` where the viable paths the team is considering are listed, written and edited, each carrying its proposal, its mechanism, its cost, its risks, its critical assumptions and its success metrics, and linking the Space's confirmed Contributions as evidence for or against. Nothing here scores, ranks or rates an Option.
+_Avoid_: Shortlist, candidates, scoring matrix, comparison table
+
+**Option**:
+One viable path a member wrote for a Decision Space: a title and a proposal that are required, and six narrative fields (mechanism, upside, cost, risks, critical assumptions, success metrics) that are optional and stay absent when left out rather than becoming an empty answer.
+_Avoid_: Idea, proposal, variant, hypothesis
+
+**Option evidence**:
+A confirmed Contribution of the same Space, linked to an Option on the `for` or `against` side by a member. Linking asserts nothing new about the Contribution: it says which Option that Contribution speaks to, and on which side.
+_Avoid_: RATING, score, weight, confidence

@@ -256,6 +256,70 @@
           "failed": "The group could not be created."
         }
       }
+    },
+    "options": {
+      "loadFailed": "The options could not be loaded. Try again in a moment.",
+      "empty": {
+        "title": "No option yet.",
+        "body": "Options appear here only once they are written: a path, its proposal, and what it costs. Write the first one."
+      },
+      "list": {
+        "title": "Options",
+        "intro": "The viable paths the team is considering. Nothing here ranks or rates: the comparison happens by reading, not by looking at a score.",
+        "noEvidence": "No evidence linked",
+        "evidence": "{for} for · {against} against",
+        "createdBy": "Written by {name}"
+      },
+      "fields": {
+        "mechanism": "Mechanism",
+        "upside": "Upside",
+        "cost": "Cost",
+        "risks": "Risks",
+        "criticalAssumptions": "Critical assumptions",
+        "successMetrics": "Success metrics"
+      },
+      "form": {
+        "create": "Create an option",
+        "newTitle": "New option",
+        "editTitle": "Edit the option",
+        "name": "Title",
+        "namePlaceholder": "Raise the entry price",
+        "nameRequired": "The title is required.",
+        "proposal": "Proposal",
+        "proposalPlaceholder": "What we would do, in one or two sentences.",
+        "proposalRequired": "The proposal is required.",
+        "optional": "Optional fields",
+        "optionalHint": "A field left empty stays absent: it does not become an empty answer.",
+        "submit": "Create the option",
+        "save": "Save",
+        "saving": "Saving…",
+        "failed": "The option could not be saved. Try again in a moment."
+      },
+      "actions": {
+        "edit": "Edit",
+        "done": "Done",
+        "link": "Link evidence",
+        "delete": "Delete the option",
+        "deleting": "Deleting…",
+        "deleteFailed": "The option could not be deleted. Try again in a moment."
+      },
+      "evidence": {
+        "title": "Evidence",
+        "intro": "Only confirmed Contributions of this space can serve as evidence, on one side or the other.",
+        "for": "For",
+        "against": "Against",
+        "empty": "No evidence linked yet.",
+        "unlink": "Unlink",
+        "unlinking": "Unlinking…",
+        "unlinkFailed": "The evidence could not be unlinked. Try again in a moment.",
+        "label": "Confirmed Contribution",
+        "choose": "Choose a Contribution",
+        "side": "Side",
+        "add": "Link",
+        "adding": "Linking…",
+        "addFailed": "The evidence could not be linked. Try again in a moment.",
+        "noCandidates": "No confirmed Contribution to link. Confirm one in Explore."
+      }
     }
   },
   "meta": {
