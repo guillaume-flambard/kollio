@@ -410,3 +410,67 @@ async def test_the_read_carries_no_verdict(challenge_database):
             assert set(body) == {"run", "findings", "coverage"}
             for forbidden in ("verdict", "score", "ranking", "prediction"):
                 assert forbidden not in str(body).lower()
+
+
+async def test_an_english_run_asks_the_critic_in_english(challenge_database):
+    engine, _ = challenge_database
+    async with _tx(engine) as session:
+        ids = await _seed(session)
+        space, option, _ = await _scaffold(
+            session, ids, contributions=[("Churn is flat", "confirmed", "for")]
+        )
+        run = await _open(session, ids, space, option, lang="en")
+        gateway = _FakeGateway(findings=[_finding()])
+
+        await execute_run(PostgresChallenge(session), gateway, run.id, "en")
+
+        assert gateway.locales == ["en"]
+
+
+async def test_raw_branch_material_never_reaches_the_brief(challenge_database):
+    engine, _ = challenge_database
+    async with _tx(engine) as session:
+        ids = await _seed(session)
+        space, option, _ = await _scaffold(
+            session, ids, contributions=[("Churn is flat", "confirmed", "for")]
+        )
+        await PostgresBranches(session).create_branch(
+            space_id=space.id,
+            title="Unpromoted research notes",
+            summary=None,
+            visibility="shared",
+            created_by=ids["owner_id"],
+            source_idea_id=None,
+            lang="en",
+        )
+        run = await _open(session, ids, space, option)
+        gateway = _FakeGateway(findings=[_finding()])
+
+        await execute_run(PostgresChallenge(session), gateway, run.id, "en")
+
+        brief = gateway.briefs[0]
+        assert "Unpromoted research notes" not in str(brief)
+        assert [item["title"] for item in brief["evidence"]] == ["Churn is flat"]
+
+
+async def test_a_failed_run_keeps_its_reason_and_a_new_one_can_be_opened(challenge_database):
+    engine, _ = challenge_database
+    async with _tx(engine) as session:
+        ids = await _seed(session)
+        space, option, _ = await _scaffold(session, ids)
+        failed = await _open(session, ids, space, option)
+        await execute_run(
+            PostgresChallenge(session),
+            _FakeGateway(error=RuntimeError("the gateway timed out")),
+            failed.id,
+            "en",
+        )
+
+        retried = await _open(session, ids, space, option)
+
+        assert retried.id != failed.id
+        assert retried.status == "RUNNING"
+        stored = await PostgresChallenge(session).run_by_id(failed.id)
+        assert stored is not None
+        assert stored.status == "FAILED"
+        assert stored.failure_reason == "The Critic could not answer: RuntimeError"
