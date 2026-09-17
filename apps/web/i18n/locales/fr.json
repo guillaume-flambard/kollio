@@ -9,7 +9,8 @@
     "menuOpen": "Ouvrir la navigation",
     "menuClose": "Fermer la navigation",
     "skipToContent": "Aller au contenu",
-    "decisionSpaces": "Espaces de décision"
+    "decisionSpaces": "Espaces de décision",
+    "inbox": "Boîte de réception"
   },
   "decisionSpaces": {
     "metaTitle": "Espaces de décision {'|'} Kollio",
@@ -978,6 +979,52 @@
       },
       "error": "L’action a échoué. Vos saisies sont conservées.",
       "loadError": "Le contexte n’a pas pu être chargé."
+    }
+  },
+  "inbox": {
+    "metaTitle": "Ce qui demande votre attention {'|'} Kollio",
+    "title": "Ce qui demande votre attention",
+    "description": "Les espaces qui attendent une convergence, votre avis, une décision ou un apprentissage, dans les espaces de travail dont vous êtes membre.",
+    "loadFailed": "La boîte de réception n’a pas pu être chargée. Réessayez dans un instant.",
+    "spacesLink": "Voir les espaces de décision",
+    "more": "{count} de plus | {count} de plus",
+    "empty": {
+      "title": "Rien ne demande votre attention.",
+      "body": "Aucun espace n’attend une convergence, votre avis, une décision ou un apprentissage."
+    },
+    "sections": {
+      "needsConvergence": {
+        "title": "À faire converger",
+        "intro": "Les espaces dont le raisonnement doit être rassemblé avant de décider.",
+        "empty": "Aucun espace à faire converger."
+      },
+      "needsMyInput": {
+        "title": "En attente de votre avis",
+        "intro": "Les contributions et les constats que personne n’a encore tranchés, dans un espace où vous participez.",
+        "empty": "Rien ne vous attend personnellement."
+      },
+      "readyToDecide": {
+        "title": "Prêts à décider",
+        "intro": "Les espaces prêts pour une décision qui n’en portent aucune.",
+        "empty": "Aucun espace prêt à décider."
+      },
+      "needsLearning": {
+        "title": "En attente d’un apprentissage",
+        "intro": "Les expériences closes sans résultat, et les apprentissages encore en brouillon.",
+        "empty": "Aucun apprentissage en attente."
+      }
+    },
+    "kinds": {
+      "space_needs_convergence": "Convergence",
+      "contribution_awaits_confirmation": "Contribution à confirmer",
+      "finding_awaits_resolution": "Constat à trancher",
+      "decision_awaits_commitment": "Décision à enregistrer",
+      "experiment_awaits_outcome": "Résultat à enregistrer",
+      "learning_awaits_confirmation": "Apprentissage à confirmer"
+    },
+    "memory": {
+      "title": "Mémoire antérieure",
+      "body": "Cette section reste absente : rien ne fait encore remonter les apprentissages confirmés d’autres décisions. Une liste vide affirmerait qu’aucune mémoire pertinente n’existe, ce que rien ne soutient aujourd’hui."
     }
   },
   "ideas": {

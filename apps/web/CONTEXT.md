@@ -37,7 +37,7 @@ A signed-in user who follows or comments without team membership.
 _Avoid_: Visitor, lurker, fan
 
 **DecisionSpaces**:
-The list at `/workspace`: the questions the workspace must settle, each with its owner, status, deadline and participants, plus the form that opens a new one. The idea Explorer lives one level below at `/workspace/ideas`.
+The list at `/workspace/decision-spaces`: the questions the workspace must settle, each with its owner, status, deadline and participants, plus the form that opens a new one. The idea Explorer lives one level below at `/workspace/ideas`.
 _Avoid_: Home, dashboard, feed
 
 **SpaceShell**:
@@ -119,3 +119,7 @@ _Avoid_: Insight, conclusion, prediction, score
 **Learning provenance**:
 The outcome, the experiment and the initiative a lesson descends from, together with the person who confirmed it and the date.
 _Avoid_: Source, citation, metadata
+
+**Decision inbox**:
+The screen at `/workspace` that answers what needs attention, reading the four sections the API computes - spaces to converge, work waiting on the reader, spaces ready for a decision, work needing a learning - each bounded and leading to the space and the section where it can be acted on. It also says that relevant prior memory is not answered yet, because the capability that would surface it does not exist.
+_Avoid_: Dashboard, feed, notifications, queue

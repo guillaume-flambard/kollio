@@ -62,7 +62,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       }))
       await page.route('**/api/workspaces/workspace-one/decision-spaces/*', route => route.fulfill({ json: makeDetail() }))
 
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/decision-spaces`)
 
       await expect(page.getByRole('heading', { name: messages.decisionSpaces.title })).toBeVisible()
       await expect(page.getByText(makeSpace().question)).toBeVisible()
@@ -74,7 +74,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
     test('DECISION-SPACES-02 says the workspace has none yet', async ({ page }) => {
       await page.route('**/api/workspaces/workspace-one/decision-spaces', route => route.fulfill({ json: { items: [] } }))
 
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/decision-spaces`)
 
       await expect(page.getByRole('heading', { name: messages.decisionSpaces.empty.title })).toBeVisible()
       await expect(page.getByText(messages.decisionSpaces.empty.description)).toBeVisible()
@@ -91,7 +91,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       })
       await page.route('**/api/workspaces/workspace-one/decision-spaces/*', route => route.fulfill({ json: makeDetail({ id: 'space-new', question: created.question, status: 'OPEN' }) }))
 
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/decision-spaces`)
       await page.getByRole('button', { name: messages.decisionSpaces.open }).first().click()
       await page.getByLabel(messages.decisionSpaces.form.question).fill(created.question)
       await page.getByRole('button', { name: messages.decisionSpaces.form.submit }).click()
@@ -107,7 +107,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       })
       await page.route('**/api/workspaces/workspace-one/decision-spaces', route => route.fulfill({ json: { items: [] } }))
 
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/decision-spaces`)
       await page.getByRole('button', { name: messages.decisionSpaces.open }).first().click()
       await page.getByLabel(messages.decisionSpaces.form.question).fill('   ')
       await page.getByRole('button', { name: messages.decisionSpaces.form.submit }).click()
@@ -165,10 +165,22 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.route('**/api/workspaces/workspace-one/ideas?*', route => route.fulfill({
         json: { items: [], total: 0, limit: 5, offset: 0 },
       }))
+      await page.route('**/api/inbox', route => route.fulfill({
+        json: {
+          needs_convergence: { entries: [], total: 0 },
+          needs_my_input: { entries: [], total: 0 },
+          ready_to_decide: { entries: [], total: 0 },
+          needs_learning: { entries: [], total: 0 },
+        },
+      }))
 
       await page.goto(`${prefix}/workspace`)
+      await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.inbox })).toHaveAttribute('data-active', 'true')
+      await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.decisionSpaces })).toHaveAttribute('data-active', 'false')
+
+      await page.goto(`${prefix}/workspace/decision-spaces`)
       await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.decisionSpaces })).toHaveAttribute('data-active', 'true')
-      await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.ideas })).toHaveAttribute('data-active', 'false')
+      await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.inbox })).toHaveAttribute('data-active', 'false')
 
       await page.goto(`${prefix}/workspace/ideas`)
       await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.ideas })).toHaveAttribute('data-active', 'true')

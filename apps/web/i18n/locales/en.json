@@ -9,7 +9,8 @@
     "menuOpen": "Open navigation",
     "menuClose": "Close navigation",
     "skipToContent": "Skip to content",
-    "decisionSpaces": "Decision spaces"
+    "decisionSpaces": "Decision spaces",
+    "inbox": "Inbox"
   },
   "decisionSpaces": {
     "metaTitle": "Decision spaces {'|'} Kollio",
@@ -978,6 +979,52 @@
       },
       "error": "The action failed. Your input is kept.",
       "loadError": "The context could not be loaded."
+    }
+  },
+  "inbox": {
+    "metaTitle": "What needs your attention {'|'} Kollio",
+    "title": "What needs your attention",
+    "description": "The spaces waiting on convergence, your input, a decision or a learning, across the workspaces you belong to.",
+    "loadFailed": "The inbox could not be loaded. Try again in a moment.",
+    "spacesLink": "See the decision spaces",
+    "more": "{count} more | {count} more",
+    "empty": {
+      "title": "Nothing needs your attention.",
+      "body": "No space is waiting on convergence, your input, a decision or a learning."
+    },
+    "sections": {
+      "needsConvergence": {
+        "title": "Needs convergence",
+        "intro": "The spaces whose reasoning has to come together before deciding.",
+        "empty": "No space needs convergence."
+      },
+      "needsMyInput": {
+        "title": "Needs your input",
+        "intro": "The contributions and findings nobody has settled yet, in a space you take part in.",
+        "empty": "Nothing waits on you personally."
+      },
+      "readyToDecide": {
+        "title": "Ready to decide",
+        "intro": "The spaces ready for a decision that have not committed one.",
+        "empty": "No space is ready to decide."
+      },
+      "needsLearning": {
+        "title": "Needs a learning",
+        "intro": "The completed experiments with no outcome, and the learnings still in draft.",
+        "empty": "No learning is waiting."
+      }
+    },
+    "kinds": {
+      "space_needs_convergence": "Convergence",
+      "contribution_awaits_confirmation": "Contribution to confirm",
+      "finding_awaits_resolution": "Finding to settle",
+      "decision_awaits_commitment": "Decision to commit",
+      "experiment_awaits_outcome": "Outcome to record",
+      "learning_awaits_confirmation": "Learning to confirm"
+    },
+    "memory": {
+      "title": "Prior memory",
+      "body": "This section stays absent: nothing yet surfaces confirmed learnings from other decisions. An empty list would assert that no relevant memory exists, which nothing supports today."
     }
   },
   "ideas": {
