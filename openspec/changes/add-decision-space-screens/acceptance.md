@@ -18,7 +18,7 @@ Status: **implemented and verified.** Every scenario below is bound to a browser
 | A blank question is refused | `::DECISION-SPACES-04` (the form says so and no POST is sent) | passing |
 | The header frames the Space | `::DECISION-SPACES-05` (question, status word, owner, participants) | passing |
 | Every section is reachable | `::DECISION-SPACES-05` (all six section routes clicked and rendered) | passing |
-| An empty section says what will live there | `::DECISION-SPACES-06` (body plus the "lands with its own slice" line) | passing |
+| An empty section says what will live there | `::DECISION-SPACES-06` — **superseded**: retired by `openspec/changes/add-learning-screens` once every section route shipped | retired |
 | The status is readable | `::DECISION-SPACES-05` (the status renders as a word, not as `READY_TO_DECIDE`) | passing |
 | A permitted transition is applied | `::DECISION-SPACES-07` (applied, then survives a reload) | passing |
 | A transition the API refuses is not offered | `::DECISION-SPACES-08` (from `OPEN` the select offers exactly `EXPLORING`) | passing |
