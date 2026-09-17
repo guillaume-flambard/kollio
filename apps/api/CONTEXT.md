@@ -2,6 +2,10 @@
 
 The FastAPI backend. Owns all Kollio domain state: ideas, their versioned history, constraint analyses, the company context, teams, and the private-workspace boundary. The agent graphs (LangGraph) and their Taskiq workers also live here.
 
+## Vocabulary in transition
+
+`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 maps Ideas into Branches and Contributions, step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
+
 ## Language
 
 ### The idea as a repository
@@ -127,3 +131,25 @@ _Avoid_: Subscribe, watch, like
 **Embedding**:
 The multilingual vector of an idea, user, or contribution, stored in pgvector. French content matches English profiles through it.
 _Avoid_: Translation (as stored data), vector alone
+
+### Decision spaces
+
+**DecisionSpace**:
+The central object of Kollio: one question a workspace commits to converging on, owned by a person and worked by participants through a fixed lifecycle. Workspace-scoped, never public.
+_Avoid_: Idea (once step 3 lands), project, thread, discussion, ticket
+
+**DecisionSpaceParticipant**:
+A workspace member who works a decision space. The owner is a participant by construction and can never be removed from their own space.
+_Avoid_: Member (the workspace role), assignee, watcher
+
+**DecisionSpaceStatusEvent**:
+One append-only status change on a decision space: from, to, actor, optional reason, timestamp. Ordered by an internal monotonic `seq`, never updated and never deleted; the stored status is a projection of the last event.
+_Avoid_: Log entry, audit row, history item
+
+**Decision space status**:
+The closed lifecycle: `OPEN`, `EXPLORING`, `CONVERGING`, `READY_TO_DECIDE`, `DECIDED`, `TESTING`, `LEARNED`, `REOPENED`. Forward edges only, except reopening (`DECIDED`/`TESTING`/`LEARNED` → `REOPENED`, reason required) and resuming (`REOPENED` → `EXPLORING`). Anything else is refused and writes nothing.
+_Avoid_: Stage (reserved for an Idea), phase, state
+
+**Decision space deadline**:
+An optional date carried on a space for information only. It gates no transition and skips no state.
+_Avoid_: Due date (as a trigger), SLA, expiry

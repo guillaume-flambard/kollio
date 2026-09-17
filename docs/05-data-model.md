@@ -12,6 +12,16 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - `WorkspaceMembership(workspace_id, user_id, role: admin|member)`
 - Une idée publique n'a pas de workspace ; une idée privée appartient à un workspace.
 
+### DecisionSpace (l'objet parent — pivot « Collaborative Decision Intelligence »)
+`id, workspace_id (requis, jamais null), question (non vide), description?, owner_id, status, deadline?, lang, created_at, updated_at`
+- `status` est un ensemble fermé : `OPEN|EXPLORING|CONVERGING|READY_TO_DECIDE|DECIDED|TESTING|LEARNED|REOPENED`.
+- `DecisionSpaceParticipant(space_id, user_id, created_at)` — clé primaire composite, ce qui rend idempotent l'ajout du même participant. Le propriétaire est participant par construction et ne peut pas être retiré.
+- `DecisionSpaceStatusEvent(id, seq, space_id, from_status?, to_status, actor_id, reason?, created_at)` — append-only, jamais modifié ni supprimé. `seq` (identité monotone) porte l'ordre, `now()` étant constant par transaction ; le `status` de l'espace est une projection du dernier événement.
+- Cycle de vie fermé : seules les arêtes déclarées sont acceptées (`OPEN`→`EXPLORING`→`CONVERGING`→`READY_TO_DECIDE`→`DECIDED`→`TESTING`→`LEARNED`), plus la réouverture (`DECIDED`/`TESTING`/`LEARNED`→`REOPENED`, motif obligatoire) et la reprise (`REOPENED`→`EXPLORING`). Toute autre transition est refusée sans rien écrire.
+- `deadline` est informatif : aucune transition n'est refusée parce qu'une date est passée.
+- Le statut est écrit par le propriétaire et les participants ; la gestion des participants est réservée au propriétaire.
+- Voir `openspec/changes/add-decision-space/` (étape 2 de la séquence de migration §20) et l'issue #109.
+
 ### Idea (le "dépôt")
 `id, slug, title, pitch, owner_id, workspace_id?(null=public), stage(seed|iterating|team_formed), lang, visibility(public|workspace), created_at`
 
