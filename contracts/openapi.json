@@ -1981,6 +1981,380 @@
         }
       }
     },
+    "/workspaces/{workspace_id}/decision-spaces": {
+      "get": {
+        "tags": [
+          "decision-spaces"
+        ],
+        "summary": "List Decision Spaces",
+        "operationId": "list_decision_spaces",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionSpaceListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "decision-spaces"
+        ],
+        "summary": "Open Decision Space",
+        "operationId": "open_decision_space",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionSpaceCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionSpaceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}": {
+      "get": {
+        "tags": [
+          "decision-spaces"
+        ],
+        "summary": "Read Decision Space",
+        "operationId": "get_decision_space",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionSpaceDetailResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/transitions": {
+      "post": {
+        "tags": [
+          "decision-spaces"
+        ],
+        "summary": "Transition Decision Space",
+        "operationId": "transition_decision_space",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionSpaceTransition"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionSpaceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/participants": {
+      "post": {
+        "tags": [
+          "decision-spaces"
+        ],
+        "summary": "Add Decision Space Participant",
+        "operationId": "add_decision_space_participant",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipantAdd"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DecisionSpaceParticipantResponse"
+                  },
+                  "title": "Response Add Decision Space Participant"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/participants/{user_id}": {
+      "delete": {
+        "tags": [
+          "decision-spaces"
+        ],
+        "summary": "Remove Decision Space Participant",
+        "operationId": "remove_decision_space_participant",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DecisionSpaceParticipantResponse"
+                  },
+                  "title": "Response Remove Decision Space Participant"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ideas/{idea_id}/experiments": {
       "post": {
         "summary": "Create Idea Experiment",
@@ -3341,6 +3715,377 @@
           "snapshot"
         ],
         "title": "CreateIterationRequest"
+      },
+      "DecisionSpaceCreate": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Question"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "deadline": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question"
+        ],
+        "title": "DecisionSpaceCreate"
+      },
+      "DecisionSpaceDetailResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "owner_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Owner Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "EXPLORING",
+              "CONVERGING",
+              "READY_TO_DECIDE",
+              "DECIDED",
+              "TESTING",
+              "LEARNED",
+              "REOPENED"
+            ],
+            "title": "Status"
+          },
+          "deadline": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "participants": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionSpaceParticipantResponse"
+            },
+            "type": "array",
+            "title": "Participants"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionSpaceStatusEventResponse"
+            },
+            "type": "array",
+            "title": "History"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "workspace_id",
+          "question",
+          "owner_id",
+          "status",
+          "lang",
+          "created_at",
+          "updated_at",
+          "participants",
+          "history"
+        ],
+        "title": "DecisionSpaceDetailResponse"
+      },
+      "DecisionSpaceListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DecisionSpaceResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "DecisionSpaceListResponse"
+      },
+      "DecisionSpaceParticipantResponse": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "created_at"
+        ],
+        "title": "DecisionSpaceParticipantResponse"
+      },
+      "DecisionSpaceResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "question": {
+            "type": "string",
+            "title": "Question"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "owner_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Owner Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "EXPLORING",
+              "CONVERGING",
+              "READY_TO_DECIDE",
+              "DECIDED",
+              "TESTING",
+              "LEARNED",
+              "REOPENED"
+            ],
+            "title": "Status"
+          },
+          "deadline": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "fr",
+              "en"
+            ],
+            "title": "Lang"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "workspace_id",
+          "question",
+          "owner_id",
+          "status",
+          "lang",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "DecisionSpaceResponse"
+      },
+      "DecisionSpaceStatusEventResponse": {
+        "properties": {
+          "from_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "OPEN",
+                  "EXPLORING",
+                  "CONVERGING",
+                  "READY_TO_DECIDE",
+                  "DECIDED",
+                  "TESTING",
+                  "LEARNED",
+                  "REOPENED"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From Status"
+          },
+          "to_status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "EXPLORING",
+              "CONVERGING",
+              "READY_TO_DECIDE",
+              "DECIDED",
+              "TESTING",
+              "LEARNED",
+              "REOPENED"
+            ],
+            "title": "To Status"
+          },
+          "actor_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Actor Id"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "to_status",
+          "actor_id",
+          "created_at"
+        ],
+        "title": "DecisionSpaceStatusEventResponse"
+      },
+      "DecisionSpaceTransition": {
+        "properties": {
+          "to_status": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "EXPLORING",
+              "CONVERGING",
+              "READY_TO_DECIDE",
+              "DECIDED",
+              "TESTING",
+              "LEARNED",
+              "REOPENED"
+            ],
+            "title": "To Status"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "to_status"
+        ],
+        "title": "DecisionSpaceTransition"
       },
       "DepositIdeaRequest": {
         "properties": {
@@ -4837,6 +5582,20 @@
           "created_at"
         ],
         "title": "OwnedIdeaResponse"
+      },
+      "ParticipantAdd": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "title": "ParticipantAdd"
       },
       "PrincipleCreate": {
         "properties": {

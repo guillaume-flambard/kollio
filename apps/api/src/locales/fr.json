@@ -6,5 +6,6 @@
   "unavailable": "Service indisponible",
   "invalid": "Requête invalide",
   "initial_deposit": "Dépôt initial",
-  "not_found_workspace": "Espace de travail introuvable"
+  "not_found_workspace": "Espace de travail introuvable",
+  "not_found_space": "Espace de décision introuvable"
 }

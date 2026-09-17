@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from alembic import context
 from src.modules.company_context.adapters import postgres as company_context_postgres  # noqa: F401
 from src.modules.constraint_analysis.adapters import postgres as analysis_postgres  # noqa: F401
+from src.modules.decision_spaces.adapters import postgres as decision_spaces_postgres  # noqa: F401
 from src.modules.ideas.adapters import postgres  # noqa: F401
 from src.modules.iterations.adapters import postgres as iterations_postgres  # noqa: F401
 from src.platform import effects, embeddings, import_legacy  # noqa: F401

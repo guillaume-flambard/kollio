@@ -493,6 +493,188 @@ export type CreateIterationRequest = {
 };
 
 /**
+ * DecisionSpaceCreate
+ */
+export type DecisionSpaceCreate = {
+    /**
+     * Question
+     */
+    question: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Deadline
+     */
+    deadline?: string | null;
+};
+
+/**
+ * DecisionSpaceDetailResponse
+ */
+export type DecisionSpaceDetailResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Workspace Id
+     */
+    workspace_id: string;
+    /**
+     * Question
+     */
+    question: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Owner Id
+     */
+    owner_id: string;
+    /**
+     * Status
+     */
+    status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
+    /**
+     * Deadline
+     */
+    deadline?: string | null;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Participants
+     */
+    participants: Array<DecisionSpaceParticipantResponse>;
+    /**
+     * History
+     */
+    history: Array<DecisionSpaceStatusEventResponse>;
+};
+
+/**
+ * DecisionSpaceListResponse
+ */
+export type DecisionSpaceListResponse = {
+    /**
+     * Items
+     */
+    items: Array<DecisionSpaceResponse>;
+};
+
+/**
+ * DecisionSpaceParticipantResponse
+ */
+export type DecisionSpaceParticipantResponse = {
+    /**
+     * User Id
+     */
+    user_id: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * DecisionSpaceResponse
+ */
+export type DecisionSpaceResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Workspace Id
+     */
+    workspace_id: string;
+    /**
+     * Question
+     */
+    question: string;
+    /**
+     * Description
+     */
+    description?: string | null;
+    /**
+     * Owner Id
+     */
+    owner_id: string;
+    /**
+     * Status
+     */
+    status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
+    /**
+     * Deadline
+     */
+    deadline?: string | null;
+    /**
+     * Lang
+     */
+    lang: 'fr' | 'en';
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
+ * DecisionSpaceStatusEventResponse
+ */
+export type DecisionSpaceStatusEventResponse = {
+    /**
+     * From Status
+     */
+    from_status?: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED' | null;
+    /**
+     * To Status
+     */
+    to_status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
+    /**
+     * Actor Id
+     */
+    actor_id: string;
+    /**
+     * Reason
+     */
+    reason?: string | null;
+    /**
+     * Created At
+     */
+    created_at: string;
+};
+
+/**
+ * DecisionSpaceTransition
+ */
+export type DecisionSpaceTransition = {
+    /**
+     * To Status
+     */
+    to_status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
+    /**
+     * Reason
+     */
+    reason?: string | null;
+};
+
+/**
  * DepositIdeaRequest
  */
 export type DepositIdeaRequest = {
@@ -1250,6 +1432,16 @@ export type OwnedIdeaResponse = {
      * Created At
      */
     created_at: string;
+};
+
+/**
+ * ParticipantAdd
+ */
+export type ParticipantAdd = {
+    /**
+     * User Id
+     */
+    user_id: string;
 };
 
 /**
@@ -2544,6 +2736,210 @@ export type UpdateCompanyMetricResponses = {
 };
 
 export type UpdateCompanyMetricResponse = UpdateCompanyMetricResponses[keyof UpdateCompanyMetricResponses];
+
+export type ListDecisionSpacesData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces';
+};
+
+export type ListDecisionSpacesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ListDecisionSpacesError = ListDecisionSpacesErrors[keyof ListDecisionSpacesErrors];
+
+export type ListDecisionSpacesResponses = {
+    /**
+     * Successful Response
+     */
+    200: DecisionSpaceListResponse;
+};
+
+export type ListDecisionSpacesResponse = ListDecisionSpacesResponses[keyof ListDecisionSpacesResponses];
+
+export type OpenDecisionSpaceData = {
+    body: DecisionSpaceCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces';
+};
+
+export type OpenDecisionSpaceErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type OpenDecisionSpaceError = OpenDecisionSpaceErrors[keyof OpenDecisionSpaceErrors];
+
+export type OpenDecisionSpaceResponses = {
+    /**
+     * Successful Response
+     */
+    201: DecisionSpaceResponse;
+};
+
+export type OpenDecisionSpaceResponse = OpenDecisionSpaceResponses[keyof OpenDecisionSpaceResponses];
+
+export type GetDecisionSpaceData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}';
+};
+
+export type GetDecisionSpaceErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetDecisionSpaceError = GetDecisionSpaceErrors[keyof GetDecisionSpaceErrors];
+
+export type GetDecisionSpaceResponses = {
+    /**
+     * Successful Response
+     */
+    200: DecisionSpaceDetailResponse;
+};
+
+export type GetDecisionSpaceResponse = GetDecisionSpaceResponses[keyof GetDecisionSpaceResponses];
+
+export type TransitionDecisionSpaceData = {
+    body: DecisionSpaceTransition;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/transitions';
+};
+
+export type TransitionDecisionSpaceErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type TransitionDecisionSpaceError = TransitionDecisionSpaceErrors[keyof TransitionDecisionSpaceErrors];
+
+export type TransitionDecisionSpaceResponses = {
+    /**
+     * Successful Response
+     */
+    200: DecisionSpaceResponse;
+};
+
+export type TransitionDecisionSpaceResponse = TransitionDecisionSpaceResponses[keyof TransitionDecisionSpaceResponses];
+
+export type AddDecisionSpaceParticipantData = {
+    body: ParticipantAdd;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants';
+};
+
+export type AddDecisionSpaceParticipantErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AddDecisionSpaceParticipantError = AddDecisionSpaceParticipantErrors[keyof AddDecisionSpaceParticipantErrors];
+
+export type AddDecisionSpaceParticipantResponses = {
+    /**
+     * Response Add Decision Space Participant
+     *
+     * Successful Response
+     */
+    201: Array<DecisionSpaceParticipantResponse>;
+};
+
+export type AddDecisionSpaceParticipantResponse = AddDecisionSpaceParticipantResponses[keyof AddDecisionSpaceParticipantResponses];
+
+export type RemoveDecisionSpaceParticipantData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/participants/{user_id}';
+};
+
+export type RemoveDecisionSpaceParticipantErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RemoveDecisionSpaceParticipantError = RemoveDecisionSpaceParticipantErrors[keyof RemoveDecisionSpaceParticipantErrors];
+
+export type RemoveDecisionSpaceParticipantResponses = {
+    /**
+     * Response Remove Decision Space Participant
+     *
+     * Successful Response
+     */
+    200: Array<DecisionSpaceParticipantResponse>;
+};
+
+export type RemoveDecisionSpaceParticipantResponse = RemoveDecisionSpaceParticipantResponses[keyof RemoveDecisionSpaceParticipantResponses];
 
 export type ListIdeaExperimentsData = {
     body?: never;
