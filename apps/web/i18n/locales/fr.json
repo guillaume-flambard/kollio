@@ -432,6 +432,172 @@
           "forbidden": "Seuls le porteur et les participants de cet espace peuvent décider."
         }
       }
+    },
+    "experiment": {
+      "loadFailed": "L’expérience n’a pas pu être chargée. Réessayez dans un instant.",
+      "empty": {
+        "title": "Aucune option à éprouver.",
+        "body": "Les plages de scénario et l’expérience s’appuient sur les options du space. Écrivez-en une d’abord."
+      },
+      "variables": {
+        "title": "Plages de scénario",
+        "intro": "Chaque variable porte une plage éditable : une valeur basse, une valeur de base, une valeur haute.",
+        "create": "Ajouter une variable",
+        "empty": "Aucune variable déclarée pour le moment.",
+        "range": "Plage : {low} → {high}",
+        "base": "Base : {value}",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "deleting": "Suppression…",
+        "deleteFailed": "La variable n’a pas pu être supprimée.",
+        "form": {
+          "createTitle": "Nouvelle variable",
+          "editTitle": "Modifier la variable",
+          "name": "Nom",
+          "namePlaceholder": "Budget publicitaire",
+          "nameRequired": "Le nom est obligatoire.",
+          "unit": "Unité",
+          "unitPlaceholder": "€",
+          "low": "Valeur basse",
+          "base": "Valeur de base",
+          "high": "Valeur haute",
+          "rangeHint": "La plage reste ordonnée : basse, base, haute.",
+          "rangeInvalid": "La plage doit rester ordonnée : basse, base, haute.",
+          "submit": "Ajouter la variable",
+          "save": "Enregistrer",
+          "saving": "Enregistrement…",
+          "submitting": "Ajout…",
+          "failed": "La variable n’a pas pu être enregistrée."
+        }
+      },
+      "runs": {
+        "title": "Runs de scénario",
+        "intro": "Un run porte une hypothèse et une valeur par variable. Une option ne porte qu’une seule hypothèse de base.",
+        "create": "Déclarer un run",
+        "empty": "Aucun run déclaré pour cette option.",
+        "option": "Option",
+        "form": {
+          "title": "Nouveau run",
+          "level": "Niveau",
+          "levels": {
+            "optimistic": "Optimiste",
+            "base": "Base",
+            "pessimistic": "Pessimiste",
+            "failure": "Échec"
+          },
+          "assumptions": "Hypothèses",
+          "assumptionsPlaceholder": "Ce que ce run suppose vrai.",
+          "assumptionsRequired": "Le run doit énoncer ses hypothèses.",
+          "values": "Valeurs",
+          "valuesHint": "Une valeur par variable déclarée.",
+          "submit": "Déclarer le run",
+          "submitting": "Déclaration…",
+          "failed": "Le run n’a pas pu être enregistré."
+        },
+        "remove": "Supprimer",
+        "removing": "Suppression…",
+        "removeFailed": "Le run n’a pas pu être supprimé."
+      },
+      "sensitivity": {
+        "title": "Sensibilité",
+        "intro": "Ce qui changerait la préférence, jamais une valeur prédite : la lecture dit autour de quelle valeur le critère bascule, et quelles preuves manquent.",
+        "metric": "Variable de résultat",
+        "direction": "Sens du critère",
+        "directions": {
+          "above": "Au-dessus du seuil",
+          "below": "En dessous du seuil"
+        },
+        "threshold": "Seuil",
+        "read": "Lire la sensibilité",
+        "reading": "Lecture…",
+        "failed": "La lecture n’a pas pu être faite.",
+        "empty": "Déclarez un run par variable pour lire la sensibilité.",
+        "status": {
+          "found": "Bascule trouvée",
+          "beyond_declared_range": "Hors plage déclarée",
+          "insufficient_points": "Points insuffisants"
+        },
+        "crossing": "Bascule autour de {value}",
+        "interval": "Entre {low} et {high}",
+        "slopes": "Pente impliquée {min} → {max}",
+        "travel": {
+          "up": "Le résultat monte sur la plage déclarée",
+          "down": "Le résultat descend sur la plage déclarée",
+          "flat": "Le résultat reste stable sur la plage déclarée"
+        },
+        "crossings": "{count} bascule | {count} bascules",
+        "evidence": "Preuves liées à l’option : {pour} pour, {contre} contre",
+        "incomplete": "{count} run ignoré faute de résultat | {count} runs ignorés faute de résultat",
+        "noVerdict": "Cette lecture ne prédit rien : elle décrit les points déclarés."
+      },
+      "experiments": {
+        "title": "Expérience",
+        "intro": "Une décision devient une expérience : hypothèse, métrique de succès, valeur de départ et plage attendue, puis le résultat observé.",
+        "list": "Expériences suivies",
+        "create": "Créer une expérience",
+        "empty": "Aucune expérience sur ce space pour le moment.",
+        "initiative": "Initiative",
+        "initiativeHint": "Une expérience reste rattachée à une initiative ; le space la liste ensuite.",
+        "initiativeRequired": "Choisissez l’initiative qui porte l’expérience.",
+        "option": "Option liée",
+        "optionNone": "Aucune",
+        "status": {
+          "proposed": "Proposée",
+          "running": "En cours",
+          "completed": "Close",
+          "cancelled": "Abandonnée"
+        },
+        "start": "Lancer",
+        "starting": "Lancement…",
+        "complete": "Clore",
+        "completing": "Clôture…",
+        "abandon": "Abandonner",
+        "abandoning": "Abandon…",
+        "statusFailed": "Le changement de statut n’a pas pu être fait.",
+        "expected": "Attendu",
+        "observed": "Observé",
+        "noOutcome": "Aucun résultat enregistré pour le moment.",
+        "fields": {
+          "hypothesis": "Hypothèse",
+          "metric": "Métrique de succès",
+          "baseline": "Valeur de départ",
+          "target": "Plage attendue",
+          "startedAt": "Lancée le",
+          "endedAt": "Close le"
+        },
+        "learning": "Apprentissage proposé",
+        "learningHint": "L’apprentissage est composé à la clôture ; un humain le confirme dans la section Apprentissage.",
+        "recordOutcome": "Enregistrer un résultat",
+        "outcome": {
+          "title": "Résultat observé",
+          "metric": "Métrique",
+          "metricRequired": "La métrique est obligatoire.",
+          "value": "Valeur",
+          "valueRequired": "La valeur est obligatoire.",
+          "unit": "Unité",
+          "observedAt": "Observé le",
+          "comment": "Commentaire",
+          "submit": "Enregistrer le résultat",
+          "submitting": "Enregistrement…",
+          "failed": "Le résultat n’a pas pu être enregistré."
+        },
+        "form": {
+          "title": "Nouvelle expérience",
+          "titleLabel": "Titre",
+          "titlePlaceholder": "Tester le prix d’entrée à 20 % de plus",
+          "titleRequired": "Le titre est obligatoire.",
+          "hypothesis": "Hypothèse",
+          "hypothesisRequired": "L’hypothèse est obligatoire.",
+          "successMetric": "Métrique de succès",
+          "successMetricRequired": "La métrique de succès est obligatoire.",
+          "baseline": "Valeur de départ",
+          "target": "Plage attendue",
+          "submit": "Créer l’expérience",
+          "submitting": "Création…",
+          "failed": "L’expérience n’a pas pu être créée.",
+          "forbidden": "Seul un participant du space peut écrire ici."
+        }
+      }
     }
   },
   "meta": {

@@ -432,6 +432,172 @@
           "forbidden": "Only the owner and the participants of this space can decide."
         }
       }
+    },
+    "experiment": {
+      "loadFailed": "The experiment could not be loaded. Try again in a moment.",
+      "empty": {
+        "title": "No option to test yet.",
+        "body": "Scenario ranges and the experiment build on the Space's options. Write one first."
+      },
+      "variables": {
+        "title": "Scenario ranges",
+        "intro": "Every variable carries an editable range: a low, a base and a high value.",
+        "create": "Add a variable",
+        "empty": "No variable declared yet.",
+        "range": "Range: {low} → {high}",
+        "base": "Base: {value}",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleting": "Deleting…",
+        "deleteFailed": "The variable could not be deleted.",
+        "form": {
+          "createTitle": "New variable",
+          "editTitle": "Edit the variable",
+          "name": "Name",
+          "namePlaceholder": "Advertising budget",
+          "nameRequired": "A name is required.",
+          "unit": "Unit",
+          "unitPlaceholder": "EUR",
+          "low": "Low value",
+          "base": "Base value",
+          "high": "High value",
+          "rangeHint": "The range stays ordered: low, base, high.",
+          "rangeInvalid": "The range must stay ordered: low, base, high.",
+          "submit": "Add the variable",
+          "save": "Save",
+          "saving": "Saving…",
+          "submitting": "Adding…",
+          "failed": "The variable could not be saved."
+        }
+      },
+      "runs": {
+        "title": "Scenario runs",
+        "intro": "A run carries one assumption and one value per variable. An option holds a single base case.",
+        "create": "Declare a run",
+        "empty": "No run declared for this option.",
+        "option": "Option",
+        "form": {
+          "title": "New run",
+          "level": "Level",
+          "levels": {
+            "optimistic": "Optimistic",
+            "base": "Base",
+            "pessimistic": "Pessimistic",
+            "failure": "Failure"
+          },
+          "assumptions": "Assumptions",
+          "assumptionsPlaceholder": "What this run assumes to be true.",
+          "assumptionsRequired": "A run states its assumptions.",
+          "values": "Values",
+          "valuesHint": "One value per declared variable.",
+          "submit": "Declare the run",
+          "submitting": "Declaring…",
+          "failed": "The run could not be saved."
+        },
+        "remove": "Delete",
+        "removing": "Deleting…",
+        "removeFailed": "The run could not be deleted."
+      },
+      "sensitivity": {
+        "title": "Sensitivity",
+        "intro": "What would change the preference, never a predicted value: the read says around which value the criterion flips, and which evidence is missing.",
+        "metric": "Outcome variable",
+        "direction": "Criterion direction",
+        "directions": {
+          "above": "Above the threshold",
+          "below": "Below the threshold"
+        },
+        "threshold": "Threshold",
+        "read": "Read the sensitivity",
+        "reading": "Reading…",
+        "failed": "The read could not be made.",
+        "empty": "Declare one run per variable to read the sensitivity.",
+        "status": {
+          "found": "Flip found",
+          "beyond_declared_range": "Beyond the declared range",
+          "insufficient_points": "Too few points"
+        },
+        "crossing": "Flips around {value}",
+        "interval": "Between {low} and {high}",
+        "slopes": "Implied slope {min} → {max}",
+        "travel": {
+          "up": "The outcome rises across the declared range",
+          "down": "The outcome falls across the declared range",
+          "flat": "The outcome stays flat across the declared range"
+        },
+        "crossings": "{count} flip | {count} flips",
+        "evidence": "Evidence linked to the option: {pour} for, {contre} against",
+        "incomplete": "{count} run ignored for missing an outcome | {count} runs ignored for missing an outcome",
+        "noVerdict": "This read predicts nothing: it describes the declared points."
+      },
+      "experiments": {
+        "title": "Experiment",
+        "intro": "A decision becomes an experiment: hypothesis, success metric, baseline and expected range, then the observed outcome.",
+        "list": "Tracked experiments",
+        "create": "Create an experiment",
+        "empty": "No experiment on this Space yet.",
+        "initiative": "Initiative",
+        "initiativeHint": "An experiment stays attached to an initiative; the Space lists it afterwards.",
+        "initiativeRequired": "Choose the initiative that carries the experiment.",
+        "option": "Linked option",
+        "optionNone": "None",
+        "status": {
+          "proposed": "Proposed",
+          "running": "Running",
+          "completed": "Completed",
+          "cancelled": "Cancelled"
+        },
+        "start": "Start",
+        "starting": "Starting…",
+        "complete": "Complete",
+        "completing": "Completing…",
+        "abandon": "Cancel",
+        "abandoning": "Cancelling…",
+        "statusFailed": "The status change could not be made.",
+        "expected": "Expected",
+        "observed": "Observed",
+        "noOutcome": "No outcome recorded yet.",
+        "fields": {
+          "hypothesis": "Hypothesis",
+          "metric": "Success metric",
+          "baseline": "Baseline",
+          "target": "Expected range",
+          "startedAt": "Started on",
+          "endedAt": "Completed on"
+        },
+        "learning": "Proposed learning",
+        "learningHint": "The learning is composed on completion; a human confirms it in the Learning section.",
+        "recordOutcome": "Record an outcome",
+        "outcome": {
+          "title": "Observed outcome",
+          "metric": "Metric",
+          "metricRequired": "A metric is required.",
+          "value": "Value",
+          "valueRequired": "A value is required.",
+          "unit": "Unit",
+          "observedAt": "Observed on",
+          "comment": "Comment",
+          "submit": "Record the outcome",
+          "submitting": "Recording…",
+          "failed": "The outcome could not be recorded."
+        },
+        "form": {
+          "title": "New experiment",
+          "titleLabel": "Title",
+          "titlePlaceholder": "Test raising the entry price by 20%",
+          "titleRequired": "A title is required.",
+          "hypothesis": "Hypothesis",
+          "hypothesisRequired": "A hypothesis is required.",
+          "successMetric": "Success metric",
+          "successMetricRequired": "A success metric is required.",
+          "baseline": "Baseline",
+          "target": "Expected range",
+          "submit": "Create the experiment",
+          "submitting": "Creating…",
+          "failed": "The experiment could not be created.",
+          "forbidden": "Only a participant of the Space can write here."
+        }
+      }
     }
   },
   "meta": {

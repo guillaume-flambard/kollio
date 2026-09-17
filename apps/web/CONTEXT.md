@@ -91,3 +91,19 @@ _Avoid_: Review, audit, verdict, score
 **Decision record**:
 The committed choice of a Space rendered in the Decision section: the selected Option, the rejected alternatives, the arguments for and against, the critical assumptions, the unresolved uncertainty, the success criteria and the revisit triggers, with every committed version listed and readable. An earlier version is never overwritten.
 _Avoid_: Revision, draft, final answer
+
+**Experiment section**:
+The section at `/workspace/decision-spaces/[spaceId]/experiment` carrying the two halves the PRD puts under Options and Experiment: the editable scenario ranges read as a sensitivity report, and the experiments a Space runs with what was expected set beside what was observed. The screen reads ranges, it never predicts a value.
+_Avoid_: Simulation, forecast, model, dashboard
+
+**Scenario variable**:
+A named number a Space declares with a low, a base and a high value, so its scenario runs can be read across an editable range. The range stays ordered low <= base <= high, and a name is unique inside its Space.
+_Avoid_: Parameter, input, factor, assumption
+
+**Scenario run**:
+One declared point of a scenario on an Option: a level (optimistic, base, pessimistic or failure), the assumptions it states, and one value per declared variable. An Option holds at most one base run.
+_Avoid_: Case, variant, simulation, projection
+
+**Sensitivity read**:
+The deterministic report of what would change the preference: for one result variable and one criterion, it says within which declared interval the criterion flips, ranks the variables by the impact they imply, and reports the runs that carry no result instead of averaging them. It describes declared points, never a predicted value.
+_Avoid_: Forecast, probability, confidence, prediction
