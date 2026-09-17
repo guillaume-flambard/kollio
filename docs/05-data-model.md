@@ -48,6 +48,16 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - **Le Critic n'existe pas** : `service/ports.py` déclare la passerelle sans implémentation, et l'API n'accepte jamais un `origin: critic` venant d'un client.
 - Voir `openspec/changes/add-challenge/` et l'issue #113. Hors périmètre : le Critic, le Decision Record (étape 6), tout écran.
 
+### Decision + alternatives + arguments (le Decision Record — étape 6)
+`Decision(id, space_id, version, selected_option_id, rationale, critical_assumptions?, uncertainty?, success_criteria?, revisit_triggers?, reviewer_ids, decided_by, lang, created_at)` — la trace versionnée et append-only de l'engagement d'un Decision Space. `(space_id, version)` est unique ; `version` démarre à 1. `rationale` non vide (contrainte `btrim`), `lang` fermé. Aucun update, aucun delete : le record d'un espace est sa version la plus haute, et son historique est entier.
+- **Committer est le seul chemin vers `DECIDED`** : l'opération exige que l'espace soit `READY_TO_DECIDE`, écrit le record et ajoute l'événement `READY_TO_DECIDE → DECIDED` via l'adaptateur de l'étape 2, dans la même transaction. Tout autre statut est refusé sans rien écrire (ni record, ni événement). Réouvrir puis re-décider écrit la version suivante.
+- `DecisionRejectedAlternative(decision_id, option_id)` — clé primaire composite : les Options explicitement écartées. C'est pourquoi une Option ne porte pas de statut propre.
+- `DecisionArgument(decision_id, contribution_id, side(for|against))` — clé primaire composite `(decision_id, contribution_id)` : les Contributions **confirmées** du **même espace** sur lesquelles le record repose. `side` est une colonne, pas une partie de la clé, donc la même Contribution ne peut pas argumenter dans les deux sens sur une même décision (contradiction refusée, pas stockée deux fois).
+- `reviewer_ids` est un **instantané** des participants au moment du commit, pas une jointure vive : un record doit garder son sens quand l'appartenance change ensuite.
+- `revisit_triggers` est une liste structurée : `{metric (requis, non vide), direction?(above|below), threshold?, note?}`. Un métrique seul est un déclencheur légitime (un rappel de regarder). **Informatif** : aucun déclenchement automatique, aucun score.
+- Écriture (committer) = propriétaire + participants ; lecture = membres de l'espace.
+- Voir `openspec/changes/add-decision-record/` et l'issue #114. Hors périmètre : le Critic, les scénarios (étape 7), Outcome/Learning (étape 8), la Decision Inbox (étape 9), tout écran. Question laissée ouverte par l'étape 2 et tranchée ici : `READY_TO_DECIDE → CONVERGING` reste non modélisé, la réouverture est le chemin de retour déclaré.
+
 ### Idea (le "dépôt")
 `id, slug, title, pitch, owner_id, workspace_id?(null=public), stage(seed|iterating|team_formed), lang, visibility(public|workspace), created_at`
 

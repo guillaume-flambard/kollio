@@ -4,7 +4,7 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 
 ## Vocabulary in transition
 
-`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
+`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 6 added the Decision Record (see Decision records below), step 8 re-parents Outcome and Learning onto the Decision → Experiment → Outcome → Learning chain, and the matching vocabulary is frozen rather than extended.
 
 ## Language
 
@@ -187,8 +187,8 @@ Which of the six checks carry at least one non-dismissed finding. Information on
 _Avoid_: Score, completeness rating, gate
 
 **Critic**:
-The component that will propose findings automatically. **Not built.** `service/ports.py` declares the gateway it will implement; the API never lets a client declare a `critic` origin.
-_Avoid_: Reviewer, analyst
+The component that will propose Challenge findings automatically: unsupported assumptions, contradictory evidence, hidden dependencies, failure modes, causal claims and missing success criteria. **Not built.** `service/ports.py` declares the gateway it will implement; the API never lets a client declare a `critic` origin, and nothing ranks or scores an Option while it is absent.
+_Avoid_: Reviewer, analyst, score, verdict, rating
 
 ### Converge map
 
@@ -214,6 +214,24 @@ _Avoid_: Alternative (the relation type), scenario (a simulated variant), plan, 
 A link from an Option to a *confirmed* Contribution, on the `for` or `against` side. Evidence is linked rather than asserted, so an Option cannot claim support no Contribution backs. The same Contribution may support one Option and contradict another.
 _Avoid_: Evidence (the Contribution kind), citation, note
 
-**Critic**:
-The machine challenge §7 settles before commitment: unsupported assumptions, contradictory evidence, hidden dependencies, failure modes, causal claims, missing success criteria. Not built yet; it is the next slice of step 7 and the first one that needs a model. Until it exists, nothing ranks or scores an Option.
-_Avoid_: Score, verdict, rating
+### Decision records
+
+**Decision** (record):
+The committed choice of a Decision Space, committed from `READY_TO_DECIDE`: the selected Option, the rationale, the critical assumptions, the unresolved uncertainty, the success criteria and the revisit triggers. Append-only and versioned per Space; committing moves the Space to `DECIDED` through the existing lifecycle edge, and reopening then re-deciding writes the next version.
+_Avoid_: DecisionSpace (the container), choice, plan
+
+**Decision version**:
+One row of a record's history, numbered from 1. Never updated and never deleted; a Space's current record is its highest version.
+_Avoid_: Revision, edit, draft
+
+**Decision alternative**:
+An Option the record explicitly did not take. Recorded per decision, which is why an Option carries no status of its own.
+_Avoid_: Runner-up, loser
+
+**Decision argument**:
+A link from a record to a *confirmed* Contribution of the same Space, on the `for` or `against` side. One Contribution argues one way on one decision: citing it both ways is refused.
+_Avoid_: OptionEvidence (which argues about an Option), quote, citation
+
+**Revisit trigger**:
+A structured reason to come back: a required metric, with an optional direction (`above` or `below`), threshold and note. A metric alone is a legitimate reminder. Informational only: it gates nothing and produces no score.
+_Avoid_: Alert, KPI, expiry
