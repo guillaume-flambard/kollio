@@ -1702,6 +1702,31 @@
         "title": "DecisionCommit",
         "type": "object"
       },
+      "DecisionInboxResponse": {
+        "description": "What needs the reader's attention: four of the five section 4 questions.\n\nRelevant prior memory is absent because the capability that surfaces prior\nconfirmed Learnings with their provenance is not built. An empty section\nwould assert that no relevant memory exists, which nothing supports today.",
+        "properties": {
+          "needs_convergence": {
+            "$ref": "#/components/schemas/InboxSectionResponse"
+          },
+          "needs_learning": {
+            "$ref": "#/components/schemas/InboxSectionResponse"
+          },
+          "needs_my_input": {
+            "$ref": "#/components/schemas/InboxSectionResponse"
+          },
+          "ready_to_decide": {
+            "$ref": "#/components/schemas/InboxSectionResponse"
+          }
+        },
+        "required": [
+          "needs_convergence",
+          "needs_my_input",
+          "ready_to_decide",
+          "needs_learning"
+        ],
+        "title": "DecisionInboxResponse",
+        "type": "object"
+      },
       "DecisionListResponse": {
         "properties": {
           "items": {
@@ -2888,6 +2913,109 @@
           "created_at"
         ],
         "title": "IdeaSummaryResponse",
+        "type": "object"
+      },
+      "InboxEntryResponse": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "kind": {
+            "enum": [
+              "space_needs_convergence",
+              "contribution_awaits_confirmation",
+              "finding_awaits_resolution",
+              "decision_awaits_commitment",
+              "experiment_awaits_outcome",
+              "learning_awaits_confirmation"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "space_id": {
+            "format": "uuid",
+            "title": "Space Id",
+            "type": "string"
+          },
+          "space_question": {
+            "title": "Space Question",
+            "type": "string"
+          },
+          "space_status": {
+            "enum": [
+              "OPEN",
+              "EXPLORING",
+              "CONVERGING",
+              "READY_TO_DECIDE",
+              "DECIDED",
+              "TESTING",
+              "LEARNED",
+              "REOPENED"
+            ],
+            "title": "Space Status",
+            "type": "string"
+          },
+          "subject_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject Id"
+          },
+          "workspace_id": {
+            "format": "uuid",
+            "title": "Workspace Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "workspace_id",
+          "space_id",
+          "space_question",
+          "space_status",
+          "created_at"
+        ],
+        "title": "InboxEntryResponse",
+        "type": "object"
+      },
+      "InboxSectionResponse": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/InboxEntryResponse"
+            },
+            "title": "Entries",
+            "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "entries",
+          "total"
+        ],
+        "title": "InboxSectionResponse",
         "type": "object"
       },
       "IterationResponse": {
@@ -7057,6 +7185,62 @@
         "summary": "Remove Idea Member",
         "tags": [
           "ideas"
+        ]
+      }
+    },
+    "/inbox": {
+      "get": {
+        "operationId": "read_decision_inbox",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 50,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionInboxResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Read Decision Inbox",
+        "tags": [
+          "decision-inbox"
         ]
       }
     },

@@ -29,6 +29,7 @@ from src.modules.ideas.api.routes import (
 from src.modules.ideas.api.routes import (
     workspace_ideas_router,
 )
+from src.modules.inbox.api.routes import router as inbox_router
 from src.modules.iterations.api.routes import router as iterations_router
 from src.modules.options.api.routes import router as options_router
 from src.modules.profiles.api.routes import router as profiles_router
@@ -120,6 +121,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(converge_router)
     app.include_router(experiments_router)
     app.include_router(space_experiments_router)
+    app.include_router(inbox_router)
     FastAPIInstrumentor.instrument_app(app, excluded_urls="health/live,health/ready")
     return app
 

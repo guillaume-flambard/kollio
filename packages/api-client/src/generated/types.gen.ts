@@ -854,6 +854,22 @@ export type DecisionCommit = {
 };
 
 /**
+ * DecisionInboxResponse
+ *
+ * What needs the reader's attention: four of the five section 4 questions.
+ *
+ * Relevant prior memory is absent because the capability that surfaces prior
+ * confirmed Learnings with their provenance is not built. An empty section
+ * would assert that no relevant memory exists, which nothing supports today.
+ */
+export type DecisionInboxResponse = {
+    needs_convergence: InboxSectionResponse;
+    needs_learning: InboxSectionResponse;
+    needs_my_input: InboxSectionResponse;
+    ready_to_decide: InboxSectionResponse;
+};
+
+/**
  * DecisionListResponse
  */
 export type DecisionListResponse = {
@@ -1447,6 +1463,58 @@ export type IdeaSummaryResponse = {
      * Title
      */
     title: string;
+};
+
+/**
+ * InboxEntryResponse
+ */
+export type InboxEntryResponse = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Detail
+     */
+    detail?: string | null;
+    /**
+     * Kind
+     */
+    kind: 'space_needs_convergence' | 'contribution_awaits_confirmation' | 'finding_awaits_resolution' | 'decision_awaits_commitment' | 'experiment_awaits_outcome' | 'learning_awaits_confirmation';
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Space Question
+     */
+    space_question: string;
+    /**
+     * Space Status
+     */
+    space_status: 'OPEN' | 'EXPLORING' | 'CONVERGING' | 'READY_TO_DECIDE' | 'DECIDED' | 'TESTING' | 'LEARNED' | 'REOPENED';
+    /**
+     * Subject Id
+     */
+    subject_id?: string | null;
+    /**
+     * Workspace Id
+     */
+    workspace_id: string;
+};
+
+/**
+ * InboxSectionResponse
+ */
+export type InboxSectionResponse = {
+    /**
+     * Entries
+     */
+    entries: Array<InboxEntryResponse>;
+    /**
+     * Total
+     */
+    total: number;
 };
 
 /**
@@ -3669,6 +3737,36 @@ export type RemoveIdeaMemberResponses = {
 };
 
 export type RemoveIdeaMemberResponse = RemoveIdeaMemberResponses[keyof RemoveIdeaMemberResponses];
+
+export type ReadDecisionInboxData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/inbox';
+};
+
+export type ReadDecisionInboxErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReadDecisionInboxError = ReadDecisionInboxErrors[keyof ReadDecisionInboxErrors];
+
+export type ReadDecisionInboxResponses = {
+    /**
+     * Successful Response
+     */
+    200: DecisionInboxResponse;
+};
+
+export type ReadDecisionInboxResponse = ReadDecisionInboxResponses[keyof ReadDecisionInboxResponses];
 
 export type GetProfileData = {
     body?: never;
