@@ -55,3 +55,15 @@ _Avoid_: Post, comment, card, item
 **Explore**:
 The section at `/workspace/decision-spaces/[spaceId]/explore` where each participant explores independently, proposes Contributions from their Branch, and sees which Contributions are confirmed and which wait for a human.
 _Avoid_: Brainstorm, ideation, feed
+
+**Converge**:
+The section at `/workspace/decision-spaces/[spaceId]/converge` where the map of the Space's confirmed Contributions is read and corrected by a human: the Relations between them, the Clusters a human decided, and the unclustered material. What the map shows is what a human last asserted; nothing is inferred.
+_Avoid_: AI clustering, auto-aggregation, whiteboard, canvas
+
+**Relation**:
+A typed link a human asserts between two confirmed Contributions, one of SUPPORTS, CONTRADICTS, DUPLICATES, ALTERNATIVE_TO, DERIVED_FROM, SUPERSEDES, EVIDENCE_FOR or EVIDENCE_AGAINST. A directed pair carries at most one Relation, and a Contribution never relates to itself.
+_Avoid_: Edge, link (alone), similarity
+
+**Cluster**:
+A group of confirmed Contributions whose grouping a human decided. A Contribution belongs to one Cluster at a time: assigning it moves it. Deleting a Cluster keeps its members.
+_Avoid_: Category, theme, folder, bucket

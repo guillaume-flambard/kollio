@@ -178,6 +178,84 @@
         "added": "Added on",
         "none": "Not given"
       }
+    },
+    "converge": {
+      "loadFailed": "The map could not be loaded. Try again in a moment.",
+      "empty": {
+        "title": "No shared reasoning yet.",
+        "body": "Converge works from confirmed contributions. Confirm at least one in Explore and the map appears.",
+        "action": "Go to Explore"
+      },
+      "map": {
+        "title": "The shared reasoning",
+        "intro": "Every confirmed contribution, the kind it carries and the group a human placed it in.",
+        "belongs": "Group · {name}",
+        "ungrouped": "Not grouped"
+      },
+      "kinds": {
+        "idea": "Idea",
+        "claim": "Claim",
+        "evidence": "Evidence",
+        "objection": "Objection",
+        "constraint": "Constraint"
+      },
+      "relations": {
+        "title": "Relations",
+        "intro": "What a human asserts between two contributions. Nothing is inferred automatically.",
+        "create": "Create a relation",
+        "empty": "No relation yet.",
+        "remove": "Delete",
+        "removing": "Deleting…",
+        "removeFailed": "The relation could not be deleted.",
+        "form": {
+          "title": "New relation",
+          "from": "From",
+          "to": "To",
+          "type": "Kind",
+          "submit": "Create the relation",
+          "submitting": "Creating…",
+          "failed": "The relation could not be created.",
+          "sameEnds": "A relation links two different contributions."
+        },
+        "types": {
+          "SUPPORTS": "Supports",
+          "CONTRADICTS": "Contradicts",
+          "DUPLICATES": "Duplicates",
+          "ALTERNATIVE_TO": "Alternative to",
+          "DERIVED_FROM": "Derived from",
+          "SUPERSEDES": "Supersedes",
+          "EVIDENCE_FOR": "Evidence for",
+          "EVIDENCE_AGAINST": "Evidence against"
+        }
+      },
+      "clusters": {
+        "title": "Groups",
+        "intro": "The groupings you decided. A contribution belongs to one group until a human moves it.",
+        "create": "Create a group",
+        "empty": "No group yet.",
+        "members": "Contributions",
+        "noMembers": "No contribution in this group.",
+        "addLabel": "Add a contribution",
+        "choose": "Choose a contribution",
+        "add": "Add",
+        "adding": "Adding…",
+        "addFailed": "The contribution could not be added.",
+        "removeMember": "Remove",
+        "removingMember": "Removing…",
+        "removeMemberFailed": "The contribution could not be removed.",
+        "remove": "Delete the group",
+        "removing": "Deleting…",
+        "removeFailed": "The group could not be deleted.",
+        "form": {
+          "title": "New group",
+          "name": "Title",
+          "namePlaceholder": "E.g. pricing evidence",
+          "nameRequired": "A title is required.",
+          "submit": "Create the group",
+          "submitting": "Creating…",
+          "failed": "The group could not be created."
+        }
+      }
     }
   },
   "meta": {

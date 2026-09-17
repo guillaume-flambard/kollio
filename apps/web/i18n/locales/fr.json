@@ -178,6 +178,84 @@
         "added": "Ajoutée le",
         "none": "Non précisé"
       }
+    },
+    "converge": {
+      "loadFailed": "La carte n’a pas pu être chargée. Réessayez dans un instant.",
+      "empty": {
+        "title": "Aucun raisonnement partagé pour le moment.",
+        "body": "Converge travaille sur les contributions confirmées. Confirmez-en au moins une dans Explorer pour voir la carte apparaître.",
+        "action": "Aller dans Explorer"
+      },
+      "map": {
+        "title": "Le raisonnement partagé",
+        "intro": "Chaque contribution confirmée, la nature qu’elle porte et le groupe où un humain l’a placée.",
+        "belongs": "Groupe · {name}",
+        "ungrouped": "Non groupée"
+      },
+      "kinds": {
+        "idea": "Idée",
+        "claim": "Affirmation",
+        "evidence": "Preuve",
+        "objection": "Objection",
+        "constraint": "Contrainte"
+      },
+      "relations": {
+        "title": "Relations",
+        "intro": "Ce qu’un humain affirme entre deux contributions. Rien n’est déduit automatiquement.",
+        "create": "Créer une relation",
+        "empty": "Aucune relation pour le moment.",
+        "remove": "Supprimer",
+        "removing": "Suppression…",
+        "removeFailed": "La relation n’a pas pu être supprimée.",
+        "form": {
+          "title": "Nouvelle relation",
+          "from": "Depuis",
+          "to": "Vers",
+          "type": "Nature",
+          "submit": "Créer la relation",
+          "submitting": "Création…",
+          "failed": "La relation n’a pas pu être créée.",
+          "sameEnds": "Une relation relie deux contributions différentes."
+        },
+        "types": {
+          "SUPPORTS": "Soutient",
+          "CONTRADICTS": "Contredit",
+          "DUPLICATES": "Duplique",
+          "ALTERNATIVE_TO": "Alternative à",
+          "DERIVED_FROM": "Dérivée de",
+          "SUPERSEDES": "Remplace",
+          "EVIDENCE_FOR": "Preuve pour",
+          "EVIDENCE_AGAINST": "Preuve contre"
+        }
+      },
+      "clusters": {
+        "title": "Groupes",
+        "intro": "Les regroupements que vous avez décidés. Une contribution n’appartient qu’à un groupe tant qu’un humain ne la déplace pas.",
+        "create": "Créer un groupe",
+        "empty": "Aucun groupe pour le moment.",
+        "members": "Contributions",
+        "noMembers": "Aucune contribution dans ce groupe.",
+        "addLabel": "Ajouter une contribution",
+        "choose": "Choisir une contribution",
+        "add": "Ajouter",
+        "adding": "Ajout…",
+        "addFailed": "La contribution n’a pas pu être ajoutée.",
+        "removeMember": "Retirer",
+        "removingMember": "Retrait…",
+        "removeMemberFailed": "La contribution n’a pas pu être retirée.",
+        "remove": "Supprimer le groupe",
+        "removing": "Suppression…",
+        "removeFailed": "Le groupe n’a pas pu être supprimé.",
+        "form": {
+          "title": "Nouveau groupe",
+          "name": "Titre",
+          "namePlaceholder": "Ex. Preuves tarifaires",
+          "nameRequired": "Le titre est obligatoire.",
+          "submit": "Créer le groupe",
+          "submitting": "Création…",
+          "failed": "Le groupe n’a pas pu être créé."
+        }
+      }
     }
   },
   "meta": {
