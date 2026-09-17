@@ -237,6 +237,56 @@ export type BranchResponse = {
 };
 
 /**
+ * ClusterCreate
+ */
+export type ClusterCreate = {
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * ClusterMemberAdd
+ */
+export type ClusterMemberAdd = {
+    /**
+     * Contribution Id
+     */
+    contribution_id: string;
+};
+
+/**
+ * ClusterResponse
+ */
+export type ClusterResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Created By
+     */
+    created_by: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Member Ids
+     */
+    member_ids?: Array<string>;
+};
+
+/**
  * CollaboratorResponse
  */
 export type CollaboratorResponse = {
@@ -1257,6 +1307,58 @@ export type LegacyIdeaContext = {
 };
 
 /**
+ * MapContributionResponse
+ */
+export type MapContributionResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Branch Id
+     */
+    branch_id: string;
+    /**
+     * Kind
+     */
+    kind: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * Author Id
+     */
+    author_id: string;
+    /**
+     * Cluster Id
+     */
+    cluster_id?: string | null;
+};
+
+/**
+ * MapResponse
+ */
+export type MapResponse = {
+    /**
+     * Contributions
+     */
+    contributions: Array<MapContributionResponse>;
+    /**
+     * Relations
+     */
+    relations: Array<RelationResponse>;
+    /**
+     * Clusters
+     */
+    clusters: Array<ClusterResponse>;
+};
+
+/**
  * MembershipResponse
  */
 export type MembershipResponse = {
@@ -1652,6 +1754,58 @@ export type RejectProposalRequest = {
      * Rationale
      */
     rationale: string;
+};
+
+/**
+ * RelationCreate
+ */
+export type RelationCreate = {
+    /**
+     * From Contribution Id
+     */
+    from_contribution_id: string;
+    /**
+     * To Contribution Id
+     */
+    to_contribution_id: string;
+    /**
+     * Relation Type
+     */
+    relation_type: 'SUPPORTS' | 'CONTRADICTS' | 'DUPLICATES' | 'ALTERNATIVE_TO' | 'DERIVED_FROM' | 'SUPERSEDES' | 'EVIDENCE_FOR' | 'EVIDENCE_AGAINST';
+};
+
+/**
+ * RelationResponse
+ */
+export type RelationResponse = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Space Id
+     */
+    space_id: string;
+    /**
+     * From Contribution Id
+     */
+    from_contribution_id: string;
+    /**
+     * To Contribution Id
+     */
+    to_contribution_id: string;
+    /**
+     * Relation Type
+     */
+    relation_type: 'SUPPORTS' | 'CONTRADICTS' | 'DUPLICATES' | 'ALTERNATIVE_TO' | 'DERIVED_FROM' | 'SUPERSEDES' | 'EVIDENCE_FOR' | 'EVIDENCE_AGAINST';
+    /**
+     * Created By
+     */
+    created_by: string;
+    /**
+     * Created At
+     */
+    created_at: string;
 };
 
 /**
@@ -3336,6 +3490,264 @@ export type ConfirmContributionResponses = {
 };
 
 export type ConfirmContributionResponse = ConfirmContributionResponses[keyof ConfirmContributionResponses];
+
+export type GetConvergeMapData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/converge/map';
+};
+
+export type GetConvergeMapErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetConvergeMapError = GetConvergeMapErrors[keyof GetConvergeMapErrors];
+
+export type GetConvergeMapResponses = {
+    /**
+     * Successful Response
+     */
+    200: MapResponse;
+};
+
+export type GetConvergeMapResponse = GetConvergeMapResponses[keyof GetConvergeMapResponses];
+
+export type CreateRelationData = {
+    body: RelationCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/relations';
+};
+
+export type CreateRelationErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateRelationError = CreateRelationErrors[keyof CreateRelationErrors];
+
+export type CreateRelationResponses = {
+    /**
+     * Successful Response
+     */
+    201: RelationResponse;
+};
+
+export type CreateRelationResponse = CreateRelationResponses[keyof CreateRelationResponses];
+
+export type DeleteRelationData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Relation Id
+         */
+        relation_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/relations/{relation_id}';
+};
+
+export type DeleteRelationErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteRelationError = DeleteRelationErrors[keyof DeleteRelationErrors];
+
+export type DeleteRelationResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteRelationResponse = DeleteRelationResponses[keyof DeleteRelationResponses];
+
+export type CreateClusterData = {
+    body: ClusterCreate;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters';
+};
+
+export type CreateClusterErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateClusterError = CreateClusterErrors[keyof CreateClusterErrors];
+
+export type CreateClusterResponses = {
+    /**
+     * Successful Response
+     */
+    201: ClusterResponse;
+};
+
+export type CreateClusterResponse = CreateClusterResponses[keyof CreateClusterResponses];
+
+export type DeleteClusterData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Cluster Id
+         */
+        cluster_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}';
+};
+
+export type DeleteClusterErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type DeleteClusterError = DeleteClusterErrors[keyof DeleteClusterErrors];
+
+export type DeleteClusterResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteClusterResponse = DeleteClusterResponses[keyof DeleteClusterResponses];
+
+export type AddClusterMemberData = {
+    body: ClusterMemberAdd;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Cluster Id
+         */
+        cluster_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members';
+};
+
+export type AddClusterMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type AddClusterMemberError = AddClusterMemberErrors[keyof AddClusterMemberErrors];
+
+export type AddClusterMemberResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClusterResponse;
+};
+
+export type AddClusterMemberResponse = AddClusterMemberResponses[keyof AddClusterMemberResponses];
+
+export type RemoveClusterMemberData = {
+    body?: never;
+    path: {
+        /**
+         * Workspace Id
+         */
+        workspace_id: string;
+        /**
+         * Space Id
+         */
+        space_id: string;
+        /**
+         * Cluster Id
+         */
+        cluster_id: string;
+        /**
+         * Contribution Id
+         */
+        contribution_id: string;
+    };
+    query?: never;
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members/{contribution_id}';
+};
+
+export type RemoveClusterMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RemoveClusterMemberError = RemoveClusterMemberErrors[keyof RemoveClusterMemberErrors];
+
+export type RemoveClusterMemberResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClusterResponse;
+};
+
+export type RemoveClusterMemberResponse = RemoveClusterMemberResponses[keyof RemoveClusterMemberResponses];
 
 export type ListIdeaExperimentsData = {
     body?: never;

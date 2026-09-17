@@ -71,6 +71,7 @@ class Contribution(Base):
     branch_id: Mapped[UUID] = mapped_column(
         ForeignKey("branches.id", ondelete="CASCADE"), index=True
     )
+    cluster_id: Mapped[UUID | None] = mapped_column(ForeignKey("clusters.id", ondelete="SET NULL"))
     kind: Mapped[str] = mapped_column(String(20))
     title: Mapped[str]
     body: Mapped[str | None] = mapped_column(Text)

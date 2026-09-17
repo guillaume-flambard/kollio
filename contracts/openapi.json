@@ -2739,6 +2739,478 @@
         }
       }
     },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/converge/map": {
+      "get": {
+        "tags": [
+          "converge-map"
+        ],
+        "summary": "Read Converge Map",
+        "operationId": "get_converge_map",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/relations": {
+      "post": {
+        "tags": [
+          "converge-map"
+        ],
+        "summary": "Create Space Relation",
+        "operationId": "create_relation",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RelationCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RelationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/relations/{relation_id}": {
+      "delete": {
+        "tags": [
+          "converge-map"
+        ],
+        "summary": "Delete Space Relation",
+        "operationId": "delete_relation",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "relation_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Relation Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters": {
+      "post": {
+        "tags": [
+          "converge-map"
+        ],
+        "summary": "Create Space Cluster",
+        "operationId": "create_cluster",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusterCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}": {
+      "delete": {
+        "tags": [
+          "converge-map"
+        ],
+        "summary": "Delete Space Cluster",
+        "operationId": "delete_cluster",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Cluster Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members": {
+      "post": {
+        "tags": [
+          "converge-map"
+        ],
+        "summary": "Add Member To Cluster",
+        "operationId": "add_cluster_member",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Cluster Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClusterMemberAdd"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members/{contribution_id}": {
+      "delete": {
+        "tags": [
+          "converge-map"
+        ],
+        "summary": "Remove Member From Cluster",
+        "operationId": "remove_cluster_member",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "space_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Space Id"
+            }
+          },
+          {
+            "name": "cluster_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Cluster Id"
+            }
+          },
+          {
+            "name": "contribution_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Contribution Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ideas/{idea_id}/experiments": {
       "post": {
         "summary": "Create Idea Experiment",
@@ -3559,6 +4031,80 @@
           "updated_at"
         ],
         "title": "BranchResponse"
+      },
+      "ClusterCreate": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "ClusterCreate"
+      },
+      "ClusterMemberAdd": {
+        "properties": {
+          "contribution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Contribution Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contribution_id"
+        ],
+        "title": "ClusterMemberAdd"
+      },
+      "ClusterResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "space_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Space Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "member_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Member Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "space_id",
+          "title",
+          "created_by",
+          "created_at"
+        ],
+        "title": "ClusterResponse"
       },
       "CollaboratorResponse": {
         "properties": {
@@ -5598,6 +6144,91 @@
         ],
         "title": "LegacyIdeaContext"
       },
+      "MapContributionResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "branch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Branch Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "author_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Author Id"
+          },
+          "cluster_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cluster Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "branch_id",
+          "kind",
+          "title",
+          "status",
+          "author_id"
+        ],
+        "title": "MapContributionResponse"
+      },
+      "MapResponse": {
+        "properties": {
+          "contributions": {
+            "items": {
+              "$ref": "#/components/schemas/MapContributionResponse"
+            },
+            "type": "array",
+            "title": "Contributions"
+          },
+          "relations": {
+            "items": {
+              "$ref": "#/components/schemas/RelationResponse"
+            },
+            "type": "array",
+            "title": "Relations"
+          },
+          "clusters": {
+            "items": {
+              "$ref": "#/components/schemas/ClusterResponse"
+            },
+            "type": "array",
+            "title": "Clusters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contributions",
+          "relations",
+          "clusters"
+        ],
+        "title": "MapResponse"
+      },
       "MembershipResponse": {
         "properties": {
           "idea_id": {
@@ -6399,6 +7030,100 @@
           "rationale"
         ],
         "title": "RejectProposalRequest"
+      },
+      "RelationCreate": {
+        "properties": {
+          "from_contribution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "From Contribution Id"
+          },
+          "to_contribution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "To Contribution Id"
+          },
+          "relation_type": {
+            "type": "string",
+            "enum": [
+              "SUPPORTS",
+              "CONTRADICTS",
+              "DUPLICATES",
+              "ALTERNATIVE_TO",
+              "DERIVED_FROM",
+              "SUPERSEDES",
+              "EVIDENCE_FOR",
+              "EVIDENCE_AGAINST"
+            ],
+            "title": "Relation Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from_contribution_id",
+          "to_contribution_id",
+          "relation_type"
+        ],
+        "title": "RelationCreate"
+      },
+      "RelationResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "space_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Space Id"
+          },
+          "from_contribution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "From Contribution Id"
+          },
+          "to_contribution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "To Contribution Id"
+          },
+          "relation_type": {
+            "type": "string",
+            "enum": [
+              "SUPPORTS",
+              "CONTRADICTS",
+              "DUPLICATES",
+              "ALTERNATIVE_TO",
+              "DERIVED_FROM",
+              "SUPERSEDES",
+              "EVIDENCE_FOR",
+              "EVIDENCE_AGAINST"
+            ],
+            "title": "Relation Type"
+          },
+          "created_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "space_id",
+          "from_contribution_id",
+          "to_contribution_id",
+          "relation_type",
+          "created_by",
+          "created_at"
+        ],
+        "title": "RelationResponse"
       },
       "RemoveMemberBody": {
         "properties": {

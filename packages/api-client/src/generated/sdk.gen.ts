@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, AcceptIdeaMembershipRequestData, AcceptIdeaMembershipRequestErrors, AcceptIdeaMembershipRequestResponses, AddDecisionSpaceParticipantData, AddDecisionSpaceParticipantErrors, AddDecisionSpaceParticipantResponses, AddIdeaParticipantData, AddIdeaParticipantErrors, AddIdeaParticipantResponses, ChangeExperimentStatusData, ChangeExperimentStatusErrors, ChangeExperimentStatusResponses, ConfirmContributionData, ConfirmContributionErrors, ConfirmContributionResponses, CreateBranchData, CreateBranchErrors, CreateBranchResponses, CreateCompanyConstraintData, CreateCompanyConstraintErrors, CreateCompanyConstraintResponses, CreateCompanyMetricData, CreateCompanyMetricErrors, CreateCompanyMetricResponses, CreateCompanyObjectiveData, CreateCompanyObjectiveErrors, CreateCompanyObjectiveResponses, CreateCompanyPrincipleData, CreateCompanyPrincipleErrors, CreateCompanyPrincipleResponses, CreateExperimentData, CreateExperimentErrors, CreateExperimentResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, DepositWorkspaceIdeaData, DepositWorkspaceIdeaErrors, DepositWorkspaceIdeaResponses, GetBranchData, GetBranchErrors, GetBranchResponses, GetCompanyContextData, GetCompanyContextErrors, GetCompanyContextResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetDecisionSpaceData, GetDecisionSpaceErrors, GetDecisionSpaceResponses, GetExperimentData, GetExperimentErrors, GetExperimentResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, GetProfileData, GetProfileErrors, GetProfileResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, LeaveIdeaTeamData, LeaveIdeaTeamErrors, LeaveIdeaTeamResponses, ListBranchesData, ListBranchesErrors, ListBranchesResponses, ListContributionsData, ListContributionsErrors, ListContributionsResponses, ListDecisionSpacesData, ListDecisionSpacesErrors, ListDecisionSpacesResponses, ListIdeaExperimentsData, ListIdeaExperimentsErrors, ListIdeaExperimentsResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListIdeaLearningsData, ListIdeaLearningsErrors, ListIdeaLearningsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspaceMembersData, ListWorkspaceMembersErrors, ListWorkspaceMembersResponses, ListWorkspacesData, ListWorkspacesResponses, OpenDecisionSpaceData, OpenDecisionSpaceErrors, OpenDecisionSpaceResponses, ProposeContributionData, ProposeContributionErrors, ProposeContributionResponses, RecordExperimentOutcomeData, RecordExperimentOutcomeErrors, RecordExperimentOutcomeResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RejectIdeaMembershipRequestData, RejectIdeaMembershipRequestErrors, RejectIdeaMembershipRequestResponses, RemoveDecisionSpaceParticipantData, RemoveDecisionSpaceParticipantErrors, RemoveDecisionSpaceParticipantResponses, RemoveIdeaMemberData, RemoveIdeaMemberErrors, RemoveIdeaMemberResponses, RequestIdeaMembershipData, RequestIdeaMembershipErrors, RequestIdeaMembershipResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses, SaveCompanyProfileData, SaveCompanyProfileErrors, SaveCompanyProfileResponses, TransitionDecisionSpaceData, TransitionDecisionSpaceErrors, TransitionDecisionSpaceResponses, UpdateCompanyConstraintData, UpdateCompanyConstraintErrors, UpdateCompanyConstraintResponses, UpdateCompanyMetricData, UpdateCompanyMetricErrors, UpdateCompanyMetricResponses, UpdateCompanyObjectiveData, UpdateCompanyObjectiveErrors, UpdateCompanyObjectiveResponses, UpdateCompanyPrincipleData, UpdateCompanyPrincipleErrors, UpdateCompanyPrincipleResponses, UpdateIdeaInitiativeTypeData, UpdateIdeaInitiativeTypeErrors, UpdateIdeaInitiativeTypeResponses, WriteExperimentLearningData, WriteExperimentLearningErrors, WriteExperimentLearningResponses } from './types.gen';
+import type { AcceptIdeaIterationData, AcceptIdeaIterationErrors, AcceptIdeaIterationResponses, AcceptIdeaMembershipRequestData, AcceptIdeaMembershipRequestErrors, AcceptIdeaMembershipRequestResponses, AddClusterMemberData, AddClusterMemberErrors, AddClusterMemberResponses, AddDecisionSpaceParticipantData, AddDecisionSpaceParticipantErrors, AddDecisionSpaceParticipantResponses, AddIdeaParticipantData, AddIdeaParticipantErrors, AddIdeaParticipantResponses, ChangeExperimentStatusData, ChangeExperimentStatusErrors, ChangeExperimentStatusResponses, ConfirmContributionData, ConfirmContributionErrors, ConfirmContributionResponses, CreateBranchData, CreateBranchErrors, CreateBranchResponses, CreateClusterData, CreateClusterErrors, CreateClusterResponses, CreateCompanyConstraintData, CreateCompanyConstraintErrors, CreateCompanyConstraintResponses, CreateCompanyMetricData, CreateCompanyMetricErrors, CreateCompanyMetricResponses, CreateCompanyObjectiveData, CreateCompanyObjectiveErrors, CreateCompanyObjectiveResponses, CreateCompanyPrincipleData, CreateCompanyPrincipleErrors, CreateCompanyPrincipleResponses, CreateExperimentData, CreateExperimentErrors, CreateExperimentResponses, CreateIdeaIterationData, CreateIdeaIterationErrors, CreateIdeaIterationResponses, CreateRelationData, CreateRelationErrors, CreateRelationResponses, DeleteClusterData, DeleteClusterErrors, DeleteClusterResponses, DeleteRelationData, DeleteRelationErrors, DeleteRelationResponses, DepositWorkspaceIdeaData, DepositWorkspaceIdeaErrors, DepositWorkspaceIdeaResponses, GetBranchData, GetBranchErrors, GetBranchResponses, GetCompanyContextData, GetCompanyContextErrors, GetCompanyContextResponses, GetConstraintAnalysisData, GetConstraintAnalysisErrors, GetConstraintAnalysisResponses, GetConvergeMapData, GetConvergeMapErrors, GetConvergeMapResponses, GetDecisionSpaceData, GetDecisionSpaceErrors, GetDecisionSpaceResponses, GetExperimentData, GetExperimentErrors, GetExperimentResponses, GetIdeaData, GetIdeaErrors, GetIdeaResponses, GetProfileData, GetProfileErrors, GetProfileResponses, HealthLiveData, HealthLiveResponses, HealthReadyData, HealthReadyResponses, LaunchConstraintAnalysisData, LaunchConstraintAnalysisErrors, LaunchConstraintAnalysisResponses, LeaveIdeaTeamData, LeaveIdeaTeamErrors, LeaveIdeaTeamResponses, ListBranchesData, ListBranchesErrors, ListBranchesResponses, ListContributionsData, ListContributionsErrors, ListContributionsResponses, ListDecisionSpacesData, ListDecisionSpacesErrors, ListDecisionSpacesResponses, ListIdeaExperimentsData, ListIdeaExperimentsErrors, ListIdeaExperimentsResponses, ListIdeaIterationsData, ListIdeaIterationsErrors, ListIdeaIterationsResponses, ListIdeaLearningsData, ListIdeaLearningsErrors, ListIdeaLearningsResponses, ListWorkspaceIdeasData, ListWorkspaceIdeasErrors, ListWorkspaceIdeasResponses, ListWorkspaceMembersData, ListWorkspaceMembersErrors, ListWorkspaceMembersResponses, ListWorkspacesData, ListWorkspacesResponses, OpenDecisionSpaceData, OpenDecisionSpaceErrors, OpenDecisionSpaceResponses, ProposeContributionData, ProposeContributionErrors, ProposeContributionResponses, RecordExperimentOutcomeData, RecordExperimentOutcomeErrors, RecordExperimentOutcomeResponses, RejectIdeaIterationData, RejectIdeaIterationErrors, RejectIdeaIterationResponses, RejectIdeaMembershipRequestData, RejectIdeaMembershipRequestErrors, RejectIdeaMembershipRequestResponses, RemoveClusterMemberData, RemoveClusterMemberErrors, RemoveClusterMemberResponses, RemoveDecisionSpaceParticipantData, RemoveDecisionSpaceParticipantErrors, RemoveDecisionSpaceParticipantResponses, RemoveIdeaMemberData, RemoveIdeaMemberErrors, RemoveIdeaMemberResponses, RequestIdeaMembershipData, RequestIdeaMembershipErrors, RequestIdeaMembershipResponses, ReviewConstraintAnalysisData, ReviewConstraintAnalysisErrors, ReviewConstraintAnalysisResponses, RollbackIdeaIterationData, RollbackIdeaIterationErrors, RollbackIdeaIterationResponses, SaveCompanyProfileData, SaveCompanyProfileErrors, SaveCompanyProfileResponses, TransitionDecisionSpaceData, TransitionDecisionSpaceErrors, TransitionDecisionSpaceResponses, UpdateCompanyConstraintData, UpdateCompanyConstraintErrors, UpdateCompanyConstraintResponses, UpdateCompanyMetricData, UpdateCompanyMetricErrors, UpdateCompanyMetricResponses, UpdateCompanyObjectiveData, UpdateCompanyObjectiveErrors, UpdateCompanyObjectiveResponses, UpdateCompanyPrincipleData, UpdateCompanyPrincipleErrors, UpdateCompanyPrincipleResponses, UpdateIdeaInitiativeTypeData, UpdateIdeaInitiativeTypeErrors, UpdateIdeaInitiativeTypeResponses, WriteExperimentLearningData, WriteExperimentLearningErrors, WriteExperimentLearningResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -520,6 +520,81 @@ export const proposeContribution = <ThrowOnError extends boolean = false>(option
 export const confirmContribution = <ThrowOnError extends boolean = false>(options: Options<ConfirmContributionData, ThrowOnError>): RequestResult<ConfirmContributionResponses, ConfirmContributionErrors, ThrowOnError> => (options.client ?? client).post<ConfirmContributionResponses, ConfirmContributionErrors, ThrowOnError>({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/contributions/{contribution_id}/confirmation',
+    ...options
+});
+
+/**
+ * Read Converge Map
+ */
+export const getConvergeMap = <ThrowOnError extends boolean = false>(options: Options<GetConvergeMapData, ThrowOnError>): RequestResult<GetConvergeMapResponses, GetConvergeMapErrors, ThrowOnError> => (options.client ?? client).get<GetConvergeMapResponses, GetConvergeMapErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/converge/map',
+    ...options
+});
+
+/**
+ * Create Space Relation
+ */
+export const createRelation = <ThrowOnError extends boolean = false>(options: Options<CreateRelationData, ThrowOnError>): RequestResult<CreateRelationResponses, CreateRelationErrors, ThrowOnError> => (options.client ?? client).post<CreateRelationResponses, CreateRelationErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/relations',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete Space Relation
+ */
+export const deleteRelation = <ThrowOnError extends boolean = false>(options: Options<DeleteRelationData, ThrowOnError>): RequestResult<DeleteRelationResponses, DeleteRelationErrors, ThrowOnError> => (options.client ?? client).delete<DeleteRelationResponses, DeleteRelationErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/relations/{relation_id}',
+    ...options
+});
+
+/**
+ * Create Space Cluster
+ */
+export const createCluster = <ThrowOnError extends boolean = false>(options: Options<CreateClusterData, ThrowOnError>): RequestResult<CreateClusterResponses, CreateClusterErrors, ThrowOnError> => (options.client ?? client).post<CreateClusterResponses, CreateClusterErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete Space Cluster
+ */
+export const deleteCluster = <ThrowOnError extends boolean = false>(options: Options<DeleteClusterData, ThrowOnError>): RequestResult<DeleteClusterResponses, DeleteClusterErrors, ThrowOnError> => (options.client ?? client).delete<DeleteClusterResponses, DeleteClusterErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}',
+    ...options
+});
+
+/**
+ * Add Member To Cluster
+ */
+export const addClusterMember = <ThrowOnError extends boolean = false>(options: Options<AddClusterMemberData, ThrowOnError>): RequestResult<AddClusterMemberResponses, AddClusterMemberErrors, ThrowOnError> => (options.client ?? client).post<AddClusterMemberResponses, AddClusterMemberErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Remove Member From Cluster
+ */
+export const removeClusterMember = <ThrowOnError extends boolean = false>(options: Options<RemoveClusterMemberData, ThrowOnError>): RequestResult<RemoveClusterMemberResponses, RemoveClusterMemberErrors, ThrowOnError> => (options.client ?? client).delete<RemoveClusterMemberResponses, RemoveClusterMemberErrors, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/workspaces/{workspace_id}/decision-spaces/{space_id}/clusters/{cluster_id}/members/{contribution_id}',
     ...options
 });
 
