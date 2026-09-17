@@ -4,7 +4,7 @@ The FastAPI backend. Owns all Kollio domain state: ideas, their versioned histor
 
 ## Vocabulary in transition
 
-`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 6 added the Decision Record (see Decision records below), step 7 added scenario analysis with a deterministic sensitivity read (see Scenario analysis below), step 8 linked experiments to spaces so a Space reaches its own Outcomes and Learnings while the initiative path stays intact (see Experiment loop and the space link below), and the matching vocabulary is frozen rather than extended.
+`docs/00-project-overview.md` §20 re-points this domain over several steps. The Idea, Iteration, Branch, Proposal, ConstraintAnalysis, RealismScore and Embedding sections below describe today's shipped product; the Decision spaces section describes the parent object that steps 3 to 8 attach them to or replace. Read them as a sequence, not as coexisting targets: step 3 mapped Ideas into Branches and Contributions (see Exploration branches below), step 4 added the converge map, step 5 added Options (see Options below), and its Challenge half added the structure the Critic writes into (see Challenge below), step 6 added the Decision Record (see Decision records below), step 7 added scenario analysis with a deterministic sensitivity read (see Scenario analysis below), step 8 linked experiments to spaces so a Space reaches its own Outcomes and Learnings while the initiative path stays intact (see Experiment loop and the space link below), step 9 added the Decision Inbox read (see Decision inbox below), and the matching vocabulary is frozen rather than extended.
 
 ## Language
 
@@ -267,3 +267,21 @@ _Avoid_: Insight, takeaway, conclusion
 **Experiment space link**:
 The optional pair a Decision Space sees its tests through. An `option_id` is only ever set together with a `decision_space_id`, both ends belong to the idea's workspace, and the option must belong to that space. Deleting a Space or an Option nulls the link rather than destroying experiment history. No backfill: inferring a space for an existing experiment would invent a decision nobody made.
 _Avoid_: Parent (the idea is still the parent), re-parent, migration link
+
+### Decision inbox
+
+**DecisionInbox**:
+The read behind Home: what needs this person's attention, assembled from rows that already exist. It owns no table and stores nothing; every entry quotes the object it points at.
+_Avoid_: Dashboard, feed, activity stream, notifications
+
+**Inbox section**:
+One of the four questions the inbox answers: `needs_convergence` (a Space in `CONVERGING`, workspace-scoped), `needs_my_input` (a `suggested` Contribution or a `proposed` finding, only in Spaces where the reader is owner or participant), `ready_to_decide` (a Space in `READY_TO_DECIDE` that holds no Decision yet, workspace-scoped) and `needs_learning` (a `completed` experiment with no recorded Outcome, or a `draft` Learning, workspace-scoped). Each section carries its entries oldest first and its own total.
+_Avoid_: Tab, bucket, category
+
+**Inbox entry**:
+One line of a section: its kind, the workspace and space it belongs to, the space's question and status, the row it is about when it is about one row, a detail string for the client, and its timestamp.
+_Avoid_: Card, item, row
+
+**Relevant prior memory**:
+The fifth section §4 names, deliberately NOT answered yet. Its source is the memory retriever (§11), which does not exist; returning an empty list under that key would assert that no relevant memory exists, which nothing supports. The inbox answers only what it can prove.
+_Avoid_: Recommendation, suggestion, related (until retrieval is built)

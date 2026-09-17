@@ -96,6 +96,11 @@ Postgres. `lang` (locale d'origine) sur tout contenu utilisateur. Embeddings mul
 - Aucun backfill : deviner un espace pour une expérience existante inventerait une décision que personne n'a prise.
 - Voir `openspec/changes/link-experiments-to-spaces/` et l'issue #116.
 
+### Decision inbox (lecture agrégée — étape 9)
+Pas de table : l'inbox est une **projection en lecture** de lignes qui existent déjà, assemblée à la demande. Quatre sections : `needs_convergence` (Decision Space en `CONVERGING`, périmètre = les workspaces du lecteur), `needs_my_input` (Contribution `suggested` ou ChallengeFinding `proposed`, périmètre = les espaces où le lecteur est propriétaire ou participant), `ready_to_decide` (Decision Space en `READY_TO_DECIDE` qui ne porte encore aucune Decision), `needs_learning` (Experiment `completed` sans Outcome enregistré, ou Learning `draft`). Chaque section trie du plus ancien au plus récent et rend son propre `total`. Un `limit` optionnel (1..50, défaut 20) borne les entrées, jamais le total.
+- La cinquième section du §4, la mémoire pertinente, est **volontairement absente** tant que le Memory Retriever (§11) n'existe pas : une liste vide sous cette clé affirmerait qu'aucune mémoire pertinente n'existe, ce que rien ne soutient.
+- Voir `openspec/changes/add-decision-inbox/` et l'issue #117.
+
 ### CompanyContext (contexte entreprise, par workspace)
 - `CompanyProfile(workspace_id PK, name, description, business_model, products_services, customer_segments, markets, structure, created_at, updated_at)` — une seule fiche par workspace.
 - `CompanyObjective(id, workspace_id, title, state(active|archived), priority, created_at, updated_at)` — objectifs évolutifs.
