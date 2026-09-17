@@ -29,6 +29,7 @@ class ChallengeRunResponse(BaseModel):
     status: RunStatus
     opened_by: UUID
     model: str | None = None
+    failure_reason: str | None = None
     lang: Literal["fr", "en"]
     created_at: datetime
     updated_at: datetime

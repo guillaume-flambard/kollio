@@ -1,5 +1,8 @@
+from collections.abc import Mapping
 from dataclasses import dataclass
 from uuid import UUID
+
+import httpx
 
 from src.modules.challenge.adapters.postgres import (
     ChallengeFinding,
@@ -7,7 +10,14 @@ from src.modules.challenge.adapters.postgres import (
     PostgresChallenge,
 )
 from src.modules.challenge.domain.access import can_read_challenge, can_write_challenge
+from src.modules.challenge.domain.brief import (
+    BriefError,
+    BriefEvidence,
+    BriefOption,
+    build_brief,
+)
 from src.modules.challenge.domain.coverage import Coverage, compute_coverage
+from src.modules.challenge.domain.critic import CriticFindingError, validate_candidates
 from src.modules.challenge.domain.findings import (
     FindingShapeError,
     arriving_status,
@@ -22,6 +32,7 @@ from src.modules.challenge.domain.vocabularies import (
     validate_kind,
     validate_severity,
 )
+from src.modules.challenge.service.ports import ChallengeGateway, ChallengeQueue
 from src.modules.decision_spaces.adapters.postgres import DecisionSpace
 
 
@@ -35,6 +46,12 @@ class ChallengeValidationError(ValueError):
 
 class ChallengeForbiddenError(LookupError):
     """Raised when a workspace member is neither the owner nor a participant."""
+
+
+QUEUE_FAILED_REASON = "The challenge could not be queued for the Critic"
+EMPTY_RESULT_REASON = "The Critic proposed no findings"
+SPACE_GONE_REASON = "The decision space no longer exists"
+OPTION_GONE_REASON = "The option no longer exists"
 
 
 @dataclass(frozen=True)
@@ -135,14 +152,21 @@ async def open_challenge(
     subject: str,
     *,
     lang: str,
+    queue: ChallengeQueue,
+    trace_context: Mapping[str, str],
 ) -> ChallengeRun:
     await _authorize_read(repository, workspace_id, subject)
     space = await _space(repository, workspace_id, space_id)
     await _option(repository, space_id, option_id)
     actor_id = await _authorize_write(repository, space, subject, workspace_id)
-    return await repository.create_run(
+    run = await repository.create_run(
         space_id=space.id, option_id=option_id, opened_by=actor_id, lang=lang
     )
+    try:
+        await queue.dispatch(run.id, trace_context)
+    except Exception:
+        return await repository.fail_run(run, QUEUE_FAILED_REASON, lang)
+    return run
 
 
 async def record_finding(
@@ -237,3 +261,84 @@ async def complete_challenge(
     except InvalidRunTransition as error:
         raise ChallengeValidationError(str(error)) from error
     return await repository.complete_run(run, lang)
+
+
+def _gateway_failure(error: Exception) -> str:
+    if isinstance(error, httpx.HTTPStatusError):
+        return f"The model gateway answered {error.response.status_code}"
+    return f"The Critic could not answer: {type(error).__name__}"
+
+
+async def execute_run(
+    repository: PostgresChallenge,
+    gateway: ChallengeGateway,
+    run_id: UUID,
+    locale: str,
+) -> ChallengeRun:
+    run = await repository.run_by_id(run_id)
+    if run is None:
+        raise ChallengeNotFoundError
+    if run.status != "RUNNING":
+        return run
+
+    space = await repository.space(run.space_id)
+    if space is None:
+        return await repository.fail_run(run, SPACE_GONE_REASON, locale)
+    option = await repository.option(run.space_id, run.option_id)
+    if option is None:
+        return await repository.fail_run(run, OPTION_GONE_REASON, locale)
+
+    evidence = await repository.confirmed_evidence(run.space_id, run.option_id)
+    try:
+        brief = build_brief(
+            question=space.question,
+            option=BriefOption(
+                title=option.title,
+                proposal=option.proposal,
+                mechanism=option.mechanism,
+                upside=option.upside,
+                cost=option.cost,
+                risks=option.risks,
+                critical_assumptions=option.critical_assumptions,
+                success_metrics=option.success_metrics,
+            ),
+            evidence=[
+                BriefEvidence(
+                    contribution_id=contribution.id,
+                    side=side,
+                    title=contribution.title,
+                    body=contribution.body,
+                )
+                for side, contribution in evidence
+            ],
+        )
+    except BriefError as error:
+        return await repository.fail_run(run, str(error), locale)
+
+    run = await repository.set_run_model(run, gateway.model)
+
+    try:
+        raws = await gateway.challenge(brief=brief.payload, locale=locale)
+    except Exception as error:
+        return await repository.fail_run(run, _gateway_failure(error), locale)
+
+    try:
+        candidates = validate_candidates(raws, allowed_contribution_ids=brief.contribution_ids)
+    except CriticFindingError as error:
+        return await repository.fail_run(run, str(error), locale)
+
+    if not candidates:
+        return await repository.fail_run(run, EMPTY_RESULT_REASON, locale)
+
+    for candidate in candidates:
+        await repository.create_finding(
+            run_id=run.id,
+            kind=candidate.kind,
+            severity=candidate.severity,
+            detail=candidate.detail,
+            origin="critic",
+            status="proposed",
+            contribution_id=candidate.contribution_id,
+            lang=locale,
+        )
+    return await repository.complete_run(run, locale)

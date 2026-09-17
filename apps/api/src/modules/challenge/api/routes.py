@@ -1,6 +1,8 @@
+from typing import cast
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from opentelemetry.propagate import inject
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.challenge.adapters.postgres import PostgresChallenge
@@ -25,11 +27,22 @@ from src.modules.challenge.service.challenge import (
     record_finding,
     resolve_finding,
 )
+from src.modules.challenge.service.ports import ChallengeQueue
 from src.platform.auth import Identity, current_identity
 from src.platform.db import get_session
 from src.platform.locale import MESSAGES
 
 router = APIRouter(prefix="/workspaces", tags=["challenge"])
+
+
+def get_challenge_queue(request: Request) -> ChallengeQueue:
+    return cast(ChallengeQueue, request.app.state.challenge_queue)
+
+
+def _trace_context() -> dict[str, str]:
+    carrier: dict[str, str] = {}
+    inject(carrier)
+    return carrier
 
 
 def _not_found(request: Request, key: str = "not_found_challenge") -> HTTPException:
@@ -93,6 +106,7 @@ async def open_option_challenge(
     request: Request,
     identity: Identity = Depends(current_identity),
     session: AsyncSession = Depends(get_session),
+    queue: ChallengeQueue = Depends(get_challenge_queue),
 ) -> ChallengeRunResponse:
     try:
         run = await open_challenge(
@@ -102,6 +116,8 @@ async def open_option_challenge(
             option_id,
             identity.subject,
             lang=request.state.locale,
+            queue=queue,
+            trace_context=_trace_context(),
         )
         await session.commit()
     except ChallengeNotFoundError as error:

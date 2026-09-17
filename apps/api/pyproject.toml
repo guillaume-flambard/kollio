@@ -64,6 +64,7 @@ files = [
     "src/modules/ideas/domain",
     "src/modules/iterations/domain",
     "src/modules/constraint_analysis/domain",
+    "src/modules/challenge/domain",
 ]
 
 [tool.ruff.lint.flake8-bugbear]

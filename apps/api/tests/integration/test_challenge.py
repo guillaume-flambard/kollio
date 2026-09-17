@@ -1,6 +1,7 @@
 import os
+from collections.abc import Mapping
 from contextlib import asynccontextmanager
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import httpx
 import pytest
@@ -75,6 +76,14 @@ async def _seed(session):
     }
 
 
+class _FakeQueue:
+    def __init__(self) -> None:
+        self.dispatched: list[UUID] = []
+
+    async def dispatch(self, run_id: UUID, trace_context: Mapping[str, str]) -> None:
+        self.dispatched.append(run_id)
+
+
 def _client(session, url, subject: str | None):
     app = create_app(Settings(_env_file=None, database_url=url))
     if subject is not None:
@@ -84,6 +93,7 @@ def _client(session, url, subject: str | None):
         yield session
 
     app.dependency_overrides[get_session] = override_session
+    app.state.challenge_queue = _FakeQueue()
     return httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test")
 
 
@@ -328,6 +338,8 @@ async def test_critic_finding_arrives_proposed(challenge_database):
             option.id,
             str(ids["owner_id"]),
             lang="en",
+            queue=_FakeQueue(),
+            trace_context={},
         )
         finding = await record_finding(
             repository,
@@ -364,6 +376,8 @@ async def test_confirm_and_dismiss_keep_the_record(challenge_database):
             option.id,
             str(ids["owner_id"]),
             lang="en",
+            queue=_FakeQueue(),
+            trace_context={},
         )
         proposed = await record_finding(
             repository,

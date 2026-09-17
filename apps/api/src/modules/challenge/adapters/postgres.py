@@ -19,7 +19,7 @@ from src.modules.decision_spaces.adapters.postgres import (
     DecisionSpaceParticipant,
 )
 from src.modules.ideas.adapters.postgres import User, WorkspaceMembership
-from src.modules.options.adapters.postgres import Option
+from src.modules.options.adapters.postgres import Option, OptionEvidence
 from src.platform.db import Base
 
 RUN_STATUS_CHECK = "status IN ('OPEN', 'RUNNING', 'COMPLETED', 'FAILED')"
@@ -51,6 +51,7 @@ class ChallengeRun(Base):
     status: Mapped[str] = mapped_column(String(12))
     opened_by: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     model: Mapped[str | None] = mapped_column(String(200))
+    failure_reason: Mapped[str | None] = mapped_column(Text)
     lang: Mapped[str] = mapped_column(String(2))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -213,3 +214,36 @@ class PostgresChallenge:
         await self.session.flush()
         await self.session.refresh(run)
         return run
+
+    async def run_by_id(self, run_id: UUID) -> ChallengeRun | None:
+        return await self.session.get(ChallengeRun, run_id)
+
+    async def set_run_model(self, run: ChallengeRun, model: str) -> ChallengeRun:
+        run.model = model
+        await self.session.flush()
+        await self.session.refresh(run)
+        return run
+
+    async def fail_run(self, run: ChallengeRun, reason: str, lang: str) -> ChallengeRun:
+        run.status = "FAILED"
+        run.failure_reason = reason
+        run.lang = lang
+        await self.session.flush()
+        await self.session.refresh(run)
+        return run
+
+    async def confirmed_evidence(
+        self, space_id: UUID, option_id: UUID
+    ) -> list[tuple[str, Contribution]]:
+        """The confirmed Contributions this Option presents, with their side."""
+        rows = await self.session.execute(
+            select(OptionEvidence.side, Contribution)
+            .join(Contribution, Contribution.id == OptionEvidence.contribution_id)
+            .where(
+                OptionEvidence.option_id == option_id,
+                Contribution.space_id == space_id,
+                Contribution.status == "confirmed",
+            )
+            .order_by(OptionEvidence.created_at, OptionEvidence.contribution_id)
+        )
+        return [(side, contribution) for side, contribution in rows.all()]

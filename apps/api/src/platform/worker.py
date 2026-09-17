@@ -11,6 +11,9 @@ from taskiq import Context as TaskiqContext
 from taskiq import SimpleRetryMiddleware, TaskiqDepends, TaskiqEvents, TaskiqState
 from taskiq_redis import RedisStreamBroker
 
+from src.modules.challenge.adapters.critic import LLMChallengeGateway
+from src.modules.challenge.adapters.postgres import PostgresChallenge
+from src.modules.challenge.service.challenge import execute_run
 from src.modules.constraint_analysis.adapters.litellm import (
     LiteLLMConstraintAnalysisGateway,
 )
@@ -196,4 +199,62 @@ async def execute_constraint_analysis(
             retrying=retries < max_retries,
             review=approved is not None,
         )
+        raise
+
+
+CHALLENGE_INTERRUPTED_REASON = "The challenge run could not finish"
+
+
+async def _fail_challenge_run(
+    sessions: async_sessionmaker[AsyncSession],
+    run_id: UUID,
+    reason: str,
+) -> None:
+    async with sessions() as session:
+        repository = PostgresChallenge(session)
+        run = await repository.run_by_id(run_id)
+        if run is not None and run.status == "RUNNING":
+            await repository.fail_run(run, reason, run.lang)
+            await session.commit()
+
+
+@broker.task(
+    task_name="challenge.execute",
+    timeout=180,
+    retry_on_error=True,
+    max_retries=3,
+)
+async def execute_challenge(
+    run_id: str,
+    trace_context: dict[str, str],
+    task_context: Annotated[TaskiqContext, TaskiqDepends()],
+) -> dict[str, Any]:
+    identifier = UUID(run_id)
+    otel_context = extract(carrier=trace_context)
+    tracer = trace.get_tracer("kollio.challenge")
+    gateway = LLMChallengeGateway(settings)
+    try:
+        with tracer.start_as_current_span("challenge.worker", context=otel_context) as span:
+            span.set_attribute("kollio.challenge.run_id", run_id)
+            span.set_attribute("kollio.task.class", gateway.task_class.value)
+            span.set_attribute("gen_ai.request.model", gateway.model)
+            async with task_context.state.sessions() as session:
+                repository = PostgresChallenge(session)
+                existing = await repository.run_by_id(identifier)
+                if existing is None:
+                    return {"run_id": run_id, "ignored": True}
+                span.set_attribute("kollio.locale", existing.lang)
+                span.set_attribute("kollio.space.id", str(existing.space_id))
+                run = await execute_run(repository, gateway, identifier, existing.lang)
+                await session.commit()
+            return {"run_id": run_id, "status": run.status}
+    except Exception as error:
+        retries = int(task_context.message.labels.get("_retries", 0)) + 1
+        max_retries = int(task_context.message.labels.get("max_retries", 3))
+        if retries >= max_retries:
+            await _fail_challenge_run(
+                task_context.state.sessions,
+                identifier,
+                f"{CHALLENGE_INTERRUPTED_REASON}: {type(error).__name__}",
+            )
         raise

@@ -10,6 +10,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from src.modules.branches.api.routes import router as branches_router
+from src.modules.challenge.adapters.taskiq import TaskiqChallengeQueue
 from src.modules.challenge.api.routes import router as challenge_router
 from src.modules.company_context.api.routes import router as company_context_router
 from src.modules.constraint_analysis.adapters.taskiq import TaskiqAnalysisQueue
@@ -73,6 +74,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app = FastAPI(title="Kollio API", lifespan=lifespan)
     app.state.analysis_queue = TaskiqAnalysisQueue()
+    app.state.challenge_queue = TaskiqChallengeQueue()
     app.dependency_overrides[get_settings] = lambda: settings
 
     @app.middleware("http")
