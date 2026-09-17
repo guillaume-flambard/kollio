@@ -115,7 +115,7 @@ test.describe('workspace navigation adapts', () => {
   test('NAV-mobile exposes every destination from the top bar at 375px', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 })
     const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
-    await page.goto('/workspace')
+    await page.goto('/workspace/ideas')
     await listResponse
     await expect(page.locator('.workspace-rail')).toBeHidden()
 
@@ -134,7 +134,7 @@ test.describe('workspace navigation adapts', () => {
   test('NAV-mobile filter strip fits without clipping at 375px', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 })
     const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
-    await page.goto('/workspace')
+    await page.goto('/workspace/ideas')
     await listResponse
     const rail = page.locator('.ideas-filter-rail')
     await expect(rail).toBeVisible()
@@ -146,7 +146,7 @@ test.describe('workspace navigation adapts', () => {
   test('NAV-desktop keeps the persistent rail at 1440px', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 })
     const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
-    await page.goto('/workspace')
+    await page.goto('/workspace/ideas')
     await listResponse
     await expect(page.locator('.workspace-rail')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Ouvrir la navigation' })).toHaveCount(0)

@@ -437,7 +437,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
     :reassurance="t('ideas.detail.loadError.reassurance')"
     :retry-label="t('ideas.detail.retry')"
     :back-label="t('ideas.detail.explore')"
-    :back-to="$localePath('/workspace')"
+    :back-to="$localePath('/workspace/ideas')"
     @retry="refresh"
   />
   <article
@@ -452,7 +452,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
 
       <div ref="documentRef" class="kollio-surface idea-document relative z-10 min-w-0 p-5 sm:p-7 lg:p-7 xl:p-9">
         <header class="idea-header">
-          <NuxtLink :to="$localePath('/workspace')" class="idea-breadcrumb inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-default">
+          <NuxtLink :to="$localePath('/workspace/ideas')" class="idea-breadcrumb inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-default">
             {{ t('navigation.ideas') }}
             <svg aria-hidden="true" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 18 6-6-6-6" /></svg>
             {{ t(`ideas.stage.${idea.stage}`) }}

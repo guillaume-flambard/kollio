@@ -24,7 +24,7 @@ function ideaLink(id: string) {
 
 <template>
   <div class="profile-shell">
-    <NuxtLink class="profile-back" :to="localePath('/workspace')"><span aria-hidden="true" v-text="glyphs.back" /> {{ t('ideas.profile.back') }}</NuxtLink>
+    <NuxtLink class="profile-back" :to="localePath('/workspace/ideas')"><span aria-hidden="true" v-text="glyphs.back" /> {{ t('ideas.profile.back') }}</NuxtLink>
 
     <p v-if="error?.statusCode === 404" class="profile-error">
       <strong>{{ t('ideas.profile.notFound') }}</strong>

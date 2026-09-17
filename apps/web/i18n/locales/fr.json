@@ -8,7 +8,105 @@
     "settings": "Contexte entreprise",
     "menuOpen": "Ouvrir la navigation",
     "menuClose": "Fermer la navigation",
-    "skipToContent": "Aller au contenu"
+    "skipToContent": "Aller au contenu",
+    "decisionSpaces": "Espaces de décision"
+  },
+  "decisionSpaces": {
+    "metaTitle": "Espaces de décision {'|'} Kollio",
+    "title": "Espaces de décision",
+    "description": "Les questions que votre équipe doit trancher, de l’exploration à l’apprentissage.",
+    "back": "Tous les espaces de décision",
+    "open": "Ouvrir un espace",
+    "cancel": "Annuler",
+    "retry": "Réessayer",
+    "error": {
+      "title": "Les espaces de décision n’ont pas pu être chargés",
+      "description": "La liste n’est pas disponible pour le moment. Réessayez dans un instant."
+    },
+    "empty": {
+      "title": "Aucune question en cours",
+      "description": "Ouvrez le premier espace de décision de cet espace de travail : une question, une équipe, et la trace de ce qui a été décidé."
+    },
+    "form": {
+      "title": "Nouvelle question à trancher",
+      "question": "Question",
+      "questionPlaceholder": "Ex. : quel canal d’acquisition essayer en premier ?",
+      "questionRequired": "La question est obligatoire.",
+      "description": "Contexte",
+      "descriptionPlaceholder": "Ce que l’équipe doit savoir pour partir du bon pied.",
+      "deadline": "Échéance",
+      "submit": "Ouvrir l’espace",
+      "submitting": "Ouverture…",
+      "failed": "L’espace de décision n’a pas pu être ouvert. Réessayez dans un instant."
+    },
+    "list": {
+      "owner": "Porteur",
+      "deadline": "Échéance",
+      "noDeadline": "Sans échéance",
+      "ownerLine": "Porteur · {name}",
+      "deadlineLine": "Échéance · {label}",
+      "participants": "{count} participant | {count} participants"
+    },
+    "header": {
+      "owner": "Porteur",
+      "deadline": "Échéance",
+      "participants": "Participants",
+      "noParticipants": "Aucun participant pour le moment"
+    },
+    "transition": {
+      "choose": "Nouveau statut",
+      "reason": "Raison de la réouverture",
+      "reasonRequired": "Une réouverture exige une raison.",
+      "submit": "Appliquer",
+      "failed": "Le changement de statut a été refusé. Rechargez la page et réessayez."
+    },
+    "status": {
+      "OPEN": "Ouvert",
+      "EXPLORING": "Exploration",
+      "CONVERGING": "Convergence",
+      "READY_TO_DECIDE": "Prêt à décider",
+      "DECIDED": "Décidé",
+      "TESTING": "En test",
+      "LEARNED": "Appris",
+      "REOPENED": "Réouvert"
+    },
+    "section": {
+      "pending": "Cette section arrive avec sa propre tranche.",
+      "explore": {
+        "label": "Explorer",
+        "title": "Explorer",
+        "body": "Les branches d’exploration de chaque participant, avec leur matière brute, puis la promotion des contributions qu’un humain confirme."
+      },
+      "converge": {
+        "label": "Convergence",
+        "title": "Convergence",
+        "body": "La carte vivante du raisonnement collectif : accords, désaccords, alternatives, inconnues, hypothèses à risque et doublons, corrigée par l’équipe."
+      },
+      "options": {
+        "label": "Options",
+        "title": "Options",
+        "body": "Les chemins structurés, chacun avec sa proposition, son mécanisme, ses coûts, ses hypothèses critiques et ses preuves pour et contre."
+      },
+      "decision": {
+        "label": "Décision",
+        "title": "Décision",
+        "body": "Le challenge de chaque option, puis le compte rendu de la décision : ce qui a été retenu, pourquoi, et ce qui déclencherait une révision."
+      },
+      "experiment": {
+        "label": "Expérience",
+        "title": "Expérience",
+        "body": "Les plages de scénario éditables, puis l’expérience avec son résultat attendu et son résultat observé."
+      },
+      "learning": {
+        "label": "Apprentissage",
+        "title": "Apprentissage",
+        "body": "La leçon réutilisable qu’un humain confirme après un résultat, conservée pour les décisions suivantes."
+      }
+    },
+    "notFound": {
+      "title": "Cet espace de décision est introuvable",
+      "description": "Il n’existe pas dans cet espace de travail, ou il n’est pas accessible avec votre compte."
+    }
   },
   "meta": {
     "title": "Kollio {'|'} Des idées aux projets collectifs",

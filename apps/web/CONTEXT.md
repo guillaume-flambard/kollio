@@ -35,3 +35,11 @@ _Avoid_: Dashboard, admin panel
 **Observer**:
 A signed-in user who follows or comments without team membership.
 _Avoid_: Visitor, lurker, fan
+
+**DecisionSpaces**:
+The list at `/workspace`: the questions the workspace must settle, each with its owner, status, deadline and participants, plus the form that opens a new one. The idea Explorer lives one level below at `/workspace/ideas`.
+_Avoid_: Home, dashboard, feed
+
+**SpaceShell**:
+The frame of one Decision Space at `/workspace/decision-spaces/[spaceId]`: the question, its facts and its status, the six section routes (Explore, Converge, Options, Decision, Experiment, Learning) and the transitions the lifecycle permits from the current status. A section whose capability has not shipped says what will live there.
+_Avoid_: Tabs (the sections are routes, each addressable), detail page, workspace

@@ -22,7 +22,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.route('**/api/workspaces/workspace-one/ideas?*', route => route.fulfill({
         json: { items: [], total: 0, limit: 5, offset: 0 } satisfies IdeaPageResponse,
       }))
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/ideas`)
       await page.getByLabel(messages.ideas.detail.team.soughtTitle).selectOption('marketing')
       await expect.poll(() => requested.some(url => url.includes('sought_role=marketing')), { timeout: 15_000 }).toBe(true)
     })
@@ -32,7 +32,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
         json: { items: [], total: 0, limit: 5, offset: 0 } satisfies IdeaPageResponse,
       }))
       const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/ideas`)
       await listResponse
       await expect(page.getByLabel(messages.ideas.detail.team.soughtTitle)).toBeVisible()
       await expect(page.getByText('IA et société')).toHaveCount(0)
@@ -42,7 +42,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.route('**/api/workspaces/workspace-one/ideas?*', route => route.fulfill({
         json: { items: [], total: 0, limit: 5, offset: 0 } satisfies IdeaPageResponse,
       }))
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/ideas`)
       const rail = page.locator('.ideas-filter-rail')
       await expect(rail.getByRole('button', { name: new RegExp(messages.ideas.explorer.forYou) })).toHaveCount(1)
       await expect(rail.getByRole('button', { name: new RegExp(messages.ideas.explorer.recent) })).toHaveCount(0)

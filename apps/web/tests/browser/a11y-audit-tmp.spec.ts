@@ -142,7 +142,7 @@ test.describe('A11Y-TMP explorer', () => {
       await mockAll(page)
       const prefix = locale === 'fr' ? '' : '/en'
       const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/ideas`)
       await listResponse
       const data = await page.evaluate(() => {
         const search = document.querySelector('.ideas-search input') as HTMLInputElement | null
@@ -212,7 +212,7 @@ test.describe('A11Y-TMP explorer', () => {
     await mockAll(page)
     await page.setViewportSize({ width: 390, height: 844 })
     const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
-    await page.goto('/workspace')
+    await page.goto('/workspace/ideas')
     await listResponse
     const toggle = page.getByRole('button', { name: /menu|ouvrir/i }).first()
     await toggle.click()

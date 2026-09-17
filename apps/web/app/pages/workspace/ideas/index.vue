@@ -70,7 +70,7 @@ watch(() => ideaPage.value?.items, items => {
 
 function replaceFilters(updates: Record<string, string | undefined>) {
   const nextQuery = Object.fromEntries(Object.entries({ ...route.query, ...updates }).filter(([key, value]) => key !== 'page' && Boolean(value)))
-  void router.replace({ path: localePath('/workspace'), query: nextQuery })
+  void router.replace({ path: localePath('/workspace/ideas'), query: nextQuery })
 }
 function scheduleSearch() {
   clearTimeout(searchTimer)
@@ -90,7 +90,7 @@ function relativeDate(date: string) {
 }
 function pageLocation(page: number) {
   return {
-    path: localePath('/workspace'),
+    path: localePath('/workspace/ideas'),
     query: { ...route.query, ...(activeWorkspace.value ? { workspace: activeWorkspace.value.id } : {}), page: page > 1 ? String(page) : undefined },
   }
 }

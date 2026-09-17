@@ -103,7 +103,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
 
     test('DEPOSIT-01 goes from the explorer action to the form', async ({ page }) => {
       await mockIo(page, resolved)
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/ideas`)
       await page.getByRole('link', { name: new RegExp(messages.ideas.explorer.create) }).click()
       await expect(page).toHaveURL(new RegExp(`${prefix}/workspace/deposit$`))
       await expect(page.getByRole('heading', { name: deposit.title, exact: true })).toBeVisible()

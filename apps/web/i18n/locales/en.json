@@ -8,7 +8,105 @@
     "settings": "Company context",
     "menuOpen": "Open navigation",
     "menuClose": "Close navigation",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "decisionSpaces": "Decision spaces"
+  },
+  "decisionSpaces": {
+    "metaTitle": "Decision spaces {'|'} Kollio",
+    "title": "Decision spaces",
+    "description": "The questions your team must settle, from exploration to learning.",
+    "back": "All decision spaces",
+    "open": "Open a space",
+    "cancel": "Cancel",
+    "retry": "Try again",
+    "error": {
+      "title": "The decision spaces could not be loaded",
+      "description": "The list is not available right now. Try again in a moment."
+    },
+    "empty": {
+      "title": "No question in flight",
+      "description": "Open this workspace’s first decision space: one question, a team, and the record of what was decided."
+    },
+    "form": {
+      "title": "A new question to settle",
+      "question": "Question",
+      "questionPlaceholder": "e.g. which acquisition channel should we try first?",
+      "questionRequired": "The question is required.",
+      "description": "Context",
+      "descriptionPlaceholder": "What the team needs to know to start in the right place.",
+      "deadline": "Deadline",
+      "submit": "Open the space",
+      "submitting": "Opening…",
+      "failed": "The decision space could not be opened. Try again in a moment."
+    },
+    "list": {
+      "owner": "Owner",
+      "deadline": "Deadline",
+      "noDeadline": "No deadline",
+      "ownerLine": "Owner · {name}",
+      "deadlineLine": "Deadline · {label}",
+      "participants": "{count} participant | {count} participants"
+    },
+    "header": {
+      "owner": "Owner",
+      "deadline": "Deadline",
+      "participants": "Participants",
+      "noParticipants": "No participant yet"
+    },
+    "transition": {
+      "choose": "New status",
+      "reason": "Reason for reopening",
+      "reasonRequired": "Reopening requires a reason.",
+      "submit": "Apply",
+      "failed": "The status change was refused. Reload the page and try again."
+    },
+    "status": {
+      "OPEN": "Open",
+      "EXPLORING": "Exploring",
+      "CONVERGING": "Converging",
+      "READY_TO_DECIDE": "Ready to decide",
+      "DECIDED": "Decided",
+      "TESTING": "Testing",
+      "LEARNED": "Learned",
+      "REOPENED": "Reopened"
+    },
+    "section": {
+      "pending": "This section lands with its own slice.",
+      "explore": {
+        "label": "Explore",
+        "title": "Explore",
+        "body": "Each participant’s exploration branches with their raw material, then the promotion of the contributions a person confirms."
+      },
+      "converge": {
+        "label": "Converge",
+        "title": "Converge",
+        "body": "The living map of the team’s reasoning: agreements, conflicts, alternatives, unknowns, assumption hotspots and duplicates, corrected by the team."
+      },
+      "options": {
+        "label": "Options",
+        "title": "Options",
+        "body": "The structured paths, each with its proposal, mechanism, costs, critical assumptions and evidence for and against."
+      },
+      "decision": {
+        "label": "Decision",
+        "title": "Decision",
+        "body": "The challenge of each option, then the decision record: what was chosen, why, and what would trigger a revisit."
+      },
+      "experiment": {
+        "label": "Experiment",
+        "title": "Experiment",
+        "body": "The editable scenario ranges, then the experiment with its expected and observed outcome."
+      },
+      "learning": {
+        "label": "Learning",
+        "title": "Learning",
+        "body": "The reusable lesson a person confirms after an outcome, kept for the decisions that follow."
+      }
+    },
+    "notFound": {
+      "title": "This decision space was not found",
+      "description": "It does not exist in this workspace, or it is not reachable with your account."
+    }
   },
   "meta": {
     "title": "Kollio {'|'} From ideas to shared projects",

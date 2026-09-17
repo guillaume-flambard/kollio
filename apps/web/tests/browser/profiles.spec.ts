@@ -58,7 +58,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.route(/\/api\/workspaces$/, route => route.fulfill({ json: [{ id: 'workspace-one', name: 'Team', role: 'member' }] } satisfies WorkspaceResponse[]))
       await page.route(/\/api\/workspaces\/workspace-one\/ideas\?*/, route => route.fulfill({ json: explorerPage }))
       await page.route(/\/api\/users\/owner-one$/, route => route.fulfill({ json: profile }))
-      await page.goto(`${prefix}/workspace`)
+      await page.goto(`${prefix}/workspace/ideas`)
       await page.locator('aside.idea-preview').getByRole('link', { name: 'Propriétaire' }).click()
       await expect(page).toHaveURL(new RegExp(`${prefix}/workspace/people/owner-one$`))
       await expect(page.getByRole('heading', { name: p.actsTitle })).toBeVisible()
