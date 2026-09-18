@@ -14,7 +14,7 @@ Status: complete.
 
 Live, in production, after the deploy:
 
-- Not applicable. The guard runs in `make verify` and in Foundations CI and never ships with the app, and every key this change removes was unused, so no served string changes. Nothing was observed on kollio.memolabs.dev for that reason, not because the check was skipped.
+- Not applicable. The guard runs in `make verify` and in Foundations CI and never ships with the app, and every key this change removes was unused, so no served string changes. Nothing was observed on kollio.example.com for that reason, not because the check was skipped.
 
 Local, before deploy:
 

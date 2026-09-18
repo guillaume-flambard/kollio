@@ -75,7 +75,7 @@ services:
       LLM_API_KEY: ${LLM_API_KEY:-}
       LOGTO_ISSUER: ${LOGTO_ISSUER:-}
       LOGTO_JWKS_URL: ${LOGTO_JWKS_URL:-}
-      LOGTO_AUDIENCE: https://kollio.memolabs.dev/api
+      LOGTO_AUDIENCE: https://kollio.example.com/api
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:-}
       OTEL_EXPORTER_OTLP_HEADERS: ${OTEL_EXPORTER_OTLP_HEADERS:-}
       LANGCHAIN_TRACING_V2: "false"

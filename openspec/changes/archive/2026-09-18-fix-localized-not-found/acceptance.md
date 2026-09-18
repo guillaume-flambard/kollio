@@ -22,11 +22,11 @@ Status: complete.
 
 Live, in production, after the deploy:
 
-- `https://kollio.memolabs.dev/`: HTTP 200, 65 945 bytes.
-- `https://kollio.memolabs.dev/no-such-page`: HTTP 404, `text/html`, 13 947 bytes, `lang="fr-FR"`,
+- `https://kollio.example.com/`: HTTP 200, 65 945 bytes.
+- `https://kollio.example.com/no-such-page`: HTTP 404, `text/html`, 13 947 bytes, `lang="fr-FR"`,
   title `Cette page n'existe pas · Kollio`, a link back to `/` labelled `Revenir à l'accueil`, and
   no raw key path anywhere in the response.
-- `https://kollio.memolabs.dev/en/no-such-page`: HTTP 404, `text/html`, 13 942 bytes, `lang="en-GB"`,
+- `https://kollio.example.com/en/no-such-page`: HTTP 404, `text/html`, 13 942 bytes, `lang="en-GB"`,
   title `This page does not exist · Kollio`, a link back to `/en` labelled `Back to home`, and no
   raw key path.
 - The deploy needed a companion fix in `lab-infra` (PR #83, merged as `8157414`): the `kollio-web`

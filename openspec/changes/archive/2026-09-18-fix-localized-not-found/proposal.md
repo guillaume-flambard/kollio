@@ -2,7 +2,7 @@
 
 ## Why
 
-A visitor who mistypes a path never meets Kollio. On 2026-09-18, `https://kollio.memolabs.dev/nope` returned **HTTP 404 with 16,639 bytes of `text/html`**, and `/en/nope` returned **16,674 bytes**, both under a plain `Accept: */*` and under a browser `Accept` header. The body is Nuxt's default error page: its title reads `404 - Page not found: /nope | Nuxt`, it carries no Kollio brand, no navigation and no way back, and **its text is English whichever locale prefix the reader used**, so a French reader and an English reader see the same English screen.
+A visitor who mistypes a path never meets Kollio. On 2026-09-18, `https://kollio.example.com/nope` returned **HTTP 404 with 16,639 bytes of `text/html`**, and `/en/nope` returned **16,674 bytes**, both under a plain `Accept: */*` and under a browser `Accept` header. The body is Nuxt's default error page: its title reads `404 - Page not found: /nope | Nuxt`, it carries no Kollio brand, no navigation and no way back, and **its text is English whichever locale prefix the reader used**, so a French reader and an English reader see the same English screen.
 
 This is the JOURNEY-1 finding of the production journey audit (`.agents/skills/ux-flow-auditor/evidence/journey-report.md`), the only public dead end that audit reached. The audit captured a raw JSON body at the time; the re-measurement above shows the deployed build answers with the framework's HTML error page instead, so that one detail of the finding has moved, but the finding itself stands: the product is bilingual by contract, the landing promises a private space that looks cared for, and a stranger who lands on a wrong path gets none of it.
 

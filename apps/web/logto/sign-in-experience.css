@@ -28,7 +28,7 @@
  * links #493b57/#c5b3d4; headline Bricolage 700 #242039/#f7f4f8; page wash
  * #f7f5f7/#1c1920; card #ffffff/#252129 + radius 16 + --kollio-shadow;
  * inputs Geist 14px #25213a/#f7f4f8 (Logto's own 8px ring + 44px height kept).
- * Logo swaps to https://kollio.memolabs.dev/brand/kollio-mark.svg (repo:
+ * Logo swaps to https://kollio.example.com/brand/kollio-mark.svg (repo:
  * apps/web/public/brand/kollio-mark.svg). "Powered by Logto" kept as-is.
  */
 @font-face {
@@ -78,7 +78,7 @@ main[class*='main'] {
   box-shadow: 0 10px 30px rgba(73, 59, 87, .055);
 }
 main[class*='main'] img[class*='logo'] {
-  content: url('https://kollio.memolabs.dev/brand/kollio-mark.svg');
+  content: url('https://kollio.example.com/brand/kollio-mark.svg');
   height: 40px;
   width: auto;
 }

@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:63799/0"
     logto_issuer: str = ""
     logto_jwks_url: str = ""
-    logto_audience: str = "https://kollio.memolabs.dev/api"
+    logto_audience: str = "https://kollio.example.com/api"
     llm_base_url: str = "http://localhost:4000/v1"
     llm_api_key: SecretStr = SecretStr("")
     llm_model: str = "kollio-default"

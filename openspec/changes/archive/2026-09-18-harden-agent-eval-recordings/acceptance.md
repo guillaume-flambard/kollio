@@ -15,7 +15,7 @@ Status: complete.
 
 Live, in production, after the deploy:
 
-- Not applicable. This change adds an offline test module; it ships nothing to `kollio.memolabs.dev` and calls no provider. The corpus runs in `make verify` and in the `verify` job of Foundations CI.
+- Not applicable. This change adds an offline test module; it ships nothing to `kollio.example.com` and calls no provider. The corpus runs in `make verify` and in the `verify` job of Foundations CI.
 
 Local, before deploy:
 

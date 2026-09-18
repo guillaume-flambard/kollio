@@ -87,9 +87,9 @@ USD 0.000556.
   `GET /ideas/{idea_id}`. Non-members receive 404, avoiding idea enumeration.
 - JWT signature, issuer, audience, expiry and subject validation; fail closed without
   identity configuration. Token validation tests cover each rejection.
-- The production issuer `https://kollio-auth.memolabs.dev/oidc`, JWKS endpoint, Web
+- The production issuer `https://auth.example.com/oidc`, JWKS endpoint, Web
   application identifier, and API audience are recorded in `.env.example`. Callback and
-  sign-out URLs cover localhost and `https://kollio.memolabs.dev`. Secrets remain in the
+  sign-out URLs cover localhost and `https://kollio.example.com`. Secrets remain in the
   macOS password manager and encrypted infrastructure configuration.
 - Logto OSS 1.43.0 runs from a digest-pinned image with a dedicated PostgreSQL database.
   Its public OIDC discovery and JWKS endpoints pass over HTTPS, while the Admin Console is
@@ -135,7 +135,7 @@ added the encrypted environment, deterministic WAL ownership and recovery toolin
 by the live PITR rehearsal. All infrastructure checks passed through the supported lab
 deployment path.
 
-- Public `https://kollio.memolabs.dev/` and `/api/health` return HTTP 200. Postgres,
+- Public `https://kollio.example.com/` and `/api/health` return HTTP 200. Postgres,
   Redis, LiteLLM, API and web report healthy. As verified on 2026-09-13, production still
   runs the earlier ARQ worker revision `9f13572`; the Taskiq and LangGraph workflow remains
   pending in pull request 11.
@@ -172,11 +172,11 @@ These checks close the remaining Phase 0 integration criteria against the public
 deployment.
 
 - Public liveness and readiness through Traefik return HTTP 200 on
-  `https://kollio.memolabs.dev/` and on `https://kollio.memolabs.dev/api/health`, with
+  `https://kollio.example.com/` and on `https://kollio.example.com/api/health`, with
   `{"status": "ok"}` from the API.
 - Browser authentication: signing in through the hosted Logto form, reached from
-  `https://kollio.memolabs.dev/sign-in`, lands on
-  `https://kollio.memolabs.dev/workspace` (`Espace de travail`). The signed-in page
+  `https://kollio.example.com/sign-in`, lands on
+  `https://kollio.example.com/workspace` (`Espace de travail`). The signed-in page
   renders in the account locale (French), reports 447 initiatives, and carries the
   workspace query parameter `e2dd68da-ab21-502d-b59a-d5fecca416e9` together with the
   private pilot idea `f8a15602-5da0-48c5-b89d-ce49ca6610b1`. Signing out restores the

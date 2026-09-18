@@ -1,6 +1,8 @@
 # Production journey audit
 
-Method: HTTP probes against `https://kollio.memolabs.dev` with curl (status code, redirect target, body size, `<title>`, `html` lang, heading and landmark counts, `aria-label` inventory) plus inspection of the server-rendered HTML of the public screens. No credentials were used and no authentication was bypassed, weakened or invented, so every screen behind the sign-in gate is reported as NOT VERIFIED with the gate's own response cited as the evidence. Every step was attempted in French (`/`) and in English (`/en`).
+Note: the host names in this record were replaced with examples when the repository was prepared for publication. The measurements, status codes, byte counts and conclusions are the ones observed at the time, only the names changed.
+
+Method: HTTP probes against `https://kollio.example.com` with curl (status code, redirect target, body size, `<title>`, `html` lang, heading and landmark counts, `aria-label` inventory) plus inspection of the server-rendered HTML of the public screens. No credentials were used and no authentication was bypassed, weakened or invented, so every screen behind the sign-in gate is reported as NOT VERIFIED with the gate's own response cited as the evidence. Every step was attempted in French (`/`) and in English (`/en`).
 
 Result: 1 finding (0 blocker, 0 major, 1 minor), 4 checks verified clean, and 9 journey steps not verified because they sit behind authentication.
 
@@ -8,17 +10,17 @@ Result: 1 finding (0 blocker, 0 major, 1 minor), 4 checks verified clean, and 9 
 
 ### JOURNEY-1 (minor) - an unknown path answers with a raw JSON error
 
-URL: `https://kollio.memolabs.dev/nope` (same shape for any unknown path, including under `/en`).
+URL: `https://kollio.example.com/nope` (same shape for any unknown path, including under `/en`).
 
 Observed: HTTP 404 with a JSON body:
 
 ```
-{"error":true,"url":"https://kollio.memolabs.dev/nope","statusCode":404,"statusMessage":"Page not found: /nope","message":"Page not found: /nope","data":{"path":"/nope"}}
+{"error":true,"url":"https://kollio.example.com/nope","statusCode":404,"statusMessage":"Page not found: /nope","message":"Page not found: /nope","data":{"path":"/nope"}}
 ```
 
 Expected: a localized not-found page in the active locale with a way back to the landing. The product already ships localized screens in French and English, and the landing claims a private, well-kept space.
 
-Repro: `curl -s https://kollio.memolabs.dev/nope`
+Repro: `curl -s https://kollio.example.com/nope`
 
 Impact: a visitor who mistypes a path reads an English technical payload with no navigation and no product surface. It is the only public dead end this audit could reach.
 
@@ -27,7 +29,7 @@ Impact: a visitor who mistypes a path reads an English technical payload with no
 - Landing FR at `/`: HTTP 200, 64566 bytes, `html lang="fr-FR"`, one `h1` ("Confrontez vos initiatives au réel, gardez la trace de chaque décision et réunissez les bonnes personnes dans un espace privé"), one `main`, two `nav`, visible prose in French.
 - Landing EN at `/en`: HTTP 200, 64217 bytes, `html lang="en-GB"`, one `h1`, one `main`, two `nav`, English prose.
 - No raw translation keys on either landing: scanning the server-rendered HTML for `ideas.*` key paths returns nothing, so the blocker fixed in `de8b913` is absent from what production serves.
-- The sign-in gate holds: `/workspace`, `/en/workspace`, `/workspace/ideas` and `/workspace/deposit` all answer 302 to `/sign-in`, which answers 302 to the Logto authorization endpoint (`kollio-auth.memolabs.dev`, `response_type=code`, `code_challenge_method=S256`, `resource=https://kollio.memolabs.dev/api`). `/sign-out` answers 302 to the Logto end-session endpoint with `post_logout_redirect_uri=/`.
+- The sign-in gate holds: `/workspace`, `/en/workspace`, `/workspace/ideas` and `/workspace/deposit` all answer 302 to `/sign-in`, which answers 302 to the Logto authorization endpoint (`auth.example.com`, `response_type=code`, `code_challenge_method=S256`, `resource=https://kollio.example.com/api`). `/sign-out` answers 302 to the Logto end-session endpoint with `post_logout_redirect_uri=/`.
 - Cross-reference: production also serves two navigation landmarks with the same name (`Navigation principale` in French, `Main navigation` in English), which is the accessibility finding A11Y-3 in `a11y-report.md`, observed here on the deployed build.
 
 ## Journey grid

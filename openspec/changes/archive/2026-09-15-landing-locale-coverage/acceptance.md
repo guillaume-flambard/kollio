@@ -91,7 +91,7 @@ prefix, without enumerating the runtime values.
   integration and performance, not this change.
 - The served-page check ran against a local production preview, not against the
   deployed site. Re-running
-  `curl -s https://kollio.memolabs.dev/ | grep -o 'landing\.[a-zA-Z.]*'` after the
+  `curl -s https://kollio.example.com/ | grep -o 'landing\.[a-zA-Z.]*'` after the
   deploy is the last step.
 - GitHub branch protection is still not enforced on this repository (HTTP 403,
   GitHub Pro or a public repository required, rechecked on 2026-09-13), so the

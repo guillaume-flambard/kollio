@@ -1,8 +1,8 @@
-# Kollio — documents de projet
+# Kollio
 
-**Kollio** — un "GitHub des idées" : une plateforme collaborative où l'on dépose une idée, où l'IA la pressure-teste (le tueur de contraintes), où l'on itère façon commits/branches, et où une équipe se forme autour d'elle.
+**Kollio** est un espace de décision pour équipes privées. On y dépose une idée, l'IA la confronte au réel (le tueur de contraintes), l'équipe explore, converge, tranche et documente la décision, puis l'éprouve par une expérience et en tire un apprentissage. Le flux privé, c'est-à-dire qui résout quoi avec qui et ce que ça a donné, est la vraie matière du produit.
 
-Ces documents sont la **source de vérité** du projet. Ils sont destinés à être lus par des agents de code (Astra, Claude Code) et par OpenSpec. Déposer le contenu à la **racine du dépôt**.
+Ce dépôt est la **source de vérité** du projet : documentation produit, décisions d'architecture, spécifications et roadmap. Il est écrit pour être lu par des humains et par des agents de code (voir `AGENTS.md`), et ses specs vivent sous `openspec/`.
 
 ## Ordre de lecture
 1. `AGENTS.md` — instructions pour les agents de code (à lire en premier)
@@ -21,10 +21,17 @@ Ces documents sont la **source de vérité** du projet. Ils sont destinés à ê
 14. `docs/12-agentic-stack-2026.md` — décision agentique vérifiée en 2026 et responsabilités de chaque brique
 
 ## Statut
-Pré-PMF. Un back-end existe déjà (Python + Langfuse + SQLite sur VPS Netcup) et sera solidifié/migré selon `docs/03-architecture.md`. Ne pas partir de zéro : migrer.
+Pré-PMF, en pilote privé. Le pivot vers la décision collaborative est livré de bout en bout côté écrans : espaces de décision, explore, converge, options, décision, expérience, apprentissage, membres et inbox. Les specs correspondantes ont rejoint le registre canonique (`openspec/specs`), et les documents de fondation restent la référence pour l'architecture, le modèle de données et la stratégie. Mesuré le 2026-09-18 : 322 tests navigateur et 557 tests API passent, les catalogues FR/EN sont à parité à 1013 clés, et `make verify` porte tout cela. Restent ouverts la couche investisseurs (hors V1) et l'extension du corpus d'évaluation aux surfaces du pivot.
 
 ## Principe directeur
-Bâtir du **solide sans sur-ingénierie**. Chaque brique se remplace individuellement quand une métrique le réclame — jamais "au cas où".
+Bâtir du **solide sans sur-ingénierie**. Chaque brique se remplace individuellement quand une métrique le réclame, jamais "au cas où".
+
+## Contribuer
+- `CONTRIBUTING.md` dit comment lancer le projet et comment une modification est livrée.
+- `CODE_OF_CONDUCT.md` et `SECURITY.md` couvrent la conduite attendue et la divulgation privée d'une faille.
+- Les issues et les pull requests passent par les modèles de `.github/`.
+
+Kollio est distribué sous **licence Apache-2.0** : voir `LICENSE`.
 
 ## Local foundations
 
@@ -46,5 +53,4 @@ database with the Alembic migrations applied. Never point tests at imported data
 Provider calls require `KOLLIO_RUN_LIVE_EVALS=1`; ordinary checks use recordings.
 
 See `docs/11-bootstrap-status.md` for resolved versions, evidence and unfinished
-Phase 0 acceptance criteria. The current implementation is a foundation, not the
-complete V1 product.
+Phase 0 acceptance criteria.

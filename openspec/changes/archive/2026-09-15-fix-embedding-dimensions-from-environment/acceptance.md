@@ -65,7 +65,7 @@ was redeployed with the five embedding variables.
 - `docker exec kollio-api printenv` lists exactly five `EMBEDDING_*` variables:
   `EMBEDDING_MODEL=kollio-embedding`, `EMBEDDING_SOURCE_MODEL=text-embedding-3-large`,
   `EMBEDDING_DIMENSIONS=1536` and both E5 prefixes empty.
-- `https://kollio.memolabs.dev/` and `/api/health` both answer 200.
+- `https://kollio.example.com/` and `/api/health` both answer 200.
 - Through the gateway, `GET /v1/models` lists `kollio-embedding`, and an
   embedding call on that alias returns five vectors of 1536 dimensions. The
   reviewed French query ranks its English semantic counterpart at 0.7855 against

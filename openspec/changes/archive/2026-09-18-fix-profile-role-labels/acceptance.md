@@ -13,7 +13,7 @@ Status: complete.
 ## Verification runs (2026-09-18)
 
 Live, in production, after the deploy:
-- Nothing is recorded yet. This change carries its own commit and no deploy has been made, so `kollio.memolabs.dev` still serves the pre-fix build. The deploy and a production read of the profile page belong in the delivery comment on the commit, not here.
+- Nothing is recorded yet. This change carries its own commit and no deploy has been made, so `kollio.example.com` still serves the pre-fix build. The deploy and a production read of the profile page belong in the delivery comment on the commit, not here.
 
 Local, before deploy:
 - `node scripts/check_locales.mjs` → `FR/EN translation keys match, and all 1022 catalog keys cover their usages.` (down from 1029 after the seven legacy keys left both catalogs in step).

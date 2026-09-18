@@ -25,7 +25,7 @@ Re-verified on `main` 2026-09-15 against an isolated pgvector database.
 - Contract: `export_openapi` hash unchanged, `generate:client` produces no diff.
 - `pnpm build` + `check_web_performance_budgets.mjs`: pass (JS 10.7%, CSS 14.4%, images 0.4%).
 - CI `Foundations CI` on `main`: success (runs 34906527316, 34905144487, 34903671578, 34901277882, 34899597676).
-- Deployed: `https://kollio.memolabs.dev/api/health` returns `{"status":"ok"}`; landing returns HTTP 200. Prod runs merge commit `9f13572`.
+- Deployed: `https://kollio.example.com/api/health` returns `{"status":"ok"}`; landing returns HTTP 200. Prod runs merge commit `9f13572`.
 
 ## Known boundaries
 

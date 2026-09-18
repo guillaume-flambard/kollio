@@ -6,7 +6,7 @@ Date: 2026-09-16
 ## Context
 
 Kollio delegates authentication to self-hosted Logto OSS 1.43.0 at
-`kollio-auth.memolabs.dev`, reached through `@logto/nuxt` and Logto's hosted
+`auth.example.com`, reached through `@logto/nuxt` and Logto's hosted
 sign-in experience. That experience was never customised, so users leaving the
 product land on Logto's stock default skin on a different host. It reads as an
 old, foreign login page. Logto officially supports two remedies: a custom UI
