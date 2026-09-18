@@ -15,7 +15,7 @@ Status: complete.
 
 Live, in production, after the deploy:
 
-- The infrastructure half is deployed and observed: `guillaume-flambard/lab-infra` pull request #85 (squash-merged, merge commit `36212d7292d69e8ebc7c832e80e01082e88924c2`) provides `NUXT_LOGTO_RESOURCES=["https://kollio.memolabs.dev/api"]` to the `kollio-web` service, applied with `make deploy-stack app=kollio force=1` (`ok=14 changed=3 failed=0`). The running container reports the variable, is healthy, `https://kollio.memolabs.dev/` answers 200, and `/sign-in` redirects to the identity provider with `resource=https://kollio.memolabs.dev/api`.
+- The infrastructure half is deployed and observed: `guillaume-flambard/lab-infra` pull request #85 (squash-merged, merge commit `36212d7292d69e8ebc7c832e80e01082e88924c2`) provides `NUXT_LOGTO_RESOURCES` to the `kollio-web` service with a one-entry list holding the API resource indicator of the operator's host, applied with `make deploy-stack app=kollio force=1` (`ok=14 changed=3 failed=0`). The running container reports the variable, is healthy, the landing page answers 200, and `/sign-in` redirects to the identity provider with a `resource` parameter equal to that same indicator. The host names themselves are left out of this record, which the guard below requires of every tracked file.
 - The code half of this change reaches production with the image built from this commit, so at the time of writing the container still runs the previous image, which carries the operator's host in its own bundle and ignores the resource variable. Reading the named resource and the canonical URLs back from the deployed site belongs to the delivery comment; the local evidence below already exercises the same code paths.
 
 Local, before deploy:
