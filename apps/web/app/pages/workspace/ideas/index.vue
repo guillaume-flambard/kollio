@@ -166,7 +166,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
               :date-label="relativeDate(idea.created_at)"
               :contributor-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
               :avatar-label="t('ideas.explorer.contributors', { count: idea.collaborators?.length ?? 0 })"
-              :expertise-label="idea.collaborators?.[0]?.roles[0] ? t(`ideas.role.${idea.collaborators[0].roles[0]}`) : undefined"
+              :expertise-label="idea.collaborators?.[0]?.roles[0] ? t(`ideas.detail.roles.${idea.collaborators[0].roles[0]}`) : undefined"
               :roles-label="idea.sought_roles?.length ? idea.sought_roles.map(role => t(`ideas.function.${role}`)).join(' · ') : undefined"
               @select="selectIdea(idea)"
             />

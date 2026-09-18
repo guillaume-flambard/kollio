@@ -1279,15 +1279,6 @@
       "timeoutRetry": "Relancer l’analyse",
       "error": "Le dépôt a échoué. Réessayez."
     },
-    "role": {
-      "owner": "Porteur",
-      "designer": "Designer",
-      "dev": "Développement",
-      "commercial": "Commercial",
-      "growth": "Growth",
-      "data": "Data",
-      "product": "Produit"
-    },
     "profile": {
       "metaTitle": "Profil {'|'} Kollio",
       "back": "Retour",

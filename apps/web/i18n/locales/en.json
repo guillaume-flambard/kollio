@@ -1279,15 +1279,6 @@
       "timeoutRetry": "Run the analysis again",
       "error": "The deposit failed. Try again."
     },
-    "role": {
-      "owner": "Owner",
-      "designer": "Designer",
-      "dev": "Engineering",
-      "commercial": "Commercial",
-      "growth": "Growth",
-      "data": "Data",
-      "product": "Product"
-    },
     "profile": {
       "metaTitle": "Profile {'|'} Kollio",
       "back": "Back",

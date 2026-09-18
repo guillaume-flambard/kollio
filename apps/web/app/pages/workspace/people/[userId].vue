@@ -40,7 +40,7 @@ function ideaLink(id: string) {
         <KollioPersonRow :name="profile.display_name" :meta="profile.handle ? `@${profile.handle}` : ''" :avatar-key="profile.avatar_key || 'lilac'" />
         <p v-if="profile.bio" class="profile-bio">{{ profile.bio }}</p>
         <ul class="profile-roles" :aria-label="t('ideas.profile.rolesTitle')">
-          <li v-for="role in profile.roles" :key="role">{{ t(`ideas.role.${role}`) }}</li>
+          <li v-for="role in profile.roles" :key="role">{{ t(`ideas.detail.roles.${role}`) }}</li>
         </ul>
       </header>
 
@@ -59,7 +59,7 @@ function ideaLink(id: string) {
         <h2>{{ t('ideas.profile.teamsTitle') }}</h2>
         <ul v-if="profile.memberships.length" role="list">
           <li v-for="membership in profile.memberships" :key="`${membership.idea_id}-${membership.role}`">
-            <strong>{{ t(`ideas.role.${membership.role}`) }}</strong>
+            <strong>{{ t(`ideas.function.${membership.role}`) }}</strong>
             <span>{{ t('ideas.profile.roleIn', { idea: membership.idea_title }) }}</span>
             <NuxtLink class="profile-open" :to="ideaLink(membership.idea_id)"><span aria-hidden="true" v-text="glyphs.forward" /></NuxtLink>
           </li>
