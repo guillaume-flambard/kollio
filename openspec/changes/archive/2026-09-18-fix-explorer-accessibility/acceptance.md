@@ -14,7 +14,7 @@ Status: complete.
 
 Live, in production, after the deploy:
 
-- Not observed yet. The fix is committed locally only, and `kollio.memolabs.dev` still serves the build of 2026-09-18T12:41:50Z which predates it. Reading the named field and the single main landmark on the deployed site belongs to the delivery comment.
+- Deployed and observed. The `3c358e0` build reached production on 2026-09-18: the `kollio-web` container was recreated at 15:29:47Z, started at 15:30:38Z and reported healthy, and `grep -rl ideas.explorer.searchLabel /app/.output/public/_nuxt` inside the running container returned `_nuxt/COM01a2j.js`, so the served bundle carries the named search field. The single main landmark follows from the same source change, whose rendered effect was measured locally.
 
 Local, before deploy:
 
