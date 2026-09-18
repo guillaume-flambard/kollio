@@ -22,10 +22,17 @@ Status: complete.
 
 Live, in production, after the deploy:
 
-- Not yet. The screen is committed locally and the deployed build predates it, so
-  `kollio.memolabs.dev/no-such-page` still answers with the framework page. Reading the
-  localized screen, its document language and its way back on the deployed site belongs to
-  the delivery comment.
+- `https://kollio.memolabs.dev/`: HTTP 200, 65 945 bytes.
+- `https://kollio.memolabs.dev/no-such-page`: HTTP 404, `text/html`, 13 947 bytes, `lang="fr-FR"`,
+  title `Cette page n'existe pas · Kollio`, a link back to `/` labelled `Revenir à l'accueil`, and
+  no raw key path anywhere in the response.
+- `https://kollio.memolabs.dev/en/no-such-page`: HTTP 404, `text/html`, 13 942 bytes, `lang="en-GB"`,
+  title `This page does not exist · Kollio`, a link back to `/en` labelled `Back to home`, and no
+  raw key path.
+- The deploy needed a companion fix in `lab-infra` (PR #83, merged as `8157414`): the `kollio-web`
+  health probe allowed 5 s while spawning `node` took about 6 s under memory pressure, so the
+  container stayed unhealthy and Traefik dropped its route, which took the whole domain down to the
+  default gateway 404 for a few minutes. The probe now allows 30 s, retries 5 and starts after 120 s.
 
 Local, before deploy:
 
