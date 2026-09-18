@@ -641,6 +641,18 @@
       }
     }
   },
+  "errors": {
+    "notFound": {
+      "title": "This page does not exist",
+      "description": "The link may be incomplete, or the page has moved. Go back home to pick up from there.",
+      "action": "Back to home"
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "description": "Try again in a moment. If it keeps happening, start again from home.",
+      "action": "Back to home"
+    }
+  },
   "language": {
     "switch": "Français"
   },
