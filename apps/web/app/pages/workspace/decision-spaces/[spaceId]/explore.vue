@@ -8,7 +8,7 @@ import type {
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
 const spaceId = String(route.params.spaceId)
@@ -77,15 +77,10 @@ const confirmedContributions = computed(() => contributions.value.filter(item =>
 const proposalOpen = computed(() => Boolean(proposalBranchId.value))
 const proposalBranch = computed(() => branches.value.find(branch => branch.id === proposalBranchId.value))
 
-const dateFormatter = computed(() =>
-  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
-)
+const { formatDate: dateLabel } = useFormatters()
 
 function memberName(userId: string) {
   return members.value?.find(member => member.id === userId)?.display_name ?? userId
-}
-function dateLabel(value: string) {
-  return dateFormatter.value.format(new Date(value))
 }
 function branchTitleOf(branchId: string) {
   return branches.value.find(branch => branch.id === branchId)?.title ?? branchId

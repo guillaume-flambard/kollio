@@ -3,15 +3,13 @@ import type { ProfileResponse } from '@kollio/api-client'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
 const userId = String(route.params.userId)
 const glyphs = Object.freeze({ back: '←', forward: '→' })
-const dateFormatter = computed(() =>
-  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
-)
+const { formatDate } = useFormatters()
 
 const { data: profile, error } = await useAsyncData(`profile-${userId}`, () =>
   requestFetch<ProfileResponse>(`/api/users/${encodeURIComponent(userId)}`),
@@ -73,7 +71,7 @@ function ideaLink(id: string) {
           <li v-for="act in profile.contributions" :key="`${act.idea_id}-${act.short_hash}`">
             <span class="profile-act-message">{{ act.message }}</span>
             <NuxtLink :to="ideaLink(act.idea_id)">{{ t('ideas.profile.onIdea', { idea: act.idea_title }) }}</NuxtLink>
-            <time :datetime="act.created_at">{{ dateFormatter.format(new Date(act.created_at)) }}</time>
+            <time :datetime="act.created_at">{{ formatDate(act.created_at) }}</time>
           </li>
         </ul>
         <p v-else class="profile-empty">{{ t('ideas.profile.actsEmpty') }}</p>

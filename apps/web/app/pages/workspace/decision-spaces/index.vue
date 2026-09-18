@@ -10,7 +10,7 @@ import { motion, useReducedMotion } from 'motion-v'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const router = useRouter()
 const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
@@ -56,15 +56,13 @@ const { data: members } = await useAsyncData(
   { watch: [activeWorkspace] },
 )
 
-const dateFormatter = computed(() =>
-  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
-)
+const { formatDate } = useFormatters()
 
 function ownerName(ownerId: string) {
   return members.value?.find(member => member.id === ownerId)?.display_name ?? t('decisionSpaces.list.owner')
 }
 function deadlineLabel(deadline: string | null | undefined) {
-  return deadline ? dateFormatter.value.format(new Date(deadline)) : t('decisionSpaces.list.noDeadline')
+  return deadline ? formatDate(deadline) : t('decisionSpaces.list.noDeadline')
 }
 function spaceLink(space: DecisionSpaceResponse) {
   return {

@@ -11,7 +11,7 @@ import type {
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
 
@@ -91,13 +91,7 @@ const lessons = computed<LearningResponse[]>(() => lessonList.value ?? [])
 const proposed = computed(() => lessons.value.filter(lesson => lesson.status === 'draft'))
 const confirmed = computed(() => lessons.value.filter(lesson => lesson.status === 'confirmed'))
 
-const dateFormatter = computed(() =>
-  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' })
-)
-
-function dateLabel(value: string) {
-  return dateFormatter.value.format(new Date(value))
-}
+const { formatDate: dateLabel } = useFormatters()
 
 function detailFor(experimentId: string) {
   return experimentDetails.value?.find(detail => detail.experiment.id === experimentId)

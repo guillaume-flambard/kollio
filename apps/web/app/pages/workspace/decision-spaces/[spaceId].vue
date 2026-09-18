@@ -3,7 +3,7 @@ import type { DecisionSpaceDetailResponse, WorkspaceMemberResponse, WorkspaceRes
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
@@ -54,15 +54,13 @@ const { data: members } = await useAsyncData(
 )
 
 const offeredTransitions = computed(() => (space.value ? permitted[space.value.status] ?? [] : []))
-const dateFormatter = computed(() =>
-  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
-)
+const { formatDate } = useFormatters()
 
 function memberName(userId: string) {
   return members.value?.find(member => member.id === userId)?.display_name ?? userId
 }
 function deadlineLabel(deadline: string | null | undefined) {
-  return deadline ? dateFormatter.value.format(new Date(deadline)) : t('decisionSpaces.list.noDeadline')
+  return deadline ? formatDate(deadline) : t('decisionSpaces.list.noDeadline')
 }
 function sectionLink(section: string) {
   return {

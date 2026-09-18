@@ -12,7 +12,7 @@ import type {
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
 const spaceId = String(route.params.spaceId)
@@ -199,9 +199,7 @@ const argumentCandidates = computed(() => {
   return confirmedContributions.value.filter(contribution => !used.has(contribution.id))
 })
 
-const dateFormatter = computed(() =>
-  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
-)
+const { formatDate: dateLabel } = useFormatters()
 
 function memberName(userId: string) {
   return members.value?.find(entry => entry.id === userId)?.display_name ?? userId
@@ -217,9 +215,6 @@ function contributionTitle(contributionId: string) {
   )
 }
 
-function dateLabel(value: string) {
-  return dateFormatter.value.format(new Date(value))
-}
 
 function runStatusLabel(status: string) {
   return t('decisionSpaces.decision.challenge.status.' + status)

@@ -3,7 +3,7 @@ import type { DecisionInboxResponse, InboxEntryResponse, InboxSectionResponse } 
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
 
@@ -22,13 +22,7 @@ const hasAnything = computed(() =>
   sections.value.some(section => (section.value?.entries.length ?? 0) > 0),
 )
 
-const dateFormatter = computed(
-  () => new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
-)
-
-function dateLabel(value: string) {
-  return dateFormatter.value.format(new Date(value))
-}
+const { formatDate: dateLabel } = useFormatters()
 
 function entriesOf(section?: InboxSectionResponse) {
   return section?.entries ?? []

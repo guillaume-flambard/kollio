@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from 'motion-v'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const requestFetch = useRequestFetch()
@@ -54,7 +54,7 @@ const { data: ideaPage, status, error, refresh } = await useAsyncData(
 
 const selectedIdea = computed(() => ideaPage.value?.items.find(idea => idea.id === selectedIdeaId.value) ?? ideaPage.value?.items[0])
 const totalPages = computed(() => Math.max(1, Math.ceil((ideaPage.value?.total ?? 0) / pageSize)))
-const relativeFormatter = computed(() => new Intl.RelativeTimeFormat(locale.value, { numeric: 'auto' }))
+const { formatRelative: relativeDate } = useFormatters()
 const teamRoles = ['marketing', 'sales', 'finance', 'product', 'engineering', 'customer_success', 'operations', 'legal', 'hr', 'data', 'direction', 'other'] as const
 
 watch(() => route.query.q, value => {
@@ -79,14 +79,6 @@ function scheduleSearch() {
 function selectIdea(idea: IdeaSummaryResponse) {
   selectedIdeaId.value = idea.id
   previewOpen.value = true
-}
-function relativeDate(date: string) {
-  const days = Math.round((new Date(date).getTime() - Date.now()) / 86_400_000)
-  if (Math.abs(days) < 1) {
-    const hours = Math.round((new Date(date).getTime() - Date.now()) / 3_600_000)
-    return relativeFormatter.value.format(hours, 'hour')
-  }
-  return relativeFormatter.value.format(days, 'day')
 }
 function pageLocation(page: number) {
   return {

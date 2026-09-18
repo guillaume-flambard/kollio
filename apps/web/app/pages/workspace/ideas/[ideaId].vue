@@ -4,7 +4,7 @@ import type { TimelineView } from '~/utils/timeline'
 
 definePageMeta({ layout: 'workspace', middleware: 'authenticated' })
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const route = useRoute()
 const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
@@ -26,9 +26,7 @@ function personLink(id: string) {
   return localePath({ name: 'workspace-people-userId', params: { userId: id } })
 }
 
-const dateFormatter = computed(() =>
-  new Intl.DateTimeFormat(locale.value, { day: 'numeric', month: 'long', year: 'numeric' }),
-)
+const { formatDate } = useFormatters()
 
 const grantableParticipations = ['decision_maker', 'contributor', 'observer'] as const
 const ownerMemberId = ref('')
@@ -231,7 +229,7 @@ function analysisLabel(analysis: IterationResponse['analysis']) {
 
 const timelineView = computed<TimelineView>(() => toTimelineView(buildTimeline(iterations.value ?? []), {
   authorName: authorLabel,
-  formatDate: iso => dateFormatter.value.format(new Date(iso)),
+  formatDate,
   statusLabel: status => t(`ideas.iterations.${status}`),
   analysisLabel,
 }))
@@ -503,7 +501,7 @@ useSeoMeta({ title: () => idea.value ? `${idea.value.title} | Kollio` : t('ideas
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
             <button type="button" class="transition-colors hover:text-default" @click="selectPanel('evidence')">{{ t('ideas.detail.stats.evidence', { count: 0 }) }}</button>
             <span aria-hidden="true" class="size-1 rounded-full bg-muted" />
-            <time :datetime="idea.created_at">{{ dateFormatter.format(new Date(idea.created_at)) }}</time>
+            <time :datetime="idea.created_at">{{ formatDate(idea.created_at) }}</time>
           </div>
         </header>
 
