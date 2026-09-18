@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     logto: {
       endpoint: '', appId: '', appSecret: '', cookieEncryptionKey: '',
       customRedirectBaseUrl: '',
-      resources: ['https://kollio.memolabs.dev/api'],
+      resources: [],
       scopes: ['openid', 'profile', 'email'],
       cookieSecure: process.env.NODE_ENV === 'production',
       fetchUserInfo: false,
@@ -25,7 +25,7 @@ export default defineNuxtConfig({
     public: { authEnabled: false },
   },
   i18n: {
-    baseUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://kollio.memolabs.dev',
+    baseUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     defaultLocale: 'fr', strategy: 'prefix_except_default',
     locales: [{ code: 'fr', language: 'fr-FR', name: 'French', file: 'fr.json' },
               { code: 'en', language: 'en-GB', name: 'English', file: 'en.json' }],

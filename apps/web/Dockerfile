@@ -11,6 +11,8 @@ COPY packages packages
 COPY apps/web apps/web
 ARG NUXT_PUBLIC_AUTH_ENABLED=false
 ENV NUXT_PUBLIC_AUTH_ENABLED=$NUXT_PUBLIC_AUTH_ENABLED
+ARG NUXT_PUBLIC_SITE_URL=
+ENV NUXT_PUBLIC_SITE_URL=$NUXT_PUBLIC_SITE_URL
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm --dir apps/web build
 

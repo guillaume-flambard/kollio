@@ -1,4 +1,4 @@
-"""Reject tracked or staged secrets and private migration artifacts."""
+"""Reject tracked or staged secrets, private migration artifacts and operator infrastructure."""
 
 import argparse
 import re
@@ -42,3 +42,17 @@ for path in paths:
         continue
 if leaks:
     raise SystemExit("Provider credentials found in tracked content: " + ", ".join(leaks))
+
+infrastructure_pattern = re.compile(rb"(?i)memolabs\.dev|/Users/memo\b")
+host_leaks = []
+for path in paths:
+    candidate = Path(path)
+    if not path or not candidate.is_file() or path == "scripts/check_private_files.py":
+        continue
+    try:
+        if infrastructure_pattern.search(candidate.read_bytes()):
+            host_leaks.append(path)
+    except OSError:
+        continue
+if host_leaks:
+    raise SystemExit("Operator infrastructure found in tracked content: " + ", ".join(host_leaks))

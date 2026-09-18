@@ -150,6 +150,7 @@ jobs:
             -f ${{ matrix.dockerfile }} \
             -t 127.0.0.1:5000/kollio-${{ matrix.image }}:${{ github.sha }} \
             --build-arg NUXT_PUBLIC_AUTH_ENABLED=true \
+            --build-arg NUXT_PUBLIC_SITE_URL=${{ vars.NUXT_PUBLIC_SITE_URL }} \
             --label org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }} \
             --label org.opencontainers.image.revision=${{ github.sha }} \
             .
