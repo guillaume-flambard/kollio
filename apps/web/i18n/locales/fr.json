@@ -3,7 +3,6 @@
   "navigation": {
     "label": "Navigation principale",
     "ideas": "Initiatives",
-    "workspace": "Espace",
     "promise": "Des initiatives à impact, ensemble.",
     "settings": "Réglages",
     "menuOpen": "Ouvrir la navigation",
@@ -42,7 +41,6 @@
     },
     "list": {
       "owner": "Porteur",
-      "deadline": "Échéance",
       "noDeadline": "Sans échéance",
       "ownerLine": "Porteur · {name}",
       "deadlineLine": "Échéance · {label}",
@@ -643,10 +641,6 @@
       }
     }
   },
-  "meta": {
-    "title": "Kollio {'|'} Des idées aux projets collectifs",
-    "description": "Confrontez vos idées au réel, faites-les évoluer et réunissez les bonnes personnes."
-  },
   "language": {
     "switch": "English"
   },
@@ -654,29 +648,7 @@
     "signIn": "Se connecter",
     "signOut": "Se déconnecter",
     "getStarted": "Commencer",
-    "getStartedNote": "Vous vous connectez, puis vous arrivez dans l’espace privé de votre équipe.",
-    "pending": "Les inscriptions ouvriront prochainement."
-  },
-  "hero": {
-    "eyebrow": "PENSER ENSEMBLE. CONSTRUIRE ENSEMBLE.",
-    "title": "Une idée mérite plus qu’une conversation.",
-    "description": "Un endroit pour confronter vos intuitions au réel, garder le fil de chaque avancée et construire avec les bonnes personnes.",
-    "action": "Entrer dans mon espace"
-  },
-  "principles": {
-    "label": "Comment les idées avancent",
-    "idea": {
-      "title": "Posez une idée.",
-      "description": "Un problème, une intuition, une possibilité. Donnez-lui un point de départ."
-    },
-    "challenge": {
-      "title": "Mettez-la à l’épreuve.",
-      "description": "Des contraintes explicites et des sources pour décider de la prochaine étape."
-    },
-    "team": {
-      "title": "Faites-la grandir ensemble.",
-      "description": "Chaque contribution compte. Chaque avancée garde son histoire."
-    }
+    "getStartedNote": "Vous vous connectez, puis vous arrivez dans l’espace privé de votre équipe."
   },
   "landing": {
     "meta": {
