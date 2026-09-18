@@ -6,6 +6,8 @@ Method: Chromium against the Nuxt app served by the repository Playwright webSer
 
 Result: 5 findings (0 blocker, 2 major, 3 minor), and 10 checks verified clean across the same screens. The two major findings are on the explorer, the screen a contributor spends the most time in.
 
+Three of the five map onto a WCAG 2.2 success criterion: A11Y-1 to 4.1.2 Name, Role, Value (A), A11Y-2 to 1.3.1 Info and Relationships (A) plus invalid HTML nesting, A11Y-4 to 4.1.3 Status Messages (AA). A11Y-3 and A11Y-5 are best-practice findings (unique landmark names, a level-1 heading above the sections) rather than conformance failures: no success criterion requires them, so they are advisory and can be deferred without claiming non-conformance. The adversarial review of this report (`evidence/adversarial-review.md`) records the same reading.
+
 ## Findings
 
 ### A11Y-1 (major) The explorer search field has no accessible name

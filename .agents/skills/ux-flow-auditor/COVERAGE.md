@@ -61,3 +61,4 @@ evidence path is missing or empty.
 | WorkspaceArea.Context.Settings.SaveAnnouncement | fr | A11Y-SETTINGS | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
 | WorkspaceArea.DecisionInbox.Shell.Landmarks | fr | A11Y-INBOX | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
 | Landing.Production.Journey | fr, en | JOURNEY-LANDING, JOURNEY-GATE, JOURNEY-SIGNOUT, JOURNEY-404 | .agents/skills/ux-flow-auditor/evidence/journey-report.md | AUDITED |
+| Audit.Reports.AdversarialReview | fr, en | REVIEW-I18N, REVIEW-A11Y, REVIEW-JOURNEY | .agents/skills/ux-flow-auditor/evidence/adversarial-review.md | AUDITED |
