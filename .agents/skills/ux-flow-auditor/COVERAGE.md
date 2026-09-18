@@ -49,3 +49,14 @@ evidence path is missing or empty.
 | Timeline.Owner.IdeaDetail.Reject | fr, en | OWNER-02 | .agents/skills/ux-flow-auditor/evidence/2026-09-15-owner-actions.md | AUDITED |
 | Timeline.Owner.IdeaDetail.Rollback | fr, en | OWNER-03 | .agents/skills/ux-flow-auditor/evidence/2026-09-15-owner-actions.md | AUDITED |
 | Timeline.Owner.IdeaDetail.HideFromMember | fr | MEMBER-04 | .agents/skills/ux-flow-auditor/evidence/2026-09-15-owner-actions.md | AUDITED |
+| WorkspaceArea.People.Profile.RoleLabels | fr, en | PROFILE-01, PROFILE-02 | .agents/skills/ux-flow-auditor/evidence/2026-09-17-i18n-profile-role-render.txt | AUDITED |
+| WorkspaceArea.I18n.Catalog.Parity | fr, en | I18N-CATALOG, I18N-DEADKEYS, I18N-FORMATS | .agents/skills/ux-flow-auditor/evidence/i18n-report.md | AUDITED |
+| Explorer.Filter.Toolbar.SearchName | fr, en | A11Y-EXPLORER | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
+| Explorer.Results.Main.Landmark | fr, en | A11Y-EXPLORER | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
+| Explorer.Results.Search.HoldAtPhone | fr | A11Y-DRAWER | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
+| Landing.Nav.Landmarks.Name | fr, en | A11Y-LANDING | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
+| Deposit.Verdict.Form.LiveRegion | fr | A11Y-DEPOSIT | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
+| IdeaDetail.Team.Panel.ControlNames | fr | A11Y-IDEA-DETAIL | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
+| WorkspaceArea.People.Profile.HeadingStructure | fr | A11Y-PROFILE | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
+| WorkspaceArea.Context.Settings.SaveAnnouncement | fr | A11Y-SETTINGS | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |
+| WorkspaceArea.DecisionInbox.Shell.Landmarks | fr | A11Y-INBOX | .agents/skills/ux-flow-auditor/evidence/a11y-report.md | AUDITED |

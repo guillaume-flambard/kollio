@@ -1,0 +1,13 @@
+
+Running 2 tests using 1 worker
+
+[fr] profile-roles text = "ideas.role.engineering\nideas.role.platform"
+[fr] memberships text = "ÉQUIPES\nideas.role.engineering\ndans Deuxième idée\n→"
+[fr] page title = ""
+  ✓  1 [chromium] › tests/browser/i18n-audit-tmp.spec.ts:17:3 › i18n audit fr: profile role labels (16.4s)
+[en] profile-roles text = "ideas.role.engineering\nideas.role.platform"
+[en] memberships text = "TEAMS\nideas.role.engineering\nin Deuxième idée\n→"
+[en] page title = ""
+  ✓  2 [chromium] › tests/browser/i18n-audit-tmp.spec.ts:17:3 › i18n audit en: profile role labels (3.9s)
+
+  2 passed (34.9s)
