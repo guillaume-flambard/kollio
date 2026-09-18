@@ -117,7 +117,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
         </NuxtLink>
         <label class="ideas-search">
           <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m16 16 5 5" /></svg>
-          <input v-model="searchInput" type="search" :placeholder="t('ideas.explorer.search')" @input="scheduleSearch">
+          <input v-model="searchInput" type="search" :aria-label="t('ideas.explorer.searchLabel')" :placeholder="t('ideas.explorer.search')" @input="scheduleSearch">
           <span class="ideas-filter-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h10m4 0h2M4 17h2m4 0h10M14 4v6M7 14v6" /></svg></span>
         </label>
       </motion.header>
@@ -147,7 +147,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
             </select>
         </aside>
 
-        <main class="ideas-results">
+        <div class="ideas-results">
           <header class="ideas-results-header">
             <strong>{{ t('ideas.explorer.found', { count: ideaPage?.total ?? 0 }) }}</strong>
             <span>{{ t('ideas.explorer.sortBy') }} <b>{{ t('ideas.explorer.activity') }}</b></span>
@@ -176,7 +176,7 @@ useSeoMeta({ title: () => t('workspace.metaTitle') })
             <NuxtLink v-if="currentPage > 1" :to="pageLocation(currentPage - 1)">{{ t('ideas.previous') }}</NuxtLink><span v-else />
             <NuxtLink v-if="currentPage < totalPages" :to="pageLocation(currentPage + 1)">{{ t('ideas.next') }}</NuxtLink>
           </nav>
-        </main>
+        </div>
 
         <KollioIdeaPreviewPanel
           v-if="selectedIdea"

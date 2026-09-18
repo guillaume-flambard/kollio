@@ -47,5 +47,14 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(rail.getByRole('button', { name: new RegExp(messages.ideas.explorer.forYou) })).toHaveCount(1)
       await expect(rail.getByRole('button', { name: new RegExp(messages.ideas.explorer.recent) })).toHaveCount(0)
     })
+
+    test('EXPLORER-08 names the search field and keeps a single main landmark', async ({ page }) => {
+      await page.route('**/api/workspaces/workspace-one/ideas?*', route => route.fulfill({
+        json: { items: [], total: 0, limit: 5, offset: 0 } satisfies IdeaPageResponse,
+      }))
+      await page.goto(`${prefix}/workspace/ideas`)
+      await expect(page.getByRole('searchbox', { name: messages.ideas.explorer.searchLabel })).toBeVisible()
+      await expect(page.locator('main')).toHaveCount(1)
+    })
   })
 }

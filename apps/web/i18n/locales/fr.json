@@ -1039,6 +1039,7 @@
     "explorer": {
       "description": "Trouvez une initiative qui a besoin de vous.",
       "search": "Rechercher une initiative, un domaine ou un besoin",
+      "searchLabel": "Rechercher une initiative",
       "create": "Déposer une initiative",
       "library": "Bibliothèque des initiatives",
       "explore": "Explorer",
