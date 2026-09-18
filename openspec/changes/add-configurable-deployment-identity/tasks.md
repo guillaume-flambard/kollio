@@ -18,5 +18,5 @@
 ## 4. Close with evidence
 
 - [x] 4.1 Run `scripts/check_private_files.py --tracked`, `pnpm lint`, `pnpm typecheck`, the locale, token and coverage guards, `pnpm build` and the browser suite
-- [ ] 4.2 Verify sign-in, the landing and the canonical URLs in the deployment after the merge
+- [x] 4.2 Verify sign-in, the landing and the canonical URLs in the deployment after the merge
 - [x] 4.3 Write `acceptance.md` with the scenario to evidence mapping
