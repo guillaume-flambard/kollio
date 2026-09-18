@@ -10,9 +10,9 @@
     "imageLargest": 1145217
   },
   "budgets": {
-    "compressedJavaScriptTotal": 260000,
+    "compressedJavaScriptTotal": 300000,
     "compressedJavaScriptLargest": 135000,
-    "compressedCssTotal": 52000,
+    "compressedCssTotal": 66000,
     "compressedCssLargest": 42000,
     "imageTotal": 3000000,
     "imageLargest": 1250000

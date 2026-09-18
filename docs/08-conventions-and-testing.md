@@ -53,8 +53,9 @@ Tout ce que renvoie un LLM passe par un schéma Pydantic avant exécution. Local
 
 ## Automated guards
 
-`make verify` (and Foundations CI) run three checks beyond the test suites:
+`make verify` (and Foundations CI) run four checks beyond the test suites:
 
 - `node scripts/check_locales.mjs` — the FR and EN catalogs expose the same keys, and every static key used by `apps/web/app` exists in them. A template or concatenated key only needs one catalog entry starting with its static prefix, which proves the family exists without enumerating runtime values.
 - `node scripts/check_design_tokens.mjs` — `apps/web/app` contains no literal colour and no `--kollio-*` name absent from `packages/ui/src/tokens.css`. A typo there is invisible in review because the hardcoded fallback wins at runtime, so the check is the only reliable guard. Run it with `--self-test` to prove it still fails on a fixture. `--ui-*` names come from Nuxt UI and are exempt; a variable declared in the same file is treated as local.
 - the migration drift check, `uv run alembic check` from `apps/api`.
+- `node scripts/check_web_performance_budgets.mjs`: gzips every `.js` and `.css` file emitted under `apps/web/.output/public/_nuxt` and compares the totals and the largest single file against `performance-budgets.json`; images are measured raw. The totals cover every chunk the build emits, lazy route chunks included, so they grow with each new surface and are not a load-time measure; the per-file caps are that guard. Refresh a total only with a measured build and a dated reason, and leave the largest-file caps alone unless the entry payload really moved.
