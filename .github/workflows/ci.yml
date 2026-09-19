@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   verify:
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: pgvector/pgvector@sha256:78bf48b801e792f99e3ac62b5036fd3876e9be48afda16c1e331af1c75ceb2ff
@@ -55,6 +55,8 @@ jobs:
           pnpm install --frozen-lockfile
           uv sync --locked --all-packages
       - name: Lint and types
+        env:
+          KOLLIO_PRIVATE_PATTERNS: ${{ secrets.KOLLIO_PRIVATE_PATTERNS }}
         run: |
           uv run --project apps/api python scripts/check_private_files.py --tracked
           uv run --project apps/api ruff check apps/api scripts
@@ -91,7 +93,7 @@ jobs:
   live-evaluations:
     if: github.event_name == 'workflow_dispatch' && inputs.run_live_evals
     needs: verify
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
@@ -123,9 +125,10 @@ jobs:
   publish:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: verify
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
     strategy:
       max-parallel: 2
       matrix:
@@ -140,15 +143,20 @@ jobs:
             dockerfile: infra/litellm/Dockerfile
     steps:
       - uses: actions/checkout@v7.0.1
-      # Kollio est un depot PRIVE : son paquet GHCR est prive lui aussi et le VPS
-      # ne peut pas le tirer (le jeton du serveur n'a pas read:packages). Comme
-      # facture/usine/veilleur, on construit l'image LA ou elle sera servie : sur
-      # le runner self-hosted du VPS, et on la pousse dans le registre local.
-      - name: Build on the VPS
+      # Le depot est public : la CI publie les images sur GHCR, ou le VPS les
+      # tire sans jeton. Construire la ou le runner heberge suffit, les paquets
+      # publics etant lisibles par n'importe quel hote.
+      - name: Log in to the container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the image
         run: |
           docker build \
             -f ${{ matrix.dockerfile }} \
-            -t 127.0.0.1:5000/kollio-${{ matrix.image }}:${{ github.sha }} \
+            -t ghcr.io/guillaume-flambard/kollio-${{ matrix.image }}:${{ github.sha }} \
             --build-arg NUXT_PUBLIC_AUTH_ENABLED=true \
             --build-arg NUXT_PUBLIC_SITE_URL=${{ vars.NUXT_PUBLIC_SITE_URL }} \
             --label org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }} \
@@ -156,9 +164,9 @@ jobs:
             .
       - name: Push sha and latest (main only)
         run: |
-          docker push 127.0.0.1:5000/kollio-${{ matrix.image }}:${{ github.sha }}
-          docker tag 127.0.0.1:5000/kollio-${{ matrix.image }}:${{ github.sha }} 127.0.0.1:5000/kollio-${{ matrix.image }}:latest
-          docker push 127.0.0.1:5000/kollio-${{ matrix.image }}:latest
+          docker push ghcr.io/guillaume-flambard/kollio-${{ matrix.image }}:${{ github.sha }}
+          docker tag ghcr.io/guillaume-flambard/kollio-${{ matrix.image }}:${{ github.sha }} ghcr.io/guillaume-flambard/kollio-${{ matrix.image }}:latest
+          docker push ghcr.io/guillaume-flambard/kollio-${{ matrix.image }}:latest
       - name: Prune intermediate images
         if: always()
         run: docker image prune -f --filter "until=168h" >/dev/null 2>&1 || true

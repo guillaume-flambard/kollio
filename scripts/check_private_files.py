@@ -1,6 +1,7 @@
 """Reject tracked or staged secrets, private migration artifacts and operator infrastructure."""
 
 import argparse
+import os
 import re
 import subprocess
 from pathlib import Path, PurePosixPath
@@ -43,16 +44,23 @@ for path in paths:
 if leaks:
     raise SystemExit("Provider credentials found in tracked content: " + ", ".join(leaks))
 
-infrastructure_pattern = re.compile(rb"(?i)memolabs\.dev|/Users/memo\b")
-host_leaks = []
-for path in paths:
-    candidate = Path(path)
-    if not path or not candidate.is_file() or path == "scripts/check_private_files.py":
-        continue
-    try:
-        if infrastructure_pattern.search(candidate.read_bytes()):
-            host_leaks.append(path)
-    except OSError:
-        continue
-if host_leaks:
-    raise SystemExit("Operator infrastructure found in tracked content: " + ", ".join(host_leaks))
+# The operator's host names and home directory are not written here: this file is
+# published. Export KOLLIO_PRIVATE_PATTERNS with the patterns to reject (the
+# deployment holds them), so the check can fail on them without naming them.
+private_patterns = os.environ.get("KOLLIO_PRIVATE_PATTERNS", "")
+if not private_patterns:
+    print("KOLLIO_PRIVATE_PATTERNS is not set; skipping the operator infrastructure scan")
+else:
+    infrastructure_pattern = re.compile(private_patterns.encode())
+    host_leaks = []
+    for path in paths:
+        candidate = Path(path)
+        if not path or not candidate.is_file():
+            continue
+        try:
+            if infrastructure_pattern.search(candidate.read_bytes()):
+                host_leaks.append(path)
+        except OSError:
+            continue
+    if host_leaks:
+        raise SystemExit("Operator infrastructure found in tracked content: " + ", ".join(host_leaks))
