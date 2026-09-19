@@ -6,6 +6,14 @@ Kollio turns fragmented human + AI work into shared, traceable, testable decisio
 
 Core loop: Explore -> Converge -> Challenge -> Decide -> Test -> Learn.
 
+Visible journey: three moments, and only three, are what a new team member is asked to learn.
+
+1. Frame the decision. The question, its owner, the participants and the material they bring. Explore and Converge serve this moment: Branches hold raw material, promoting a Contribution makes it canonical, and the convergence map shows where people agree, conflict, or still need evidence.
+2. Choose with reasons. Options, the evidence and assumptions behind them, what would make the team regret the choice, and the Decision Record that keeps the rejected alternatives and the revisit triggers.
+3. Record what happened. The Experiment, the observed Outcome against what was expected, and the Learning a human confirms.
+
+Branches, Contributions, relations, clusters and scenario variables are support mechanics. They stay available on demand, and they are never a vocabulary a beginner has to learn before starting.
+
 Kollio is no longer primarily an idea manager. Existing ideation becomes the Explore layer of a broader decision-intelligence product.
 
 Product definition:
@@ -39,6 +47,8 @@ Sections:
 - Ready to decide.
 - Needs learning.
 - Relevant prior memory.
+
+The first four have answers today. The fifth does not yet: the convergence map is built and corrected by hand, no retriever surfaces past lessons, and the inbox itself says that this question has no answer today.
 
 DECISION SPACE: Header: question, owner, status, deadline, participants. Navigation: Explore / Converge / Options / Decision / Experiment / Learning. Main canvas: structured work, never merely a giant chat transcript. Intelligence rail: contradictions, assumptions, missing evidence, related past Decisions. Collaboration layer: comments, proposals, reviews, provenance and history.
 
@@ -108,7 +118,7 @@ Long-term loop: Decision -> Experiment -> Outcome -> Learning -> Future Decision
 
 Memory units are Decisions, Assumptions, Outcomes, confirmed Learnings and reusable Evidence — not generic chat history.
 
-When a new Decision appears, Kollio surfaces relevant past lessons and explains WHY they are relevant, with provenance.
+When a new Decision appears, the ambition is that Kollio surfaces relevant past lessons and explains WHY they are relevant, with provenance. That retriever is not built yet: today a confirmed Learning lives with its Decision Space, and a person has to bring it forward by hand.
 
 ## 12. COLLABORATION
 
@@ -136,25 +146,32 @@ MVP: text, URLs, documents, AI-chat exports. Next: browser capture, Slack, Notio
 
 ## 15. MVP
 
-P0:
-- [ ] Decision Space
-- [ ] Multiple contributors
-- [ ] Independent Branches
-- [ ] AI/imported exploration
-- [ ] Contribution promotion + provenance
-- [ ] Converge: agreements/conflicts/alternatives/unknowns/assumptions/duplicates
-- [ ] Human correction of convergence
-- [ ] Structured Options
-- [ ] Challenge
-- [ ] Versioned Decision Record
-- [ ] Revisit triggers
-- [ ] Editable Scenario comparison
-- [ ] Experiment
-- [ ] Outcome
-- [ ] Confirmed Learning
-- [ ] End-to-end history
+Shipped (the canonical behaviours live in `openspec/specs`):
+- [x] Decision Space
+- [x] Multiple contributors
+- [x] Independent Branches
+- [x] AI/imported exploration
+- [x] Contribution promotion + provenance
+- [x] Converge: agreements/conflicts/alternatives/unknowns/assumptions/duplicates
+- [x] Human correction of convergence
+- [x] Structured Options
+- [x] Challenge
+- [x] Versioned Decision Record
+- [x] Revisit triggers
+- [x] Editable Scenario comparison
+- [x] Experiment
+- [x] Outcome
+- [x] Confirmed Learning
+- [x] End-to-end history
+- [x] The decision inbox that says what needs attention
+- [x] Members, business functions and participation roles
+- [x] French and English, on the Living Canvas tokens
 
-P1 only after P0 works: browser extension; Slack/Notion/Drive; semantic Decision/Learning retrieval; templates; notifications; revisit alerts; analytics.
+In validation, and the only milestone that matters now: one real Decision taken by two people in their own words, an observed Outcome within the following days, and a voluntary return for a second Decision. This milestone requires no new integration and no feature expansion, only real use of the loop that already ships.
+
+Quality, measured 2026-09-19 on commit `710a707` whose CI passes: 322 browser tests in 21 files run against simulated API responses, so they prove rendering and not authentication, persistence or provider quality; 557 API tests pass without a database, 239 integration tests need a migrated throwaway PostgreSQL, and 2 provider tests are live, opt-in and budgeted; the FR/EN catalogs match at 1013 keys and the guard checks both directions.
+
+Deferred: browser extension; Slack/Notion/Drive; semantic Decision/Learning retrieval; templates; notifications; revisit alerts; analytics. Automatic structuring of raw material and the memory retriever behind the inbox's fifth question belong here too: today the convergence map is built and corrected by hand, and the inbox itself says that question has no answer yet.
 
 Out of scope now: generic PM, full AI-chat replacement, social feed, marketplace, autonomous campaign execution, predictive-accuracy claims, complex enterprise governance, vanity scoring.
 
@@ -241,5 +258,7 @@ The pivot is functionally real when:
 - a Scenario becomes an Experiment;
 - an Outcome creates a confirmed Learning;
 - that Learning can later be retrieved for another Decision.
+
+Status, measured 2026-09-19: the first eight hold in the shipped product, and the ninth does not. Nothing surfaces a past Learning today, so a person brings it forward by hand, which is also why the inbox's fifth question has no answer yet. The milestone that would prove the first eight in real use is one Decision taken by two people in their own words, an observed Outcome within days, and a voluntary return for a second Decision.
 
 END OF PRD / BLUEPRINT

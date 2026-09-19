@@ -3,7 +3,7 @@
 Tu construis **Kollio**. Lis les docs dans `docs/` (ordre dans `README.md`) et traite-les comme la source de vérité. En cas de contradiction avec une habitude par défaut, ce sont ces docs qui gagnent.
 
 ## En une phrase
-Un "GitHub des idées" collaboratif : dépôt d'idée → tueur de contraintes (IA) → itérations façon commits → l'équipe se forme. Le moat = le **flux privé** (qui-résout-quoi-avec-qui + résultats), pas le contenu des idées.
+Un espace de décision pour équipes privées : une équipe cadre une décision, l'IA et les participants explorent et convergent, l'équipe choisit avec ses raisons, puis on enregistre ce qui s'est passé. Le parcours visible a trois moments : **cadrer la décision, choisir avec ses raisons, enregistrer ce qui s'est passé**. Le moat = le **flux privé** (qui-résout-quoi-avec-qui + résultats), pas le contenu des décisions.
 
 ## Non-négociables (à respecter dès la première ligne)
 1. **Multilingue FR/EN dès le départ.** `@nuxtjs/i18n` côté front, tout texte en clé de traduction. **Embeddings multilingues** pour le matching (une idée FR doit matcher un profil EN). Contenu utilisateur stocké avec sa langue d'origine, traduit à la lecture. Agents répondent dans la locale de l'utilisateur. Voir `docs/07-i18n.md`.
@@ -24,7 +24,7 @@ Remplacer ou réinterpréter la direction visuelle **Living Canvas** (`docs/06-d
 Kubernetes · Kafka/microservices tant que < ~50 req/min · base vectorielle dédiée jour 1 (pgvector d'abord) · framework de mémoire (Mem0/Zep) prématuré · Celery+RabbitMQ (utiliser Taskiq avec Redis) · empiler plusieurs frameworks d'agents · sandbox microVM si les agents n'exécutent pas de code arbitraire · la couche investisseurs (régulée — hors V1).
 
 ## Périmètre V1
-Dépôt d'idée · tueur de contraintes · itération façon GitHub · formation d'équipe · explorer. **Hors V1 :** couche investisseurs. Cible d'attaque : **B2B-first en PLG** (espace d'équipe privé), le public/B2C étant l'expansion. Voir `docs/02-strategy-and-moat.md` et `docs/09-roadmap.md`.
+Espace de décision privé et ses six sections · exploration et convergence des contributions · options, regard critique et décision enregistrée avec ses raisons · expérience, résultat observé et apprentissage confirmé par un humain · écran d'accueil qui dit ce qui demande attention. **Hors V1 :** couche investisseurs, intégrations (navigateur, Slack, Notion, Drive) et récupération sémantique. Cible d'attaque : **B2B-first en PLG** (espace d'équipe privé), le public/B2C étant l'expansion. Voir `docs/02-strategy-and-moat.md` et `docs/09-roadmap.md`.
 
 ## Implementation language
 All code, identifiers, comments and docstrings must be in English. Localized user-facing text belongs in FR/EN translation catalogs. Preserve original field names only at legacy data boundaries.

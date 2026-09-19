@@ -4,7 +4,7 @@
 Le moat n'est **PAS** le contenu des idées (commodité : les LLM génèrent des idées à volonté ; Reddit/LinkedIn/Product Hunt ont déjà le contenu public). Le moat est un **data network effect sur la MÉMOIRE ORGANISATIONNELLE** :
 1. les **Learnings confirmés avec provenance** — la boucle Décision → Expérience → Outcome → Learning → Décision future ; chaque Learning réutilisé par un autre Decision Space rend le suivant meilleur ;
 2. le **graphe de relations explicite** (SUPPORTS, CONTRADICTS, DUPLICATES, ALTERNATIVE_TO, DERIVED_FROM, SUPERSEDES, EVIDENCE_FOR, EVIDENCE_AGAINST) — stocké explicitement, pas seulement dans des embeddings ; les corrections humaines deviennent des données durables qui améliorent la convergence ;
-3. la **boucle du Memory Retriever** — chaque nouvelle Décision fait remonter les leçons passées pertinentes en expliquant POURQUOI elles sont pertinentes, avec provenance.
+3. la **boucle du Memory Retriever** — chaque nouvelle Décision fait remonter les leçons passées pertinentes en expliquant POURQUOI elles sont pertinentes, avec provenance. Cette troisième boucle est l'ambition, pas une capacité livrée : aujourd'hui une Learning confirmée vit avec son Decision Space et c'est une personne qui la ramène, comme l'écran d'accueil l'avoue lui-même.
 
 ## Les 4 conditions (sinon le moat est fictif)
 1. C'est un **flux** généré par l'usage (Décisions, Outcomes, Learnings réels — pas un stock scrapé/acheté).
