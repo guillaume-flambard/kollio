@@ -63,4 +63,6 @@ else:
         except OSError:
             continue
     if host_leaks:
-        raise SystemExit("Operator infrastructure found in tracked content: " + ", ".join(host_leaks))
+        raise SystemExit(
+            "Operator infrastructure found in tracked content: " + ", ".join(host_leaks)
+        )
