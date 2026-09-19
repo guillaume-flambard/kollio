@@ -9,7 +9,15 @@ const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
 const spaceId = String(route.params.spaceId)
 const glyphs = Object.freeze({ back: '←' })
-const sections = ['explore', 'converge', 'options', 'decision', 'experiment', 'learning'] as const
+const moments = [
+  { key: 'frame', sections: ['explore', 'converge'] },
+  { key: 'choose', sections: ['options', 'decision'] },
+  { key: 'happened', sections: ['experiment', 'learning'] },
+] as const
+
+function momentIsActive(moment: (typeof moments)[number]) {
+  return moment.sections.some(section => sectionIsActive(section))
+}
 const permitted: Record<string, readonly string[]> = {
   OPEN: ['EXPLORING'],
   EXPLORING: ['CONVERGING'],
@@ -156,9 +164,14 @@ useSeoMeta({ title: () => space.value?.question ?? t('decisionSpaces.metaTitle')
       </form>
 
       <nav class="space-sections" :aria-label="t('decisionSpaces.title')">
-        <NuxtLink v-for="section in sections" :key="section" :to="sectionLink(section)" :class="{ 'is-active': sectionIsActive(section) }">
-          {{ sectionLabel(section) }}
-        </NuxtLink>
+        <div v-for="moment in moments" :key="moment.key" class="space-moment" :class="{ 'is-current': momentIsActive(moment) }">
+          <p class="space-moment-label">{{ t(`decisionSpaces.moments.${moment.key}.label`) }}</p>
+          <div class="space-moment-links">
+            <NuxtLink v-for="section in moment.sections" :key="section" :to="sectionLink(section)" :class="{ 'is-active': sectionIsActive(section) }">
+              {{ sectionLabel(section) }}
+            </NuxtLink>
+          </div>
+        </div>
       </nav>
 
       <div class="space-body">
@@ -190,7 +203,11 @@ useSeoMeta({ title: () => space.value?.question ?? t('decisionSpaces.metaTitle')
 .space-transition button { min-height: 44px; border-radius: var(--kollio-radius-md); background: var(--kollio-heading); padding: 0 20px; color: var(--ui-bg-elevated); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
 .space-transition button[disabled] { opacity: .6; }
 .space-transition-error { flex-basis: 100%; color: var(--ui-error); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
-.space-sections { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 26px; border-bottom: 1px solid var(--ui-border); padding-bottom: 12px; }
+.space-sections { display: flex; flex-wrap: wrap; gap: 14px 26px; margin-top: 26px; border-bottom: 1px solid var(--ui-border); padding-bottom: 12px; }
+.space-moment { display: grid; gap: 6px; }
+.space-moment-label { color: var(--ui-text-muted); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); text-transform: uppercase; letter-spacing: .08em; }
+.space-moment.is-current .space-moment-label { color: var(--kollio-active-ink); }
+.space-moment-links { display: flex; flex-wrap: wrap; gap: 4px 6px; }
 .space-sections a { display: inline-flex; min-height: 42px; align-items: center; border-radius: var(--kollio-radius-pill); padding: 0 16px; color: var(--ui-text-muted); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); }
 .space-sections a:hover { color: var(--kollio-heading); }
 .space-sections a.is-active { background: var(--ui-bg-accented); color: var(--kollio-active-ink); }
@@ -198,7 +215,8 @@ useSeoMeta({ title: () => space.value?.question ?? t('decisionSpaces.metaTitle')
 @media (max-width: 760px) {
   .space { padding: 20px 14px 50px; }
   .space-header { flex-direction: column; }
-  .space-sections { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .space-sections { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .space-moment-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .space-sections a { justify-content: center; }
 }
 </style>

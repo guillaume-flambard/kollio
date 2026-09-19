@@ -102,6 +102,27 @@
         "body": "La leçon réutilisable qu’un humain confirme après un résultat, conservée pour les décisions suivantes."
       }
     },
+    "moments": {
+      "title": "Par où commencer",
+      "frame": {
+        "label": "Cadrer la décision",
+        "description": "La question, qui la porte, et le matériau que chacun apporte.",
+        "empty": "Commencez par écrire ce que vous savez déjà, puis proposez ce qui doit devenir commun.",
+        "action": "Explorer la question"
+      },
+      "choose": {
+        "label": "Choisir avec ses raisons",
+        "description": "Les options en présence, ce qui les soutient, et ce qui pourrait faire regretter.",
+        "empty": "Ouvrez une option depuis la convergence, puis éprouvez-la avec ce qui pourrait faire regretter.",
+        "action": "Voir les options"
+      },
+      "happened": {
+        "label": "Enregistrer ce qui s’est passé",
+        "description": "L’expérience, le résultat observé face à l’attendu, et la leçon qu’un humain confirme.",
+        "empty": "Décidez d’abord, puis lancez une expérience pour comparer l’observé à l’attendu.",
+        "action": "Voir les expériences"
+      }
+    },
     "notFound": {
       "title": "Cet espace de décision est introuvable",
       "description": "Il n’existe pas dans cet espace de travail, ou il n’est pas accessible avec votre compte."

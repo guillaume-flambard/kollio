@@ -97,7 +97,8 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await page.getByRole('button', { name: messages.decisionSpaces.form.submit }).click()
 
       await expect(page.getByRole('heading', { name: created.question })).toBeVisible({ timeout: 15_000 })
-      await expect(page.getByText(messages.decisionSpaces.section.explore.body)).toBeVisible()
+      await expect(page.getByRole('heading', { name: messages.decisionSpaces.moments.title })).toBeVisible()
+      await expect(page.locator('.space-orientation-moment')).toHaveCount(3)
     })
 
     test('DECISION-SPACES-04 refuses a blank question', async ({ page }) => {
@@ -207,6 +208,41 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
 
       await expect(page.getByText(messages.decisionSpaces.notFound.title)).toBeVisible()
       await expect(page.getByText(messages.decisionSpaces.notFound.description)).toBeVisible()
+    })
+
+    test('DECISION-SPACES-12 reads the space as three moments', async ({ page }) => {
+      await page.route('**/api/workspaces/workspace-one/decision-spaces/*', route => route.fulfill({ json: makeDetail() }))
+
+      const moments = [
+        { key: 'frame', first: 'explore', second: 'converge' },
+        { key: 'choose', first: 'options', second: 'decision' },
+        { key: 'happened', first: 'experiment', second: 'learning' },
+      ] as const
+      const copy = messages.decisionSpaces.moments
+
+      await page.goto(`${prefix}/workspace/decision-spaces/space-one?workspace=workspace-one`)
+
+      await expect(page.locator('.space-moment-label')).toHaveText(moments.map(moment => copy[moment.key].label))
+
+      for (const moment of moments) {
+        const group = page.locator('.space-moment').filter({ hasText: copy[moment.key].label })
+        await expect(group.locator('a')).toHaveText([
+          messages.decisionSpaces.section[moment.first].label,
+          messages.decisionSpaces.section[moment.second].label,
+        ])
+      }
+
+      const orientation = page.locator('.space-orientation')
+      await expect(orientation.getByRole('heading', { name: copy.title })).toBeVisible()
+
+      const blocks = orientation.locator('.space-orientation-moment')
+      await expect(blocks).toHaveCount(3)
+      await expect(blocks.first().getByText(copy.frame.description)).toBeVisible()
+      await expect(blocks.first().getByText(copy.frame.empty)).toBeVisible()
+      await expect(blocks.first().getByRole('link', { name: copy.frame.action }))
+        .toHaveAttribute('href', /\/workspace\/decision-spaces\/space-one\/explore/)
+      await expect(blocks.nth(2).getByRole('link', { name: copy.happened.action }))
+        .toHaveAttribute('href', /\/workspace\/decision-spaces\/space-one\/experiment/)
     })
   })
 }

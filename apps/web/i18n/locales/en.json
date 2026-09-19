@@ -102,6 +102,27 @@
         "body": "The reusable lesson a person confirms after an outcome, kept for the decisions that follow."
       }
     },
+    "moments": {
+      "title": "Where to start",
+      "frame": {
+        "label": "Frame the decision",
+        "description": "The question, who owns it, and what each person brings.",
+        "empty": "Start by writing down what you already know, then propose what should become shared.",
+        "action": "Explore the question"
+      },
+      "choose": {
+        "label": "Choose with reasons",
+        "description": "The options in play, what backs them, and what would make you regret the choice.",
+        "empty": "Open an option from the convergence, then test it against what would make you regret the choice.",
+        "action": "See the options"
+      },
+      "happened": {
+        "label": "Record what happened",
+        "description": "The experiment, the observed outcome against what was expected, and the lesson a person confirms.",
+        "empty": "Decide first, then run an experiment to compare what happened with what was expected.",
+        "action": "See the experiments"
+      }
+    },
     "notFound": {
       "title": "This decision space was not found",
       "description": "It does not exist in this workspace, or it is not reachable with your account."
