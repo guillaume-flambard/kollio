@@ -80,6 +80,7 @@ async def create_idea_experiment(
         raise _not_found(request) from error
     except ExperimentRuleError as error:
         raise _rule_error(request, error) from error
+    await session.commit()
     return ExperimentResponse.model_validate(experiment)
 
 
@@ -170,6 +171,7 @@ async def change_experiment_status(
         raise _not_found(request) from error
     except ExperimentRuleError as error:
         raise _rule_error(request, error) from error
+    await session.commit()
     return ExperimentResponse.model_validate(experiment)
 
 
@@ -200,6 +202,7 @@ async def record_experiment_outcome(
         )
     except ExperimentNotFoundError as error:
         raise _not_found(request) from error
+    await session.commit()
     return OutcomeResponse.model_validate(outcome)
 
 
@@ -227,6 +230,7 @@ async def write_experiment_learning(
         raise _not_found(request) from error
     except ExperimentRuleError as error:
         raise _rule_error(request, error) from error
+    await session.commit()
     return LearningResponse.model_validate(learning)
 
 
