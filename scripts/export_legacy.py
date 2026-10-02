@@ -25,7 +25,12 @@ c.rollback()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--host", default="memo-labs")
+    parser.add_argument(
+        "--host",
+        required=True,
+        help="SSH host holding the legacy prospecteur container. No default: the "
+        "deployment names are operator infrastructure and must not be versioned.",
+    )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
