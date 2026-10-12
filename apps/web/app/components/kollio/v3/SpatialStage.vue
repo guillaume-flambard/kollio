@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { SpatialV3Edge, SpatialV3Fixture, SpatialV3Node } from '~/utils/spatialV3.generated'
-import { fitSpatialV3, zoomSpatialV3, panSpatialV3, type SpatialV3Camera } from '~/utils/spatialV3Camera'
+import { fitSpatialV3, spatialV3Bounds, zoomSpatialV3, panSpatialV3, type SpatialV3Camera } from '~/utils/spatialV3Camera'
 
 const props = defineProps<{ fixture: SpatialV3Fixture }>()
 const { t } = useI18n()
@@ -17,7 +17,12 @@ let hasMovedCamera = false
 function fitView() {
   const stage = stageRef.value
   if (!stage) return
-  camera.value = fitSpatialV3(stage.clientWidth, stage.clientHeight)
+  camera.value = fitSpatialV3(stage.clientWidth, stage.clientHeight, {
+    x: sceneBounds.value.x - sceneOrigin.value.x,
+    y: sceneBounds.value.y - sceneOrigin.value.y,
+    width: sceneBounds.value.width,
+    height: sceneBounds.value.height,
+  })
   hasMovedCamera = false
 }
 function zoomView(factor: number, clientX?: number, clientY?: number) {
@@ -79,6 +84,21 @@ const visibleNodes = computed(() => props.fixture.nodes.filter(node => node.dept
 const visibleEdges = computed(() => props.fixture.edges.filter(edge => edge.depth <= depth.value))
 const selectedNode = computed(() => visibleNodes.value.find(node => node.id === selectedId.value))
 const hiddenCount = computed(() => props.fixture.nodes.filter(node => node.depth > depth.value).length)
+// Stable origin: expansion cannot shift existing objects as hidden nodes appear.
+const sceneBounds = computed(() => spatialV3Bounds(visibleNodes.value))
+const fullBounds = computed(() => spatialV3Bounds(props.fixture.nodes))
+const sceneOrigin = computed(() => ({
+  x: Math.min(0, fullBounds.value.x),
+  y: Math.min(0, fullBounds.value.y),
+}))
+const sceneSize = computed(() => ({
+  width: Math.max(1000, fullBounds.value.x + fullBounds.value.width - sceneOrigin.value.x),
+  height: Math.max(640, fullBounds.value.y + fullBounds.value.height - sceneOrigin.value.y),
+}))
+const svgViewBox = computed(() => [
+  sceneOrigin.value.x, sceneOrigin.value.y, sceneSize.value.width, sceneSize.value.height,
+].join(' '))
+
 
 function edgePath(edge: SpatialV3Edge): string {
   const points = edge.points
@@ -87,9 +107,12 @@ function edgePath(edge: SpatialV3Edge): string {
   return points.map((p, index) => `${index ? 'L' : 'M'} ${p.x} ${p.y}`).join(' ')
 }
 function changeDepth(next: 1 | 2) {
+  const mayRefit = !hasMovedCamera
   depth.value = next
   if (selectedId.value && !visibleNodes.value.some(node => node.id === selectedId.value))
     selectedId.value = null
+  if (mayRefit)
+    nextTick(() => fitView())
 }
 function selectNode(node: SpatialV3Node) {
   selectedId.value = selectedId.value === node.id ? null : node.id
@@ -124,9 +147,9 @@ function selectNode(node: SpatialV3Node) {
       @wheel.prevent="onWheel"
       @keydown="onStageKeydown"
     >
-      <div class="spatial-v3__canvas" :style="{ transform: `translate(${camera.x}px, ${camera.y}px) scale(${camera.zoom})` }">
+      <div class="spatial-v3__canvas" :style="{ width: sceneSize.width + 'px', height: sceneSize.height + 'px', transform: 'translate(' + camera.x + 'px, ' + camera.y + 'px) scale(' + camera.zoom + ')' }">
         <p class="spatial-v3__folio">{{ t('spatialV3.folio') }}</p>
-        <svg aria-hidden="true" class="spatial-v3__edges" viewBox="0 0 1000 640" preserveAspectRatio="none">
+        <svg aria-hidden="true" class="spatial-v3__edges" :viewBox="svgViewBox" preserveAspectRatio="none">
           <path v-for="edge in visibleEdges" :key="edge.id" :class="`spatial-v3__edge--${edge.type}`" :d="edgePath(edge)" />
         </svg>
         <button
@@ -136,7 +159,7 @@ function selectNode(node: SpatialV3Node) {
           type="button"
           class="spatial-v3__node"
           :class="[`spatial-v3__node--${node.kind}`, `spatial-v3__node--${node.status}`]"
-          :style="{ left: `${node.x * 100}%`, top: `${node.y * 100}%` }"
+          :style="{ left: (node.x * 1000 - sceneOrigin.x) + 'px', top: (node.y * 640 - sceneOrigin.y) + 'px' }"
           :aria-pressed="selectedId === node.id"
           :aria-label="t('spatialV3.nodeAria', { role: node.eyebrow, label: node.label, status: node.status })"
           @click="selectNode(node)"
