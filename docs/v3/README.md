@@ -34,6 +34,7 @@ Ce que Kollio n'est pas : un clone de ChatGPT/Claude, un framework d'agents, un 
 - [02 — Contrat produit](02-product-contract.md) : modèle commun, navigation, parcours de référence.
 - [03 — Parité visuelle](03-visual-parity.md) : design direction, écrans et scénarios à maquetter.
 - [04 — Plan de migration](04-migration-plan.md) : phases, critères de sortie, risques et réutilisation.
+- [05 — Arbitrages visuels](05-design-arbitrations.md) : shell structuré vs canvas-first, découvertes locales et protocole de décision.
 
 ## Règle de livraison
 
