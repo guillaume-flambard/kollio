@@ -2,9 +2,9 @@
 import type { SpatialV3Edge, SpatialV3Fixture, SpatialV3Node } from '~/utils/spatialV3.generated'
 import { fitSpatialV3, spatialV3Bounds, zoomSpatialV3, panSpatialV3, type SpatialV3Camera } from '~/utils/spatialV3Camera'
 
-const props = defineProps<{ fixture: SpatialV3Fixture }>()
+const props = defineProps<{ fixture: SpatialV3Fixture, initialDepth?: 1 | 2 }>()
 const { t } = useI18n()
-const depth = ref<1 | 2>(1)
+const depth = ref<1 | 2>(props.initialDepth ?? 1)
 const selectedId = ref<string | null>(null)
 const stageRef = ref<HTMLElement | null>(null)
 const camera = ref<SpatialV3Camera>({ zoom: 1, x: 0, y: 0 })
