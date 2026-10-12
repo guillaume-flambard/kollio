@@ -22,7 +22,7 @@ useSeoMeta({
 </template>
 
 <style>
-@import '../assets/css/spatial-v3.tokens.css';
+/* Shared V3 tokens are registered in @kollio/ui/tokens.css. */
 .spatial-v3-page{min-height:100vh;background:var(--k-color-paper);color:var(--k-color-ink)}
 .spatial-v3-page__bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 30px;border-bottom:1px solid var(--k-color-border)}
 .spatial-v3-page__brand{font-size:18px;font-weight:730;letter-spacing:-.045em;display:flex;align-items:center;gap:10px}
