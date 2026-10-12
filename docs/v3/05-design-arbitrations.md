@@ -4,7 +4,7 @@
 
 ## Découverte pendant R0
 
-La copie locale Mac, à `/Users/memo/projects/kollio-mac`, est en HEAD détachée `e8d24c9` avec des modifications de travail. Elle possède un `docs/product-pack/P13_VISUAL_LANGUAGE_V3.md` **plus récent que le `main` distant**. Ce document n'a **pas** été publié dans le dépôt GitHub que cette PR référence ; ne pas écraser, citer comme source distante ou importer silencieusement ce travail local.
+La copie locale Mac, à `the local Mac checkout of Kollio`, est en HEAD détachée `e8d24c9` avec des modifications de travail. Elle possède un `docs/product-pack/P13_VISUAL_LANGUAGE_V3.md` **plus récent que le `main` distant**. Ce document n'a **pas** été publié dans le dépôt GitHub que cette PR référence ; ne pas écraser, citer comme source distante ou importer silencieusement ce travail local.
 
 Le document local approfondit le principe **Paper / Ink / Branch / Glass** : canvas comme application, très peu de chrome à l'état de repos, contrôles éphémères, gestes près de l'objet. Il entre en tension avec le modèle de navigation Web à sections fixes et avec le wireframe initial à sidebar/inspecteur permanents.
 
