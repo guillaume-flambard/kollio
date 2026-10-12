@@ -17,6 +17,9 @@ export interface SpatialV3Edge {
   type: string
   label: string
   depth: 1 | 2
+  points: { x: number, y: number }[]
+  blocked: boolean
+  crossings: number
 }
 export interface SpatialV3Fixture {
   schemaVersion: 1
@@ -108,7 +111,19 @@ export const spatialV3Fixture: SpatialV3Fixture = {
       "target": "context",
       "type": "relates",
       "label": "contexte",
-      "depth": 1
+      "depth": 1,
+      "points": [
+        {
+          "x": 413.2543103448276,
+          "y": 288.1
+        },
+        {
+          "x": 292.41379310344826,
+          "y": 208
+        }
+      ],
+      "blocked": false,
+      "crossings": 0
     },
     {
       "id": "rel-goal",
@@ -116,7 +131,19 @@ export const spatialV3Fixture: SpatialV3Fixture = {
       "target": "goal",
       "type": "supports",
       "label": "oriente",
-      "depth": 1
+      "depth": 1,
+      "points": [
+        {
+          "x": 586.7456896551724,
+          "y": 288.1
+        },
+        {
+          "x": 707.5862068965517,
+          "y": 208
+        }
+      ],
+      "blocked": false,
+      "crossings": 0
     },
     {
       "id": "rel-evidence",
@@ -124,7 +151,19 @@ export const spatialV3Fixture: SpatialV3Fixture = {
       "target": "evidence",
       "type": "evidence",
       "label": "documente",
-      "depth": 2
+      "depth": 2,
+      "points": [
+        {
+          "x": 382.8125,
+          "y": 403.1
+        },
+        {
+          "x": 297.82608695652175,
+          "y": 444.8
+        }
+      ],
+      "blocked": false,
+      "crossings": 0
     },
     {
       "id": "rel-proposal",
@@ -132,7 +171,19 @@ export const spatialV3Fixture: SpatialV3Fixture = {
       "target": "proposal",
       "type": "proposes",
       "label": "propose",
-      "depth": 2
+      "depth": 2,
+      "points": [
+        {
+          "x": 609.375,
+          "y": 403.1
+        },
+        {
+          "x": 688.695652173913,
+          "y": 444.8
+        }
+      ],
+      "blocked": false,
+      "crossings": 0
     },
     {
       "id": "rel-question",
@@ -140,7 +191,19 @@ export const spatialV3Fixture: SpatialV3Fixture = {
       "target": "question",
       "type": "questions",
       "label": "interroge",
-      "depth": 2
+      "depth": 2,
+      "points": [
+        {
+          "x": 798.75,
+          "y": 208
+        },
+        {
+          "x": 828.28125,
+          "y": 283.6
+        }
+      ],
+      "blocked": false,
+      "crossings": 0
     }
   ]
 }
