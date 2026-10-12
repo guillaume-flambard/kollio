@@ -1406,6 +1406,13 @@
     "details": "Selected object details",
     "closeAria": "Close details",
     "previewTitle": "Kollio Spatial Ink V3 — preview",
-    "previewDescription": "A spatial experience with a shared Web and Mac data contract."
+    "previewDescription": "A spatial experience with a shared Web and Mac data contract.",
+    "cameraControls": "Spatial navigation",
+    "zoomOut": "Zoom out",
+    "zoomIn": "Zoom in",
+    "fitView": "Fit view",
+    "zoomOutSymbol": "−",
+    "zoomInSymbol": "+",
+    "zoomPercent": "{count} %"
   }
 }
