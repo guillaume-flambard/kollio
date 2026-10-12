@@ -78,21 +78,13 @@ onBeforeUnmount(() => { resizeObserver?.disconnect() })
 const visibleNodes = computed(() => props.fixture.nodes.filter(node => node.depth <= depth.value))
 const visibleEdges = computed(() => props.fixture.edges.filter(edge => edge.depth <= depth.value))
 const selectedNode = computed(() => visibleNodes.value.find(node => node.id === selectedId.value))
-const nodeById = computed(() => new Map(props.fixture.nodes.map(node => [node.id, node])))
 const hiddenCount = computed(() => props.fixture.nodes.filter(node => node.depth > depth.value).length)
 
 function edgePath(edge: SpatialV3Edge): string {
-  const from = nodeById.value.get(edge.source)
-  const to = nodeById.value.get(edge.target)
-  if (!from || !to)
+  const points = edge.points
+  if (!points || points.length < 2)
     return ''
-  const x1 = from.x * 1000
-  const y1 = from.y * 640
-  const x2 = to.x * 1000
-  const y2 = to.y * 640
-  const bend = Math.max(45, Math.min(120, Math.abs(y2 - y1) * 0.35))
-  const direction = y2 < y1 ? -1 : 1
-  return `M ${x1} ${y1} C ${x1} ${y1 + direction * bend}, ${x2} ${y2 - direction * bend}, ${x2} ${y2}`
+  return points.map((p, index) => `${index ? 'L' : 'M'} ${p.x} ${p.y}`).join(' ')
 }
 function changeDepth(next: 1 | 2) {
   depth.value = next
