@@ -1,0 +1,36 @@
+name: Spatial Ink Browser E2E
+on:
+  pull_request:
+    paths:
+      - 'apps/web/app/components/kollio/v3/**'
+      - 'apps/web/app/pages/spatial-v3.vue'
+      - 'apps/web/app/utils/spatialV3*.ts'
+      - 'apps/web/tests/browser/spatial-v3.spec.ts'
+      - 'apps/web/playwright.spatial.config.ts'
+      - '.github/workflows/spatial-e2e.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  spatial-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: pnpm/action-setup@v6.1.0
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --dir apps/web exec playwright install --with-deps chromium
+      - name: Verify Spatial Ink real navigation
+        run: pnpm --dir apps/web exec playwright test --config playwright.spatial.config.ts
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: spatial-e2e-trace
+          path: |
+            apps/web/test-results/
+            apps/web/playwright-report/
+          retention-days: 7

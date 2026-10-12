@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { spatialV3Fixture } from '~/utils/spatialV3.generated'
+import { spatialV3StressFixture } from '~/utils/spatialV3Stress.generated'
 
 definePageMeta({ layout: false })
 const { t } = useI18n()
+const route = useRoute()
+const activeFixture = computed(() => route.query.stress === '100' ? spatialV3StressFixture : spatialV3Fixture)
 useSeoMeta({
   title: () => t('spatialV3.previewTitle'),
   description: () => t('spatialV3.previewDescription'),
@@ -17,7 +20,7 @@ useSeoMeta({
         {{ t('spatialV3.back') }}
       </NuxtLink>
     </header>
-    <KollioV3SpatialStage :fixture="spatialV3Fixture" />
+    <KollioV3SpatialStage :key="activeFixture.id" :fixture="activeFixture" :initial-depth="route.query.stress === '100' ? 2 : 1" />
   </div>
 </template>
 

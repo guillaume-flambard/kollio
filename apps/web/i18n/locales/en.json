@@ -1413,6 +1413,17 @@
     "fitView": "Fit view",
     "zoomOutSymbol": "−",
     "zoomInSymbol": "+",
-    "zoomPercent": "{count} %"
+    "zoomPercent": "{count} %",
+    "findObject": "Find an object",
+    "searchPlaceholder": "Search by idea or identifier",
+    "noMatch": "No matching object",
+    "groups": "Graph groups",
+    "overview": "Overview",
+    "groupNumber": "Group {number} · {count} objects",
+    "focusContext": "Focus: {count} related objects",
+    "returnToContext": "Back to context",
+    "neighborArrow": "↗",
+    "focusTrail": "Exploration trail",
+    "neighbors": "Explore neighbors"
   }
 }

@@ -2,10 +2,86 @@
 import type { SpatialV3Edge, SpatialV3Fixture, SpatialV3Node } from '~/utils/spatialV3.generated'
 import { fitSpatialV3, spatialV3Bounds, zoomSpatialV3, panSpatialV3, type SpatialV3Camera } from '~/utils/spatialV3Camera'
 
-const props = defineProps<{ fixture: SpatialV3Fixture }>()
+const props = defineProps<{ fixture: SpatialV3Fixture, initialDepth?: 1 | 2 }>()
 const { t } = useI18n()
-const depth = ref<1 | 2>(1)
+const depth = ref<1 | 2>(props.initialDepth ?? 1)
 const selectedId = ref<string | null>(null)
+const spotlightId = ref<string | null>(null)
+const focusHistory = ref<string[]>([])
+const focusedNeighbors = computed(() => props.fixture.edges
+  .filter(edge => edge.source === spotlightId.value || edge.target === spotlightId.value)
+  .map(edge => props.fixture.nodes.find(node => node.id === (edge.source === spotlightId.value ? edge.target : edge.source)))
+  .filter((node): node is SpatialV3Node => !!node)
+  .filter((node, index, values) => values.findIndex(candidate => candidate.id === node.id) === index))
+function rememberFocus(id: string) {
+  if (focusHistory.value.at(-1) !== id)
+    focusHistory.value.push(id)
+  if (focusHistory.value.length > 12) focusHistory.value.shift()
+}
+function restoreFocus(index: number) {
+  const id = focusHistory.value[index]
+  if (!id) return
+  focusHistory.value = focusHistory.value.slice(0, index + 1)
+  const node = props.fixture.nodes.find(item => item.id === id)
+  if (node) focusNode(node, false)
+}
+
+const spotlightIDs = computed(() => {
+  if (!spotlightId.value) return null
+  const ids = new Set([spotlightId.value])
+  for (const edge of props.fixture.edges) {
+    if (edge.source === spotlightId.value) ids.add(edge.target)
+    if (edge.target === spotlightId.value) ids.add(edge.source)
+  }
+  return ids
+})
+function returnToContext() { focusHistory.value = []; spotlightId.value = null; selectedId.value = null; showEverything() }
+const searchQuery = ref('')
+const focusedGroup = ref<number | null>(null)
+const GROUP_SIZE = 12
+const groups = computed(() => Array.from({ length: Math.ceil(props.fixture.nodes.length / GROUP_SIZE) }, (_, index) => ({
+  index,
+  ids: props.fixture.nodes.slice(index * GROUP_SIZE, (index + 1) * GROUP_SIZE).map(node => node.id),
+})))
+const matchingNodes = computed(() => props.fixture.nodes.filter(node => node.label.toLocaleLowerCase().includes(searchQuery.value.trim().toLocaleLowerCase()) || node.id.toLocaleLowerCase().includes(searchQuery.value.trim().toLocaleLowerCase())))
+const shownIds = computed(() => focusedGroup.value === null ? null : new Set(groups.value[focusedGroup.value]?.ids ?? []))
+function focusNode(node: SpatialV3Node, record = true) {
+  if (record) rememberFocus(node.id)
+  depth.value = 2
+  focusedGroup.value = null
+  selectedId.value = node.id
+  spotlightId.value = node.id
+  nextTick(() => {
+    const element = stageRef.value
+    if (!element) return
+    const zoom = Math.min(1.2, Math.max(0.8, camera.value.zoom))
+    camera.value = { zoom, x: element.clientWidth / 2 - (node.x * 1000 - sceneOrigin.value.x) * zoom,
+      y: element.clientHeight / 2 - (node.y * 640 - sceneOrigin.value.y) * zoom }
+    hasMovedCamera = true
+  })
+}
+function focusGroup(index: number) {
+  focusedGroup.value = index
+  spotlightId.value = null
+  depth.value = 2
+  const members = props.fixture.nodes.filter(node => groups.value[index]?.ids.includes(node.id))
+  nextTick(() => {
+    const viewport = stageRef.value
+    if (!viewport || !members.length) return
+    const bounds = spatialV3Bounds(members)
+    camera.value = fitSpatialV3(viewport.clientWidth, viewport.clientHeight, {
+      x: bounds.x - sceneOrigin.value.x, y: bounds.y - sceneOrigin.value.y, width: bounds.width, height: bounds.height,
+    })
+    hasMovedCamera = true
+  })
+}
+function showEverything() {
+  focusedGroup.value = null
+  spotlightId.value = null
+  depth.value = 2
+  nextTick(() => fitView())
+}
+
 const stageRef = ref<HTMLElement | null>(null)
 const camera = ref<SpatialV3Camera>({ zoom: 1, x: 0, y: 0 })
 const isPanning = ref(false)
@@ -80,8 +156,8 @@ onMounted(() => {
 onBeforeUnmount(() => { resizeObserver?.disconnect() })
 
 
-const visibleNodes = computed(() => props.fixture.nodes.filter(node => node.depth <= depth.value))
-const visibleEdges = computed(() => props.fixture.edges.filter(edge => edge.depth <= depth.value))
+const visibleNodes = computed(() => props.fixture.nodes.filter(node => node.depth <= depth.value && (!shownIds.value || shownIds.value.has(node.id))))
+const visibleEdges = computed(() => props.fixture.edges.filter(edge => edge.depth <= depth.value && (!shownIds.value || (shownIds.value.has(edge.source) && shownIds.value.has(edge.target)))))
 const selectedNode = computed(() => visibleNodes.value.find(node => node.id === selectedId.value))
 const hiddenCount = computed(() => props.fixture.nodes.filter(node => node.depth > depth.value).length)
 // Stable origin: expansion cannot shift existing objects as hidden nodes appear.
@@ -116,6 +192,8 @@ function changeDepth(next: 1 | 2) {
 }
 function selectNode(node: SpatialV3Node) {
   selectedId.value = selectedId.value === node.id ? null : node.id
+  spotlightId.value = selectedId.value
+  if (selectedId.value) rememberFocus(selectedId.value)
 }
 </script>
 
@@ -132,6 +210,35 @@ function selectNode(node: SpatialV3Node) {
       </button>
     </div>
 
+    <nav v-if="focusHistory.length" class="spatial-v3__trail" :aria-label="t('spatialV3.focusTrail')">
+      <button type="button" @click="returnToContext">{{ t('spatialV3.overview') }}</button>
+      <button v-for="(id, index) in focusHistory" :key="index" type="button" :aria-current="index === focusHistory.length - 1 ? 'location' : undefined" @click="restoreFocus(index)">
+        {{ fixture.nodes.find(node => node.id === id)?.label ?? id }}
+      </button>
+    </nav>
+    <div v-if="spotlightId && focusedNeighbors.length" class="spatial-v3__neighbors" :aria-label="t('spatialV3.neighbors')">
+      <button v-for="neighbor in focusedNeighbors.slice(0, 12)" :key="neighbor.id" type="button" @click="focusNode(neighbor)">{{ neighbor.label }} {{ t('spatialV3.neighborArrow') }}</button>
+    </div>
+    <div v-if="spotlightId" class="spatial-v3__focusbar" role="status">
+      {{ t('spatialV3.focusContext', { count: spotlightIDs?.size ?? 0 }) }}
+      <button type="button" @click="returnToContext">{{ t('spatialV3.returnToContext') }}</button>
+    </div>
+    <div v-if="fixture.nodes.length > 20" class="spatial-v3__discovery">
+      <label class="spatial-v3__search-label">
+        {{ t('spatialV3.findObject') }}
+        <input v-model="searchQuery" type="search" :placeholder="t('spatialV3.searchPlaceholder')">
+      </label>
+      <div v-if="searchQuery.trim()" class="spatial-v3__matches" role="list">
+        <button v-for="node in matchingNodes.slice(0, 8)" :key="node.id" type="button" @click="focusNode(node)">{{ node.label }}</button>
+        <p v-if="!matchingNodes.length">{{ t('spatialV3.noMatch') }}</p>
+      </div>
+      <div class="spatial-v3__group-list" role="group" :aria-label="t('spatialV3.groups')">
+        <button type="button" :aria-pressed="focusedGroup === null" @click="showEverything">{{ t('spatialV3.overview') }}</button>
+        <button v-for="group in groups" :key="group.index" type="button" :aria-pressed="focusedGroup === group.index" @click="focusGroup(group.index)">
+          {{ t('spatialV3.groupNumber', { number: group.index + 1, count: group.ids.length }) }}
+        </button>
+      </div>
+    </div>
     <div
       ref="stageRef"
       class="spatial-v3__scroll"
@@ -150,7 +257,7 @@ function selectNode(node: SpatialV3Node) {
       <div class="spatial-v3__canvas" :style="{ width: sceneSize.width + 'px', height: sceneSize.height + 'px', transform: 'translate(' + camera.x + 'px, ' + camera.y + 'px) scale(' + camera.zoom + ')' }">
         <p class="spatial-v3__folio">{{ t('spatialV3.folio') }}</p>
         <svg aria-hidden="true" class="spatial-v3__edges" :viewBox="svgViewBox" preserveAspectRatio="none">
-          <path v-for="edge in visibleEdges" :key="edge.id" :class="`spatial-v3__edge--${edge.type}`" :d="edgePath(edge)" />
+          <path v-for="edge in visibleEdges" :key="edge.id" :class="[`spatial-v3__edge--${edge.type}`, { 'spatial-v3__edge--dimmed': spotlightId && edge.source !== spotlightId && edge.target !== spotlightId }]" :d="edgePath(edge)" />
         </svg>
         <button
           v-for="node in visibleNodes"
@@ -158,7 +265,7 @@ function selectNode(node: SpatialV3Node) {
           data-spatial-node
           type="button"
           class="spatial-v3__node"
-          :class="[`spatial-v3__node--${node.kind}`, `spatial-v3__node--${node.status}`]"
+          :class="[`spatial-v3__node--${node.kind}`, `spatial-v3__node--${node.status}`, { 'spatial-v3__node--dimmed': spotlightIDs && !spotlightIDs.has(node.id) }]"
           :style="{ left: (node.x * 1000 - sceneOrigin.x) + 'px', top: (node.y * 640 - sceneOrigin.y) + 'px' }"
           :aria-pressed="selectedId === node.id"
           :aria-label="t('spatialV3.nodeAria', { role: node.eyebrow, label: node.label, status: node.status })"
@@ -196,6 +303,23 @@ function selectNode(node: SpatialV3Node) {
 </template>
 
 <style scoped>
+.spatial-v3__trail,.spatial-v3__neighbors{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px}
+.spatial-v3__trail button,.spatial-v3__neighbors button{border:1px solid var(--k-color-border);border-radius:8px;padding:7px 10px;background:var(--k-color-surface);color:var(--k-color-ink);font-size:12px}
+.spatial-v3__trail button[aria-current="location"]{border-color:var(--k-color-accent)}
+
+.spatial-v3__focusbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--k-color-accent-soft);color:var(--k-color-ink);border-radius:11px;padding:10px 14px;margin-bottom:12px;font-size:12px}
+.spatial-v3__focusbar button{min-height:36px;padding:6px 11px;border-radius:8px;border:1px solid var(--k-color-border);background:var(--k-color-surface);color:var(--k-color-ink)}
+.spatial-v3__node--dimmed{opacity:.17}
+.spatial-v3__edges .spatial-v3__edge--dimmed{opacity:.09}
+
+.spatial-v3__discovery{display:grid;gap:10px;margin:0 0 14px}
+.spatial-v3__search-label{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--k-color-muted)}
+.spatial-v3__search-label input{min-height:40px;min-width:240px;border:1px solid var(--k-color-border);border-radius:9px;padding:7px 12px;background:var(--k-color-surface);color:var(--k-color-ink)}
+.spatial-v3__matches,.spatial-v3__group-list{display:flex;flex-wrap:wrap;gap:7px}
+.spatial-v3__matches button,.spatial-v3__group-list button{padding:7px 10px;border:1px solid var(--k-color-border);border-radius:9px;background:var(--k-color-surface);color:var(--k-color-ink);font-size:12px;cursor:pointer}
+.spatial-v3__group-list button[aria-pressed="true"]{background:var(--k-color-accent);color:var(--k-color-on-accent)}
+.spatial-v3__matches p{font-size:12px;color:var(--k-color-muted)}
+
 .spatial-v3{color:var(--k-color-ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;max-width:1300px;margin:0 auto;padding:28px 20px 70px}
 .spatial-v3 *{box-sizing:border-box}
 .spatial-v3__heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:22px}
