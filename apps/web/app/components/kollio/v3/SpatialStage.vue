@@ -6,6 +6,48 @@ const props = defineProps<{ fixture: SpatialV3Fixture, initialDepth?: 1 | 2 }>()
 const { t } = useI18n()
 const depth = ref<1 | 2>(props.initialDepth ?? 1)
 const selectedId = ref<string | null>(null)
+const searchQuery = ref('')
+const focusedGroup = ref<number | null>(null)
+const GROUP_SIZE = 12
+const groups = computed(() => Array.from({ length: Math.ceil(props.fixture.nodes.length / GROUP_SIZE) }, (_, index) => ({
+  index,
+  ids: props.fixture.nodes.slice(index * GROUP_SIZE, (index + 1) * GROUP_SIZE).map(node => node.id),
+})))
+const matchingNodes = computed(() => props.fixture.nodes.filter(node => node.label.toLocaleLowerCase().includes(searchQuery.value.trim().toLocaleLowerCase()) || node.id.toLocaleLowerCase().includes(searchQuery.value.trim().toLocaleLowerCase())))
+const shownIds = computed(() => focusedGroup.value === null ? null : new Set(groups.value[focusedGroup.value]?.ids ?? []))
+function focusNode(node: SpatialV3Node) {
+  depth.value = 2
+  focusedGroup.value = null
+  selectedId.value = node.id
+  nextTick(() => {
+    const element = stageRef.value
+    if (!element) return
+    const zoom = Math.min(1.2, Math.max(0.8, camera.value.zoom))
+    camera.value = { zoom, x: element.clientWidth / 2 - (node.x * 1000 - sceneOrigin.value.x) * zoom,
+      y: element.clientHeight / 2 - (node.y * 640 - sceneOrigin.value.y) * zoom }
+    hasMovedCamera = true
+  })
+}
+function focusGroup(index: number) {
+  focusedGroup.value = index
+  depth.value = 2
+  const members = props.fixture.nodes.filter(node => groups.value[index]?.ids.includes(node.id))
+  nextTick(() => {
+    const viewport = stageRef.value
+    if (!viewport || !members.length) return
+    const bounds = spatialV3Bounds(members)
+    camera.value = fitSpatialV3(viewport.clientWidth, viewport.clientHeight, {
+      x: bounds.x - sceneOrigin.value.x, y: bounds.y - sceneOrigin.value.y, width: bounds.width, height: bounds.height,
+    })
+    hasMovedCamera = true
+  })
+}
+function showEverything() {
+  focusedGroup.value = null
+  depth.value = 2
+  nextTick(() => fitView())
+}
+
 const stageRef = ref<HTMLElement | null>(null)
 const camera = ref<SpatialV3Camera>({ zoom: 1, x: 0, y: 0 })
 const isPanning = ref(false)
@@ -80,8 +122,8 @@ onMounted(() => {
 onBeforeUnmount(() => { resizeObserver?.disconnect() })
 
 
-const visibleNodes = computed(() => props.fixture.nodes.filter(node => node.depth <= depth.value))
-const visibleEdges = computed(() => props.fixture.edges.filter(edge => edge.depth <= depth.value))
+const visibleNodes = computed(() => props.fixture.nodes.filter(node => node.depth <= depth.value && (!shownIds.value || shownIds.value.has(node.id))))
+const visibleEdges = computed(() => props.fixture.edges.filter(edge => edge.depth <= depth.value && (!shownIds.value || (shownIds.value.has(edge.source) && shownIds.value.has(edge.target)))))
 const selectedNode = computed(() => visibleNodes.value.find(node => node.id === selectedId.value))
 const hiddenCount = computed(() => props.fixture.nodes.filter(node => node.depth > depth.value).length)
 // Stable origin: expansion cannot shift existing objects as hidden nodes appear.
@@ -132,6 +174,22 @@ function selectNode(node: SpatialV3Node) {
       </button>
     </div>
 
+    <div v-if="fixture.nodes.length > 20" class="spatial-v3__discovery">
+      <label class="spatial-v3__search-label">
+        {{ t('spatialV3.findObject') }}
+        <input v-model="searchQuery" type="search" :placeholder="t('spatialV3.searchPlaceholder')">
+      </label>
+      <div v-if="searchQuery.trim()" class="spatial-v3__matches" role="list">
+        <button v-for="node in matchingNodes.slice(0, 8)" :key="node.id" type="button" @click="focusNode(node)">{{ node.label }}</button>
+        <p v-if="!matchingNodes.length">{{ t('spatialV3.noMatch') }}</p>
+      </div>
+      <div class="spatial-v3__group-list" role="group" :aria-label="t('spatialV3.groups')">
+        <button type="button" :aria-pressed="focusedGroup === null" @click="showEverything">{{ t('spatialV3.overview') }}</button>
+        <button v-for="group in groups" :key="group.index" type="button" :aria-pressed="focusedGroup === group.index" @click="focusGroup(group.index)">
+          {{ t('spatialV3.groupNumber', { number: group.index + 1, count: group.ids.length }) }}
+        </button>
+      </div>
+    </div>
     <div
       ref="stageRef"
       class="spatial-v3__scroll"
@@ -196,6 +254,14 @@ function selectNode(node: SpatialV3Node) {
 </template>
 
 <style scoped>
+.spatial-v3__discovery{display:grid;gap:10px;margin:0 0 14px}
+.spatial-v3__search-label{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--k-color-muted)}
+.spatial-v3__search-label input{min-height:40px;min-width:240px;border:1px solid var(--k-color-border);border-radius:9px;padding:7px 12px;background:var(--k-color-surface);color:var(--k-color-ink)}
+.spatial-v3__matches,.spatial-v3__group-list{display:flex;flex-wrap:wrap;gap:7px}
+.spatial-v3__matches button,.spatial-v3__group-list button{padding:7px 10px;border:1px solid var(--k-color-border);border-radius:9px;background:var(--k-color-surface);color:var(--k-color-ink);font-size:12px;cursor:pointer}
+.spatial-v3__group-list button[aria-pressed="true"]{background:var(--k-color-accent);color:var(--k-color-on-accent)}
+.spatial-v3__matches p{font-size:12px;color:var(--k-color-muted)}
+
 .spatial-v3{color:var(--k-color-ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,system-ui,sans-serif;max-width:1300px;margin:0 auto;padding:28px 20px 70px}
 .spatial-v3 *{box-sizing:border-box}
 .spatial-v3__heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:22px}

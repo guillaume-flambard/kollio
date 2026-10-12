@@ -1413,6 +1413,12 @@
     "fitView": "Recentrer",
     "zoomOutSymbol": "−",
     "zoomInSymbol": "+",
-    "zoomPercent": "{count} %"
+    "zoomPercent": "{count} %",
+    "findObject": "Retrouver un objet",
+    "searchPlaceholder": "Rechercher une idée ou un identifiant",
+    "noMatch": "Aucun objet trouvé",
+    "groups": "Groupes du graphe",
+    "overview": "Vue d’ensemble",
+    "groupNumber": "Groupe {number} · {count} objets"
   }
 }
