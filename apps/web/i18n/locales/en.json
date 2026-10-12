@@ -1421,6 +1421,9 @@
     "overview": "Overview",
     "groupNumber": "Group {number} · {count} objects",
     "focusContext": "Focus: {count} related objects",
-    "returnToContext": "Back to context"
+    "returnToContext": "Back to context",
+    "neighborArrow": "↗",
+    "focusTrail": "Exploration trail",
+    "neighbors": "Explore neighbors"
   }
 }

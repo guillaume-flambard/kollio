@@ -1421,6 +1421,9 @@
     "overview": "Vue d’ensemble",
     "groupNumber": "Groupe {number} · {count} objets",
     "focusContext": "Focus : {count} objets reliés",
-    "returnToContext": "Revenir au contexte"
+    "returnToContext": "Revenir au contexte",
+    "neighborArrow": "↗",
+    "focusTrail": "Parcours d’exploration",
+    "neighbors": "Explorer les voisins"
   }
 }
