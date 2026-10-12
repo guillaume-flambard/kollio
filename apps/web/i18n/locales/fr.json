@@ -1382,5 +1382,37 @@
       },
       "gapLine": "Preuve manquante : {gap}"
     }
+  },
+  "spatialV3": {
+    "eyebrow": "Spatial Ink · Expérience Web",
+    "expand": "+ Explorer {count} relations",
+    "collapse": "− Replier les branches",
+    "folio": "ESPACE 01 / EXPLORATION",
+    "missionCaption": "Ce qui nous rassemble",
+    "sourceCaption": "Référence à examiner",
+    "proposalCaption": "À valider par un humain",
+    "relationConfirmed": "─ Relation établie",
+    "relationProposed": "┄ Changement proposé",
+    "countShown": "{count} objets affichés",
+    "selectHint": "Sélectionne un objet pour inspecter son sens et sa provenance. Replier ne supprime rien.",
+    "nodeStatus": "{role} · {status}",
+    "close": "Fermer ×",
+    "disclaimer": "Prévisualisation V3 · Les données sont communes au Web et au Mac. Aucune IA, mutation ni persistance activée.",
+    "back": "Retour à Kollio ↗",
+    "previewLabel": "Spatial Ink V3",
+    "accessibleCanvas": "Graphe spatial, fais défiler horizontalement sur petit écran",
+    "accessibleStage": "Exploration spatiale Kollio V3",
+    "nodeAria": "{role} : {label}. Statut {status}. Afficher les détails.",
+    "details": "Détails de l'objet sélectionné",
+    "closeAria": "Fermer les détails",
+    "previewTitle": "Kollio Spatial Ink V3 — prévisualisation",
+    "previewDescription": "Une expérimentation spatiale avec un contrat de données commun au Mac et au Web.",
+    "cameraControls": "Navigation spatiale",
+    "zoomOut": "Dézoomer",
+    "zoomIn": "Zoomer",
+    "fitView": "Recentrer",
+    "zoomOutSymbol": "−",
+    "zoomInSymbol": "+",
+    "zoomPercent": "{count} %"
   }
 }
