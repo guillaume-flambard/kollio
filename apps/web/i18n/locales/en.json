@@ -1382,5 +1382,30 @@
       },
       "gapLine": "Missing evidence: {gap}"
     }
+  },
+  "spatialV3": {
+    "eyebrow": "Spatial Ink · Web experience",
+    "expand": "+ Explore {count} relationships",
+    "collapse": "− Collapse branches",
+    "folio": "SPACE 01 / EXPLORATION",
+    "missionCaption": "What holds this work together",
+    "sourceCaption": "Review this reference",
+    "proposalCaption": "Human review required",
+    "relationConfirmed": "─ Established relationship",
+    "relationProposed": "┄ Proposed change",
+    "countShown": "{count} visible objects",
+    "selectHint": "Select an object to inspect its meaning and provenance. Collapsing hides nothing permanently.",
+    "nodeStatus": "{role} · {status}",
+    "close": "Close ×",
+    "disclaimer": "V3 preview · The Web and Mac share the same fixture. No AI, mutation or persistence enabled.",
+    "back": "Return to Kollio ↗",
+    "previewLabel": "Spatial Ink V3",
+    "accessibleCanvas": "Spatial graph, scroll horizontally on narrow screens",
+    "accessibleStage": "Kollio V3 spatial exploration",
+    "nodeAria": "{role}: {label}. Status {status}. Show details.",
+    "details": "Selected object details",
+    "closeAria": "Close details",
+    "previewTitle": "Kollio Spatial Ink V3 — preview",
+    "previewDescription": "A spatial experience with a shared Web and Mac data contract."
   }
 }
