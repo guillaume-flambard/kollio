@@ -2,6 +2,8 @@
 
 ## État : direction candidate, **non validée par rendu**
 
+**Arbitrage ouvert :** [A (navigation structurée) vs B (canvas-first et contrôles contextuels)](05-design-arbitrations.md). Le wireframe ci-dessous est une hypothèse A, pas un contrat pour imposer des panneaux permanents. La direction B est prioritaire à tester à cause des documents Mac locaux plus récents.
+
 Le Web dispose d'un design `Living Canvas` aubergine/porcelain et de visuels approuvés pour l'ancien produit. Le Mac a `Paper/Ink/Branch`, palette bleu/sauge et interactions spatiales documentées. Aucune identité V3 n'est encore approuvée.
 
 ### Direction A à maquetter d'abord
