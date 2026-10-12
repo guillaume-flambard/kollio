@@ -8,16 +8,12 @@ const route = useRoute()
 const requestFetch = useRequestFetch()
 const localePath = useLocalePath()
 const spaceId = String(route.params.spaceId)
-const glyphs = Object.freeze({ back: '←' })
 const moments = [
   { key: 'frame', sections: ['explore', 'converge'] },
   { key: 'choose', sections: ['options', 'decision'] },
   { key: 'happened', sections: ['experiment', 'learning'] },
 ] as const
 
-function momentIsActive(moment: (typeof moments)[number]) {
-  return moment.sections.some(section => sectionIsActive(section))
-}
 const permitted: Record<string, readonly string[]> = {
   OPEN: ['EXPLORING'],
   EXPLORING: ['CONVERGING'],
@@ -62,7 +58,20 @@ const { data: members } = await useAsyncData(
 )
 
 const offeredTransitions = computed(() => (space.value ? permitted[space.value.status] ?? [] : []))
+const currentMomentKey = computed(() => {
+  const activeSection = moments.find(moment => moment.sections.some(section => sectionIsActive(section)))
+  if (activeSection) return activeSection.key
+
+  if (!space.value) return undefined
+  if (['OPEN', 'EXPLORING', 'CONVERGING', 'REOPENED'].includes(space.value.status)) return 'frame'
+  if (['READY_TO_DECIDE', 'DECIDED'].includes(space.value.status)) return 'choose'
+  return 'happened'
+})
 const { formatDate } = useFormatters()
+
+function momentIsActive(moment: (typeof moments)[number]) {
+  return moment.key === currentMomentKey.value
+}
 
 function memberName(userId: string) {
   return members.value?.find(member => member.id === userId)?.display_name ?? userId
@@ -118,21 +127,29 @@ useSeoMeta({ title: () => space.value?.question ?? t('decisionSpaces.metaTitle')
 
 <template>
   <div class="space">
-    <p v-if="error" class="space-feedback">
-      <strong>{{ t('decisionSpaces.notFound.title') }}</strong>
-      <span>{{ t('decisionSpaces.notFound.description') }}</span>
-    </p>
+    <div v-if="error" class="space-feedback">
+      <KollioFeedbackState
+        :title="t('decisionSpaces.notFound.title')"
+        :body="t('decisionSpaces.notFound.description')"
+        tone="error"
+      />
+    </div>
 
     <template v-else-if="space">
-      <NuxtLink class="space-back" :to="localePath('/workspace')"><span aria-hidden="true" v-text="glyphs.back" /> {{ t('decisionSpaces.back') }}</NuxtLink>
+      <NuxtLink class="space-back" :to="localePath('/workspace')">
+        <KollioIcon class="space-back__icon" name="arrow-right" />
+        {{ t('decisionSpaces.back') }}
+      </NuxtLink>
 
-      <header class="space-header">
-        <div class="space-header-main">
-          <h1>{{ space.question }}</h1>
-          <p v-if="space.description">{{ space.description }}</p>
-        </div>
-        <span class="space-status">{{ t(`decisionSpaces.status.${space.status}`) }}</span>
-      </header>
+      <KollioPageHeader
+        class="space-header"
+        :title="space.question"
+        :summary="space.description ?? undefined"
+      >
+        <template #action>
+          <KollioStatusMark class="space-status" :label="t(`decisionSpaces.status.${space.status}`)" />
+        </template>
+      </KollioPageHeader>
 
       <dl class="space-facts">
         <div><dt>{{ t('decisionSpaces.header.owner') }}</dt><dd>{{ memberName(space.owner_id) }}</dd></div>
@@ -148,20 +165,18 @@ useSeoMeta({ title: () => space.value?.question ?? t('decisionSpaces.metaTitle')
         </div>
       </dl>
 
-      <form v-if="offeredTransitions.length" class="space-transition" @submit.prevent="applyTransition">
-        <label>
+      <section v-if="offeredTransitions.length" class="space-transition" :aria-label="t('decisionSpaces.transition.choose')">
+        <div class="space-transition-target">
           <span>{{ t('decisionSpaces.transition.choose') }}</span>
-          <select v-model="transitionTarget">
-            <option v-for="target in offeredTransitions" :key="target" :value="target">{{ t(`decisionSpaces.status.${target}`) }}</option>
-          </select>
-        </label>
+          <KollioStatusMark :label="t(`decisionSpaces.status.${transitionTarget}`)" />
+        </div>
         <label v-if="transitionTarget === 'REOPENED'">
           <span>{{ t('decisionSpaces.transition.reason') }}</span>
           <input v-model="transitionReason" type="text">
         </label>
         <p v-if="transitionError" class="space-transition-error" role="alert">{{ transitionError }}</p>
-        <button type="submit" :disabled="transitioning">{{ t('decisionSpaces.transition.submit') }}</button>
-      </form>
+        <KollioPrimaryAction :label="t('decisionSpaces.transition.submit', { status: t(`decisionSpaces.status.${transitionTarget}`) })" :disabled="transitioning" @click="applyTransition" />
+      </section>
 
       <nav class="space-sections" :aria-label="t('decisionSpaces.title')">
         <div v-for="moment in moments" :key="moment.key" class="space-moment" :class="{ 'is-current': momentIsActive(moment) }">
@@ -182,40 +197,35 @@ useSeoMeta({ title: () => space.value?.question ?? t('decisionSpaces.metaTitle')
 </template>
 
 <style scoped>
-.space { width: 100%; padding: 16px 16px 34px; }
-.space-feedback { display: flex; min-height: 60vh; flex-direction: column; gap: 8px; justify-content: center; max-width: 560px; color: var(--ui-text-muted); }
-.space-feedback strong { color: var(--kollio-heading); font-size: var(--kollio-text-title); font-weight: var(--kollio-weight-display); }
-.space-back { display: inline-flex; min-height: 40px; align-items: center; gap: 8px; color: var(--ui-text-muted); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
+.space { width: 100%; padding: var(--kollio-space-md) var(--kollio-space-md) var(--kollio-space-xl); }
+.space-feedback { display: flex; min-height: 60vh; flex-direction: column; justify-content: center; }
+.space-back { display: inline-flex; min-height: var(--kollio-control-height); align-items: center; gap: var(--kollio-space-sm); color: var(--ui-text-muted); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
+.space-back__icon { width: var(--kollio-space-md); transform: rotate(180deg); }
 .space-back:hover { color: var(--kollio-active-ink); }
-.space-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 22px; margin-top: 10px; }
-.space-header h1 { max-width: 46ch; color: var(--kollio-heading); font-size: var(--kollio-text-headline); font-weight: var(--kollio-weight-display); letter-spacing: -.03em; line-height: var(--kollio-leading-heading); }
-.space-header-main p { margin-top: 10px; max-width: 62ch; color: var(--ui-text-muted); font-size: var(--kollio-text-small); line-height: var(--kollio-leading-body); }
-.space-status { flex: none; border-radius: var(--kollio-radius-pill); background: var(--kollio-active-wash); padding: 7px 15px; color: var(--kollio-active-ink); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
-.space-facts { display: flex; flex-wrap: wrap; gap: 12px 40px; margin-top: 22px; border-top: 1px solid var(--ui-border); border-bottom: 1px solid var(--ui-border); padding: 16px 0; }
-.space-facts dt { color: var(--ui-text-muted); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); text-transform: uppercase; letter-spacing: .08em; }
-.space-facts dd { margin-top: 6px; color: var(--kollio-heading); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); }
-.space-participants { display: flex; flex-wrap: wrap; gap: 6px 14px; font-weight: var(--kollio-weight-regular); }
-.space-transition { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px; margin-top: 18px; }
-.space-transition label { display: grid; gap: 6px; }
-.space-transition label > span { color: var(--ui-text-muted); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); text-transform: uppercase; letter-spacing: .08em; }
-.space-transition select, .space-transition input { min-height: 44px; border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); background: var(--ui-bg-elevated); padding: 10px 12px; color: var(--kollio-heading); font-size: var(--kollio-text-small); }
-.space-transition select:focus-visible, .space-transition input:focus-visible { outline: 2px solid var(--kollio-active-ink); outline-offset: 1px; }
-.space-transition button { min-height: 44px; border-radius: var(--kollio-radius-md); background: var(--kollio-heading); padding: 0 20px; color: var(--ui-bg-elevated); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
+.space-header { margin-top: var(--kollio-space-sm); }
+.space-facts { display: flex; flex-wrap: wrap; gap: var(--kollio-space-md) var(--kollio-space-2xl); margin-top: var(--kollio-space-lg); border-top: 1px solid var(--ui-border); border-bottom: 1px solid var(--ui-border); padding: var(--kollio-space-md) 0; }
+.space-facts dt { color: var(--ui-text-muted); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); text-transform: uppercase; letter-spacing: var(--kollio-tracking-label); }
+.space-facts dd { margin-top: var(--kollio-space-sm); color: var(--kollio-heading); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); }
+.space-participants { display: flex; flex-wrap: wrap; gap: var(--kollio-space-sm) var(--kollio-space-md); font-weight: var(--kollio-weight-regular); }
+.space-transition { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--kollio-space-md); margin-top: var(--kollio-space-lg); }
+.space-transition-target, .space-transition label { display: grid; gap: var(--kollio-space-sm); }
+.space-transition-target > span, .space-transition label > span { color: var(--ui-text-muted); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); text-transform: uppercase; letter-spacing: var(--kollio-tracking-label); }
+.space-transition input { min-height: var(--kollio-control-height); border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-md); background: var(--ui-bg-elevated); padding: var(--kollio-space-sm) var(--kollio-space-md); color: var(--kollio-heading); font-size: var(--kollio-text-small); }
+.space-transition input:focus-visible { outline: 2px solid var(--kollio-active-ink); outline-offset: var(--kollio-space-xs); }
 .space-transition button[disabled] { opacity: .6; }
 .space-transition-error { flex-basis: 100%; color: var(--ui-error); font-size: var(--kollio-text-caption); font-weight: var(--kollio-weight-strong); }
-.space-sections { display: flex; flex-wrap: wrap; gap: 14px 26px; margin-top: 26px; border-bottom: 1px solid var(--ui-border); padding-bottom: 12px; }
-.space-moment { display: grid; gap: 6px; }
-.space-moment-label { color: var(--ui-text-muted); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); text-transform: uppercase; letter-spacing: .08em; }
+.space-sections { display: flex; flex-wrap: wrap; gap: var(--kollio-space-md) var(--kollio-space-xl); margin-top: var(--kollio-space-xl); border-bottom: 1px solid var(--ui-border); padding-bottom: var(--kollio-space-md); }
+.space-moment { display: grid; gap: var(--kollio-space-sm); }
+.space-moment-label { color: var(--ui-text-muted); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); text-transform: uppercase; letter-spacing: var(--kollio-tracking-label); }
 .space-moment.is-current .space-moment-label { color: var(--kollio-active-ink); }
-.space-moment-links { display: flex; flex-wrap: wrap; gap: 4px 6px; }
-.space-sections a { display: inline-flex; min-height: 42px; align-items: center; border-radius: var(--kollio-radius-pill); padding: 0 16px; color: var(--ui-text-muted); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); }
+.space-moment-links { display: flex; flex-wrap: wrap; gap: var(--kollio-space-xs) var(--kollio-space-sm); }
+.space-sections a { display: inline-flex; min-height: var(--kollio-control-height); align-items: center; border-radius: var(--kollio-radius-pill); padding: 0 var(--kollio-space-md); color: var(--ui-text-muted); font-size: var(--kollio-text-small); font-weight: var(--kollio-weight-strong); }
 .space-sections a:hover { color: var(--kollio-heading); }
 .space-sections a.is-active { background: var(--ui-bg-accented); color: var(--kollio-active-ink); }
-.space-body { margin-top: 22px; }
+.space-body { margin-top: var(--kollio-space-lg); }
 @media (max-width: 760px) {
-  .space { padding: 20px 14px 50px; }
-  .space-header { flex-direction: column; }
-  .space-sections { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .space { padding: var(--kollio-space-md) var(--kollio-space-md) var(--kollio-space-2xl); }
+  .space-sections { display: grid; grid-template-columns: 1fr; gap: var(--kollio-space-md); }
   .space-moment-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .space-sections a { justify-content: center; }
 }

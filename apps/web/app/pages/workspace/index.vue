@@ -22,6 +22,14 @@ const hasAnything = computed(() =>
   sections.value.some(section => (section.value?.entries.length ?? 0) > 0),
 )
 
+const nextEntry = computed(() => {
+  const candidates = sections.value.flatMap(section => entriesOf(section.value))
+  return candidates.reduce<InboxEntryResponse | undefined>((oldest, entry) => {
+    if (!oldest || new Date(entry.created_at).getTime() < new Date(oldest.created_at).getTime()) return entry
+    return oldest
+  }, undefined)
+})
+
 const { formatDate: dateLabel } = useFormatters()
 
 function entriesOf(section?: InboxSectionResponse) {
@@ -72,18 +80,21 @@ useSeoMeta({ title: () => t('inbox.metaTitle') })
 
 <template>
   <div class="inbox">
-    <header class="inbox-header">
-      <h1>{{ t('inbox.title') }}</h1>
-      <p>{{ t('inbox.description') }}</p>
-    </header>
+    <KollioPageHeader class="inbox-header" :title="t('inbox.title')" :summary="t('inbox.description')" />
 
-    <p v-if="error" role="alert" class="inbox-error">{{ t('inbox.loadFailed') }}</p>
+    <KollioFeedbackState v-if="error" :title="t('inbox.loadFailed')" tone="error" role="alert" />
 
     <template v-else>
-      <div v-if="!hasAnything" class="inbox-empty-state">
-        <h2>{{ t('inbox.empty.title') }}</h2>
-        <p>{{ t('inbox.empty.body') }}</p>
-      </div>
+      <KollioFeedbackState v-if="!hasAnything" class="inbox-empty-state" :title="t('inbox.empty.title')" :body="t('inbox.empty.body')" />
+
+      <section v-if="nextEntry" class="inbox-next-action" aria-labelledby="inbox-next-title">
+        <KollioReasoningBlock :title="t('inbox.next.title')">
+          <p class="inbox-next-action__kind">{{ kindLabel(nextEntry.kind) }}</p>
+          <h2 id="inbox-next-title">{{ nextEntry.space_question }}</h2>
+          <p v-if="nextEntry.detail">{{ nextEntry.detail }}</p>
+          <KollioPrimaryAction :label="t('inbox.next.action')" :to="entryLink(nextEntry)" />
+        </KollioReasoningBlock>
+      </section>
 
       <section v-for="section in sections" :key="section.key" class="inbox-section">
         <h2>{{ t(`inbox.sections.${section.key}.title`) }}</h2>
@@ -123,59 +134,21 @@ useSeoMeta({ title: () => t('inbox.metaTitle') })
   display: grid;
   gap: var(--kollio-space-lg);
   width: 100%;
-  padding: 16px 16px 34px;
-}
-
-.inbox-header h1 {
-  color: var(--kollio-heading);
-  font-size: var(--kollio-display-section);
-  font-weight: var(--kollio-weight-display);
-  letter-spacing: -0.06em;
-}
-
-.inbox-header p {
-  margin-top: 8px;
-  color: var(--ui-text-muted);
-  font-size: var(--kollio-text-body);
-  line-height: var(--kollio-leading-body);
-}
-
-.inbox-error {
-  border: 1px solid var(--ui-error);
-  border-radius: var(--kollio-radius-md);
-  background: var(--ui-bg-elevated);
-  padding: 14px 16px;
-  color: var(--ui-error);
-  font-size: var(--kollio-text-caption);
-  font-weight: var(--kollio-weight-strong);
+  padding: var(--kollio-space-md) var(--kollio-space-md) var(--kollio-space-xl);
 }
 
 .inbox-empty-state {
-  display: grid;
-  gap: 8px;
-  min-height: 220px;
-  align-content: center;
-  border: 1px solid var(--ui-border);
-  border-radius: var(--kollio-radius-lg);
-  background: var(--ui-bg-elevated);
-  padding: 24px;
+  min-height: var(--kollio-space-4xl);
 }
 
-.inbox-empty-state h2 {
-  color: var(--kollio-heading);
-  font-size: var(--kollio-text-title);
-  font-weight: var(--kollio-weight-display);
-}
-
-.inbox-empty-state p {
-  color: var(--ui-text-muted);
-  font-size: var(--kollio-text-small);
-  line-height: var(--kollio-leading-body);
-}
+.inbox-next-action { border: 1px solid var(--ui-border); border-radius: var(--kollio-radius-lg); background: var(--ui-bg-elevated); padding: var(--kollio-space-md); }
+.inbox-next-action :deep(.reasoning-block) { border-left-color: var(--kollio-connector); }
+.inbox-next-action h2 { color: var(--kollio-heading); font-size: var(--kollio-text-lead); font-weight: var(--kollio-weight-display); }
+.inbox-next-action__kind { color: var(--kollio-active-ink); font-size: var(--kollio-text-micro); font-weight: var(--kollio-weight-strong); letter-spacing: var(--kollio-tracking-label); text-transform: uppercase; }
 
 .inbox-section {
   display: grid;
-  gap: 8px;
+  gap: var(--kollio-space-sm);
 }
 
 .inbox-section h2 {
@@ -192,18 +165,18 @@ useSeoMeta({ title: () => t('inbox.metaTitle') })
 
 .inbox-list {
   display: grid;
-  gap: 10px;
-  margin-top: 6px;
+  gap: var(--kollio-space-sm);
+  margin-top: var(--kollio-space-sm);
 }
 
 .inbox-entry-link {
   display: grid;
   gap: 6px;
-  min-height: 64px;
+  min-height: var(--kollio-control-height);
   border: 1px solid var(--ui-border);
   border-radius: var(--kollio-radius-lg);
   background: var(--ui-bg-elevated);
-  padding: 14px 16px;
+  padding: var(--kollio-space-md);
 }
 
 .inbox-entry-link:hover {
@@ -214,7 +187,7 @@ useSeoMeta({ title: () => t('inbox.metaTitle') })
   color: var(--kollio-active-ink);
   font-size: var(--kollio-text-micro);
   font-weight: var(--kollio-weight-strong);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--kollio-tracking-label);
   text-transform: uppercase;
 }
 
@@ -246,14 +219,14 @@ useSeoMeta({ title: () => t('inbox.metaTitle') })
 }
 
 .inbox-memory {
-  margin-top: 8px;
+  margin-top: var(--kollio-space-sm);
   border-top: 1px solid var(--ui-border);
-  padding-top: 18px;
+  padding-top: var(--kollio-space-lg);
 }
 
 .inbox-spaces-link {
   display: inline-flex;
-  min-height: 44px;
+  min-height: var(--kollio-control-height);
   align-items: center;
   color: var(--kollio-active-ink);
   font-size: var(--kollio-text-caption);
@@ -263,12 +236,12 @@ useSeoMeta({ title: () => t('inbox.metaTitle') })
 .inbox-entry-link:focus-visible,
 .inbox-spaces-link:focus-visible {
   outline: 2px solid var(--kollio-active-ink);
-  outline-offset: 1px;
+  outline-offset: var(--kollio-space-xs);
 }
 
 @media (max-width: 760px) {
   .inbox {
-    padding: 12px 12px 28px;
+    padding: var(--kollio-space-md);
   }
 }
 </style>

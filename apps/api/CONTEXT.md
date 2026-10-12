@@ -164,6 +164,24 @@ _Avoid_: Branch (the iteration line under Versioned history) without qualificati
 An atomic canonical unit proposed from Branch material: `idea`, `claim`, `evidence`, `objection` or `constraint`. `suggested` by AI until a human confirms it; `confirmed` by a human is canonical and will feed Converge. Carries author, Branch, source, tool/model when known, timestamp and transformation history.
 _Avoid_: Contribution (the participation record under Team and moat flow), comment alone
 
+### External decision reconciliation
+
+**SourceMaterial**:
+An imported text source owned by one DecisionSpace. It records its stated author, declared origin and visibility without claiming that those facts were independently verified. The imported body lives in one or more immutable revisions.
+_Avoid_: Attachment, integration, canonical reasoning
+
+**SourceRevision**:
+One immutable captured version of a SourceMaterial, ordered from one within that material. Creating a later revision never changes an earlier body.
+_Avoid_: Edit, overwrite, replacement
+
+**SourceExcerpt**:
+A quoted snapshot from one SourceRevision, optionally carrying its character range in that revision. It remains readable even when later revisions of the source arrive.
+_Avoid_: Live selection, citation without source
+
+**ReconciliationResolution**:
+One append-only human record comparing two SourceExcerpts from the same DecisionSpace. Its outcome may retain one, combine them, record that they cannot be combined, or leave the disagreement open. It preserves both source excerpts and never itself changes a SourceRevision or Contribution.
+_Avoid_: Merge, overwrite, automatic consensus
+
 ### Challenge
 
 **ChallengeRun**:

@@ -43,6 +43,8 @@
   --kollio-radius-lg: 16px;
   --kollio-radius-xl: 24px;
   --kollio-radius-pill: 999px;
+  --kollio-control-height: 44px;
+  --kollio-tracking-label: .08em;
   --kollio-text-micro: .6875rem;
   --kollio-text-caption: .75rem;
   --kollio-text-small: .875rem;

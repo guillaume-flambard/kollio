@@ -53,10 +53,10 @@
       "noParticipants": "No participant yet"
     },
     "transition": {
-      "choose": "New status",
+      "choose": "Next step",
       "reason": "Reason for reopening",
       "reasonRequired": "Reopening requires a reason.",
-      "submit": "Apply",
+      "submit": "Move to {status}",
       "failed": "The status change was refused. Reload the page and try again."
     },
     "status": {
@@ -987,6 +987,10 @@
     }
   },
   "inbox": {
+    "next": {
+      "title": "Your next decision move",
+      "action": "Open this work"
+    },
     "metaTitle": "What needs your attention {'|'} Kollio",
     "title": "What needs your attention",
     "description": "The spaces waiting on convergence, your input, a decision or a learning, across the workspaces you belong to.",

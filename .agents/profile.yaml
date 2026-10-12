@@ -1,0 +1,69 @@
+# Brouillon genere par agents-router propose. A relire : rien n'est applique tant que tu n'as pas lance `apply`.
+schema: 1
+families:
+- design-web-plugins
+project: kollio-web
+tools:
+- claude
+- opencode
+fingerprint:
+  markers:
+  - AGENTS.md
+  - apps/api/pyproject.toml
+  - apps/web/package.json
+  - package.json
+  - packages/api-client/package.json
+  - packages/ui/package.json
+  - pnpm-lock.yaml
+  - pyproject.toml
+  apple: false
+  web: true
+  mobile_js: false
+  inputs_hash: 521114480b2dc5a0
+skills:
+  expose:
+  - id: ask-matt
+    why: deja vendue par le projet dans .agents/skills
+  - id: code-review
+    why: deja vendue par le projet dans .agents/skills
+  - id: domain-modeling
+    why: deja vendue par le projet dans .agents/skills
+  - id: grill-with-docs
+    why: deja vendue par le projet dans .agents/skills
+  - id: implement
+    why: deja vendue par le projet dans .agents/skills
+  - id: setup-matt-pocock-skills
+    why: deja vendue par le projet dans .agents/skills
+  - id: tdd
+    why: deja vendue par le projet dans .agents/skills
+  - id: to-spec
+    why: deja vendue par le projet dans .agents/skills
+  - id: to-tickets
+    why: deja vendue par le projet dans .agents/skills
+  - id: triage
+    why: deja vendue par le projet dans .agents/skills
+  - id: wayfinder
+    why: deja vendue par le projet dans .agents/skills
+  hide:
+  - id: supabase
+    why: 'Supabase : aucune dependance @supabase/* ni dossier supabase/'
+plugins:
+  disable:
+  - id: cloudflare@cloudflare
+    why: aucun wrangler ni dependance @cloudflare/*
+  - id: stripe@claude-plugins-official
+    why: aucune dependance stripe
+protect:
+- humanizer
+- whole-project-protocol
+- holistic
+- memo:vault-enrich
+- superpowers:brainstorming
+- superpowers:systematic-debugging
+- superpowers:writing-plans
+- superpowers:using-git-worktrees
+- update-config
+- agent-browser
+manual:
+  note: Rien ici n'est touche par agents-router. Ajoute tes propres reglages dans
+    .claude/settings.local.json.

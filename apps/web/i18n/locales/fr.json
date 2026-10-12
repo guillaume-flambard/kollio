@@ -53,10 +53,10 @@
       "noParticipants": "Aucun participant pour le moment"
     },
     "transition": {
-      "choose": "Nouveau statut",
+      "choose": "Prochaine étape",
       "reason": "Raison de la réouverture",
       "reasonRequired": "Une réouverture exige une raison.",
-      "submit": "Appliquer",
+      "submit": "Passer à {status}",
       "failed": "Le changement de statut a été refusé. Rechargez la page et réessayez."
     },
     "status": {
@@ -987,6 +987,10 @@
     }
   },
   "inbox": {
+    "next": {
+      "title": "Votre prochain geste de décision",
+      "action": "Ouvrir ce travail"
+    },
     "metaTitle": "Ce qui demande votre attention {'|'} Kollio",
     "title": "Ce qui demande votre attention",
     "description": "Les espaces qui attendent une convergence, votre avis, une décision ou un apprentissage, dans les espaces de travail dont vous êtes membre.",

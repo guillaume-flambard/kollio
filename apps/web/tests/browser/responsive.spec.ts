@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
-import type { CompanyContextResponse, ExperimentResponse, IdeaResponse, WorkspaceResponse } from '@kollio/api-client'
+import type { CompanyContextResponse, DecisionSpaceDetailResponse, ExperimentResponse, IdeaResponse, WorkspaceResponse } from '@kollio/api-client'
+import fr from '../../i18n/locales/fr.json' with { type: 'json' }
 import en from '../../i18n/locales/en.json' with { type: 'json' }
 
 // #78 responsive guard: the golden-path screens must hold at the widths a
@@ -38,6 +39,24 @@ function context(): CompanyContextResponse {
     principles: [{ id: 'pri-1', title: 'Pas de croissance par la remise', detail: null, state: 'active', lang: 'fr' }],
     metrics: [{ id: 'met-1', name: 'Taux d’activation', value: '32', unit: '%', observed_at: null, source: null, state: 'active', lang: 'fr' }],
   }
+}
+
+function decisionSpace(): DecisionSpaceDetailResponse {
+  return {
+    id: 'space-one', workspace_id: 'workspace-one', question: 'Which pricing should we pick?', description: 'A deliberately long description to verify the decision shell remains readable on a narrow screen.', owner_id: 'owner-one', status: 'EXPLORING', deadline: '2026-10-01', lang: 'en', created_at: '2026-09-17T09:00:00Z', updated_at: '2026-09-17T09:00:00Z',
+    participants: [{ user_id: 'owner-one', created_at: '2026-09-17T09:00:00Z' }], history: [],
+  }
+}
+
+async function mockDecisionWorkspace(page: import('@playwright/test').Page) {
+  await page.route(/\/api\/session$/, route => route.fulfill({ json: { signedIn: true, subject: 'member-two' } }))
+  await page.route(/\/api\/workspaces$/, route => route.fulfill({ json: workspaces }))
+  await page.route(/\/api\/inbox$/, route => route.fulfill({ json: {
+    needs_convergence: { entries: [{ kind: 'space_needs_convergence', workspace_id: 'workspace-one', space_id: 'space-one', space_question: 'Which pricing should we pick?', space_status: 'EXPLORING', subject_id: null, detail: null, created_at: '2026-09-17T09:00:00Z' }], total: 1 },
+    needs_my_input: { entries: [], total: 0 }, ready_to_decide: { entries: [], total: 0 }, needs_learning: { entries: [], total: 0 },
+  } }))
+  await page.route(/\/api\/workspaces\/workspace-one\/members$/, route => route.fulfill({ json: [{ id: 'owner-one', display_name: 'Camille', role: 'member' }] }))
+  await page.route(/\/api\/workspaces\/workspace-one\/decision-spaces\/space-one$/, route => route.fulfill({ json: decisionSpace() }))
 }
 
 async function expectNoHorizontalOverflow(page: import('@playwright/test').Page) {
@@ -93,6 +112,30 @@ for (const width of [375, 768]) {
   })
 }
 
+for (const width of [375, 768]) {
+  for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
+    test(`RESP-${width}-${locale} Inbox and Space shell preserve the primary decision path`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 812 })
+      await mockDecisionWorkspace(page)
+      const prefix = locale === 'fr' ? '' : '/en'
+
+      await page.goto(`${prefix}/workspace`)
+      await expect(page.getByRole('heading', { name: messages.inbox.title })).toBeVisible()
+      await expect(page.locator('.inbox-next-action')).toBeVisible()
+      await expect(page.locator('.inbox-section')).toHaveCount(5)
+      await expectNoHorizontalOverflow(page)
+
+      await page.goto(`${prefix}/workspace/decision-spaces/space-one?workspace=workspace-one`)
+      await expect(page.getByRole('heading', { name: 'Which pricing should we pick?' })).toBeVisible()
+      await expect(page.locator('.space-status')).toHaveText(messages.decisionSpaces.status.EXPLORING)
+      await expect(page.locator('.space-moment.is-current')).toContainText(messages.decisionSpaces.moments.frame.label)
+      await expect(page.locator('.space-sections a')).toHaveCount(6)
+      await expect(page.getByLabel(messages.decisionSpaces.transition.choose)).toBeVisible()
+      await expectNoHorizontalOverflow(page)
+    })
+  }
+}
+
 test.describe('english deposit form', () => {
   test.use({ viewport: { width: 375, height: 812 } })
 
@@ -112,7 +155,7 @@ test.describe('workspace navigation adapts', () => {
     }))
   })
 
-  test('NAV-mobile exposes every destination from the top bar at 375px', async ({ page }) => {
+  test('NAV-mobile exposes decision-work destinations while the legacy explorer stays routable', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 })
     const listResponse = page.waitForResponse(r => r.url().includes('/api/workspaces/workspace-one/ideas'))
     await page.goto('/workspace/ideas')
@@ -125,8 +168,10 @@ test.describe('workspace navigation adapts', () => {
 
     const dialog = page.getByRole('dialog', { name: 'Navigation principale' })
     await expect(dialog).toBeVisible()
-    await expect(dialog.getByRole('link', { name: 'Initiatives' })).toBeVisible()
+    await expect(dialog.getByRole('link', { name: 'Boîte de réception' })).toBeVisible()
+    await expect(dialog.getByRole('link', { name: 'Espaces de décision' })).toBeVisible()
     await expect(dialog.getByRole('link', { name: 'Réglages' })).toBeVisible()
+    await expect(dialog.getByRole('link', { name: 'Initiatives' })).toHaveCount(0)
     await expect(dialog.locator('[aria-disabled="true"]')).toHaveCount(0)
     await expectNoHorizontalOverflow(page)
   })

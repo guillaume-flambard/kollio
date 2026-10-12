@@ -13,6 +13,12 @@
       "skillPath": "skills/engineering/code-review/SKILL.md",
       "computedHash": "caa9a086baaf9e0f7cd71f64edfa83da6821c05e826b083221f3d02e3d6a1905"
     },
+    "device-interaction": {
+      "source": "superagents-lab/xcode27-skills",
+      "sourceType": "github",
+      "skillPath": "device-interaction/SKILL.md",
+      "computedHash": "1bff7b118a5ca6206f324e884d1799f375bae3bc8ac13de68791ab2c15d2972c"
+    },
     "domain-modeling": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -43,11 +49,53 @@
       "skillPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
       "computedHash": "552b0f48b9fe054aa93c5d432fefbd7bd9645e3f2d20b4e22432453a81800b21"
     },
+    "swift-concurrency": {
+      "source": "dpearson2699/swift-ios-skills",
+      "sourceType": "github",
+      "skillPath": "skills/swift-concurrency/SKILL.md",
+      "computedHash": "b674cda5ff66657d0957f6d96d927646a4b2d483261ecd2ea4c31a1f947e7d27"
+    },
+    "swift-testing": {
+      "source": "dpearson2699/swift-ios-skills",
+      "sourceType": "github",
+      "skillPath": "skills/swift-testing/SKILL.md",
+      "computedHash": "a8cf4e7e76a04e41a361d342924c4d60674b64cebe5c85b752d67a447e443048"
+    },
+    "swiftui-gestures": {
+      "source": "dpearson2699/swift-ios-skills",
+      "sourceType": "github",
+      "skillPath": "skills/swiftui-gestures/SKILL.md",
+      "computedHash": "00c984b4cf876ad14ac0a274dd8a40190a71b5a747dfa324ad3ba92e3eb270e7"
+    },
+    "swiftui-performance": {
+      "source": "dpearson2699/swift-ios-skills",
+      "sourceType": "github",
+      "skillPath": "skills/swiftui-performance/SKILL.md",
+      "computedHash": "2dca682decced437172dbd5554c8267576a81960d28d2c87d7b1ce60e878860e"
+    },
+    "swiftui-specialist": {
+      "source": "superagents-lab/xcode27-skills",
+      "sourceType": "github",
+      "skillPath": "swiftui-specialist/SKILL.md",
+      "computedHash": "3822a405011719e955934b3df69a3617fbda4aa86da6dbbed89912a86ed0b994"
+    },
+    "swiftui-whats-new-27": {
+      "source": "superagents-lab/xcode27-skills",
+      "sourceType": "github",
+      "skillPath": "swiftui-whats-new-27/SKILL.md",
+      "computedHash": "33c097354c14985ccf7571cfda16b79eabe5ef14db176aa349297341d25dd8d2"
+    },
     "tdd": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/tdd/SKILL.md",
       "computedHash": "e753a5da75292bbe59d302d89566bc2c53d0e73944da2f0e944a7578883c07d0"
+    },
+    "test-modernizer": {
+      "source": "superagents-lab/xcode27-skills",
+      "sourceType": "github",
+      "skillPath": "test-modernizer/SKILL.md",
+      "computedHash": "90d754104fb816ed979d5657001d8d78c8400608cfc11025b570e7e1736c6520"
     },
     "to-spec": {
       "source": "mattpocock/skills",

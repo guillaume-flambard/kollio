@@ -1,0 +1,1 @@
+"""Security persistence adapters."""

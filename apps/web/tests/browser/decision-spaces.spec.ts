@@ -142,8 +142,8 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       })
 
       await page.goto(`${prefix}/workspace/decision-spaces/space-one?workspace=workspace-one`)
-      await page.getByLabel(messages.decisionSpaces.transition.choose).selectOption('CONVERGING')
-      await page.getByRole('button', { name: messages.decisionSpaces.transition.submit }).click()
+      await expect(page.locator('.space-transition-target')).toContainText(messages.decisionSpaces.status.CONVERGING)
+      await page.getByRole('button', { name: messages.decisionSpaces.transition.submit.replace('{status}', messages.decisionSpaces.status.CONVERGING) }).click()
 
       await expect(page.locator('.space-status')).toHaveText(messages.decisionSpaces.status.CONVERGING)
 
@@ -156,12 +156,27 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
 
       await page.goto(`${prefix}/workspace/decision-spaces/space-one?workspace=workspace-one`)
 
-      const options = page.getByLabel(messages.decisionSpaces.transition.choose).locator('option')
-      await expect(options).toHaveCount(1)
-      await expect(options.first()).toHaveText(messages.decisionSpaces.status.EXPLORING)
+      await expect(page.locator('.space-transition-target')).toContainText(messages.decisionSpaces.status.EXPLORING)
+      await expect(page.locator('.space-transition select')).toHaveCount(0)
     })
 
-    test('DECISION-SPACES-09 marks the active area without confusing ideas with spaces', async ({ page }) => {
+    test('DECISION-SPACES-08B keeps a reopening reason mandatory', async ({ page }) => {
+      const transitions: unknown[] = []
+      await page.route('**/api/workspaces/workspace-one/decision-spaces/*', route => route.fulfill({ json: makeDetail({ status: 'DECIDED' }) }))
+      await page.route('**/api/workspaces/workspace-one/decision-spaces/*/transitions', async route => {
+        transitions.push(route.request().postDataJSON())
+        await route.fulfill({ json: makeSpace({ status: 'REOPENED' }) })
+      })
+
+      await page.goto(`${prefix}/workspace/decision-spaces/space-one?workspace=workspace-one`)
+      await page.getByLabel(messages.decisionSpaces.transition.reason).fill('   ')
+      await page.getByRole('button', { name: messages.decisionSpaces.transition.submit.replace('{status}', messages.decisionSpaces.status.REOPENED) }).click()
+
+      await expect(page.getByRole('alert')).toHaveText(messages.decisionSpaces.transition.reasonRequired)
+      expect(transitions).toHaveLength(0)
+    })
+
+    test('DECISION-SPACES-09 keeps decision work primary while the legacy explorer remains routable', async ({ page }) => {
       await page.route('**/api/workspaces/workspace-one/decision-spaces', route => route.fulfill({ json: { items: [] } }))
       await page.route('**/api/workspaces/workspace-one/ideas?*', route => route.fulfill({
         json: { items: [], total: 0, limit: 5, offset: 0 },
@@ -184,7 +199,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.inbox })).toHaveAttribute('data-active', 'false')
 
       await page.goto(`${prefix}/workspace/ideas`)
-      await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.ideas })).toHaveAttribute('data-active', 'true')
+      await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.ideas })).toHaveCount(0)
       await expect(page.locator('.workspace-nav a:visible', { hasText: messages.navigation.decisionSpaces })).toHaveAttribute('data-active', 'false')
     })
 

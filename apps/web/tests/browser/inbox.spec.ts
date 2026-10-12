@@ -123,6 +123,29 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await expect(entries(page).nth(1).locator('.inbox-entry-kind')).toHaveText(copy.kinds.contribution_awaits_confirmation)
     })
 
+    test('INBOX-10 makes the oldest actionable entry the next action without hiding the other work', async ({ page }) => {
+      await serveInbox(page, emptyInbox({
+        needs_convergence: makeSection([makeEntry({ created_at: '2026-09-17T09:00:00Z' })]),
+        needs_my_input: makeSection([makeEntry({
+          kind: 'contribution_awaits_confirmation',
+          space_question: 'What did the latest interviews change?',
+          created_at: '2026-09-16T09:00:00Z',
+        })]),
+      }))
+
+      await openInbox(page)
+
+      const next = page.locator('.inbox-next-action')
+      await expect(next.getByRole('heading', { name: copy.next.title })).toBeVisible()
+      await expect(next).toContainText(copy.kinds.contribution_awaits_confirmation)
+      await expect(next).toContainText('What did the latest interviews change?')
+      await expect(next.getByRole('link', { name: copy.next.action })).toHaveAttribute(
+        'href',
+        `${prefix}/workspace/decision-spaces/space-one/explore?workspace=workspace-one`,
+      )
+      await expect(entries(page)).toHaveCount(2)
+    })
+
     test('INBOX-02 sends every entry to the section where it can be acted on', async ({ page }) => {
       await serveInbox(page, emptyInbox({
         needs_convergence: makeSection([makeEntry()]),
@@ -204,7 +227,7 @@ for (const [locale, messages] of [['fr', fr], ['en', en]] as const) {
       await openInbox(page)
 
       await expect(page.locator('.inbox-empty-state h2')).toHaveText(copy.empty.title)
-      await expect(page.locator('.inbox-empty-state p')).toHaveText(copy.empty.body)
+      await expect(page.locator('.inbox-empty-state p:not(.feedback-state__eyebrow)')).toHaveText(copy.empty.body)
       await expect(entries(page)).toHaveCount(0)
     })
 
