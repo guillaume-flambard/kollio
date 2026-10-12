@@ -1419,6 +1419,8 @@
     "noMatch": "Aucun objet trouvé",
     "groups": "Groupes du graphe",
     "overview": "Vue d’ensemble",
-    "groupNumber": "Groupe {number} · {count} objets"
+    "groupNumber": "Groupe {number} · {count} objets",
+    "focusContext": "Focus : {count} objets reliés",
+    "returnToContext": "Revenir au contexte"
   }
 }
